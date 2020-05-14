@@ -223,7 +223,7 @@ class Visualisor:
             else:
                 nrows += 2
 
-        plt.subplots(nrows,1,figsize=(7.5,nrows*7.5))
+        plt.subplots(nrows,1,figsize=(20,nrows*7.5))
 
         # get df state-by-state
         subdive = df[(df['dive_num'] >= sdive) & (df['dive_num'] <= edive)].copy()
