@@ -1,0 +1,13 @@
+% !TeX root = ../main.tex
+
+\section{Capturing Non-Markovian Behavior via the Fourier Transform}
+
+Although the CarHMM and continuous-time model can effectively capture autocorrelation within a process, both still assume Markovian dynamics, i.e. that the observation $Y_t$ depends only the value of the behaviorial state $X_t$ and the previous observation $Y_{t-1}$. However, there are many animal movement process which violate the markov propertey. In particular, on a fine scale, swimming behavior of marine mammals can exhibit periodic behavior as the animal repeatedly flukes to propel itself forward. Work has been done in the past to model non-markovian dynamics in the \textit{behavioral} process \cite{Langrock:2012}, but addressing non-markovian dynamics within observations $Y*$ is still a relatively unstudied area. With improvements in tagging technology allowing for data collection at very high frequencies, noisy and non-markovian fine scale behavior appears to be on the rise.
+
+To address this issue, we recommend borrowing techniques from the signal processing literature to compress the data and summarize its essential elements. In particular, we suggest a method which can capture periodic behavior by decompsing a signal into its fourier components.
+
+Suppose a one-dimensional fine-scale process of length $T^*$, $y^*$ exhibits significant periodic and structured behavior that is clearly non-markovian. It is possible to transform this fine-scale process $y^*$ to a shorter, but higher dimensional process $\hat y^*$ by selecting a window of size $w$, dividing $y^*$ into $\lfloor T^* / w \rfloor$ seperate intervals of length $w$ (truncating $y^*$ appropriately), and taking the discrete fourier transform (DFT) of each interval. The resulting time series $\hat y^*$ will be a complex-valued, $w$-dimensional time series of length $\lfloor T^* / w \rfloor$.  
+
+Picking the window length $w$ should be done with care. $w$ should be long enough to capture the periodic behavior of the underlying process (at least twice as long as the length of a period), but short enough so that the resolution of the process remains high and behavioral changes can be captured via the HMM.
+
+A visualization of transforming a one-dimensional sequence $y^*$ to a $w$-dimensional complex sequence $\hat y^*$ can be seen in figure (\ref{fig:fourier_example}).

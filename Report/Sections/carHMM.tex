@@ -1,0 +1,84 @@
+% !TeX root = ../main.tex
+
+\section{Autocorrelation within Fine Scale Behaviors}
+
+One of the key assumption of both HMMs and HHMM is \textit{conditional indpendence} between observations. In particular, given the state $X_t$ or $X^*_{s,t}$, $Y_t$ or $Y^*_{s,t}$ (respectively) is assumed to be independent from all other observations. Therefore,traditional HMMs can fail is when the observations $Y$ exhibit significant auto-correlation. Unfortunately this is often the case for fine-scale animal behaviors. Examples include fluking in marine mammals in Vancouver, BC (see the results section) and swiming behavior in horn sharks in southern California \cite{Adam:2019}.
+
+One way to deal with autocorrelation in fine-scale behavioral processes is to use a state-switching continuous model such as the one introduced by Michelot et al \cite{Michelot:2019}, which models the movement of an animal as an Ornstein-Uhlenbeck process with parameters that depend upon the underlying state of the animal. Continuous time models are advantagous because of their flexibiliy: they can be built up from aribitrarily complex stochastic differential equations and they allow for uneven step lengths in the observations sequence $\mathbf{Y}$. However, most continuous time models require MCMC algorithms to perform inference and as a result are not easily incorporated into the HHMM structure.
+
+Another option is to use the CarHMM, or \textit{conditionally auto-regressive hidden Markov model}, introduced by Lawler et al \cite{Lawler:2019}, in which autocorrelation is explicity modeled into the emission distributions of the HMM while maintaining the strucutre needed to run the forward algorithm for fast direct likelihood maximization. In particular, the CarHMM introduces autocorrleation into the HMM by assuming that an observation $Y_t$ has mean $(1-\phi_{x_t}) \cdot \mu_{x_t} + \phi_{x_t} \cdot y_{t-1}$, instead of $\mu_{x_t}$ in the case of a classic HMM. Note that the autocorrelation term $\phi_{x_t}$ depends upon the behavioral state of the animal. This model easily fits into the HHMM structure, but initially it seems to lack the flexibility and natural interpretation of continuous-time models.
+
+\subsection{Equivalency of CarHMM and one-dimensional Ornstein-Uhlenbeck  state-switching process}
+
+In fact, under certain conditions, the CarHMM and the state-switching continuous model are equivalent. In particular, the conditions are that (1) the underlying behavioral state of the continuous-time model must follow a Markov chain rather than a Markov process, and (2) the emission distributions of the CarHMM must be gaussian.
+
+This allows the theoretically grounded continuous-time state-switching model to be used in the computational convieneint HMM (and therefore HHMM) framework. In addition, it gives new intpretation to the learned parameters of the CarHMM in the context of an Ornstein-Uhlenbeck process.
+
+A one-dimensional state-switching Ornstein-Uhlenbeck process $y^*$ is the solution to the following stochastic differential equation:
+%
+$$dy^*_t = \beta_{x^*_t}(\gamma_{x^*_t} - y^*_t)dt + \omega_{x^*_t} dW_t$$
+%
+where $x^*_t$ is the fine-scale behavior of the animal at time $t$, $\beta_{x^*_t}$ relates to rate at which the process returns to its mean value, $\gamma_{x^*_t}$ is the long-term mean value of the process, $\omega_{x^*_t}$ is related to short-term variance, and $W$ is a Wiener process. As before, $x^*_t$ is described by an unobserved Markov process. The solution to this equation is known to be the following \cite{Michelot:2019}:
+\begin{align*}
+	y^*_{t+\delta} \sim \mathcal{N}\left((1-e^{-\beta_{x^*_t}\delta})\gamma_{x^*_t} + e^{-\beta_{x^*_t}\delta} y^*_t,\quad \frac{\omega_{x^*_t}^2}{2\beta_{x^*_t}} (1-e^{-2\beta_{x^*_t}\delta})\right)
+\end{align*}
+Now, suppose that $\delta$ is constant for all observations, as is the case for hidden Markov models. In addition, introduce the following transformations:
+\begin{align*}
+	\mu_{x^*_t} = \gamma_{x^*_t}, \qquad \phi_{x^*_t} = e^{-\beta_{x^*_t}\delta}, \qquad \sigma^2_{x^*_t} = \frac{\omega_{x^*_t}^2}{2\beta_{x^*_t}} (1-e^{-2\beta_{x^*_t}\delta})
+\end{align*}
+Then, we have the following:
+\begin{align*}
+	y^*_{t+\delta} \sim \mathcal{N}\left((1-\phi_{x^*_t})\mu_{x^*_t} + \phi_{x^*_t} y^*_t,\quad \sigma_{x^*_t}^2 \right)
+\end{align*}
+%
+If $\delta$ is fixed and $x^*_t$ is adjusted to follow a Markov chain rather than a Markov process, then this model is equivalent to the CarHMM with normal emission probabilities. Note that all of the parameter transformations above are one-to-one, so it is easy to go from the CarHMM to the continuous model and back again. This allows for the pricipled construction of the continuous-time model to be combined with the computational convienence of the CarHMM.
+
+\iffalse
+
+\subsection{Transition Parameters}
+
+The probability transition matrix $\bfA$ must be right stochastic, meaning that its entries must be between 0 and 1 and its rows must add to one. Lawler et al do not go into detail about how to parameterize $\bfA$ such that it is both identifiable and constraint free, but the following parameterization does the trick \cite{Barajas:2017}:
+%
+\begin{align*}
+	a_{ij} = \frac{\exp(\eta_{ij})}{\sum_{\ell = 1}^k \exp(\eta_{i\ell})}, \qquad \eta_{ii} = 0 \quad \forall i \in \{1,\ldots,k\}
+\end{align*}
+%
+This parameterization simplifies estimation of $\bfA$, since it eliminates constraints when maximizing the likelihood.
+
+In total, there are $5k$ parameters from the emission distributions and $k^2 - k$ parameters from the probability transition matrix, leaving a total of $k^2 + 4k$ parameters to estimate.
+
+\subsection{Likelihood Evaluation and State Decoding}
+
+While it is possible to use the EM algorithm to estimate these parameters, Lawler et al use direct likelihood maximization instead. In order to do this, it is necessary to evaluate the likelihood of the observations $\bfY$ given parameters $\mu_{RL,b}, \phi_b, \sigma_b^2, c_b, \rho_b$, and $\bfA$. Let the emission probability density of $\theta_t$ and $d_t$ given $d_{t-1}$ and $b_t$ be denoted as $f(y_t|b_t,y_{t-1})$. Additionally, recall that the stationary distribution of $\bfA$ is $\delta$ such that $\delta \bfA = \delta$ and $\sum_i \delta_i = 1$. Assuming that the initial behavior of the animal is drawn from this stationary distribution, the likelihood of $\bfY$ can be calculated sequentially using the following recurrence relation:
+%
+\begin{align*}
+	\alpha_1(b_1) = p(y_1,b_1) &= f(y_1|b_1)\delta_{b_1} \\\\\\
+	%
+	\alpha_t(b_t) = p(y_{1:t},b_t) &= f(y_t|b_t,y_{t-1})\sum_{b_{t-1} \in \{1,\ldots,k\}}a_{b_{t-1},b_t}p(y_{1:t-1},b_{t-1}) \\
+	%
+	&= f(y_t|b_t,y_{t-1})\sum_{b_{t-1} \in \{1,\ldots,k\}}a_{b_{t-1},b_t} \alpha_{t-1}(b_{t-1}) \\\\\\
+	%
+	L(\bfA,\mu_{RL,b},\phi_b,\sigma_b^2,c_b,\rho_b; \bfY) = p(y_{1:T-1}) &= \sum_{b_{T-1} \in \{1,\ldots,k\}} \alpha_{T-1}(b_{T-1}) 
+\end{align*}	
+%
+Note that $\alpha_t$ is a $k$-dimensional vector, where each dimension corresponds to a distinct behavioral state. The process of evaluating this recurrence relationship sequentially is called the \textbf{forward algorithm} and is vital to estimating the parameters of HMMs via likelihood maximization. One particularly convenient feature of the forward algorithm is that its time complexity is linear in both the number of time steps and behavioral states. The forward algorithm can also be expressed more concisely as a matrix product:
+%
+$$L(\bfA,\mu_{RL,b},\phi_b,\sigma_b^2,c_b,\rho_b; \bfY) = \delta \bfP(y_1) \prod_{i=1}^{T-1} \bfA \bfP(y_t,y_{t-1}) \mathbf{1}$$
+$$\bfP(y_1) = \text{Diag}\left( f(y_1|B_1 = 1), \ldots, f(y_1|B_1 = k) \right)$$
+$$\bfP(y_t,y_{t-1}) = \text{Diag}\left( f(y_t|B_1 = 1, y_{t-1}), \ldots, f(y_t|B_1 = k, y_{t-1}) \right)$$
+%
+$\mathbf{1}$ is a column vector of ones. Once the emission and transition parameters have been estimated, the most likely sequence of underlying behavioral states $\bfB$ can be found using the Viterbi algorithm \cite{Viterbi:1967}.
+
+\subsection{Similarity to Previous Work}
+
+Lawler et al are not the first to incorporate autocorrelation within a hidden Markov model in an ecological setting. Woriskey et al \cite{Whoriskey:2016} developed a hidden Markov model called the HMMM, which is formulated as the following:
+%
+$$\left(\bfY_t - \bfY_{t-1} |\bfY_{t-1} - \bfY_{t-2}, b_{t-1}\right) \sim \mathcal{N}\left( \phi_{b_{t-1}} T(\theta_{b_{t-1}})(\bfY_{t-1} - \bfY_{t-2}),\Sigma\right)$$
+%
+where $\phi_b$ is the state-dependent auto-correlation term, $\theta_b$ is the state-dependent mean turning angle, $T(\theta)$ is a standard rotation matrix, and $\Sigma$ is a state-independent two-dimensional covariance matrix. Like Lawler, Woriskey fits $\phi_b$, $\theta_b$, and $\Sigma$ using likelihood maximization. The details of the two approaches are different, but both are similar in that they use auto-correlation within the emission probabilities of an HMM to model animal movement in two dimensions.
+
+In addition, many continuous-time approaches model auto-correlation to account for non-uniform time intervals between time steps. For example, Michelot et al. \cite{Michelot:2019} model $\bfY$ as an integrated Ornstein-Uhlenbeck process, where the position $\bfY_t$ and velocity $\bfV_t$ are modeled as draws from a normal distribution which depends upon $\bfV_{t-1}$, $\bfY_{t-1}$, the behavioral state $b_{t-1}$, and the time step between observations $\Delta_{t-1}$. It is straightforward to adapt this continuous-time approach to an HMM by setting $\Delta_{t}$ to be constant for all values of $t$ and assuming that the behavior of the animal does not change between time steps. In fact, if the CarHMM is altered so that the emission distribution of $d_t$ is normal, then the resulting sequence of step-lengths is equivalent to a one-dimensional state-switching Ornstein-Uhlenbeck process (see the appendix for details).
+
+While the idea of auto-correlation within HMMs is not new, Lawler et al are novel in their specific implementation of an auto-correlated HMM. In addition, they detail several additional tools for data preprocessing and interpretation which are useful when applying HMMs in an ecological setting.
+
+\fi

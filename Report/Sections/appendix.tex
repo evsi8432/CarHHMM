@@ -1,0 +1,53 @@
+% !TeX root = ../main.tex
+
+\addcontentsline{toc}{section}{Appendices}
+\renewcommand*{\thesubsection}{\Alph{subsection}}
+
+\section*{Appendix}
+
+\setcounter{subsection}{0}
+
+\subsection{Equivalency of CarHMM and one-dimensional state-switching Ornstein-Uhlenbeck process}
+
+A one-dimensional state-switching Ornstein-Uhlenbeck process \textbf{x} is the solution to the following stochastic differential equation:
+%
+$$dx_t = \beta_{b_t}(\gamma_{b_t} - x_t)dt + \omega_{b_t} dW_t$$
+%
+where $b_t$ is the behavior of the animal at time $t$, $\beta_{b_t}$ relates to rate at which the process returns to its mean value, $\gamma_{b_t}$ is the long-term mean value of the process, $\omega_{b_t}$ is related to short-term variance, and $W$ is a Brownian motion process. $b_t$ is described by an unobserved Markov process. The solution to this equation is known to be the following \cite{Michelot:2019}:
+\begin{align*}
+	x_{t+\delta} \sim \mathcal{N}\left((1-e^{-\beta_{b_t}\delta})\gamma_{b_t} + e^{-\beta_{b_t}\delta} x_t,\quad \frac{\omega_{b_t}^2}{2\beta_{b_t}} (1-e^{-2\beta_{b_t}\delta})\right)
+\end{align*}
+suppose that $\delta$ is constant for all observations, and introduce the following transformations:
+\begin{align*}
+	d_t = x_t, \qquad \mu_{RL,b_t} = \gamma_{b_t}, \qquad \phi_{b_t} = e^{-\beta_{b_t}\delta}, \qquad \sigma^2_{b_t} = \frac{\omega_{b_t}^2}{2\beta_{b_t}} (1-e^{-2\beta_{b_t}\delta})
+\end{align*}
+Then, we have the following:
+\begin{align*}
+	d_{t+\delta} \sim \mathcal{N}\left((1-\phi_{b_t})\gamma_{b_t} + \phi_{b_t} d_t,\quad \sigma_{b_t}^2 \right)
+\end{align*}
+%
+If $\delta$ is fixed and $b_t$ is adjusted to follow a Markov chain rather than a Markov process, then this model is equivalent to the CarHMM with normal emission probabilities for the step length sequence. Note that all of the parameter transformations above are one-to-one, so it is easy to go from the CarHMM to the continuous model and back again.
+
+%\subsection{Proof of correlation between $d_{t-1}$ and $d_t$}
+
+%THIS IS WRONG
+%The correlation between $d_{t-1}$ and $d_t$ is defined as $\left(\mathbbm{E}(d_t d_{t-1}) - \mu_{RL,b}^2 \right) / \sigma_b^2$. Let the probability distribution function of $d_t$ and $d_{t-1}$ be denoted as $p$. Then:
+
+%\begin{align*}
+%	\mathbbm{E}(d_t d_{t-1}) &= \int_0^\infty \int_0^\infty x_t x_{t-1} p(x_{t-1}) p(x_t|x_{t-1}) dx_t dx_{t-1} \\
+	%
+%	&= \int_0^\infty x_{t-1} p(x_{t-1}) \left( \int_0^\infty x_t p(x_t|x_{t-1}) dx_t \right) dx_{t-1} \\
+	%
+%	&= \int_0^\infty x_{t-1} p(x_{t-1}) \left( (1-\phi_b)\mu_{RL,b} + \phi_b x_{t-1} \right) dx_{t-1} \\
+%	&= (1-\phi_b)\mu_{RL,b} \int_0^\infty x_{t-1} p(x_{t-1}) dx_{t-1} + \phi_b \int_0^\infty x_{t-1}^2 p(x_{t-1}) dx_{t-1} \\
+%	&= (1-\phi_b)\mu_{RL,b}^2 + \phi_b (\mu_{RL,b}^2 + \sigma_b^2) \\
+%	&= \mu_{RL,b}^2 + \phi_b\sigma_b^2
+%\end{align*}
+
+%So:
+
+%\begin{align*}
+%	corr(d_t,d_{t-1}) &= \frac{\mathbbm{E}(d_t d_{t-1}) - \mu_{RL,b}^2}{\sigma_b^2} \\
+%	&= \frac{\mu_{RL,b}^2 + \phi_b\sigma_b^2 - \mu_{RL,b}^2}{\sigma_b^2} \\
+%	&= \phi_b
+%\end{align*}
