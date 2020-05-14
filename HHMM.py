@@ -139,7 +139,7 @@ class HHMM:
                         theta[1][k0][feature]['sig'][k1]*= norm.rvs(1,0.01)
 
                     # finally update correlations randomly
-                    theta[1][k0][feature]['corr'] = np.random.random(size=K) - 3.0
+                    theta[1][k0][feature]['corr'] = 0.1*np.random.random(size=K) - 2.0
 
         self.theta = theta
 
