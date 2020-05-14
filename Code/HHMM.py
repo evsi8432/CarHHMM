@@ -424,7 +424,7 @@ class HHMM:
                 ind += self.pars.K[1]**2
 
             # update fine theta
-            ind_start = ind
+            ind_start = int(ind)
             for k0 in range(self.pars.K[0]):
                 for k1 in range(self.pars.K[1]):
                     for feature in self.pars.features[1]:
@@ -501,7 +501,7 @@ class HHMM:
             ind += self.pars.K[1]**2
 
         # update fine theta
-        ind_start = ind
+        ind_start = int(ind)
         for k0 in range(self.pars.K[0]):
             for k1 in range(self.pars.K[1]):
                 for feature in self.pars.features[1]:
