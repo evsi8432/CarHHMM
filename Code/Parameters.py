@@ -67,7 +67,8 @@ class Parameters:
                           'bottom_variance':{'corr':False,'f':'gamma'},
                           'dive_duration':{'corr':False,'f':'gamma'}},
 
-                         {'FoVeDBA_low':{'thresh':5,'corr':True,'f':'gamma'},
+                         {'VeDBA':{'corr':True,'f':'gamma'},
+                          'FoVeDBA_low':{'thresh':5,'corr':True,'f':'gamma'},
                           'FoVeDBA_high': {'thresh':5,'corr':True,'f':'gamma'},
                           'Vz': {'corr':True,'f':'normal'},
                           'peak_jerk': {'corr':False,'f':'normal'}, # in seconds

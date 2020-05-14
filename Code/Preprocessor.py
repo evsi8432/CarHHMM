@@ -279,6 +279,10 @@ class Preprocessor:
             dive_seg_features = {}
             dive_seg = subdive_df.iloc[ind_start:ind_start+nperseg]
 
+            # find average VeDBA
+            if 'VeDBA' in self.pars.features[1]:
+                dive_seg_features['VeDBA'] = dive_seg['VeDBA'].mean()
+
             # find FoVeDBA
             if ('FoVeDBA_low' in self.pars.features[1]) or ('FoVeDBA_high' in self.pars.features[1]):
 
