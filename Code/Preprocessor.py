@@ -61,7 +61,7 @@ class Preprocessor:
         only include needed columns in the dataset
         '''
 
-        cols_to_keep = set(['time','depth'])
+        cols_to_keep = set(['time','depth','Ax','Ay','Az'])
         acc_cols = ['FoVeDBA_low','FoVeDBA_high','peak_jerk','roll_at_pj']
         roll_cols = ['roll_at_pj']
         head_cols = ['heading_var']
@@ -280,8 +280,8 @@ class Preprocessor:
             dive_seg = subdive_df.iloc[ind_start:ind_start+nperseg]
 
             # find average VeDBA
-            if 'VeDBA' in self.pars.features[1]:
-                dive_seg_features['VeDBA'] = dive_seg['VeDBA'].mean()
+            if 'A' in self.pars.features[1]:
+                dive_seg_features['VeDBA'] = np.array([dive_seg['Ax'],dive_seg['Ay'],dive_seg['Az']])
 
             # find FoVeDBA
             if ('FoVeDBA_low' in self.pars.features[1]) or ('FoVeDBA_high' in self.pars.features[1]):

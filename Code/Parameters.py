@@ -41,13 +41,13 @@ class Parameters:
                          'roll','pitch','yaw']
 
         self.renamed_cvc_cols = {'dyn acc x': 'Ax',
-                                'dyn acc y': 'Ay',
-                                'dyn acc z': 'Az',
-                                'mag cal x': 'Mx',
-                                'mag cal y': 'My',
-                                'mag cal z': 'Mz',
-                                'Depth (100bar) [m]' : 'depth',
-                                'Temperature (depth) [°C]': 'temp'}
+                                 'dyn acc y': 'Ay',
+                                 'dyn acc z': 'Az',
+                                 'mag cal x': 'Mx',
+                                 'mag cal y': 'My',
+                                 'mag cal z': 'Mz',
+                                 'Depth (100bar) [m]' : 'depth',
+                                 'Temperature (depth) [°C]': 'temp'}
 
         # preprocessing parameters
         self.freq = 50 # in Hz
@@ -67,7 +67,7 @@ class Parameters:
                           'bottom_variance':{'corr':False,'f':'gamma'},
                           'dive_duration':{'corr':False,'f':'gamma'}},
 
-                         {'VeDBA':{'corr':True,'f':'gamma'},
+                         {'A':{'corr':True,'f':'multivariate_normal'},
                           'FoVeDBA_low':{'thresh':5,'corr':True,'f':'gamma'},
                           'FoVeDBA_high': {'thresh':5,'corr':True,'f':'gamma'},
                           'Vz': {'corr':True,'f':'normal'},

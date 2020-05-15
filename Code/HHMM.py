@@ -149,6 +149,18 @@ class HHMM:
     def find_log_p_yt_given_xt(self,level,feature,data,data_tm1,mu,sig,corr,sample=0):
 
         # find log density of feature
+        if self.pars.features[level][feature]['f'] == 'multivariate_normal':
+
+            # find new mean if there is autocorrelation
+            if self.pars.features[level][feature]['corr'] and data_tm1 is not None:
+                mu = (1.0-corr)*mu + corr*data_tm1[feature]
+
+            if sample > 0:
+                return multivariate_normal.rvs(mu,sig,sample)
+            else:
+                return multivariate_normal.logpdf(data[feature],mu,sig)
+
+        # find log density of feature
         if self.pars.features[level][feature]['f'] == 'normal':
 
             # find new mean if there is autocorrelation
