@@ -62,7 +62,8 @@ class Preprocessor:
         '''
 
         cols_to_keep = set(['time','depth','Ax','Ay','Az'])
-        acc_cols = ['FoVeDBA_low','FoVeDBA_high','peak_jerk','roll_at_pj']
+        acc_cols = ['A','Ahat_low','Ahat_high','FoVeDBA_low','FoVeDBA_high',
+                    'peak_jerk','roll_at_pj']
         roll_cols = ['roll_at_pj']
         head_cols = ['heading_var']
 
@@ -279,9 +280,42 @@ class Preprocessor:
             dive_seg_features = {}
             dive_seg = subdive_df.iloc[ind_start:ind_start+nperseg]
 
-            # find average VeDBA
+            # find average Acceleration
             if 'A' in self.pars.features[1]:
-                dive_seg_features['VeDBA'] = np.array([dive_seg['Ax'],dive_seg['Ay'],dive_seg['Az']])
+                Ax = np.mean(dive_seg['Ax'])
+                Ay = np.mean(dive_seg['Ay'])
+                Az = np.mean(dive_seg['Az'])
+                dive_seg_features['A'] = np.array([Ax,Ay,Az])
+
+            # find average Acceleration
+            if 'Ax' in self.pars.features[1]:
+                dive_seg_features['Ax'] = np.mean(dive_seg['Ax'])
+            if 'Ay' in self.pars.features[1]:
+                dive_seg_features['Ay'] = np.mean(dive_seg['Ay'])
+            if 'Az' in self.pars.features[1]:
+                dive_seg_features['Az'] = np.mean(dive_seg['Az'])
+
+            # find FoVeDBA
+            if ('Ahat_low' in self.pars.features[1]) or ('Ahat_high' in self.pars.features[1]):
+
+                freqs = np.fft.rfftfreq(nperseg, d=1/self.pars.freq)
+                fftx = np.absolute(np.fft.rfft(dive_seg['Ax']))
+                ffty = np.absolute(np.fft.rfft(dive_seg['Ay']))
+                fftz = np.absolute(np.fft.rfft(dive_seg['Az']))
+
+                if 'Ahat_low' in self.pars.features[1]:
+                    thresh = self.pars.features[1]['Ahat_low']['thresh']
+                    thresh_ind = max(np.where(freqs <= thresh)[0]) + 1
+                    dive_seg_features['Ahat_low'] = np.sum(fftx[1:thresh_ind]**2)
+                    dive_seg_features['Ahat_low'] += np.sum(ffty[1:thresh_ind]**2)
+                    dive_seg_features['Ahat_low'] += np.sum(fftz[1:thresh_ind]**2)
+
+                if 'Ahat_high' in self.pars.features[1]:
+                    thresh = self.pars.features[1]['Ahat_high']['thresh']
+                    thresh_ind = max(np.where(freqs <= thresh)[0]) + 1
+                    dive_seg_features['Ahat_high'] = np.sum(fftx[thresh_ind:]**2)
+                    dive_seg_features['Ahat_high'] += np.sum(ffty[thresh_ind:]**2)
+                    dive_seg_features['Ahat_high'] += np.sum(fftz[thresh_ind:]**2)
 
             # find FoVeDBA
             if ('FoVeDBA_low' in self.pars.features[1]) or ('FoVeDBA_high' in self.pars.features[1]):

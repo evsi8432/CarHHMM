@@ -87,7 +87,10 @@ class HHMM:
                 quantiles = np.linspace(1/(2*K),1-(1/(2*K)),K)
 
                 # first find mu
-                theta[0][feature]['mu'] = np.quantile(feature_data,quantiles)
+                if feature in ['Ax','Ay','Az']:
+                    theta[0][feature]['mu'] = np.mean(feature_data)*np.ones(K)
+                else:
+                    theta[0][feature]['mu'] = np.quantile(feature_data,quantiles)
 
                 # then get varaince of each quantile set of data
                 data_sorted = np.sort(feature_data)
@@ -124,7 +127,10 @@ class HHMM:
                     quantiles = np.linspace(1/(2*K),1-(1/(2*K)),K)
 
                     # first find mu
-                    theta[1][k0][feature]['mu'] = np.quantile(feature_data,quantiles)
+                    if feature in ['Ax','Ay','Az']:
+                        theta[1][k0][feature]['mu'] = np.mean(feature_data)*np.ones(K)
+                    else:
+                        theta[1][k0][feature]['mu'] = np.quantile(feature_data,quantiles)
                     theta[1][k0][feature]['mu'] *= norm.rvs(1,0.01)
 
                     # then get varaince of each quantile set of data
@@ -139,7 +145,7 @@ class HHMM:
                         theta[1][k0][feature]['sig'][k1]*= norm.rvs(1,0.01)
 
                     # finally update correlations randomly
-                    theta[1][k0][feature]['corr'] = 0.1*np.random.random(size=K) - 2.0
+                    theta[1][k0][feature]['corr'] = 0.1*np.random.random(size=K) - 1.0
 
         self.theta = theta
 
@@ -158,7 +164,7 @@ class HHMM:
             if sample > 0:
                 return multivariate_normal.rvs(mu,sig,sample)
             else:
-                return multivariate_normal.logpdf(data[feature],mu,sig)
+                return multivariate_normal.logpdf(mu,data[feature],sig)
 
         # find log density of feature
         if self.pars.features[level][feature]['f'] == 'normal':
@@ -424,10 +430,16 @@ class HHMM:
             # update crude theta
             for k0 in range(self.pars.K[0]):
                 for feature in self.pars.features[0]:
-                    self.theta[0][feature]['mu'][k0] = x[ind]
-                    self.theta[0][feature]['sig'][k0] = max(x[ind+1],eps)
-                    self.theta[0][feature]['corr'][k0] = x[ind+2]
-                    ind += 3
+                    if feature in ['Ay','Az']:
+                        self.theta[0][feature]['mu'][k0] = x[ind]
+                        self.theta[0][feature]['sig'][k0] = self.theta[0]['Ax']['sig'][k0]
+                        self.theta[0][feature]['corr'][k0] = self.theta[0]['Ax']['corr'][k0]
+                        ind += 1
+                    else:
+                        self.theta[0][feature]['mu'][k0] = x[ind]
+                        self.theta[0][feature]['sig'][k0] = max(x[ind+1],eps)
+                        self.theta[0][feature]['corr'][k0] = x[ind+2]
+                        ind += 3
 
             # update fine eta
             for k0 in range(self.pars.K[0]):
@@ -440,10 +452,16 @@ class HHMM:
             for k0 in range(self.pars.K[0]):
                 for k1 in range(self.pars.K[1]):
                     for feature in self.pars.features[1]:
-                        self.theta[1][k0][feature]['mu'][k1] = x[ind]
-                        self.theta[1][k0][feature]['sig'][k1] = max(x[ind+1],eps)
-                        self.theta[1][k0][feature]['corr'][k1] = x[ind+2]
-                        ind += 3
+                        if feature in ['Ay','Az']:
+                            self.theta[1][k0][feature]['mu'][k1] = x[ind]
+                            self.theta[1][k0][feature]['sig'][k1] = self.theta[1][k0]['Ax']['sig'][k1]
+                            self.theta[1][k0][feature]['corr'][k1] = self.theta[1][k0]['Ax']['corr'][k1]
+                            ind += 1
+                        else:
+                            self.theta[1][k0][feature]['mu'][k1] = x[ind]
+                            self.theta[1][k0][feature]['sig'][k1] = max(x[ind+1],eps)
+                            self.theta[1][k0][feature]['corr'][k1] = x[ind+2]
+                            ind += 3
                 if self.pars.share_fine_states:
                     ind = ind_start
 
@@ -459,8 +477,9 @@ class HHMM:
         for k0 in range(self.pars.K[0]):
             for feature in self.pars.features[0]:
                 x0.append(self.theta[0][feature]['mu'][k0])
-                x0.append(self.theta[0][feature]['sig'][k0])
-                x0.append(self.theta[0][feature]['corr'][k0])
+                if feature not in ['Ay','Az']:
+                    x0.append(self.theta[0][feature]['sig'][k0])
+                    x0.append(self.theta[0][feature]['corr'][k0])
 
         # update fine eta
         for k0 in range(self.pars.K[0]):
@@ -476,11 +495,13 @@ class HHMM:
             for k1 in range(self.pars.K[1]):
                 for feature in self.pars.features[1]:
                     x0.append(self.theta[1][k0][feature]['mu'][k1])
-                    x0.append(self.theta[1][k0][feature]['sig'][k1])
-                    x0.append(self.theta[1][k0][feature]['corr'][k1])
+                    if feature not in ['Ay','Az']:
+                        x0.append(self.theta[1][k0][feature]['sig'][k1])
+                        x0.append(self.theta[1][k0][feature]['corr'][k1])
 
 
         # do the maximization
+        print(len(x0))
         start = time.time()
         options = {'disp': True, 'adaptive':True}
         if max_iters is not None:
@@ -501,10 +522,16 @@ class HHMM:
         # update crude theta
         for k0 in range(self.pars.K[0]):
             for feature in self.pars.features[0]:
-                self.theta[0][feature]['mu'][k0] = x[ind]
-                self.theta[0][feature]['sig'][k0] = x[ind+1]
-                self.theta[0][feature]['corr'][k0] = x[ind+2]
-                ind += 3
+                if feature in ['Ay','Az']:
+                    self.theta[0][feature]['mu'][k0] = x[ind]
+                    self.theta[0][feature]['sig'][k0] = self.theta[0]['Ax']['sig'][k0]
+                    self.theta[0][feature]['corr'][k0] = self.theta[0]['Ax']['corr'][k0]
+                    ind += 1
+                else:
+                    self.theta[0][feature]['mu'][k0] = x[ind]
+                    self.theta[0][feature]['sig'][k0] = max(x[ind+1],eps)
+                    self.theta[0][feature]['corr'][k0] = x[ind+2]
+                    ind += 3
 
         # update fine eta
         for k0 in range(self.pars.K[0]):
@@ -517,10 +544,16 @@ class HHMM:
         for k0 in range(self.pars.K[0]):
             for k1 in range(self.pars.K[1]):
                 for feature in self.pars.features[1]:
-                    self.theta[1][k0][feature]['mu'][k1] = x[ind]
-                    self.theta[1][k0][feature]['sig'][k1] = max(x[ind+1],eps)
-                    self.theta[1][k0][feature]['corr'][k1] = x[ind+2]
-                    ind += 3
+                    if feature in ['Ay','Az']:
+                        self.theta[1][k0][feature]['mu'][k1] = x[ind]
+                        self.theta[1][k0][feature]['sig'][k1] = self.theta[1][k0]['Ax']['sig'][k1]
+                        self.theta[1][k0][feature]['corr'][k1] = self.theta[1][k0]['Ax']['corr'][k1]
+                        ind += 1
+                    else:
+                        self.theta[1][k0][feature]['mu'][k1] = x[ind]
+                        self.theta[1][k0][feature]['sig'][k1] = max(x[ind+1],eps)
+                        self.theta[1][k0][feature]['corr'][k1] = x[ind+2]
+                        ind += 3
             if self.pars.share_fine_states:
                 ind = ind_start
 
