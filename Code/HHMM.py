@@ -33,7 +33,7 @@ class HHMM:
         self.eta = []
         self.ptm = []
 
-        eta_crude = -1.0 + np.random.normal(size=(self.pars.K[0],self.pars.K[0]))
+        eta_crude = -1.0 + 0.1*np.random.normal(size=(self.pars.K[0],self.pars.K[0]))
         ptm_crude = np.exp(eta_crude)
         ptm_crude = (ptm_crude.T/np.sum(ptm_crude,1)).T
 
@@ -43,7 +43,7 @@ class HHMM:
         eta_fine = []
         ptm_fine = []
         for _ in range(self.pars.K[0]):
-            eta_fine_k = -1.0 + np.random.normal(size=(self.pars.K[1],self.pars.K[1]))
+            eta_fine_k = -1.0 + 0.1*np.random.normal(size=(self.pars.K[1],self.pars.K[1]))
             ptm_fine_k = np.exp(eta_fine_k)
             ptm_fine_k = (ptm_fine_k.T/np.sum(ptm_fine_k,1)).T
             eta_fine.append(eta_fine_k)
@@ -103,7 +103,7 @@ class HHMM:
                         theta[0][feature]['sig'][k0] = 1.0
 
                 # finally update correlations randomly
-                theta[0][feature]['corr'] = np.random.random(size=K) - 3
+                theta[0][feature]['corr'] = np.random.random(size=K) - 2.0
 
 
 
