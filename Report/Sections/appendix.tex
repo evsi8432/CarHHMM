@@ -7,26 +7,34 @@
 
 \setcounter{subsection}{0}
 
+\subsection{Dimension Reduction on $\hat{Y_t^*}$}
+
+First, we simply use down-sampling and only record every $w^{th}$ time step of $\hat{Y}_t^*$. This both reduces the space of $\hat{Y}_t^*$ to $\mathbb{C}^{\lfloor S^*_t / w \rfloor \times w}$ and ensures that none of the sliding windows overlap when taking the STFT. This is important because HMMs assume temporal independence between observations. Next, the dimension of $\hat{Y}_t^*$ can be cut in half by recognizing that the $Y_t^*$ is real-valued, and therefore $\hat{Y}_{t,k}^*$ is equal to the complex-congugate of $\hat{Y}_{t,w-k-1}^*$. Finally, by Parseval's Thereom we have that:
+
+$$\sum_{n = 0}^{w-1} |Y^*_{t+n}|^2 = \sum_{n = 0}^{w-1} |\hat{Y}^*_{t,n}|^2$$
+
 \subsection{Equivalency of CarHMM and one-dimensional state-switching Ornstein-Uhlenbeck process}
 
-A one-dimensional state-switching Ornstein-Uhlenbeck process \textbf{x} is the solution to the following stochastic differential equation:
+If it is the case that (1) the underlying behavioral state of the continuous-time model must follow a Markov chain rather than a Markov process, and (2) the emission distributions of the CarHMM are gaussian, then the CarHMM and the state-switching continuous model are equivalent. This allows the theoretically grounded continuous-time state-switching model to be used in the computational convieneint HMM (and therefore HHMM) framework. In addition, it gives new intpretation to the learned parameters of the CarHMM in the context of an Ornstein-Uhlenbeck process.
+
+A one-dimensional state-switching Ornstein-Uhlenbeck process $y^*$ is the solution to the following stochastic differential equation:
 %
-$$dx_t = \beta_{b_t}(\gamma_{b_t} - x_t)dt + \omega_{b_t} dW_t$$
+$$dy^*_t = \beta_{x^*_t}(\gamma_{x^*_t} - y^*_t)dt + \omega_{x^*_t} dW_t$$
 %
-where $b_t$ is the behavior of the animal at time $t$, $\beta_{b_t}$ relates to rate at which the process returns to its mean value, $\gamma_{b_t}$ is the long-term mean value of the process, $\omega_{b_t}$ is related to short-term variance, and $W$ is a Brownian motion process. $b_t$ is described by an unobserved Markov process. The solution to this equation is known to be the following \cite{Michelot:2019}:
+where $x^*_t$ is the fine-scale behavior of the animal at time $t$, $\beta_{x^*_t}$ relates to rate at which the process returns to its mean value, $\gamma_{x^*_t}$ is the long-term mean value of the process, $\omega_{x^*_t}$ is related to short-term variance, and $W$ is a Wiener process. As before, $x^*_t$ is described by an unobserved Markov process. The solution to this equation is known to be the following \cite{Michelot:2019}:
 \begin{align*}
-	x_{t+\delta} \sim \mathcal{N}\left((1-e^{-\beta_{b_t}\delta})\gamma_{b_t} + e^{-\beta_{b_t}\delta} x_t,\quad \frac{\omega_{b_t}^2}{2\beta_{b_t}} (1-e^{-2\beta_{b_t}\delta})\right)
+y^*_{t+\delta} \sim \mathcal{N}\left((1-e^{-\beta_{x^*_t}\delta})\gamma_{x^*_t} + e^{-\beta_{x^*_t}\delta} y^*_t,\quad \frac{\omega_{x^*_t}^2}{2\beta_{x^*_t}} (1-e^{-2\beta_{x^*_t}\delta})\right)
 \end{align*}
-suppose that $\delta$ is constant for all observations, and introduce the following transformations:
+Now, suppose that $\delta$ is constant for all observations, as is the case for hidden Markov models. In addition, introduce the following transformations:
 \begin{align*}
-	d_t = x_t, \qquad \mu_{RL,b_t} = \gamma_{b_t}, \qquad \phi_{b_t} = e^{-\beta_{b_t}\delta}, \qquad \sigma^2_{b_t} = \frac{\omega_{b_t}^2}{2\beta_{b_t}} (1-e^{-2\beta_{b_t}\delta})
+\mu_{x^*_t} = \gamma_{x^*_t}, \qquad \phi_{x^*_t} = e^{-\beta_{x^*_t}\delta}, \qquad \sigma^2_{x^*_t} = \frac{\omega_{x^*_t}^2}{2\beta_{x^*_t}} (1-e^{-2\beta_{x^*_t}\delta})
 \end{align*}
 Then, we have the following:
 \begin{align*}
-	d_{t+\delta} \sim \mathcal{N}\left((1-\phi_{b_t})\gamma_{b_t} + \phi_{b_t} d_t,\quad \sigma_{b_t}^2 \right)
+y^*_{t+\delta} \sim \mathcal{N}\left((1-\phi_{x^*_t})\mu_{x^*_t} + \phi_{x^*_t} y^*_t,\quad \sigma_{x^*_t}^2 \right)
 \end{align*}
 %
-If $\delta$ is fixed and $b_t$ is adjusted to follow a Markov chain rather than a Markov process, then this model is equivalent to the CarHMM with normal emission probabilities for the step length sequence. Note that all of the parameter transformations above are one-to-one, so it is easy to go from the CarHMM to the continuous model and back again.
+If $\delta$ is fixed and $x^*_t$ is adjusted to follow a Markov chain rather than a Markov process, then this model is equivalent to the CarHMM with normal emission probabilities. Note that all of the parameter transformations above are one-to-one, so it is easy to go from the CarHMM to the continuous model and back again. This allows for the pricipled construction of the continuous-time model to be combined with the computational convienence of the CarHMM.
 
 %\subsection{Proof of correlation between $d_{t-1}$ and $d_t$}
 

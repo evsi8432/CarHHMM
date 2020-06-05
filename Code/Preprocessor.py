@@ -250,6 +250,7 @@ class Preprocessor:
         del df_temp
 
         df = df[df['dive_num'] != -1]
+        df = df[df['depth'] > 0.2]
 
         return df,dives
 

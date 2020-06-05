@@ -1,13 +1,52 @@
 % !TeX root = ../main.tex
 
-\section{Capturing Non-Markovian Behavior via the Fourier Transform}
+\section{Model Formulation}
 
-Although the CarHMM and continuous-time model can effectively capture autocorrelation within a process, both still assume Markovian dynamics, i.e. that the observation $Y_t$ depends only the value of the behaviorial state $X_t$ and the previous observation $Y_{t-1}$. However, there are many animal movement process which violate the markov propertey. In particular, on a fine scale, swimming behavior of marine mammals can exhibit periodic behavior as the animal repeatedly flukes to propel itself forward. Work has been done in the past to model non-markovian dynamics in the \textit{behavioral} process \cite{Langrock:2012}, but addressing non-markovian dynamics within observations $Y*$ is still a relatively unstudied area. With improvements in tagging technology allowing for data collection at very high frequencies, noisy and non-markovian fine scale behavior appears to be on the rise.
+\subsection{Short-time Fourier Transform on Fine-scale process}
 
-To address this issue, we recommend borrowing techniques from the signal processing literature to compress the data and summarize its essential elements. In particular, we suggest a method which can capture periodic behavior by decompsing a signal into its fourier components.
+One issue with HMMs is that they assume markovian dynamics conditioned on the hidden state, i.e. that any observation $Y^*_t$ depends only on the behaviorial state $X^*_t$ (here we focus on the fine-scale process). However, there are many animal movement processes which violate this markov propertey on very fine scales. For example swimming behaviour of marine mammals can be periodic since the animal repeatedly flukes to propel itself forward. Work has been done in the past to model non-markovian dynamics in the \textit{behavioural} process $X^*_t$ \cite{Langrock:2012}, but addressing non-markovian dynamics within the observation process $Y^*_t$ is still a relatively unstudied area. With improvements in tagging technology allowing for data collection at very high frequencies, data exhibiting noisy and non-markovian fine scale behavior is likely to persist in future studies.
 
-Suppose a one-dimensional fine-scale process of length $T^*$, $y^*$ exhibits significant periodic and structured behavior that is clearly non-markovian. It is possible to transform this fine-scale process $y^*$ to a shorter, but higher dimensional process $\hat y^*$ by selecting a window of size $w$, dividing $y^*$ into $\lfloor T^* / w \rfloor$ seperate intervals of length $w$ (truncating $y^*$ appropriately), and taking the discrete fourier transform (DFT) of each interval. The resulting time series $\hat y^*$ will be a complex-valued, $w$-dimensional time series of length $\lfloor T^* / w \rfloor$.  
+To address this issue, we recommend borrowing techniques from the signal processing literature to compress the data and summarize its essential elements. In particular, we suggest performing the discrete-time Short-time Fourier Transform (STFT) over each observed fine-scale process $Y^*_t$:
+%
+$$STFT\{Y^*_{t,t^*:t^*+w-1}\}(n) := \hat{Y}^{*(n)}_{t,t^*} = \sum_{n = 0}^{w-1} Y^*_{t,t^*+n}e^{-i \frac{2\pi k}{w} n} \qquad \forall n \in \{0, \ldots, w-1\}, \quad t^* \in \{1,w+1,2w+1, \ldots, w \left(\lfloor T^*_t / w \rfloor -1 \right) + 1\}.$$
+%
+The STFT slides a moving window of length $w$ accross the time series $Y_t^*$ with a step size of $w$ and transforms the domain of each window from time to frequency. This allows the spectrum of $Y_t^*$ at time $t^*$ to be summerized by a $w$-dimensional vector of fourier coeficients. While other step sizes can be used for the sliding window, we select $w$ to avoid serial dependence between windows.
 
-Picking the window length $w$ should be done with care. $w$ should be long enough to capture the periodic behavior of the underlying process (at least twice as long as the length of a period), but short enough so that the resolution of the process remains high and behavioral changes can be captured via the HMM.
+If $Y^*_t \in \mathbb{R}^{T^*_t}$, then $\hat{Y}_t^* \in \mathbb{C}^{\lfloor T^*_t / w \rfloor \times w}$. While this allows $Y^*_t$ to be represneted in a way that eliminates obvious periodic behavior, the dataset itself is still approximately as large as $Y^*_t$ itself. To reduce the size of $\hat{Y}^*_t$, we propose taking summary statistics of each window as follows:
+%
+$$Z_{t,t^*}^{*(1)} = \mathcal{R}\left(\hat{Y}^{*(0)}_{t,t^*}\right) \qquad Z_{t,t^*}^{*(2)} = \frac{1}{w}\sum_{n=1}^{\tilde{w}}|\hat{Y}^{*(n)}_{t,t^*}|^2$$
+%
+$Z_{t,t^*}^{*(1)}$ is equal to the average value of $Y_{t,t^*:t^*+w-1}^*$ while $Z_{t,t^*}^{*(2)}$ is equal to the squared 2-norm of $Y_{t,t^*:t^*+w-1}^*$ that can be attributed to frequencies in the signal between $1$ and $\tilde{w}$ periods per window length. Both the window length $w$ and the max frequency $\tilde{w}$ are tuning parameters that should be tuned in a problem-specific way. $w$ should be long enough to capture the periodic behavior of the underlying process (at least as long as the length of a period), but short enough to avoid over-smoothing of the data and to maintain high resultion in the behavioral process $X^*$. $\tilde{w}$ should be selected such that the maximum frequency of $Y_t^*$ that makes biological sense is $\tilde{w}$ per window length. Note that these summary statistics are just one possible choice, and future studies can adjust the definitions as needed. A visualization of transforming a one-dimensional sequence $Y^*$ to $Z^*$ can be seen in figure (\ref{fig:fourier_example}).
 
-A visualization of transforming a one-dimensional sequence $y^*$ to a $w$-dimensional complex sequence $\hat y^*$ can be seen in figure (\ref{fig:fourier_example}).
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=7.5in]{../../Plots/fourier_transform.png}
+	\caption{Visualization of transforming $Y^*_t$ into $Z^*_t$ using a sliding window and fourier transform.}
+	\label{fig:fourier_example}
+\end{figure}
+
+Finally, note that it is possible to accomodate for unequal time steps within each window by using the \textbf{non-uniform discrete Fourier transform (NDFT)}. We do not describe the details of this method in this work, but the generalization is straightforward. Refer to Bagchi et al \cite{Bagchi:2001} for details.
+
+
+\subsection{Model Structure: combining the HHMM and CarHMM}
+
+Hierarchical hidden Markov models can be used to jointly model simultaneous coarse-scale and fine-scale processes taking place simultaneously. However, as mentioned before, the fine-scale process $Y^*$ can often exhibit autocorrelation and intricate structure. Transforming $Y^*_t$ to $Z^*_t$ removes fine-scale periodic behavior, but $Z^*_t$ can still exhibit autocorrelation, especially in the window averge, $Z_{t,t^*}^{*(1)}$. Therefore, we replace the fine-scale HMM within the Hierarchical HMM with a CarHMM according to figure (\ref{fig:CarHHMM}).
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=7.5in]{../../Plots/CarHHMM.png}
+	\caption{Graphical representation of a CarHHMM. The additional arrows representing autocorrelation between observations are shown in red for emphasis.}
+	\label{fig:CarHHMM}
+\end{figure}
+
+The likelihood of this model is still easy to calculate using the forward algorithm:
+%
+$$\calL_{\text{CarHHMM}}(y,z^*;\theta,\theta^*,\Gamma,\Gamma^*,\delta,\delta^*) = \delta P(y_1,z_1^*;\theta,\theta^*,\Gamma^*,\delta^*) \prod_{t=2}^T \Gamma P(y_t,z_t^*;\theta,\theta^*,\Gamma^*,\delta^*) \mathbf{1}$$
+%
+where:
+%
+\begin{align*}
+P(y_t,z_t^*;\theta,\theta^*,\Gamma^*,\delta^*)  = \text{diag}\left[p_{\theta}(y_t|X_t = x_1)\calL_{\text{CarHMM}}\left(z_t^*;\theta^{*(x_1)},\Gamma^{*(x_1)},\delta^{*(x_1)}\right), . . . , \right.\\
+\left. p_{\theta}(y_t|x_t = x_N )\calL_{\text{CarHMM}}\left(z_t^*;\theta^{*(x_N)},\Gamma^{*(x_N)},\delta^{*(x_N)}\right) \right]
+\end{align*}
+%
