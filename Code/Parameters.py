@@ -61,7 +61,7 @@ class Parameters:
         # parameters for HHMM features
         self.timescales = [(10,'min'),(2,'sec')]
         self.K = [2,2] # number of states per level
-        self.share_fine_states = False # are fine states same for all crude states?
+        self.share_fine_states = True # are fine states same for all crude states?
 
         self.features = [{'max_depth':{'corr':False,'f':'gamma'},
                           'bottom_variance':{'corr':False,'f':'gamma'},
