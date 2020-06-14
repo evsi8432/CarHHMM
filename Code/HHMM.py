@@ -32,6 +32,7 @@ class HHMM:
         self.theta = []
         self.eta = []
         self.ptm = []
+        self.data = data
 
         eta_crude = -1.0 + 0.1*np.random.normal(size=(self.pars.K[0],self.pars.K[0]))
         ptm_crude = np.exp(eta_crude)
@@ -53,6 +54,9 @@ class HHMM:
         self.ptm.append(ptm_fine)
 
         self.initialize_theta(data)
+
+        self.true_theta = None
+        self.true_eta = None
 
         return
 
@@ -148,6 +152,13 @@ class HHMM:
                     theta[1][k0][feature]['corr'] = 0.1*np.random.random(size=K) - 1.0
 
         self.theta = theta
+
+        return
+
+
+    def initalize_theta_sim(self):
+
+
 
         return
 
