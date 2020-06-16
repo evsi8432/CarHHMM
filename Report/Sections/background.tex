@@ -12,30 +12,32 @@ Hidden Markov models are useful when inferring a single unobserved process, but 
 \end{figure}
 
 \subsection{Hidden Markov models}
+\label{subsection:HMMs}
 
-\textit{Hidden Markov models} (or HMMs) are comprised of an unobserved Markov chain $X = (X_1, \ldots, X_T)$ and a sequence of (possibly high-dimensional) observations $Y = (Y_1, \ldots, Y_T)$, each of length $T$. In the field of animal movement, the unobserved chain $X$ usually represents the latent behaviour of an animal (e.g. foraging, resting, migrating, etc.), while the observations $Y$ are often a series of step lengths and turning angles for land animals and either depth or accelerometer data (or both) for marine animals. Each random variable in the unobserved chain $X_t$ can take one of $N$ possible values, and $X$ has corresponding probability transition matrix $\Gamma \in \bbR^{N \times N}$ and initial distribution $\delta \in \bbR^N$:
+\textit{Hidden Markov models} (or HMMs) are comprised of a sequence of unobserved states, $X_t$ $(t = 1, \ldots, T)$ which form a Markov chain and a sequence of (possibly high-dimensional) observations $Y_t$ $(t = 1, \ldots, T)$ which are often referred to as ``emissions". The index $t$ often represents equi-spaced jumps in time. In the field of animal movement, the unobserved chain usually represents the latent behaviour of an animal (e.g. foraging, resting, migrating, etc.), while the observations are often a series of step lengths and turning angles for land animals and either depth or accelerometer data (or both) for marine animals. Each random variable in the unobserved chain $X_t$ can take one of $N$ possible values, and $X$ has corresponding initial distribution $\delta \in \bbR^N$ and probability transition matrix $\Gamma \in \bbR^{N \times N}$:
 
-$$\delta_i = Pr(X_1 = i)$$
+$$\delta_i = Pr(X_1 = i); \quad i = 1,\ldots,N$$
 
-$$ \Gamma_{ij} = Pr(X_{t+1} = j | X_t = i) \qquad \forall t \in \{ 1, \ldots, T-1\} $$
+$$\Gamma_{ij} = Pr(X_{t+1} = j | X_t = i); \quad t = 1, \ldots, T-1; \enspace i = 1,\ldots,N; \enspace j=1,\ldots,N $$
 
-Further, each random variable $X_t$ emits an observation $Y_t$ whose distribution depends only on the value of $X_t$ and none of the preceding observations or behavioral states: $p_{\theta}(y_t|x_t, x_{t-1}, \ldots , x_1, y_{t-1}, \ldots , y_1) = p_{\theta}(y_t|x_t)$. Note that the emission distribution depends upon parameters $\theta$. A visualization of this dependence structure can be seen in figure (\ref{fig:HMM}). The probability transition matrix $\Gamma$ and the parameters of the emission distributions $\theta$ can be estimated by maximizing the likelihood of the observed data $y$, $\calL_{\text{HMM}}(y;\theta,\Gamma,\delta)$, with respect to $\Gamma$, $\delta$, and $\theta$. In addition, $\calL_{\text{HMM}}(y;\theta,\Gamma,\delta)$ can be calculated using the \textit{forward algorithm} as follows:
+$\delta$ is often assumed to be the stationary distribution of the $\Gamma$- an assumption that we make in this work. Further, the distribution of each observation $Y_t$ depends only on the value of $X_t$ and none of the preceding observations or behavioral states, i.e. $p(y_t|x_1,\ldots, x_N, y_1,\ldots,y_{t-1},y_{t+1},\ldots,y_N) = p(y_t|x_t)$. In particular, we denote the distribution of $Y_t$ given $X_t = s$ as $f_s(y_t)$. $f_1,\ldots,f_N$ in turn depend upon a vector of parameters $\Theta = (\theta_1,\ldots,\theta_N)$ and hereafter are referred to as ``emission distributions". A visualization of the dependence structure can be seen in figure (\ref{fig:HMM}).
+In order to estimate the parameters of an HMM, suppose data $y = (y_1,\ldots,y_T)$ is observed as a realization of an unknown HMM model. The probability transition matrix $\Gamma$, and parameters of the emission distributions $\Theta$ can be estimated by maximizing the likelihood of $y$, which we denote as $\calL_{\text{HMM}}(y;\Theta,\Gamma)$, with respect to $\Gamma$, $\delta$, and $\Theta$. In addition, $\calL_{\text{HMM}}(y;\theta,\Gamma,\delta)$ can be calculated using the \textit{forward algorithm} \cite{Zucchini:2016} as follows:
 %
-$$\calL_{\text{HMM}}(y;\theta,\Gamma,\delta) = \delta P(y_1;\theta) \prod_{t=2}^T \Gamma P(y_t;\theta) \mathbf{1}$$
+$$\calL_{\text{HMM}}(y;\theta,\Gamma) = \delta P(y_1;\theta) \prod_{t=2}^T \Gamma P(y_t;\theta) \mathbf{1}$$
 %
-where:
+where $\mathbf{1}_N$ is an $N$-dimensional column vector of ones, and:
 %
-$$P(y_t;\theta) = \text{diag}(p_{\theta}(y_t|X_t = x_1), . . . , p_{\theta}(y_t|X_t = x_N ))$$
+$$P(y_t;\theta) = \text{diag}(f_1(y_t),\ldots , f_N(y_t)).$$
 %
-and $\mathbf{1}$ is an $N$-dimensional column vector of ones. In order to ensure identifiability and right-stochasticity after optimizing $\calL_{\text{HMM}}(y)$, $\Gamma$ is often parameterized using $\eta \in \bbR^{N \times N}$ and the following link function:
+In order to ensure remove constraints when maximizing $\calL_{\text{HMM}}(y)$, $\Gamma$ is often parameterized using $\eta \in \bbR^{N \times N}$ and the following link function:
 %
 $$\Gamma_{ij} = \frac{\exp(\eta_{ij})}{\sum_{k=1}^N \exp(\eta_{ik})}, \qquad \eta_{ii} = 0 \quad \forall i \in \{1, \ldots, N\}.$$
 %
-This allows for unconstrained optimization over $\eta$ and removes the constraint that $\Gamma$ be right-stochastic. $\calL_{\text{HMM}}(y;\theta,\Gamma,\delta)$ can be maximized using any numerical optimizer.
+$\eta_{ii}$ is set to zero for identifiability. $\calL_{\text{HMM}}(y;\theta,\Gamma)$ can be maximized using any numerical optimizer.
 
 \begin{figure}[h!]
 	\centering
-	\includegraphics[width=3in]{../Plots/HMM.png}
+	\includegraphics[width=5in]{../Plots/HMM.png}
 	\caption{Graphical representation of a traditional HMM.}
 	\label{fig:HMM}
 \end{figure}
@@ -43,13 +45,13 @@ This allows for unconstrained optimization over $\eta$ and removes the constrain
 
 \subsection{Hierarchical HMMs}
 
-A hierarchical hidden Markov model (or HHMM) is a variation on a hidden Markov model in which each hidden state of the original HMM $X_t$ emits both an observation $Y_t$ as well as another fine-scale hidden Markov model of length $T^*_t$. This fine-scale HMM is comprised of a fine-scale Markov chain $X^*_t = (X^*_{t,1}, \ldots, X^*_{t,T^*_t})$ and fine-scale observations $Y^*_t = (Y^*_{t,1}, \ldots, Y^*_{t,T^*_t})$. As before, each fine-scale observation $Y^*_{t,t^*}$ depends only on the value of its corresponding hidden state, $X^*_{t,t^*}$, which can take one of $N^*$ values. $X^*_{t}$ is characterized by an initial distribution $\delta^{*(X_t)} \in \bbR^{N^*}$ and probability transition matrix $\Gamma^{*(X_t)} \in \bbR^{N^* \times N^*}$:
+A hierarchical hidden Markov model (or HHMM) is a variation of a hidden Markov model in which $X_t$ satisfies the conditions of section \ref{subsection:HMMs}, but in addition it produces yet another fine-scale hidden Markov model of length $T_t^*$. This fine-scale hidden Markov model can be either instead of \cite{Barajas:2017} or in addition to \cite{Adam:2019} a coarse-scale observation $Y_t$ which must satisfy the conditions of section \ref{subsection:HMMs}. The fine-scale HMM is comprised of a fine-scale Markov chain $X^*_t = (X^*_{t,1}, \ldots, X^*_{t,T^*_t})$ and fine-scale observations $Y^*_t = (Y^*_{t,1}, \ldots, Y^*_{t,T^*_t})$, each of length $T^*_t$. $X^*_t$ can take one of $N^*$ values. Note that while $N^*$ can be set to depend upon $X_t$, we assume here that it does not for simplicity in both the model and the notation. $X^*_t$ is characterized by an initial distribution $\delta^{*(X_t)} \in \bbR^{N^*}$ and probability transition matrix $\Gamma^{*(X_t)} \in \bbR^{N^* \times N^*}$:
 %
-$$\delta^{*(x_t)}_i = Pr(X^*_{t,1} = i | X_t = x_t)$$
+$$\delta^{*(s)}_i = Pr(X^*_{t,1} = i | X_t = s); \quad i = 1,\ldots,N^*$$
 %
-$$\Gamma^{*(x_t)}_{ij} = Pr(X^*_{t,t^*+1} = j | X^*_{t,t^*} = i, X_t = x_t) \qquad \forall t^* \in \{ 1, \ldots, T^*_t-1\}$$
+$$\Gamma^{*(s)}_{ij} = Pr(X^*_{t,t^*+1} = j | X^*_{t,t^*} = i, X_t = s); \quad t^* = 1, \ldots, T^*_t-1; \enspace i,j = 1,\ldots,N^*$$
 %
-The fine-scale emission probabilities $p_{\theta^{*(X_t)}}(y^*_{s,t} | x^*_{s,t})$ are parameterized by $\theta^{*(X_t)}$. Note the parameters of the fine-scale hidden Markov model ($\Gamma^{*(X_t)}$, $\delta^{*(X_t)}$, and $\theta^{*(X_t)}$) all depend upon the hidden state of the \textit{crude-scale} hidden Markov model. However, depending upon the discretion of the researcher, it is possible to force any of these parameters to be independent of the crude-scale hidden state $X_t$. A visualization of the full structure of the HHMM can be seen in figure (\ref{fig:HHMM}). Due to the nested structure of a hierarchical hidden Markov model, the likelihood of an HHMM is still easy to calculate using the forward algorithm:
+Again, we assume that the initial distribution $\delta^{*(s)}$ is the stationary distribution of $\Gamma^{*(s)}$. Each fine-scale observation $Y^*_{t,t^*}$ depends only on the value of its corresponding fine-scale hidden state $X^*_{t,t^*}$ and coarse-scale hidden state, $X_t$. We denote the distribution of $Y^*_{t,t^*}$ given that $X_t = s$ and $X^*_{t,t^*} = s^*$ as $f_{s,s^*}$. Therefore, in the hierarchical setting $\Theta$ is a $N$-by-$N^*$ matrix of parameters where $\theta_{s,s^*}$ describes the distribution $f_{s,s^*}$. Note the parameters of the fine-scale hidden Markov model ($\Gamma^{*(X_t)}$, $\delta^{*(X_t)}$, and $\theta^{*(X_t)}$) all depend upon the hidden state of the \textit{crude-scale} hidden Markov model. However, depending upon the discretion of the researcher, it is possible to force any of these parameters to be independent of the crude-scale hidden state $X_t$. A visualization of the full structure of the HHMM can be seen in figure (\ref{fig:HHMM}). Due to the nested structure of a hierarchical hidden Markov model, the likelihood of an HHMM is still easy to calculate using the forward algorithm:
 %
 $$\calL_{\text{HHMM}}(y,y^*;\theta,\theta^*,\Gamma,\Gamma^*,\delta,\delta^*) = \delta P(y_1,y_1^*;\theta,\theta^*,\Gamma^*,\delta^*) \prod_{t=2}^T \Gamma P(y_t,y_t^*;\theta,\theta^*,\Gamma^*,\delta^*) \mathbf{1}$$
 %
@@ -74,9 +76,12 @@ Note that this formulation assumes that the crude-scale observations at a given 
 
 One of the key assumptions of both HMMs and HHMMs is \textit{conditional Independence} between observations at both the crude and fine scale. Namely, given the state $X_t$ or $X^*_{t,t^*}$, $Y_t$ or $Y^*_{t,t^*}$ (respectively) is assumed to be independent from all other observations. Therefore, traditional HMMs and HHMMs can fail when the observation sequence $Y$ exhibits significant auto-correlation in time. Examples include fluking in marine mammals in Vancouver, BC (see the results section) and the swimming behavior of horn sharks off the coast of Southern California \cite{Adam:2019}.
 
-One way to deal with auto-correlation in fine-scale behavioral processes is to use a state-switching continuous model such as the one introduced by Michelot et al \cite{Michelot:2019}, which models the movement of an animal as an Ornstein-Uhlenbeck process with parameters that depend upon the underlying behavioural state of the animal. Continuous time models are advantageous because of their flexibility: they can be built up from arbitrarily complex stochastic differential equations and they allow for uneven step lengths in the observations sequence $Y$. However, most continuous time models require MCMC algorithms to perform inference over and as a result are not easily incorporated into the HHMM structure.
-
-Another option is to use the CarHMM, or \textit{conditionally auto-regressive hidden Markov model}, introduced by Lawler et al \cite{Lawler:2019}. The CarHMM explicitly models auto-correlation into the emission distributions of the HMM while maintaining the structure needed to run the forward algorithm. In particular, if the emission distribution of observation $Y_t$ is parameterized by its mean and variance, i.e. $\theta_{x_t} = \{\mu_{x_t},\sigma^2_{x_t}\}$, the CarHMM assumes that an observation $Y_t$ has mean $(1-\phi_{x_t}) \cdot \mu_{x_t} + \phi_{x_t} \cdot y_{t-1}$ rather than $\mu_{x_t}$. This introduces one new parameter, $\phi_{x_t}$, which represents the auto-correlation of $y_t$ and depends upon the behavioral state of the animal. This model easily fits into the HHMM structure, but seems to lack the natural interpretation of continuous-time models. However, we prove in the following section that under certain conditions these two models are in fact equivalent.
+One way to deal with auto-correlation in fine-scale behavioral processes is to use the CarHMM, or \textit{conditionally auto-regressive hidden Markov model}, introduced by Lawler et al \cite{Lawler:2019}. If the emission distribution of observation $Y_t$ is parameterized by its mean and variance, i.e. $\theta_{x_t} = \{\mu_{x_t},\sigma^2_{x_t}\}$, then the CarHMM models the distribution of $Y_t|X_t,Y_{t-1}$ as the following:
+%
+$$\mathbb{E}(Y_t) = \phi_{x_t}*Y_{t-1} + (1-\phi_{x_t}) * \mu_{x_t}$$
+$$\mathbb{V}(Y_t) = \sigma^2_{x_t}$$
+%
+The CarHMM therefore explicitly models auto-correlation into the emission distributions of the HMM while maintaining the structure needed to run the forward algorithm and only adding one additional parameter per observation and hidden state. 
 
 The likelihood of CarHMM is still compatible with the forward algorithm:
 \begin{equation}
@@ -99,10 +104,12 @@ and the first observation $y_1$ is assumed to be fixed as an initial value. The 
 
 \subsection{State decoding}
 
-Once an HMM, HHMM, or CarHMM model is fit using by maximizing their respective likelihoods with respect to their parameters, it is common to find the most likely sequence of hidden states $\hat X$. This is often done using a dynamic programming algorithm called the Viterbi algorithm \cite{Viterbi:1967}. In the case of HHMMs, after running the Viterbi algorithm on the coarse-scale process $X$, it can be run again on each fine-scale process $X^*_t$ to find the mostly likely sequence of fine-scale hidden states $\hat X_t^*$ conditioned on the estimated crude-state value $\hat X_t$. Note that while $\hat X$ is a maximum likelihood estimate of $X$, $\hat X^*_t$ is \textit{not} necessarily a maximum likelihood estimate of $\hat X^*_t$ because it is conditioned on the value of $\hat X_t$.
+Once an HMM, HHMM, or CarHMM model is fit by maximizing their respective likelihoods with respect to their parameters, it is common to find the most likely sequence of hidden states $\hat X$. 
 
-While the Viterbi algorithm is the de-facto standard in the current ecology literature, we suggest to instead find the \textit{probability} of each crude-level state (conditioned on the learned parameters) using the \textit{forward-backward algorithm}. The forward-backward algorithm has the same time complexity as the forward algorithm and is also used to find the \textit{psuedoresiduals} of a given model, which is an important tool for model validation. In addition, for HHMMs the forward-backward algorithm can be used recursively to find the probability of the fine-level states $X^*_{s,t}$ exactly by marginalizing out $X_t$:
+This can be done in one of two ways: first, the \textit{most likely sequence} of \text{all} hidden states $\hat X$ is often found using a dynamic programming algorithm called the Viterbi algorithm \cite{Viterbi:1967}. Second, the \textit{probability} of \textit{each} crude-level state (conditioned on the learned parameters) can be found using the \textit{forward-backward algorithm}. In the case of HHMMs, both the Viterbi algorithm and the forward-backward algorithm are easy to extend to HHMMs by recursively running the algorithm on the fine-scale HMMs after decoding the states of the coarse-scale HMM.
+
+While both the Viterbi algorithm and the forward-backward algorithm are used in the current ecology literature, we use the \textit{forward-backward algorithm} in this work for several reasons. In particular, the forward-backward algorithm is used to find the \textit{psuedoresiduals} of a given model, which is an important tool for model validation. In addition, for HHMMs the forward-backward algorithm can be used recursively to find the probability of the fine-level states $X^*_{t^*,t}$ exactly by marginalizing out $X_t$:
 %
-$$P(X^*_{s,t} = x^*_{s,t}) = \sum_{n=1}^N P(X_t = x_n)P(X^*_{s,t} = x^*_{s,t} | X_t = x_n)$$
+$$P(X^*_{t^*,t} = x^*_{t^*,t}) = \sum_{n=1}^N P(X_t = x_n)P(X^*_{t^*,t} = x^*_{t^*,t} | X_t = x_n)$$
 %
 where $P(X_t = x_n)$ can be found using the forward-backward algorithm on the crude-level Markov chain and $P(X^*_{s,t} = x^*_{s,t} | X_t = x_n)$ can be found by running the forward-backward algorithm on the fine-level HMM for every possible value of $X_t$.

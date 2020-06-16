@@ -4,21 +4,23 @@
 
 \subsection{Data Simulation}
 
-To test the CarHHMM with STFT, a sequence of 100 marine-animal dives were simulated. The coarse-scale observations $Y$ were set as the duration of each dive, and the fine-scale observations $Y^*$ were set as one dimensional acceleration readings simulated at 50 hertz. Specifically, the following procedure was followed: 
+%!% Have you simulated this only once? I think you would want to do this multiple time and present results across simulations, no?
+
+To test the CarHHMM with STFT, 100 separate sequences of 100 marine-animal dives were simulated. The coarse-scale observations $Y$ were set as the duration of each dive, and the fine-scale observations $Y^*$ were set as one-dimensional acceleration readings simulated at 50 hertz. the specific procedure used to generate data was as follows: 
 
 \begin{enumerate}
 	\item 100 dive durations were simulated using an HMM generative model with the following parameters:
 	
 	\begin{align*}
-		\Gamma &= \begin{pmatrix} 0.4 & 0.6 \\ 0.6 & 0.4 \end{pmatrix} \\
+		&\Gamma = \begin{pmatrix} 0.4 & 0.6 \\ 0.6 & 0.4 \end{pmatrix} \\
 		% 
 		&Y_t|X_t \sim Gamma \\
-		\bbE(Y_t|X_t = 1) &= 15 s, \quad \bbE(Y_t|X_t = 2) = 60 s \\
+		&\bbE(Y_t|X_t = 1) = 15 s, \quad \quad \bbE(Y_t|X_t = 2) = 60 s \\
 		%
-		\bbV(Y_t|X_t = 1) &= 25 s^2, \quad \bbV(Y_t|X_t = 2) = 100 s^2
+		&\bbV(Y_t|X_t = 1) = 25 s^2, \quad \quad  \bbV(Y_t|X_t = 2) = 100 s^2
 	\end{align*}
 	
-	\item Once the dive durations were calculated, for each $t \in \{1, \ldots, 100\}$, dive $t$ was broken into $\lfloor Y_t/2 \rfloor$ 2-second segments (the end of the dive sequence was discarded). Further, each 2-second segment was assigned a behaviour according to a fine-scale Markov chain $X^*_t$, where $X^*_{t,t^*} \in \{1,2\}$ and $t^* \in \{1,101,201,\ldots,100*\lfloor Y_t/2 \rfloor + 1\}$. The parameters of the fine-scale behaviour Markov chain were set to be as follows:
+	\item Once the dive durations were calculated, for each $t \in \{1, \ldots, 100\}$, dive $t$ was broken into $\lfloor Y_t/2 \rfloor$ 2-second segments (the end of the dive sequence was discarded). Further, each 2-second segment was assigned a behaviour according to a fine-scale Markov chain $X^*_t$, where $X^*_{t,t^*} \in \{1,2\}$ and $t^* \in \{1,101,201,\ldots,100\lfloor Y_t/2 \rfloor - 99\}$. The parameters of the fine-scale behaviour Markov chain were set to be as follows:
 	%
 	$$\Gamma^{*(1)} = \begin{pmatrix} 0.25 & 0.75 \\ 0.75 & 025 \end{pmatrix} \qquad 	\Gamma^{*(2)} = \begin{pmatrix} 0.75 & 0.25 \\ 0.25 & 0.75 \end{pmatrix}$$
 	%
@@ -53,7 +55,7 @@ To test the CarHHMM with STFT, a sequence of 100 marine-animal dives were simula
     	\hat{Y}^{*(n)}_{t,t^*}  &= -\hat{Y}^{*(100-n)}_{t,t^*}, & \qquad n \in \{51,\ldots,99\}
     \end{align*}
 	
-	\item Finally, $Y^*_{t,t^*:t^*+99}$ is set using the inverse discrete Fourier transform of $\hat{Y}^*_{t,t^*}$:
+	\item Finally, $Y^*_{t,t^*:t^*+99}$ was set using the inverse discrete Fourier transform of $\hat{Y}^*_{t,t^*}$:
 	$$Y^*_{t,t^*:t^*+99} = IDFT\left(\hat{Y}^*_{t,t^*}\right)$$
 		
 \end{enumerate}
@@ -104,21 +106,24 @@ Note that the two fine-scale states $X^*_{t,t^*} = 1$ and $X^*_{t,t^*} = 2$ are 
 \end{figure}
 
 
-
 \subsection{Simulation Results}
 
-Four different models were fit to the generated data shown in figure (\ref{fig:sim_data}):
+Four different models were fit to the 100 simulated data sets:
 
 \begin{enumerate}
-    \item A CarHMM with no hierarchical component (CarHMM) using both $Z^{(1)}$ and $Z^{(2)}$ as fine-scale observations
-    \item A Hierarchical hidden Markov model with no auto-correlation (HHMM) using both $Z^{(1)}$ and $Z^{(2)}$ as fine-scale observations.
-    \item A CarHHMM using $Z^{(1)}$, but not $Z^{(2)}$, as fine-scale observations.
-    \item A CarHHMM using both $Z^{(1)}$ and $Z^{(2)}$ as fine-scale observations
+    \item A CarHMM with no hierarchical component using both $Z^{(1)}$ and $Z^{(2)}$ as fine-scale observations (CarHMM).
+    \item A Hierarchical hidden Markov model with no auto-correlation using both $Z^{(1)}$ and $Z^{(2)}$ as fine-scale observations (HHMM).
+    \item A CarHHMM using $Z^{(1)}$, but not $Z^{(2)}$, as fine-scale observations (CarHHMM1).
+    \item A CarHHMM using both $Z^{(1)}$ and $Z^{(2)}$ as fine-scale observations (CarHHMM2).
 \end{enumerate}
-
-Table (\ref{table:emis_dist}) gives the MLE estimates of the parameters for each model above.
-
-
+%
+For each model, the following were recorded:
+%
+\begin{enumerate}
+    \item an empirical distribution of the MLE estimates of $\Gamma$ and $\theta$ using the 100 generated data sets generated from true parameters $\Gamma_0$ and $\theta_0$.
+    \item a confusion matrix showing the state decoding capabilities of each model across all data sets.
+    \item The true coverage of 95\% confidence intervals estimated using the observed information matrix (to see how over- or under- confident our parameter estimates are).
+\end{enumerate}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

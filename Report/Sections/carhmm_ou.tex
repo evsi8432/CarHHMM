@@ -2,36 +2,41 @@
 
 \section{Results regarding CarHMMs and the Ornstein-Uhlenbeck process}
 
-\subsection{Equivalence of CarHMM and OU process}
+\subsection{Continuous Time models}
 
-Once the CarHMM is fit by maximizing the likelihood in equation (\ref{CarHMM_likelihood}), the emission distributions can be interpretted as the solution of a state-switching Ornstein-Uhlenbeck process similar to the one introduced by Michelot et al \cite{Michelot:2019}. In order for this to be the case, however, the following two conditions must be met:
-\begin{enumerate}
-	\item The underlying behavioral state of the continuous-time model must follow a Markov chain rather than a Markov process.
-	\item The emission distributions of the CarHMM must be normal.
-\end{enumerate}
-If this is the case, then the CarHMM is equivalent to a state-switching Ornstein-Uhlenbeck process. This gives new interpretation to the learned parameters of the CarHMM in the context of continuous-time model.
-
-\subsubsection{Proof}
-
-A one-dimensional state-switching Ornstein-Uhlenbeck process $y$ is the solution to the following stochastic differential equation:
+Although the CarHMM can incorporate auto-correlation into the structure of an HMM, they break down when observations are taken at irregular time intervals since the probability transition matrix $\Gamma$ would then depend upon the time step between observations. A common solution to this issue is to use a continuous-time method such as the one introduced by Michelot et al \cite{Michelot:2019}, which models the movement of an animal as an Ornstein-Uhlenbeck process with parameters that depend upon the underlying behavioural state of the animal. Namely, a state-switching Ornstein-Uhlenbeck process $y$ is the solution to the following stochastic differential equation:
 %
 $$dy_t = \beta_{x_t}(\gamma_{x_t} - y_t)dt + \omega_{x_t} dW_t$$
 %
-where $x_t$ is the fine-scale behavior of the animal at time $t$, $\beta_{x_t}$ relates to rate at which the process returns to its mean value, $\gamma_{x_t}$ is the long-term mean value of the process, $\omega_{x_t}$ is related to short-term variance, and $W$ is a Wiener process. $x_t$ is described by an unobserved Markov process. Here, $t \in \mathbb{R}$ is a continuous time stamp rather than an index. If the behavioral state $x_t$ does not change between observations (i.e. $x_t$ follows a Markov chain), the solution to this equation is known to be the following \cite{Michelot:2019}:
-%
-\begin{align*}
-y_{t+\Delta t} | x_{t:t+\Delta t} \sim \mathcal{N}\left((1-e^{-\beta_{x_t}\Delta t})\gamma_{x_t} + e^{-\beta_{x_t}\Delta t} y_t,\quad \frac{\omega_{x_t}^2}{2\beta_{x_t}} (1-e^{-2\beta_{x_t}\Delta t})\right)
-\end{align*}
-%
-Now, suppose that $\Delta t$ is constant for all observations, as is the case for hidden Markov models. In addition, introduce the following transformations:
+where $x_t$ is the fine-scale behavior of the animal at time $t$, $\beta_{x_t}$ relates to rate at which the process returns to its mean value, $\gamma_{x_t}$ is the long-term mean value of the process, $\omega_{x_t}$ is related to short-term variance, and $W$ is a Wiener process. $x_t$ is assumed to follow an unobserved continuous-time Markov process. Here, $t \in \mathbb{R}$ is a continuous time stamp rather than an index. If the behavioral state $x_t$ is known and does not change between observations, the solution is known to be the following \cite{Michelot:2019}:
 %
 \begin{align}
-\mu_{x_t} = \gamma_{x_t}, \qquad \phi_{x_t} = e^{-\beta_{x_t}\Delta t}, \qquad \sigma^2_{x_t} = \frac{\omega_{x_t}^2}{2\beta_{x_t}} (1-e^{-2\beta_{x_t}\Delta t}) \\
-\gamma_{x_t} = \mu_{x_t}, \qquad \beta_{x_t} = -\frac{\log(\phi_{x_t})}{\Delta t}, \qquad \omega_{x_t} = \sqrt{\frac{2\sigma^{2}_{x_t}\log(\phi_{x_t})}{\Delta t (\phi_{x_t}^2-1)}}
-\label{CarHMM_to_OU}
+y_{t+\Delta t} | x_{t:t+\Delta t} \sim \mathcal{N}\left((1-e^{-\beta_{x_t}\Delta t})\gamma_{x_t} + e^{-\beta_{x_t}\Delta t} y_t,\quad \frac{\omega_{x_t}^2}{2\beta_{x_t}} (1-e^{-2\beta_{x_t}\Delta t})\right)
+\label{eqn:OU_sol}
 \end{align}
 %
-Then, almost immediately we can see the following:
+where $\Delta t$ is the distance between any two observations $Y_t$ and $Y_{t+\delta t}$. Continuous time models can be built up from arbitrarily complex stochastic differential equations and allow for uneven step lengths in the observations sequence $Y$. However, most continuous time models require MCMC algorithms to perform inference over and as a result are not easily incorporated into the HHMM structure.
+
+\subsection{Equivalence of CarHMM and OU process}
+
+Once the CarHMM is fit by maximizing the likelihood in equation (\ref{CarHMM_likelihood}), the emission distributions can be interpreted as the solution of a state-switching Ornstein-Uhlenbeck process similar to the one introduced by Michelot et al \cite{Michelot:2019}. In order for this to be the case, however, the following two conditions must be met:
+\begin{enumerate}
+	\item The underlying behavioral state of the continuous-time model follows a Markov chain rather than a Markov process.
+	\item The emission distributions of the CarHMM are normal.
+\end{enumerate}
+If this is the case, then the CarHMM is equivalent to a state-switching Ornstein-Uhlenbeck process. This gives new interpretation to the learned parameters of the CarHMM in the context of a continuous-time model.
+
+\subsubsection{Proof}
+
+Suppose that $\Delta t$ is constant for all observations. In addition, introduce the following transformations:
+%
+\begin{align}
+\mu_{x_t} = \gamma_{x_t}, \qquad \phi_{x_t} = e^{-\beta_{x_t}\Delta t}, \qquad \sigma^2_{x_t} = \frac{\omega_{x_t}^2}{2\beta_{x_t}} (1-e^{-2\beta_{x_t}\Delta t}) \label{eqn:CarHMM_to_OU} \\
+\gamma_{x_t} = \mu_{x_t}, \qquad \beta_{x_t} = -\frac{\log(\phi_{x_t})}{\Delta t}, \qquad \omega_{x_t} = \sqrt{\frac{2\sigma^{2}_{x_t}\log(\phi_{x_t})}{\Delta t (\phi_{x_t}^2-1)}}
+\label{eqn:OU_to_CarHMM}
+\end{align}
+%
+Combining equation (\ref{eqn:CarHMM_to_OU}) with equation (\ref{eqn:OU_sol}) gives the following:
 %
 \begin{align*}
 y_{t+\Delta t} | x_{t:t+\Delta t} \sim \mathcal{N}\left((1-\phi_{x_t})\mu_{x_t} + \phi_{x_t} y_t,\quad \sigma_{x_t}^2 \right)
@@ -50,7 +55,7 @@ p_{21} e^{-\lambda_2 \Delta t} & 1-e^{-\lambda_2 \Delta t} & \dots & p_{2N} e^{-
 p_{N1} e^{-\lambda_N \Delta t} & p_{N2} e^{-\lambda_N \Delta t} & \dots  & 1-e^{-\lambda_N \Delta t}
 \end{pmatrix}$$
 %
-where $\Lambda = \{p,\lambda\}$, $p_{ij}$ is the probability that the animal moves from state $i$ to state $j$ given that it left state $i$, and $\lambda_i$ is the rate at which the animal leaves behavioral state $i$. Finally, we just note that the parameters in equation (\ref{CarHMM_to_OU}) become functions of the time step between observations $\Delta t$:
+where $\Lambda = \{p,\lambda\}$, $p_{ij}$ is the probability that the animal moves from state $i$ to state $j$ given that it left state $i$ such that $\sum_{j \neq i} p_ij = 1$, and $\lambda_i$ is the rate at which the animal leaves behavioral state $i$. Finally, we just note that the parameters in equation (\ref{CarHMM_to_OU}) become functions of the time step between observations $\Delta t$:
 %
 \begin{align*}
 \mu_{x_t}= \gamma_{x_t}, \qquad \phi_{x_t}(\Delta t) = e^{-\beta_{x_t}\Delta t}, \qquad \sigma^2_{x_t}(\Delta t) = \frac{\omega_{x_t}^2}{2\beta_{x_t}} (1-e^{-2\beta_{x_t}\Delta t})
