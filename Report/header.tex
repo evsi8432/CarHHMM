@@ -1,7 +1,6 @@
 % header.tex
 % this is where you load pacakges, specify custom formats, etc.
 
-\usepackage[left=0.5in,right=0.5in,top=1in,footskip=25pt]{geometry} 
 % \usepackage{changepage}
 \usepackage{amsmath,amsthm,amssymb,amsfonts}
 \usepackage{mathtools}
@@ -11,16 +10,6 @@
 % Load dsfont this to get proper indicator function (bold 1) with \mathds{1}:
 \usepackage{dsfont}
 \usepackage{centernot}
-
-\usepackage[usenames,dvipsnames]{xcolor}
-
-% set up commenting code (I will use this during marking)
-\definecolor{CommentColor}{rgb}{0,.50,.50}
-\newcounter{margincounter}
-\newcommand{\displaycounter}{{\arabic{margincounter}}}
-\newcommand{\incdisplaycounter}{{\stepcounter{margincounter}\arabic{margincounter}}}
-\newcommand{\COMMENT}[1]{\textcolor{CommentColor}{$\,^{(\incdisplaycounter)}$}\marginpar{\scriptsize\textcolor{CommentColor}{ {\tiny $(\displaycounter)$} #1}}}
-
 \usepackage{appendix}
 
 % set up graphics
