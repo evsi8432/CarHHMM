@@ -17,6 +17,8 @@ from scipy.optimize import LinearConstraint
 from scipy.signal import convolve
 from scipy.interpolate import interp1d
 
+from copy import deepcopy
+
 import divebomb
 
 import time
@@ -427,148 +429,165 @@ class HHMM:
         return log_alpha, log_beta, gamma, xi
 
 
-    def train_DM(self,data,eps=0.001,max_iters=None):
+    def train_DM(self,data,max_iters=10,tol=0.01,eps=10e-6):
 
-        # define loss function
-        def loss_fn(x):
-            ind = 0
+        options = {'maxiter':10,'disp':False}
+        prev_l = self.likelihood(data)
 
-            # update crude eta
-            self.eta[0] = x[0:self.pars.K[0]**2].reshape((self.pars.K[0],
-                                                          self.pars.K[0]))
-            ind += self.pars.K[0]**2
+        for _ in range(max_iters):
 
-            # update crude theta
+            print(prev_l)
+
+            ### start with crude eta ###
+            def loss_fn(x):
+                ind = 0
+
+                # update crude eta
+                self.eta[0] = x[0:self.pars.K[0]**2].reshape((self.pars.K[0],
+                                                              self.pars.K[0]))
+                l = -self.likelihood(data)
+                return l
+
+            # define inital value
+            x0 = []
+            x0.extend(self.eta[0].flatten())
+
+            # optimize
+            res = minimize(loss_fn, x0, method='Nelder-Mead',options=options)
+
+            # update final values
+            x = np.copy(res['x'])
+            self.eta[0] = x.reshape((self.pars.K[0],self.pars.K[0]))
+
+            #### then do crude theta ###
             for k0 in range(self.pars.K[0]):
                 for feature in self.pars.features[0]:
-                    if feature in ['Ay','Az']:
-                        self.theta[0][feature]['mu'][k0] = x[ind]
-                        self.theta[0][feature]['sig'][k0] = self.theta[0]['Ax']['sig'][k0]
-                        self.theta[0][feature]['corr'][k0] = self.theta[0]['Ax']['corr'][k0]
-                        ind += 1
-                    else:
-                        self.theta[0][feature]['mu'][k0] = x[ind]
-                        self.theta[0][feature]['sig'][k0] = max(x[ind+1],eps)
-                        self.theta[0][feature]['corr'][k0] = x[ind+2]
-                        ind += 3
 
-            # update fine eta
-            for k0 in range(self.pars.K[0]):
-                self.eta[1][k0] = x[ind:ind+self.pars.K[1]**2].reshape((self.pars.K[1],
-                                                                        self.pars.K[1]))
-                ind += self.pars.K[1]**2
-
-            # update fine theta
-            ind_start = int(ind)
-            for k0 in range(self.pars.K[0]):
-                for k1 in range(self.pars.K[1]):
-                    for feature in self.pars.features[1]:
+                    def loss_fn(x):
+                        ind = 0
                         if feature in ['Ay','Az']:
-                            self.theta[1][k0][feature]['mu'][k1] = x[ind]
-                            self.theta[1][k0][feature]['sig'][k1] = self.theta[1][k0]['Ax']['sig'][k1]
-                            self.theta[1][k0][feature]['corr'][k1] = self.theta[1][k0]['Ax']['corr'][k1]
+                            self.theta[0][feature]['mu'][k0] = x[ind]
+                            self.theta[0][feature]['sig'][k0] = self.theta[0]['Ax']['sig'][k0]
+                            self.theta[0][feature]['corr'][k0] = self.theta[0]['Ax']['corr'][k0]
                             ind += 1
                         else:
-                            self.theta[1][k0][feature]['mu'][k1] = x[ind]
-                            self.theta[1][k0][feature]['sig'][k1] = max(x[ind+1],eps)
-                            self.theta[1][k0][feature]['corr'][k1] = x[ind+2]
+                            self.theta[0][feature]['mu'][k0] = x[ind]
+                            self.theta[0][feature]['sig'][k0] = max(x[ind+1],eps)
+                            self.theta[0][feature]['corr'][k0] = x[ind+2]
                             ind += 3
-                if self.pars.share_fine_states:
-                    ind = ind_start
 
-            return -self.likelihood(data)
+                        return -self.likelihood(data)
 
-        # define inital value
-        x0 = []
-
-        # update crude eta
-        x0.extend(self.eta[0].flatten())
-
-        # update crude theta
-        for k0 in range(self.pars.K[0]):
-            for feature in self.pars.features[0]:
-                x0.append(self.theta[0][feature]['mu'][k0])
-                if feature not in ['Ay','Az']:
-                    x0.append(self.theta[0][feature]['sig'][k0])
-                    x0.append(self.theta[0][feature]['corr'][k0])
-
-        # update fine eta
-        for k0 in range(self.pars.K[0]):
-            x0.extend(self.eta[1][k0].flatten())
-
-        # update fine theta
-        if self.pars.share_fine_states:
-            K0 = 1
-        else:
-            K0 = self.pars.K[0]
-
-        for k0 in range(K0):
-            for k1 in range(self.pars.K[1]):
-                for feature in self.pars.features[1]:
-                    x0.append(self.theta[1][k0][feature]['mu'][k1])
+                    # define inital value
+                    x0 = []
+                    x0.append(self.theta[0][feature]['mu'][k0])
                     if feature not in ['Ay','Az']:
-                        x0.append(self.theta[1][k0][feature]['sig'][k1])
-                        x0.append(self.theta[1][k0][feature]['corr'][k1])
+                        x0.append(self.theta[0][feature]['sig'][k0])
+                        x0.append(self.theta[0][feature]['corr'][k0])
 
+                    # optimize
+                    res = minimize(loss_fn, x0, method='Nelder-Mead',options=options)
 
-        # do the maximization
-        print(len(x0))
-        start = time.time()
-        options = {'disp': True, 'adaptive':True}
-        if max_iters is not None:
-            options['maxiter'] = max_iters
-        res = minimize(loss_fn, x0, method='Nelder-Mead',options=options)
-        end = time.time()
-        print(end - start)
-
-        # update final values
-        x = np.copy(res['x'])
-        ind = 0
-
-        # update crude eta
-        self.eta[0] = x[0:self.pars.K[0]**2].reshape((self.pars.K[0],
-                                                      self.pars.K[0]))
-        ind += self.pars.K[0]**2
-
-        # update crude theta
-        for k0 in range(self.pars.K[0]):
-            for feature in self.pars.features[0]:
-                if feature in ['Ay','Az']:
-                    self.theta[0][feature]['mu'][k0] = x[ind]
-                    self.theta[0][feature]['sig'][k0] = self.theta[0]['Ax']['sig'][k0]
-                    self.theta[0][feature]['corr'][k0] = self.theta[0]['Ax']['corr'][k0]
-                    ind += 1
-                else:
-                    self.theta[0][feature]['mu'][k0] = x[ind]
-                    self.theta[0][feature]['sig'][k0] = max(x[ind+1],eps)
-                    self.theta[0][feature]['corr'][k0] = x[ind+2]
-                    ind += 3
-
-        # update fine eta
-        for k0 in range(self.pars.K[0]):
-            self.eta[1][k0] = x[ind:ind+self.pars.K[1]**2].reshape((self.pars.K[1],
-                                                                    self.pars.K[1]))
-            ind += self.pars.K[1]**2
-
-        # update fine theta
-        ind_start = int(ind)
-        for k0 in range(self.pars.K[0]):
-            for k1 in range(self.pars.K[1]):
-                for feature in self.pars.features[1]:
+                    # update final values
+                    x = np.copy(res['x'])
                     if feature in ['Ay','Az']:
-                        self.theta[1][k0][feature]['mu'][k1] = x[ind]
-                        self.theta[1][k0][feature]['sig'][k1] = self.theta[1][k0]['Ax']['sig'][k1]
-                        self.theta[1][k0][feature]['corr'][k1] = self.theta[1][k0]['Ax']['corr'][k1]
-                        ind += 1
+                        self.theta[0][feature]['mu'][k0] = x[0]
+                        self.theta[0][feature]['sig'][k0] = self.theta[0]['Ax']['sig'][k0]
+                        self.theta[0][feature]['corr'][k0] = self.theta[0]['Ax']['corr'][k0]
                     else:
-                        self.theta[1][k0][feature]['mu'][k1] = x[ind]
-                        self.theta[1][k0][feature]['sig'][k1] = max(x[ind+1],eps)
-                        self.theta[1][k0][feature]['corr'][k1] = x[ind+2]
-                        ind += 3
-            if self.pars.share_fine_states:
-                ind = ind_start
+                        self.theta[0][feature]['mu'][k0] = x[0]
+                        self.theta[0][feature]['sig'][k0] = max(x[1],eps)
+                        self.theta[0][feature]['corr'][k0] = x[2]
 
-        return res
+            ### then do fine eta ###
+            for k0 in range(self.pars.K[0]):
+
+                def loss_fn(x):
+                    self.eta[1][k0] = x.reshape((self.pars.K[1],self.pars.K[1]))
+                    l = -self.likelihood(data)
+                    return l
+
+                # define inital value
+                x0 = []
+                x0.extend(self.eta[1][k0].flatten())
+
+                # optimize
+                res = minimize(loss_fn, x0, method='Nelder-Mead',options=options)
+
+                # update final values
+                x = np.copy(res['x'])
+                self.eta[1][k0] = x.reshape((self.pars.K[1],self.pars.K[1]))
+
+
+            ### finally do fine theta ###
+            for k1 in range(self.pars.K[1]):
+
+                if self.pars.share_fine_states:
+                    K0 = 1
+                else:
+                    K0 = self.pars.K[0]
+
+                for feature in self.pars.features[1]:
+
+                    for k0 in range(K0):
+
+                        def loss_fn(x):
+                            ind = 0
+                            for k00 in range(self.pars.K[0]):
+                                if self.pars.share_fine_states or (k00 == k0):
+                                    if feature in ['Ay','Az']:
+                                        self.theta[1][k00][feature]['mu'][k1] = x[ind]
+                                        self.theta[1][k00][feature]['sig'][k1] = self.theta[1][k0]['Ax']['sig'][k1]
+                                        self.theta[1][k00][feature]['corr'][k1] = self.theta[1][k0]['Ax']['corr'][k1]
+                                        if not self.pars.share_fine_states or (k00 == self.pars.K[0]-1):
+                                            ind += 1
+                                    else:
+                                        self.theta[1][k00][feature]['mu'][k1] = x[ind]
+                                        self.theta[1][k00][feature]['sig'][k1] = max(x[ind+1],eps)
+                                        self.theta[1][k00][feature]['corr'][k1] = x[ind+2]
+                                        if not self.pars.share_fine_states or (k00 == self.pars.K[0]-1):
+                                            ind += 3
+
+                            l = -self.likelihood(data)
+                            return l
+
+                        # define inital value
+                        x0 = []
+                        x0.append(self.theta[1][k0][feature]['mu'][k1])
+                        if feature not in ['Ay','Az']:
+                            x0.append(self.theta[1][k0][feature]['sig'][k1])
+                            x0.append(self.theta[1][k0][feature]['corr'][k1])
+
+
+                        # optimize
+                        if (not self.pars.share_fine_states) or (k0 == 0):
+                            res = minimize(loss_fn, x0, method='Nelder-Mead',options=options)
+
+                        # update final values
+                        x = np.copy(res['x'])
+                        ind = 0
+                        for k00 in range(self.pars.K[0]):
+                            if self.pars.share_fine_states or (k00 == k0):
+                                if feature in ['Ay','Az']:
+                                    self.theta[1][k00][feature]['mu'][k1] = x[ind]
+                                    self.theta[1][k00][feature]['sig'][k1] = self.theta[1][k0]['Ax']['sig'][k1]
+                                    self.theta[1][k00][feature]['corr'][k1] = self.theta[1][k0]['Ax']['corr'][k1]
+                                    if not self.pars.share_fine_states or (k00 == self.pars.K[0]-1):
+                                        ind += 1
+                                else:
+                                    self.theta[1][k00][feature]['mu'][k1] = x[ind]
+                                    self.theta[1][k00][feature]['sig'][k1] = max(x[ind+1],eps)
+                                    self.theta[1][k00][feature]['corr'][k1] = x[ind+2]
+                                    if not self.pars.share_fine_states or (k00 == self.pars.K[0]-1):
+                                        ind += 3
+
+            curr_l = self.likelihood(data)
+            if abs(curr_l - prev_l) < tol:
+                break
+            else:
+                prev_l = curr_l
+
+        return (self.theta,self.eta)
 
 
     def train_EM(self,data,tol,max_iters):
