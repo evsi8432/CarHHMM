@@ -6,7 +6,7 @@
 
 %!% Have you simulated this only once? I think you would want to do this multiple time and present results across simulations, no?
 
-To test the CarHHMM with STFT, 100 separate sequences of 100 marine-animal dives were simulated. The coarse-scale observations $Y$ were set as the duration of each dive, and the fine-scale observations $Y^*$ were set as one-dimensional acceleration readings simulated at 50 hertz. the specific procedure used to generate data was as follows: 
+To test the CarHHMM with STFT, 100 separate sequences of 100 marine-mammal dives were simulated. The coarse-scale observations $Y$ were set as the duration of each dive, and the fine-scale observations $Y^*$ were set as one-dimensional acceleration readings simulated at 50 hertz. the specific procedure used to generate data was as follows: 
 
 \begin{enumerate}
 	\item 100 dive durations were simulated using an HMM generative model with the following parameters:
@@ -14,7 +14,7 @@ To test the CarHHMM with STFT, 100 separate sequences of 100 marine-animal dives
 	\begin{align*}
 		&\Gamma = \begin{pmatrix} 0.4 & 0.6 \\ 0.6 & 0.4 \end{pmatrix} \\
 		% 
-		&Y_t|X_t \sim Gamma \\
+		&Y_t|X_t \sim {\rm{Gamma}} \\
 		&\bbE(Y_t|X_t = 1) = 15 s, \quad \quad \bbE(Y_t|X_t = 2) = 60 s \\
 		%
 		&\bbV(Y_t|X_t = 1) = 25 s^2, \quad \quad  \bbV(Y_t|X_t = 2) = 100 s^2
