@@ -11,6 +11,7 @@ from scipy.stats import gaussian_kde
 from scipy.stats import circstd
 from scipy.special import iv
 from scipy.special import expit
+from scipy.special import logit
 from scipy.special import logsumexp
 from scipy.optimize import minimize
 from scipy.optimize import LinearConstraint
@@ -25,6 +26,29 @@ import time
 import pickle
 
 
+def corr_2_rho(corr):
+    return logit(corr)
+
+def ptm_2_eta(gamma):
+
+    eta = np.zeros_like(gamma)
+    N = len(gamma)
+
+    for _ in range(100):
+        for i in range(N):
+            A = sum(np.exp(eta[i]))
+            for j in range(N):
+                if i != j:
+                    A0 = A-np.exp(eta[i,j])
+                    eta[i,j] = np.log((A0*gamma[i,j])/(1-gamma[i,j]))
+
+    return eta
+
+def eta_2_ptm(eta):
+    ptm = np.exp(eta)
+    return (ptm.T/np.sum(ptm,1)).T
+
+
 class HHMM:
 
 
@@ -34,7 +58,12 @@ class HHMM:
         self.theta = []
         self.eta = []
         self.ptm = []
+
+
         self.data = data
+        self.SEs = None
+        self.train_time = None
+        self.CM = None
 
         eta_crude = -1.0 + 0.1*np.random.normal(size=(self.pars.K[0],self.pars.K[0]))
         ptm_crude = np.exp(eta_crude)
@@ -158,13 +187,6 @@ class HHMM:
         return
 
 
-    def initalize_theta_sim(self):
-
-
-
-        return
-
-
     def find_log_p_yt_given_xt(self,level,feature,data,data_tm1,mu,sig,corr,sample=0):
 
         # find log density of feature
@@ -229,6 +251,10 @@ class HHMM:
 
 
     def dive_likelihood(self,dive_data,state):
+
+        # deal with dive lengths of 0
+        if len(dive_data) == 0:
+            return 0
 
         # find tpm
         self.eta[1][state][np.diag_indices(self.pars.K[1])] = 0
@@ -431,12 +457,14 @@ class HHMM:
 
     def train_DM(self,data,max_iters=10,tol=0.01,eps=10e-6):
 
+        stime = time.time()
         options = {'maxiter':10,'disp':False}
         prev_l = self.likelihood(data)
 
         for _ in range(max_iters):
 
             print(prev_l)
+            print(self.theta)
 
             ### start with crude eta ###
             def loss_fn(x):
@@ -587,6 +615,8 @@ class HHMM:
             else:
                 prev_l = curr_l
 
+        self.train_time = time.time()-stime
+
         return (self.theta,self.eta)
 
 
@@ -683,6 +713,184 @@ class HHMM:
                                  (df['time'] < seg['end_time'])] = ML_subdive
 
         return data,df
+
+
+    def get_SEs(self,data,h):
+
+        SEs = {}
+
+        # coarse-scale theta
+        for feature in self.theta[0]:
+            SEs[feature] = {}
+            for param in self.theta[0][feature]:
+                SEs[feature][param] = []
+                for state_num,theta in enumerate(self.theta[0][feature][param]):
+
+                    if param == 'corr':
+                        theta = deepcopy(expit(self.theta[0][feature][param][state_num]))
+                        h0 = h*min(theta,1.0-theta)
+
+                    # get middle value
+                    th_t = self.likelihood(data)
+
+                    # get plus value
+                    if param == 'corr':
+                        self.theta[0][feature][param][state_num] = corr_2_rho(theta+h0)
+                    else:
+                        self.theta[0][feature][param][state_num] += h
+                    th_tp1 = self.likelihood(data)
+
+                    # get minus value
+                    if param == 'corr':
+                        self.theta[0][feature][param][state_num] = corr_2_rho(theta-h0)
+                    else:
+                        self.theta[0][feature][param][state_num] += -2*h
+                    th_tm1 = self.likelihood(data)
+
+                    # return theta
+                    if param == 'corr':
+                        self.theta[0][feature][param][state_num] = corr_2_rho(theta)
+                    else:
+                        self.theta[0][feature][param][state_num] += h
+
+                    # get estimate
+                    if param =='corr':
+                        I_th = (2*th_t - th_tm1 - th_tp1)/(h0**2)
+                    else:
+                        I_th = (2*th_t - th_tm1 - th_tp1)/(h**2)
+                    V_th = 1.0/I_th
+                    sig_th = np.sqrt(V_th)
+
+                    SEs[feature][param].append(sig_th)
+
+
+        # fine-scale theta (shared states)
+        for feature in self.theta[1][0]:
+            SEs[feature] = {}
+            for param in self.theta[1][0][feature]:
+                SEs[feature][param] = []
+                for state_num,theta in enumerate(self.theta[1][0][feature][param]):
+
+                    if param == 'corr':
+                        theta = deepcopy(expit(self.theta[1][0][feature][param][state_num]))
+                        h0 = h*min(theta,1.0-theta)
+
+                    # get middle value
+                    th_t = self.likelihood(data)
+
+                    # get plus value
+                    if param == 'corr':
+                        self.theta[1][0][feature][param][state_num] = corr_2_rho(theta+h0)
+                    else:
+                        self.theta[1][0][feature][param][state_num] += h
+                    th_tp1 = self.likelihood(data)
+
+                    # get minus value
+                    if param == 'corr':
+                        self.theta[1][0][feature][param][state_num] = corr_2_rho(theta-h0)
+                    else:
+                        self.theta[1][0][feature][param][state_num] += -2*h
+                    th_tm1 = self.likelihood(data)
+
+                    # return theta
+                    if param == 'corr':
+                        self.theta[1][0][feature][param][state_num] = corr_2_rho(theta)
+                    else:
+                        self.theta[1][0][feature][param][state_num] += h
+
+                    # get estimate
+                    if param =='corr':
+                        I_th = (2*th_t - th_tm1 - th_tp1)/(h0**2)
+                    else:
+                        I_th = (2*th_t - th_tm1 - th_tp1)/(h**2)
+                    V_th = 1.0/I_th
+                    sig_th = np.sqrt(V_th)
+
+                    SEs[feature][param].append(sig_th)
+
+
+        # coarse-scale eta
+        ptm = deepcopy(eta_2_ptm(self.eta[0]))
+        h0 = h*np.min(ptm)
+
+        V_gamma_coarse = np.zeros_like(self.eta[0])
+        for i in range(self.eta[0].shape[0]):
+            for j in range(self.eta[0].shape[1]):
+                if i == j:
+                    continue
+
+                # get middle value
+                th_t = self.likelihood(data)
+
+                # get plus value
+                ptm[i,j] += h0
+                ptm[i,i] -= h0
+                self.eta[0] = ptm_2_eta(ptm)
+                th_tp1 = self.likelihood(data)
+
+                # get minus value
+                ptm[i,j] -= 2*h0
+                ptm[i,i] += 2*h0
+                self.eta[0] = ptm_2_eta(ptm)
+                th_tm1 = self.likelihood(data)
+
+                # return theta
+                ptm[i,j] += h0
+                ptm[i,i] -= h0
+                self.eta[0] = ptm_2_eta(ptm)
+
+                # get estimate
+                I_th = (2*th_t - th_tm1 - th_tp1)/(h0**2)
+                V_th = 1.0/I_th
+                V_gamma_coarse[i,j] = V_th
+
+
+        # get ptm
+        SEs['Gamma_coarse'] = np.sqrt(V_gamma_coarse)
+
+        # fine-scale eta
+        V_gamma_fine = [np.zeros_like(x) for x in self.eta[1]]
+        for n in range(len(V_gamma_fine)):
+            ptm = deepcopy(eta_2_ptm(self.eta[1][n]))
+            h0 = h*np.min(ptm)
+            for i in range(self.eta[0].shape[0]):
+                for j in range(self.eta[0].shape[1]):
+                    if i == j:
+                        continue
+
+                    # get middle value
+                    th_t = self.likelihood(data)
+
+                    # get plus value
+                    ptm[i,j] += h0
+                    ptm[i,i] -= h0
+                    self.eta[1][n] = ptm_2_eta(ptm)
+                    th_tp1 = self.likelihood(data)
+
+                    # get minus value
+                    ptm[i,j] -= 2*h0
+                    ptm[i,i] += 2*h0
+                    self.eta[1][n] = ptm_2_eta(ptm)
+                    th_tm1 = self.likelihood(data)
+
+                    # return theta
+                    ptm[i,j] += h0
+                    ptm[i,i] -= h0
+                    self.eta[1][n] = ptm_2_eta(ptm)
+
+                    # get estimate
+                    I_th = (2*th_t - th_tm1 - th_tp1)/(h0**2)
+                    V_th = 1.0/I_th
+                    V_gamma_fine[n][i,j] = V_th
+
+
+        SEs['Gamma_fine'] = []
+        for i,x in enumerate(V_gamma_fine):
+            SEs['Gamma_fine'].append(np.sqrt(x))
+
+        self.SEs = SEs
+
+        return SEs
 
 
     def save(self,file):

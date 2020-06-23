@@ -32,6 +32,7 @@ import HHMM
 import Visualisor
 
 rand_seed = int(sys.argv[1])
+model = str(sys.argv[2])
 
 random.seed(rand_seed)
 np.random.seed(rand_seed)
@@ -308,6 +309,8 @@ hhmm_Vs = []
 hhmm_FV_uncorrs = []
 hhmm_FVs = []
 
+h = 0.001
+
 for dataset_num in range(ndatasets):
 
 
@@ -319,154 +322,204 @@ for dataset_num in range(ndatasets):
 
 
     ### CarHMM ###
-    print('')
-    print('STARTING CarHMM')
-    print('')
-    pars = Parameters.Parameters()
-    pars.K = [1,2]
-    pars.features = [{'dive_duration':{'corr':False,'f':'gamma'}},
-                     {'FoVeDBA':{'corr':False,'f':'gamma'},
-                      'A':{'corr':True,'f':'normal'}}]
-    pars.theta = hmm_FV_theta
+    if model == 'CarHMM':
+        print('')
+        print('STARTING CarHMM')
+        print('')
+        pars = Parameters.Parameters()
+        pars.K = [1,2]
+        pars.features = [{'dive_duration':{'corr':False,'f':'gamma'}},
+                         {'FoVeDBA':{'corr':False,'f':'gamma'},
+                          'A':{'corr':True,'f':'normal'}}]
+        pars.theta = hmm_FV_theta
 
-    hmm_FV = HHMM.HHMM(pars,data_FV)
-    hmm_FV.theta = hmm_FV_theta
-    hmm_FV.eta = hmm_FV_eta
-    hmm_FV.true_theta = deepcopy(hmm_FV_theta)
-    hmm_FV.true_eta = deepcopy(hmm_FV_eta)
+        hmm_FV = HHMM.HHMM(pars,data_FV)
+        hmm_FV.theta = hmm_FV_theta
+        hmm_FV.eta = hmm_FV_eta
+        hmm_FV.true_theta = deepcopy(hmm_FV_theta)
+        hmm_FV.true_eta = deepcopy(hmm_FV_eta)
 
-    if train_new:
         hmm_FV.train_DM(data_FV)
-        hmm_FV.save('../Params/hmm_FV_%d_%d'%(dataset_num,rand_seed))
-    else:
-        hmm_FV = hmm_FV.load('../Params/hmm_FV_%d_%d'%(dataset_num,rand_seed))
+        hmm_FV.get_SEs(data_FV,h)
+        data,data_V,data_FV = create_data()
 
-    for dive_num,datum in enumerate(data_FV):
-        _,_,posts,_ = hmm_FV.fwd_bwd(datum['subdive_features'],[1,0])
-        for i,post in enumerate(posts.T):
-            data[dive_num]['subdive_features'][i]['hmm_FV_dive'] = 0.0
-            data[dive_num]['subdive_features'][i]['hmm_FV_subdive'] = post[1]
+        # make test data
+        for dive_num,datum in enumerate(data_FV):
+            _,_,posts,_ = hmm_FV.fwd_bwd(datum['subdive_features'],[1,0])
+            for i,post in enumerate(posts.T):
+                data[dive_num]['subdive_features'][i]['hmm_FV_dive'] = 0.0
+                data[dive_num]['subdive_features'][i]['hmm_FV_subdive'] = post[1]
+
+        # get confusion matrix
+        CM_coarse = np.zeros((2,2))
+        CM_fine = [np.zeros((2,2)),np.zeros((2,2))]
+        for dive in data:
+            dive_type = dive['dive_type']
+            CM_coarse[dive_type,1] += dive['subdive_features'][0]['hmm_FV_dive']
+            CM_coarse[dive_type,0] += max(0,1.0-dive['subdive_features'][0]['hmm_FV_dive'])
+            for seg in dive['subdive_features']:
+                subdive_type = seg['subdive_type']
+                CM_fine[dive_type][subdive_type,1] += seg['hmm_FV_subdive']
+                CM_fine[dive_type][subdive_type,0] += max(0,1.0-seg['hmm_FV_subdive'])
+
+        hmm_FV.CM = [CM_coarse,CM_fine]
+
+        # save data
+        hmm_FV.save('../Params/hmm_FV_%d_%d'%(dataset_num,rand_seed))
 
 
     ### HHMM ###
-    print('')
-    print('STARTING HHMM')
-    print('')
-    pars = Parameters.Parameters()
-    pars.K = [2,2]
-    pars.features = [{'dive_duration':{'corr':False,'f':'gamma'}},
-                     {'FoVeDBA':{'corr':False,'f':'gamma'},
-                      'A':{'corr':False,'f':'normal'}}]
+    elif model == 'HHMM':
+        print('')
+        print('STARTING HHMM')
+        print('')
+        pars = Parameters.Parameters()
+        pars.K = [2,2]
+        pars.features = [{'dive_duration':{'corr':False,'f':'gamma'}},
+                         {'FoVeDBA':{'corr':False,'f':'gamma'},
+                          'A':{'corr':False,'f':'normal'}}]
 
-    hhmm_FV_uncorr = HHMM.HHMM(pars,data_FV)
-    hhmm_FV_uncorr.theta = hhmm_FV_uncorr_theta
-    hhmm_FV_uncorr.eta = hhmm_FV_uncorr_eta
-    hhmm_FV_uncorr.true_theta = deepcopy(hhmm_FV_uncorr_theta)
-    hhmm_FV_uncorr.true_eta = deepcopy(hhmm_FV_uncorr_eta)
+        hhmm_FV_uncorr = HHMM.HHMM(pars,data_FV)
+        hhmm_FV_uncorr.theta = hhmm_FV_uncorr_theta
+        hhmm_FV_uncorr.eta = hhmm_FV_uncorr_eta
+        hhmm_FV_uncorr.true_theta = deepcopy(hhmm_FV_uncorr_theta)
+        hhmm_FV_uncorr.true_eta = deepcopy(hhmm_FV_uncorr_eta)
 
-    if train_new:
         hhmm_FV_uncorr.train_DM(data_FV)
+        hhmm_FV_uncorr.get_SEs(data_FV,h)
+        data,data_V,data_FV = create_data()
+
+        # crude posterior
+        _,_,posts_crude,_ = hhmm_FV_uncorr.fwd_bwd(data_FV,[0])
+
+        # fine posterior
+        for dive_num,datum in enumerate(data_FV):
+            data[dive_num]['hhmm_FV_uncorr'] = posts_crude.T[dive_num,1]
+            _,_,posts_fine_0,_ = hhmm_FV_uncorr.fwd_bwd(datum['subdive_features'],[1,0])
+            _,_,posts_fine_1,_ = hhmm_FV_uncorr.fwd_bwd(datum['subdive_features'],[1,1])
+            for i,(post_fine_0,post_fine_1) in enumerate(zip(posts_fine_0.T,posts_fine_1.T)):
+                p = posts_crude.T[dive_num,0]*post_fine_0[1] + \
+                    posts_crude.T[dive_num,1]*post_fine_1[1]
+                data[dive_num]['subdive_features'][i]['hhmm_FV_uncorr_subdive'] = p
+                data[dive_num]['subdive_features'][i]['hhmm_FV_uncorr_dive'] = posts_crude.T[dive_num,1]
+
+        # get confusion matrix
+        CM_coarse = np.zeros((2,2))
+        CM_fine = [np.zeros((2,2)),np.zeros((2,2))]
+        for dive in data:
+            dive_type = dive['dive_type']
+            CM_coarse[dive_type,1] += dive['subdive_features'][0]['hhmm_FV_uncorr_dive']
+            CM_coarse[dive_type,0] += max(0,1.0-dive['subdive_features'][0]['hhmm_FV_uncorr_dive'])
+            for seg in dive['subdive_features']:
+                subdive_type = seg['subdive_type']
+                CM_fine[dive_type][subdive_type,1] += seg['hhmm_FV_uncorr_subdive']
+                CM_fine[dive_type][subdive_type,0] += max(0,1.0-seg['hhmm_FV_uncorr_subdive'])
+
+        hhmm_FV_uncorr.CM = [CM_coarse,CM_fine]
+
         hhmm_FV_uncorr.save('../Params/hhmm_FV_uncorr_%d_%d'%(dataset_num,rand_seed))
-    else:
-        hhmm_FV_uncorr = hhmm_FV_uncorr.load('../Params/hhmm_FV_uncorr_%d_%d'%(dataset_num,rand_seed))
-
-    # crude posterior
-    _,_,posts_crude,_ = hhmm_FV_uncorr.fwd_bwd(data_FV,[0])
-
-    # fine posterior
-    for dive_num,datum in enumerate(data_FV):
-        data[dive_num]['hhmm_FV_uncorr'] = posts_crude.T[dive_num,1]
-        _,_,posts_fine_0,_ = hhmm_FV_uncorr.fwd_bwd(datum['subdive_features'],[1,0])
-        _,_,posts_fine_1,_ = hhmm_FV_uncorr.fwd_bwd(datum['subdive_features'],[1,1])
-        for i,(post_fine_0,post_fine_1) in enumerate(zip(posts_fine_0.T,posts_fine_1.T)):
-            p = posts_crude.T[dive_num,0]*post_fine_0[1] + \
-                posts_crude.T[dive_num,1]*post_fine_1[1]
-            data[dive_num]['subdive_features'][i]['hhmm_FV_uncorr_subdive'] = p
-            data[dive_num]['subdive_features'][i]['hhmm_FV_uncorr_dive'] = posts_crude.T[dive_num,1]
 
 
     ### CarHHMM, no Z2 ###
-    print('')
-    print('STARTING CarHHMM minux Z2')
-    print('')
-    pars = Parameters.Parameters()
-    pars.K = [2,2]
-    pars.features = [{'dive_duration':{'corr':False,'f':'gamma'}},
-                     {'A':{'corr':True,'f':'normal'}}]
+    if model == 'CarHHMM1':
+        print('')
+        print('STARTING CarHHMM minux Z2')
+        print('')
+        pars = Parameters.Parameters()
+        pars.K = [2,2]
+        pars.features = [{'dive_duration':{'corr':False,'f':'gamma'}},
+                         {'A':{'corr':True,'f':'normal'}}]
 
-    hhmm_V = HHMM.HHMM(pars,data_V)
-    hhmm_V.theta = hhmm_V_theta
-    hhmm_V.eta = hhmm_V_eta
-    hhmm_V.true_theta = deepcopy(hhmm_V_theta)
-    hhmm_V.true_eta = deepcopy(hhmm_V_eta)
+        hhmm_V = HHMM.HHMM(pars,data_V)
+        hhmm_V.theta = hhmm_V_theta
+        hhmm_V.eta = hhmm_V_eta
+        hhmm_V.true_theta = deepcopy(hhmm_V_theta)
+        hhmm_V.true_eta = deepcopy(hhmm_V_eta)
 
-    if train_new:
         hhmm_V.train_DM(data_V)
+        hhmm_V.get_SEs(data_V,h)
+        data,data_V,data_FV = create_data()
+
+        # crude posterior
+        _,_,posts_crude,_ = hhmm_V.fwd_bwd(data_V,[0])
+
+        # fine posterior
+        for dive_num,datum in enumerate(data_V):
+            data[dive_num]['hhmm_v'] = posts_crude.T[dive_num,1]
+            _,_,posts_fine_0,_ = hhmm_V.fwd_bwd(datum['subdive_features'],[1,0])
+            _,_,posts_fine_1,_ = hhmm_V.fwd_bwd(datum['subdive_features'],[1,1])
+            for i,(post_fine_0,post_fine_1) in enumerate(zip(posts_fine_0.T,posts_fine_1.T)):
+                p = posts_crude.T[dive_num,0]*post_fine_0[1] + \
+                    posts_crude.T[dive_num,1]*post_fine_1[1]
+                if i%2 == 0:
+                    p0 = p
+                else:
+                    data[dive_num]['subdive_features'][int((i-1)/2)]['hhmm_V_subdive'] = (p*p0)/(p*p0+(1.-p)*(1.-p0))
+                    data[dive_num]['subdive_features'][int((i-1)/2)]['hhmm_V_dive'] = posts_crude.T[dive_num,1]
+
+        # get confustion matrix
+        CM_coarse = np.zeros((2,2))
+        CM_fine = [np.zeros((2,2)),np.zeros((2,2))]
+        for dive in data:
+            dive_type = dive['dive_type']
+            CM_coarse[dive_type,1] += dive['subdive_features'][0]['hhmm_V_dive']
+            CM_coarse[dive_type,0] += max(0,1.0-dive['subdive_features'][0]['hhmm_V_dive'])
+            for seg in dive['subdive_features']:
+                subdive_type = seg['subdive_type']
+                CM_fine[dive_type][subdive_type,1] += seg['hhmm_V_subdive']
+                CM_fine[dive_type][subdive_type,0] += max(0,1.0-seg['hhmm_V_subdive'])
+
+        hhmm_V.CM = [CM_coarse,CM_fine]
         hhmm_V.save('../Params/hhmm_V_%d_%d'%(dataset_num,rand_seed))
-    else:
-        hhmm_V = hhmm_V.load('../Params/hhmm_V_%d_%d'%(dataset_num,rand_seed))
-
-    # crude posterior
-    _,_,posts_crude,_ = hhmm_V.fwd_bwd(data_V,[0])
-
-    # fine posterior
-    for dive_num,datum in enumerate(data_V):
-        data[dive_num]['hhmm_v'] = posts_crude.T[dive_num,1]
-        _,_,posts_fine_0,_ = hhmm_V.fwd_bwd(datum['subdive_features'],[1,0])
-        _,_,posts_fine_1,_ = hhmm_V.fwd_bwd(datum['subdive_features'],[1,1])
-        for i,(post_fine_0,post_fine_1) in enumerate(zip(posts_fine_0.T,posts_fine_1.T)):
-            p = posts_crude.T[dive_num,0]*post_fine_0[1] + \
-                posts_crude.T[dive_num,1]*post_fine_1[1]
-            if i%2 == 0:
-                p0 = p
-            else:
-                data[dive_num]['subdive_features'][int((i-1)/2)]['hhmm_V_subdive'] = (p*p0)/(p*p0+(1.-p)*(1.-p0))
-                data[dive_num]['subdive_features'][int((i-1)/2)]['hhmm_V_dive'] = posts_crude.T[dive_num,1]
 
 
     ### CarHHMM ###
-    print('')
-    print('STARTING CarHHMM')
-    print('')
-    pars = Parameters.Parameters()
-    pars.K = [2,2]
-    pars.features = [{'dive_duration':{'corr':False,'f':'gamma'}},
-                     {'FoVeDBA':{'corr':False,'f':'gamma'},
-                      'A':{'corr':True,'f':'normal'}}]
+    if model == 'CarHHMM2':
+        print('')
+        print('STARTING CarHHMM')
+        print('')
+        pars = Parameters.Parameters()
+        pars.K = [2,2]
+        pars.features = [{'dive_duration':{'corr':False,'f':'gamma'}},
+                         {'FoVeDBA':{'corr':False,'f':'gamma'},
+                          'A':{'corr':True,'f':'normal'}}]
 
-    hhmm_FV = HHMM.HHMM(pars,data_FV)
-    hhmm_FV.theta = hhmm_FV_theta
-    hhmm_FV.eta = hhmm_FV_eta
-    hhmm_FV.true_theta = deepcopy(hhmm_FV_theta)
-    hhmm_FV.true_eta = deepcopy(hhmm_FV_eta)
+        hhmm_FV = HHMM.HHMM(pars,data_FV)
+        hhmm_FV.theta = hhmm_FV_theta
+        hhmm_FV.eta = hhmm_FV_eta
+        hhmm_FV.true_theta = deepcopy(hhmm_FV_theta)
+        hhmm_FV.true_eta = deepcopy(hhmm_FV_eta)
 
-    if train_new:
         hhmm_FV.train_DM(data_FV)
+        hhmm_FV.get_SEs(data_FV,h)
+        data,data_V,data_FV = create_data()
+
+        # crude posterior
+        _,_,posts_crude,_ = hhmm_FV.fwd_bwd(data_FV,[0])
+
+        # fine posterior
+        for dive_num,datum in enumerate(data_FV):
+            _,_,posts_fine_0,_ = hhmm_FV.fwd_bwd(datum['subdive_features'],[1,0])
+            _,_,posts_fine_1,_ = hhmm_FV.fwd_bwd(datum['subdive_features'],[1,1])
+            for i,(post_fine_0,post_fine_1) in enumerate(zip(posts_fine_0.T,posts_fine_1.T)):
+                p = posts_crude.T[dive_num,0]*post_fine_0[1] + \
+                    posts_crude.T[dive_num,1]*post_fine_1[1]
+                data[dive_num]['subdive_features'][i]['hhmm_FV_subdive'] = p
+                data[dive_num]['subdive_features'][i]['hhmm_FV_dive'] = posts_crude.T[dive_num,1]
+
+        # get confusion matrix
+        CM_coarse = np.zeros((2,2))
+        CM_fine = [np.zeros((2,2)),np.zeros((2,2))]
+        for dive in data:
+            dive_type = dive['dive_type']
+            CM_coarse[dive_type,1] += dive['subdive_features'][0]['hhmm_FV_dive']
+            CM_coarse[dive_type,0] += max(0,1.0-dive['subdive_features'][0]['hhmm_FV_dive'])
+            for seg in dive['subdive_features']:
+                subdive_type = seg['subdive_type']
+                CM_fine[dive_type][subdive_type,1] += seg['hhmm_FV_subdive']
+                CM_fine[dive_type][subdive_type,0] += max(0,1.0-seg['hhmm_FV_subdive'])
+
+        hhmm_FV.CM = [CM_coarse,CM_fine]
+
+        # save hmms
         hhmm_FV.save('../Params/hhmm_FV_%d_%d'%(dataset_num,rand_seed))
-    else:
-        hhmm_FV = hhmm_FV.load('../Params/hhmm_FV_%d_%d'%(dataset_num,rand_seed))
-
-    # crude posterior
-    _,_,posts_crude,_ = hhmm_FV.fwd_bwd(data_FV,[0])
-
-    # fine posterior
-    for dive_num,datum in enumerate(data_FV):
-        _,_,posts_fine_0,_ = hhmm_FV.fwd_bwd(datum['subdive_features'],[1,0])
-        _,_,posts_fine_1,_ = hhmm_FV.fwd_bwd(datum['subdive_features'],[1,1])
-        for i,(post_fine_0,post_fine_1) in enumerate(zip(posts_fine_0.T,posts_fine_1.T)):
-            p = posts_crude.T[dive_num,0]*post_fine_0[1] + \
-                posts_crude.T[dive_num,1]*post_fine_1[1]
-            data[dive_num]['subdive_features'][i]['hhmm_FV_subdive'] = p
-            data[dive_num]['subdive_features'][i]['hhmm_FV_dive'] = posts_crude.T[dive_num,1]
-
-
-    # record data
-    datasets.append(data)
-    datasets_V.append(data_V)
-    datasets_FV.append(data_FV)
-
-    # record hmms
-    hmm_FVs.append(hmm_FV)
-    hhmm_Vs.append(hhmm_V)
-    hhmm_FV_uncorrs.append(hhmm_FV_uncorr)
-    hhmm_FVs.append(hhmm_FV)
