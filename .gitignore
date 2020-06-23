@@ -17,6 +17,9 @@ Papers/*
 !Papers/*.bib
 !Papers/*.md
 
+## parameter estimates
+Params/*
+
 ## Intermediate documents:
 *.dvi
 *.xdv
