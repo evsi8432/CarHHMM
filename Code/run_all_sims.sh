@@ -8,8 +8,11 @@
 #SBATCH --mail-type=REQUEUE
 #SBATCH --mail-type=ALL
 
-#SBATCH --time=24:00:00
+#SBATCH --time=20:00:00
 #SBATCH --mem-per-cpu=4G
-#SBATCH --array=1-100
+#SBATCH --array=1-500
 
-python Run_Sim.py $SLURM_ARRAY_TASK_ID
+python Run_Sim.py $SLURM_ARRAY_TASK_ID CarHMM
+python Run_Sim.py $SLURM_ARRAY_TASK_ID HHMM
+python Run_Sim.py $SLURM_ARRAY_TASK_ID CarHHMM1
+python Run_Sim.py $SLURM_ARRAY_TASK_ID CarHHMM2
