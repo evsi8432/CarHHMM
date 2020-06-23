@@ -6,61 +6,62 @@
 
 %!% Have you simulated this only once? I think you would want to do this multiple time and present results across simulations, no?
 
-To test the CarHHMM with STFT, 100 separate sequences of 100 marine-mammal dives were simulated. The coarse-scale observations $Y$ were set as the duration of each dive, and the fine-scale observations $Y^*$ were set as one-dimensional acceleration readings simulated at 50 hertz. the specific procedure used to generate data was as follows: 
+To test the CarHHMM with STFT, 500 separate sequences of 100 marine-mammal dives were simulated. The coarse-scale observations $Y$ were set as the duration of each dive, and the fine-scale observations $Y^*$ were set as one-dimensional acceleration readings simulated at 50 hertz. the specific procedure used to generate data was as follows: 
 
 \begin{enumerate}
 	\item 100 dive durations were simulated using an HMM generative model with the following parameters:
 	
 	\begin{align*}
-		&\Gamma = \begin{pmatrix} 0.4 & 0.6 \\ 0.6 & 0.4 \end{pmatrix} \\
+		&\Gamma = \begin{pmatrix} 0.4 & 0.6 \\ 0.6 & 0.4 \end{pmatrix} & \\
 		% 
-		&Y_t|X_t \sim {\rm{Gamma}} \\
-		&\bbE(Y_t|X_t = 1) = 15 s, \quad \quad \bbE(Y_t|X_t = 2) = 60 s \\
+		&Y_t|X_t \sim \rm{Gamma} & \\
+		&\bbE(Y_t|X_t = 1) = 15 s &\bbE(Y_t|X_t = 2) = 60 s \\
 		%
-		&\bbV(Y_t|X_t = 1) = 25 s^2, \quad \quad  \bbV(Y_t|X_t = 2) = 100 s^2
+		&\bbV(Y_t|X_t = 1) = 25 s^2 &\bbV(Y_t|X_t = 2) = 100 s^2
 	\end{align*}
 	
-	\item Once the dive durations were calculated, for each $t \in \{1, \ldots, 100\}$, dive $t$ was broken into $\lfloor Y_t/2 \rfloor$ 2-second segments (the end of the dive sequence was discarded). Further, each 2-second segment was assigned a behaviour according to a fine-scale Markov chain $X^*_t$, where $X^*_{t,t^*} \in \{1,2\}$ and $t^* \in \{1,101,201,\ldots,100\lfloor Y_t/2 \rfloor - 99\}$. The parameters of the fine-scale behaviour Markov chain were set to be as follows:
+	\item Once the dive durations were calculated, for each $t \in \{1, \ldots, 100\}$, dive $t$ was broken into $\lfloor Y_t/2 \rfloor$ 2-second segments (the end of the dive sequence was discarded). Further, each 2-second segment was assigned a behaviour according to a fine-scale Markov chain $X^*_t$, where $X^*_{t,s^*} \in \{1,2\}$ and $s^* \in \{0,1,\ldots,\lfloor Y_t/2 \rfloor\}$. The parameters of the fine-scale behaviour Markov chain were set to be as follows:
 	%
 	$$\Gamma^{*(1)} = \begin{pmatrix} 0.25 & 0.75 \\ 0.75 & 025 \end{pmatrix} \qquad 	\Gamma^{*(2)} = \begin{pmatrix} 0.75 & 0.25 \\ 0.25 & 0.75 \end{pmatrix}$$
 	%
 	where $\Gamma^{*(1)}$ was used for dives where $X_t = 1$ and $\Gamma^{*(2)}$ was used for dives where $X_t = 2$
 	
-	\item For each 2-second segment, the Fourier modes $\hat{Y}^*_{t,t^*}$ were simulated using the following procedure. Note that the $n^{th}$ Fourier mode of $\hat{Y}^*_{t,t^*}$ is denoted as $\hat{Y}^{*(n)}_{t,t^*}$ :
+	\item For each 2-second segment, the Fourier modes $\hat{Y}^*_{t,s^*}$ were simulated using the following procedure. Note that the $k^{th}$ Fourier mode of $\hat{Y}^*_{t,s^*}$ is denoted as $\hat{Y}^{*(k)}_{t,s^*}$ :
 	
 	\begin{align*}
-    	\hat{Y}^{*(0)}_{t,1} &\sim \mathcal{N} \left(\mu = 1, \sigma^2 = 0.0025 \right) & \\
+    	\hat{Y}^{*(0)}_{t,0} &\sim \mathcal{N} \left(\mu = 0, \sigma^2 = 0.0025 \right) & \\
     	%
-    	\hat{Y}^{*(0)}_{t,t^*} &\sim \mathcal{N} \left(\mu = 0.9 Y^{*(0)}_{t,t^*-100} + 0.1, \sigma^2 = 0.0025 \right), & t^* \in \{101,201,\ldots, 100*\lfloor Y_t/2 \rfloor + 1\} \\
+    	\hat{Y}^{*(0)}_{t,s^*} &\sim \mathcal{N} \left(\mu = 0.9Y^{*(0)}_{t,s^*-1}, \sigma^2 = 0.0025 \right), & s^* = 1,2,\ldots, \lfloor Y_t/2 \rfloor \\
     	%
-    	\hat{Y}^{*(n)}_{t,t^*} &= a_{t,t^*}^{(n)} i\sqrt{b^{(n)}_{t,t^*}}, & n \in \{1,\ldots,49\} \\
+    	\hat{Y}^{*(k)}_{t,t^*} &= a_{t,s^*}^{(k)} i\sqrt{b^{(k)}_{t,s^*}}, & k = 1,\ldots,49 \\
 	\end{align*}
 	\begin{align*}
-	    a_{t,t^*}^{(n)} &\sim  \left\{\begin{array}{lr}
-    	-1 & w.p. \enspace 1/2 \\
-    	1  & w.p. \enspace 1/2
+	    a_{t,s^*}^{(k)} &\sim  \left\{\begin{array}{lr}
+    	-1 & \quad w.p. \enspace 1/2 \\
+    	1  & \quad w.p. \enspace 1/2
     	\end{array}\right. \\
     	%
-    	(b^{(n)}_{t,t^*}|X^*_{t,t^*}  = 1) &\sim Gamma(1/n^2, 1) \\
+    	(b^{(k)}_{t,s^*}|X^*_{t,s^*}  = 1) &\sim {\rm{Gamma}}(1/k^2, 1) \\
     	%
-    	(b^{(n)}_{t,t^*}|X^*_{t,t^*} = 2) &\sim \left\{\begin{array}{lr}
-    	Gamma(1/n^2, 1) & \text{for } n \neq 2\\
-    	Gamma(20,1) & \text{for } n = 2
+    	(b^{(k)}_{t,t^*}|X^*_{t,t^*} = 2) &\sim \left\{\begin{array}{lr}
+    	{\rm{Gamma}}(1/k^2, 1), \quad & k \notin \{1,2\} \\
+    	{\rm{Gamma}}(100,1), & k = 1 \\
+    	{\rm{Gamma}}(50,1), & k = 2
     	\end{array}\right. 
 	\end{align*}
 
     \begin{align*}
-        \hat{Y}^{*(50)}_{t,t^*} &= 0 & \\
+        \hat{Y}^{*(50)}_{t,s^*} &= 0 & \\
     	%
-    	\hat{Y}^{*(n)}_{t,t^*}  &= -\hat{Y}^{*(100-n)}_{t,t^*}, & \qquad n \in \{51,\ldots,99\}
+    	\hat{Y}^{*(k)}_{t,s^*}  &= -\hat{Y}^{*(100-n)}_{t,s^*}, & \qquad k = 51,\ldots,99
     \end{align*}
 	
-	\item Finally, $Y^*_{t,t^*:t^*+99}$ was set using the inverse discrete Fourier transform of $\hat{Y}^*_{t,t^*}$:
-	$$Y^*_{t,t^*:t^*+99} = IDFT\left(\hat{Y}^*_{t,t^*}\right)$$
+	\item Finally, $Y^*_{t,(100s^*+1):(100s^*+100)}$ was set using the inverse discrete Fourier transform of $\hat{Y}^*_{t,s^*}$:
+	$$Y^*_{t,(100s^*+1):(100s^*+100)} = IDFT\left(\hat{Y}^*_{t,s^*}\right)$$
 		
 \end{enumerate}
 
-There are several practical reasons behind this construction. First, $\hat{Y}^*_{t,t^*}$ is anti-symmetric about $\hat{Y}^{*(50)}_{t,t^*}$ so that its inverse Fourier transform is real-valued. $\hat{Y}^{*(n)}_{t,t^*}$ also decays like $1/n^2$ so that $Y^*_{t,t^*}$ remains continuous within a 2-second window. Note, however, that $Y^*_{t,t^*}$ is not continuous in $t^*$ \textit{between} windows, as can be seen in figure (\ref{fig:fourier_example}). However, note the jumps are not too severe since $\hat{Y}^{*(0)}_{t,t^*}$ and $\hat{Y}^{*(0)}_{t,t^*+100}$ are highly correlated. See figure (\ref{fig:sim_data}) for details.
+There are several practical reasons behind this construction. First, $\hat{Y}^*_{t,t^*}$ is anti-symmetric about $\hat{Y}^{*(50)}_{t,s^*}$ so that its inverse Fourier transform is real-valued. $\hat{Y}^{*(k)}_{t,s^*}$ also decays like $1/k^2$ so that $Y^*_{t,t^*}$ remains continuous within a 2-second window. Note, however, that $Y^*_{t,s^*}$ is not continuous \textit{between} windows, as can be seen in figure (\ref{fig:fourier_example}). However, the jumps are not too severe since $\hat{Y}^{*(0)}_{t,s^*}$ and $\hat{Y}^{*(0)}_{t,s^*+1}$ are highly correlated. See figure (\ref{fig:sim_data}) for details.
 
 \subsection{Ground-Truth parameters}
 
@@ -70,8 +71,8 @@ This generative model gives simulated data where the ground-truth of the CarHHMM
     \delta &= \begin{pmatrix} 0.5 & 0.5 \end{pmatrix}\\
 	\Gamma &= \begin{pmatrix} 0.4 & 0.6 \\ 0.6 & 0.4 \end{pmatrix} \\
 	% 
-	Y_t|X_t = 1 &\sim Gamma\left(\mu = 15 s, \sigma = 5 s\right) \\
-	Y_t|X_t = 2 &\sim Gamma\left(\mu = 60 s, \sigma = 10 s\right) \\
+	Y_t|X_t = 1 &\sim {\rm{Gamma}}\left(\mu = 15 s, \sigma = 5 s\right) \\
+	Y_t|X_t = 2 &\sim {\rm{Gamma}}\left(\mu = 60 s, \sigma = 10 s\right) \\
 \end{align*}
 
 For the fine-scale, we have:
@@ -83,20 +84,18 @@ For the fine-scale, we have:
 \end{align*}
 
 \begin{align*}
-    \left(Z^{*(1)}_{t,t^*+100} | Z^{*(1)}_{t,t^*} \right) &\sim \mathcal{N} \left(\phi^* * Z^{*(1)}_{t,t^*} + \phi^* * \mu^*, \sigma^{*2} \right), & \mu^* = 1, \enspace \phi^* = 0.9, \enspace \sigma^{*2} = 0.025 \\
+    \left(Z^{*(1)}_{t,s^*} | Z^{*(1)}_{t,s^*-1} \right) &\sim \mathcal{N} \left(\phi^*Z^{*(1)}_{t,s^*-1} + \phi^*\mu^*, \sigma^{*2} \right), & \mu^* = 0, \enspace \phi^* = 0.9, \enspace \sigma^{*2} = 0.025 \\
     %
-    \left(Z^{*(2)}_{t,t^*} | X^*_{t,t^*} = 1\right) &\sim Gamma\left(\alpha^{*(1)}, \beta^* \right), & \alpha^{*(1)} = \sum_{n=1}^{\tilde{f}} \frac{1}{n^2}, \enspace \beta^* = 1 \\
+    \left(Z^{*(2)}_{t,s^*} | X^*_{t,s^*} = 1\right) &\sim {\rm{Gamma}}\left(\alpha^{*(1)}, \beta^* \right), & \alpha^{*(1)} = \sum_{k=1}^{\tilde{f}} \frac{1}{k^2}, \enspace \beta^* = 1 \\
     %
-    \left(Z^{*(2)}_{t,t^*} | X^*_{t,t^*} = 2\right) &\sim Gamma\left(\alpha^{*(2)}, \beta^* \right), & \alpha^{*(2)} = 20 + \sum_{n=2}^{\tilde{f}} \frac{1}{n^2}, \enspace \beta^* = 1 \\
+    \left(Z^{*(2)}_{t,t^*} | X^*_{t,s^*} = 2\right) &\sim {\rm{Gamma}}\left(\alpha^{*(2)}, \beta^* \right), & \alpha^{*(2)} = 20 + \sum_{k=2}^{\tilde{f}} \frac{1}{k^2}, \enspace \beta^* = 1 \\
 \end{align*}
 %
-The emission distribution of the 2-second average acceleration $Z_{t,t^*}^{*(1)}$ in particular can be reparameterized as an OU process:
+The emission distribution of the 2-second average acceleration $Z_{t,s^*}^{*(1)}$ can be reparameterized as an OU process according to Theorem 1:
 %
 $$dZ^{*(1)}_{t,t^*} = \beta^*(\gamma^* - Z^{*(1)}_{t,t^*})dt^* + \omega^* dW_{t,t^*}$$
 
-$$\gamma^* = \mu^* = 1, \qquad \beta^* = -\frac{\log(\phi^*)}{\Delta t^*} = 0.0229, \qquad \omega^{*2} = \frac{2\sigma^{*2}\log(\phi)}{\Delta t (\phi^{*2}-1)} = 0.006$$
-
-Note that the two fine-scale states $X^*_{t,t^*} = 1$ and $X^*_{t,t^*} = 2$ are identical except for the fact that the distribution of $Z^{*(2)}_{t,t^*}$ is shifted up in its shape parameter in fine-scale state 2. This corresponds to more periodic behavior in acceleration, but \textit{not} a higher mean acceleration.
+$$\gamma^* = \mu^* = 0, \qquad \beta^* = -\frac{\log(\phi^*)}{\Delta t^*} = 0.0229, \qquad \omega^{*2} = \frac{2\sigma^{*2}\log(\phi)}{\Delta t (\phi^{*2}-1)} = 0.006$$
 
 \begin{figure}[!ht]
 	\centering
@@ -108,7 +107,7 @@ Note that the two fine-scale states $X^*_{t,t^*} = 1$ and $X^*_{t,t^*} = 2$ are 
 
 \subsection{Simulation Results}
 
-Four different models were fit to the 100 simulated data sets:
+Four different models were fit to each simulated data set:
 
 \begin{enumerate}
     \item A CarHMM with no hierarchical component using both $Z^{(1)}$ and $Z^{(2)}$ as fine-scale observations (CarHMM).
@@ -120,10 +119,12 @@ Four different models were fit to the 100 simulated data sets:
 For each model, the following were recorded:
 %
 \begin{enumerate}
-    \item an empirical distribution of the MLE estimates of $\Gamma$ and $\theta$ using the 100 generated data sets generated from true parameters $\Gamma_0$ and $\theta_0$.
-    \item a confusion matrix showing the state decoding capabilities of each model across all data sets.
-    \item The true coverage of 95\% confidence intervals estimated using the observed information matrix (to see how over- or under- confident our parameter estimates are).
+    \item An empirical distribution of the MLE estimates of $\Gamma$ and $\Theta$ using the 100 generated data sets generated from true parameters $\Gamma_0$ and $\Theta_0$.
+    \item The estimated spread of these distributions using the observed information matrix.
+    \item A confusion matrix showing the state decoding capabilities of each model across all data sets.
 \end{enumerate}
+
+The empirical distribution of 
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
