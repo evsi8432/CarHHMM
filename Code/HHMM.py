@@ -781,22 +781,28 @@ class HHMM:
                     # get plus value
                     if param == 'corr':
                         self.theta[1][0][feature][param][state_num] = corr_2_rho(theta+h0)
+                        self.theta[1][1][feature][param][state_num] = self.theta[1][0][feature][param][state_num]
                     else:
                         self.theta[1][0][feature][param][state_num] += h
+                        self.theta[1][1][feature][param][state_num] = self.theta[1][0][feature][param][state_num]
                     th_tp1 = self.likelihood(data)
 
                     # get minus value
                     if param == 'corr':
                         self.theta[1][0][feature][param][state_num] = corr_2_rho(theta-h0)
+                        self.theta[1][1][feature][param][state_num] = self.theta[1][0][feature][param][state_num]
                     else:
                         self.theta[1][0][feature][param][state_num] += -2*h
+                        self.theta[1][1][feature][param][state_num] = self.theta[1][0][feature][param][state_num]
                     th_tm1 = self.likelihood(data)
 
                     # return theta
                     if param == 'corr':
                         self.theta[1][0][feature][param][state_num] = corr_2_rho(theta)
+                        self.theta[1][1][feature][param][state_num] = self.theta[1][0][feature][param][state_num]
                     else:
                         self.theta[1][0][feature][param][state_num] += h
+                        self.theta[1][1][feature][param][state_num] = self.theta[1][0][feature][param][state_num]
 
                     # get estimate
                     if param =='corr':
