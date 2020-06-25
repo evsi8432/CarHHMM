@@ -4,103 +4,53 @@
 
 \subsection{Data Simulation}
 
-%!% Have you simulated this only once? I think you would want to do this multiple time and present results across simulations, no?
+To test the CarHHMM with STFT, 500 separate sequences of 100 marine-mammal dives were simulated. The coarse-scale observations $Y$ were set as the duration of each dive, and the fine-scale observations $Y^*$ were set as one-dimensional acceleration readings simulated at 50 hertz. The number of possible states for both the coarse- and fine- scale Markov chains was set to 2, i.e. $N = N^* = 2$. 
 
-To test the CarHHMM with STFT, 500 separate sequences of 100 marine-mammal dives were simulated. The coarse-scale observations $Y$ were set as the duration of each dive, and the fine-scale observations $Y^*$ were set as one-dimensional acceleration readings simulated at 50 hertz. the specific procedure used to generate data was as follows: 
-
-\begin{enumerate}
-	\item 100 dive durations were simulated using an HMM generative model with the following parameters:
-	
-	\begin{align*}
-		&\Gamma = \begin{pmatrix} 0.4 & 0.6 \\ 0.6 & 0.4 \end{pmatrix} & \\
-		% 
-		&Y_t|X_t \sim \rm{Gamma} & \\
-		&\bbE(Y_t|X_t = 1) = 15 s &\bbE(Y_t|X_t = 2) = 60 s \\
-		%
-		&\bbV(Y_t|X_t = 1) = 25 s^2 &\bbV(Y_t|X_t = 2) = 100 s^2
-	\end{align*}
-	
-	\item Once the dive durations were calculated, for each $t \in \{1, \ldots, 100\}$, dive $t$ was broken into $\lfloor Y_t/2 \rfloor$ 2-second segments (the end of the dive sequence was discarded). Further, each 2-second segment was assigned a behaviour according to a fine-scale Markov chain $X^*_t$, where $X^*_{t,s^*} \in \{1,2\}$ and $s^* \in \{0,1,\ldots,\lfloor Y_t/2 \rfloor\}$. The parameters of the fine-scale behaviour Markov chain were set to be as follows:
+On the coarse scale, the following parameters were used:
+$$\Gamma = \begin{pmatrix} 0.5 & 0.5 \\ 0.5 & 0.5 \end{pmatrix} $$
+$$Y_t|X_t \sim \rm{Gamma} $$
+\begin{align*}
+	&\bbE(Y_t|X_t = 1) = 15 s &\bbE(Y_t|X_t = 2) = 60 s \\
 	%
-	$$\Gamma^{*(1)} = \begin{pmatrix} 0.25 & 0.75 \\ 0.75 & 025 \end{pmatrix} \qquad 	\Gamma^{*(2)} = \begin{pmatrix} 0.75 & 0.25 \\ 0.25 & 0.75 \end{pmatrix}$$
-	%
-	where $\Gamma^{*(1)}$ was used for dives where $X_t = 1$ and $\Gamma^{*(2)}$ was used for dives where $X_t = 2$
-	
-	\item For each 2-second segment, the Fourier modes $\hat{Y}^*_{t,s^*}$ were simulated using the following procedure. Note that the $k^{th}$ Fourier mode of $\hat{Y}^*_{t,s^*}$ is denoted as $\hat{Y}^{*(k)}_{t,s^*}$ :
-	
-	\begin{align*}
-    	\hat{Y}^{*(0)}_{t,0} &\sim \mathcal{N} \left(\mu = 0, \sigma^2 = 0.0025 \right) & \\
-    	%
-    	\hat{Y}^{*(0)}_{t,s^*} &\sim \mathcal{N} \left(\mu = 0.9Y^{*(0)}_{t,s^*-1}, \sigma^2 = 0.0025 \right), & s^* = 1,2,\ldots, \lfloor Y_t/2 \rfloor \\
-    	%
-    	\hat{Y}^{*(k)}_{t,t^*} &= a_{t,s^*}^{(k)} i\sqrt{b^{(k)}_{t,s^*}}, & k = 1,\ldots,49 \\
-	\end{align*}
-	\begin{align*}
-	    a_{t,s^*}^{(k)} &\sim  \left\{\begin{array}{lr}
-    	-1 & \quad w.p. \enspace 1/2 \\
-    	1  & \quad w.p. \enspace 1/2
-    	\end{array}\right. \\
-    	%
-    	(b^{(k)}_{t,s^*}|X^*_{t,s^*}  = 1) &\sim {\rm{Gamma}}(1/k^2, 1) \\
-    	%
-    	(b^{(k)}_{t,t^*}|X^*_{t,t^*} = 2) &\sim \left\{\begin{array}{lr}
-    	{\rm{Gamma}}(1/k^2, 1), \quad & k \notin \{1,2\} \\
-    	{\rm{Gamma}}(100,1), & k = 1 \\
-    	{\rm{Gamma}}(50,1), & k = 2
-    	\end{array}\right. 
-	\end{align*}
-
-    \begin{align*}
-        \hat{Y}^{*(50)}_{t,s^*} &= 0 & \\
-    	%
-    	\hat{Y}^{*(k)}_{t,s^*}  &= -\hat{Y}^{*(100-n)}_{t,s^*}, & \qquad k = 51,\ldots,99
-    \end{align*}
-	
-	\item Finally, $Y^*_{t,(100s^*+1):(100s^*+100)}$ was set using the inverse discrete Fourier transform of $\hat{Y}^*_{t,s^*}$:
-	$$Y^*_{t,(100s^*+1):(100s^*+100)} = IDFT\left(\hat{Y}^*_{t,s^*}\right)$$
-		
-\end{enumerate}
-
-There are several practical reasons behind this construction. First, $\hat{Y}^*_{t,t^*}$ is anti-symmetric about $\hat{Y}^{*(50)}_{t,s^*}$ so that its inverse Fourier transform is real-valued. $\hat{Y}^{*(k)}_{t,s^*}$ also decays like $1/k^2$ so that $Y^*_{t,t^*}$ remains continuous within a 2-second window. Note, however, that $Y^*_{t,s^*}$ is not continuous \textit{between} windows, as can be seen in figure (\ref{fig:fourier_example}). However, the jumps are not too severe since $\hat{Y}^{*(0)}_{t,s^*}$ and $\hat{Y}^{*(0)}_{t,s^*+1}$ are highly correlated. See figure (\ref{fig:sim_data}) for details.
-
-\subsection{Ground-Truth parameters}
-
-This generative model gives simulated data where the ground-truth of the CarHHMM is known. For the coarse scale, the ground truth is as follows:
-
-\begin{align*}
-    \delta &= \begin{pmatrix} 0.5 & 0.5 \end{pmatrix}\\
-	\Gamma &= \begin{pmatrix} 0.4 & 0.6 \\ 0.6 & 0.4 \end{pmatrix} \\
-	% 
-	Y_t|X_t = 1 &\sim {\rm{Gamma}}\left(\mu = 15 s, \sigma = 5 s\right) \\
-	Y_t|X_t = 2 &\sim {\rm{Gamma}}\left(\mu = 60 s, \sigma = 10 s\right) \\
+	&\bbV(Y_t|X_t = 1) = 25 s^2 &\bbV(Y_t|X_t = 2) = 100 s^2
 \end{align*}
-
-For the fine-scale, we have:
-
-\begin{align*}
-    \delta^{*(1)} &= \begin{pmatrix} 0.5 & 0.5 \end{pmatrix} & \delta^{*(2)} &= \begin{pmatrix} 0.5 & 0.5 \end{pmatrix} \\
-    %
-    \Gamma^{*(1)} &= \begin{pmatrix} 0.25 & 0.75 \\ 0.75 & 025 \end{pmatrix} & 	\Gamma^{*(2)} &= \begin{pmatrix} 0.75 & 0.25 \\ 0.25 & 0.75 \end{pmatrix} \\
-\end{align*}
+Once the coarse-scale dive durations were calculated for $t = 1, \ldots, 100$, dive $t$ was broken into $\lfloor Y_t/2 \rfloor$ 2-second segments (the end of the dive sequence was discarded). Each 2-second segment was assigned a behaviour according to a fine-scale Markov chain $X^*_t$, where the parameters were set as follows:
+%
+$$\Gamma^{*(1)} = \begin{pmatrix} 0.5 & 0.5 \\ 0.9 & 0.1 \end{pmatrix} \qquad 	\Gamma^{*(2)} = \begin{pmatrix} 0.8 & 0.2 \\ 0.3 & 0.7 \end{pmatrix}$$
+%
+where $\Gamma^{*(1)}$ was used for dives where $X_t = 1$ and $\Gamma^{*(2)}$ was used for dives where $X_t = 2$. For each 2-second segment, the Fourier modes $\hat{Y}^*_{t,s^*} \in \mathbb{C}^{100}$ were simulated such that $Z^{*(1)}_{t,s^*}$ and $Z^{*(2)}_{t,s^*}$ would have the following distributions: 
 
 \begin{align*}
-    \left(Z^{*(1)}_{t,s^*} | Z^{*(1)}_{t,s^*-1} \right) &\sim \mathcal{N} \left(\phi^*Z^{*(1)}_{t,s^*-1} + \phi^*\mu^*, \sigma^{*2} \right), & \mu^* = 0, \enspace \phi^* = 0.9, \enspace \sigma^{*2} = 0.025 \\
+    \left(Z^{*(1)}_{t,s^*} | Z^{*(1)}_{t,s^*-1}, X^*_{t,s^*} = 1 \right) &\sim \mathcal{N} \left(\phi^{*(1)}Z^{*(1)}_{t,s^*-1} + \phi^{*(1)}\mu^{*(1)}, (\sigma^{*(1)})^2 \right) \\
     %
-    \left(Z^{*(2)}_{t,s^*} | X^*_{t,s^*} = 1\right) &\sim {\rm{Gamma}}\left(\alpha^{*(1)}, \beta^* \right), & \alpha^{*(1)} = \sum_{k=1}^{\tilde{f}} \frac{1}{k^2}, \enspace \beta^* = 1 \\
+    \left(Z^{*(1)}_{t,s^*} | Z^{*(1)}_{t,s^*-1}, X^*_{t,s^*} = 2 \right) &\sim \mathcal{N} \left(\phi^{*(2)}Z^{*(1)}_{t,s^*-1} + \phi^{*(2)}\mu^{*(2)}, (\sigma^{*(2)})^2 \right) \\
     %
-    \left(Z^{*(2)}_{t,t^*} | X^*_{t,s^*} = 2\right) &\sim {\rm{Gamma}}\left(\alpha^{*(2)}, \beta^* \right), & \alpha^{*(2)} = 20 + \sum_{k=2}^{\tilde{f}} \frac{1}{k^2}, \enspace \beta^* = 1 \\
+    \mu^{*(1)} = 0.0,\enspace \sigma^{*(1)} &= 0.05,\enspace \phi^{*(1)} = 0.99 \\
+    %
+    \mu^{*(2)} = 0.0,\enspace \sigma^{*(2)} &= 0.1,\enspace \phi^{*(2)} = 0.95 \\\\
+    %
+    \left(Z^{*(2)}_{t,s^*} | X^*_{t,s^*} = 1\right) &\sim {\rm{Gamma}}\left(\alpha^{*(1)}, \beta^{*(1)} \right) \\
+    %
+    \left(Z^{*(2)}_{t,s^*} | X^*_{t,s^*} = 2\right) &\sim {\rm{Gamma}}\left(\alpha^{*(2)}, \beta^{*(2)} \right) \\
+    %
+    \alpha^{*(1)} = 10.10, \enspace & \enspace \beta^{*(1)} = 1.00 \\
+    %
+    \alpha^{*(2)} = 305.94, \enspace & \enspace \beta^{*(2)} = 1.00
 \end{align*}
 %
-The emission distribution of the 2-second average acceleration $Z_{t,s^*}^{*(1)}$ can be reparameterized as an OU process according to Theorem 1:
+See the appendix for more details regarding the simulation procedure for $\hat Y^*$. The emission distribution of the 2-second average acceleration $Z_{t,s^*}^{*(1)}$ in particular can be reparameterized as an OU process according to theorem 1:
 %
-$$dZ^{*(1)}_{t,t^*} = \beta^*(\gamma^* - Z^{*(1)}_{t,t^*})dt^* + \omega^* dW_{t,t^*}$$
+$$dZ^{*(1)}_{t,s^*} = \beta^*(\gamma^* - Z^{*(1)}_{t,s^*})dt^* + \omega^* dW_{t,t^*}$$
+%
+$$\gamma^{*(1)} = 0, \enspace \beta^{*(1)} = -\frac{\log(\phi^{*(1)})}{\Delta t^*} = 0.0111, \enspace \omega^{*(1)} = \sqrt{\frac{2(\sigma^{^{*(1)}})^2\log(\phi^{*(1)})}{\Delta t^* ((\phi^{*(1)})^2-1)}} = 0.0355$$
+$$\gamma^{*(2)} = 0, \enspace \beta^{*(2)} = -\frac{\log(\phi^{*(2)})}{\Delta t^*} = 0.0256, \enspace \omega^{*(2)} = \sqrt{\frac{2(\sigma^{*(2)})^2\log(\phi^{*(2)})}{\Delta t^* ((\phi^{*(2)})^2-1)}} = 0.7625$$
 
-$$\gamma^* = \mu^* = 0, \qquad \beta^* = -\frac{\log(\phi^*)}{\Delta t^*} = 0.0229, \qquad \omega^{*2} = \frac{2\sigma^{*2}\log(\phi)}{\Delta t (\phi^{*2}-1)} = 0.006$$
+A visualization of the first 5 dives of one simulated data set can be seen in (fig. \ref{fig:sim_data}).
 
 \begin{figure}[!ht]
 	\centering
 	\includegraphics[width=5in]{../Plots/sim_data.png}
-	\caption{Simulated Acceleration Data.}
+	\caption{Simulated acceleration data for one dive. The color of the line corresponds to the true fine-scale state of the sub-dive process, while the color of the background corresponds to the true dive type of the simulated whale, where blue corresponds to dive type 1 and orange corresponds to dive type 2.}
 	\label{fig:sim_data}
 \end{figure}
 
@@ -110,86 +60,183 @@ $$\gamma^* = \mu^* = 0, \qquad \beta^* = -\frac{\log(\phi^*)}{\Delta t^*} = 0.02
 Four different models were fit to each simulated data set:
 
 \begin{enumerate}
-    \item A CarHMM with no hierarchical component using both $Z^{(1)}$ and $Z^{(2)}$ as fine-scale observations (CarHMM).
-    \item A Hierarchical hidden Markov model with no auto-correlation using both $Z^{(1)}$ and $Z^{(2)}$ as fine-scale observations (HHMM).
-    \item A CarHHMM using $Z^{(1)}$, but not $Z^{(2)}$, as fine-scale observations (CarHHMM1).
-    \item A CarHHMM using both $Z^{(1)}$ and $Z^{(2)}$ as fine-scale observations (CarHHMM2).
+    \item A CarHMM with no hierarchical structure using both $Z^{*(1)}$ and $Z^{*(2)}$ as fine-scale observations (\textbf{CarHMM}).
+    \item An HHMM with no auto-correlation using both $Z^{*(1)}$ and $Z^{*(2)}$ as fine-scale observations (\textbf{HHMM}).
+    \item A CarHHMM using $Z^{*(1)}$, but NOT $Z^{*(2)}$ as fine-scale observations (\textbf{CarHHMM1}). To ensure that the CarHHMM could still see the ``wigliness" of the process, we halved the window size to 1 second for the CarHHMM1.
+    \item A CarHHMM using both $Z^{*(1)}$ and $Z^{*(2)}$ as fine-scale observations (\textbf{CarHHMM2}).
 \end{enumerate}
 %
-For each model, the following were recorded:
-%
-\begin{enumerate}
-    \item An empirical distribution of the MLE estimates of $\Gamma$ and $\Theta$ using the 100 generated data sets generated from true parameters $\Gamma_0$ and $\Theta_0$.
-    \item The estimated spread of these distributions using the observed information matrix.
-    \item A confusion matrix showing the state decoding capabilities of each model across all data sets.
-\end{enumerate}
+The purpose of including each of these models is to leave one important aspect of the full model (CarHHMM2) out of each of the preceding three and observe the effects on a simulated data set. In particular, the CarHMM lacks a hierarchical structure, the HHMM is missing auto-correlation within the fine-scale observations, and the CarHHMM1 does not have $Z^{*(2)}$ as observations.
 
-The empirical distribution of 
+%%% Accuracy %%%
+Every model was able to decode the fine-scale hidden states of the process effectively perfectly except for the CarHHMM1, which did not have access to the Fourier modes $Z^{*(2)}$. This is intuitively clear because the fine-scale states are much more distinct in their Fourier modes than in their average acceleration. For the coarse-scale hidden state, the CarHMM lacked a hierarchical structure and could not make any predictions at all. The other three models all achieved an accuracy of approximately 90\%, with the CarHHMM slightly more likely to categorize a dive as dive type 2 than the other models. (Fig. \ref{fig:acc}) shows the decoded state probabilities of both the fine and coarse hidden states for the first 10 dives of one simulated data set. (Tbl. \ref{table:accuracy}) also lists more details regarding the accuracy and training times of each model for each true dive and sub-dive state.
 
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
-\iffalse
-\subsection{Model Misspecification}
-
-There are two ways to simulate the fourier modes of the acceleration vector $\bfA_{s,t}$:
-
-\begin{enumerate}
-	\item $$\bbE_1\left(\bfA_{s,t} | \bfA_{s-1,t}, X^*_{s,t}\right) = \phi \bfA_{s-1,t} + (1-\phi) \mu_{X^*_{s,t}} $$
-	
-	\item $$\bbE_2(\bfA_{s,t} | \bfA_{s-1,t}, X^*_{s,t}, X^*_{s-1,t}) = \left\{\begin{array}{lr}
-	\phi \bfA_{s-1,t} + (1-\phi) \mu_{X^*_{s,t}} & \text{for } X^*_{s,t} = X^*_{s-1,t}\\
-	\mu_{X^*_{s,t}} & \text{for } X^*_{s,t} \neq X^*_{s-1,t}
-	\end{array}\right\}$$
-\end{enumerate}
-
-\subsubsection{$\bbE_1$}
-
-First, look at $\bbE_1$. This comes with an issue in that when $X^*_{s,t}$ changes values, it will take a while for the process to ``converge" long-run mean $\mu_{X^*_{s,t}}$. In particular, if the behavioral process $X^*$ had been in state 1 for a while and then switches to state 2 for a while, then:
-
-\begin{align*}
-	\bbE_1\left(\bfA_{s+1,t}|X^*_{s:s+1,t} = 2, X^*_{s,t} = 1\right) &=  \phi \mu_1 + (1-\phi) \mu_2 \\
-	%
-	\bbE_1\left(\bfA_{s+2,t}|X^*_{s:s+2,t} = 2, X^*_{s,t} = 1\right) &= \phi\left( \phi \mu_1 + (1-\phi) \mu_2\right) + (1-\phi)\mu_2 \\
-	&= \phi^2 \mu_1 + (1-\phi^2) \mu_2\\
-	%
-	\bbE_1\left(\bfA_{s+n,t}|X^*_{s:s+n,t} = 2, X^*_{s,t} = 1\right) &=  \phi^n \mu_1 + (1-\phi^n) \mu_2 \\
-\end{align*}
-
-So, if using $\bbE_1$, there is an assumption that the fourier modes of the acceleration vector $\bfA$ linearly ``converge" to the new value $\mu_i$ from $\mu_j$ when $X^*_{s,t}$ changes from $i$ to $j$. An example of this can be seen in figure (\ref{fig:FOVEDBA}).
-
- \begin{figure}[h!]
- 	\centering
- 	\includegraphics[height=3in]{../Code/test.png}
- 	\caption{The FoVeDBA of simulated data using $\bbE_1$. Note that the FoVeDBA approaches $\approx$ 300 in state 2 from $\approx$ 10 in state 1 with roughly linear convergence.}
- 	\label{fig:FOVEDBA}
- \end{figure}
- 
- Note that if the generative model is correlated, but the inference model isn't, then quick jumps between states 1 and 2 can be missed because the chain never ``converges" to the new mean $\mu_i$, as shown in figure (\ref{fig:STATE}).
- 
-\begin{figure}[h!]
-	\centering
-	\includegraphics[height=3in]{../Code/test2.png}
-	\caption{The probability of being in each behavioral state $X^*_{s,t}$ as estimated by the HHMM. The colors represent the true behavioral state.}
-	\label{fig:STATE}
+\begin{figure}[t!]
+    \centering
+    \begin{subfigure}[t]{1.0\textwidth}
+        \centering
+        \includegraphics[width=5in]{Plots/Posterior_Coarse_States.png}
+        \caption{Coarse-scale hidden process}
+    \end{subfigure}
+    \newline
+    \begin{subfigure}[t]{1.0\textwidth}
+        \centering
+        \includegraphics[width=5in]{Plots/Posterior_Fine_States.png}
+        \caption{Fine-scale hidden process}
+    \end{subfigure}
+	\caption{Decoded state probabilities of each model. The color of the line corresponds to the true fine-scale state of the sub-dive process, while the color of the background corresponds to the true dive type of the simulated whale.}
+	\label{fig:acc}
 \end{figure}
- 
- \subsubsection{$\bbE_2$}
- 
-Clearly, the model has issues decodeing the behavioral state when the model is misspecified. Therefore, if the true generative process does not have correlation when jumping between states, then it is better to use $\bbE_2$:
 
-$$\bbE_2(\bfA_{s,t} | \bfA_{s-1,t}, X^*_{s,t}, X^*_{s-1,t}) = \left\{\begin{array}{lr}
-\phi \bfA_{s-1,t} + (1-\phi) \mu_{X^*_{s,t}} & \text{for } X^*_{s,t} = X^*_{s-1,t}\\
-\mu_{X^*_{s,t}} & \text{for } X^*_{s,t} \neq X^*_{s-1,t}
-\end{array}\right\}$$
+%%% dive duration %%%
+For the emission distributions of dive duration, estimates of standard error using the observed fisher information tended to be underestimates due to correlation between $\hat \mu$ and $\hat \sigma$. In addition, $\hat \sigma$ tends to underestimate $\sigma$ for all models, which is a finding consistent with properties of MLEs, especially because the sample size for a particular dive type is approximately 50 for each simulation. The CarHMM model in particular severely underestimates $\sigma$. This is likely due to the fact that dive duration follows a mixture of gammas rather than a gamma distribution, and the CarHMM does not have the machinary to capture this fact. A full table of parameter estimates for all models is shown in (table \ref{table:dive_duration}).
 
-This fixes the issue of having to ``converge" to the new value of $\mu_i$ when jumping to state $i$. However, note that $\bbE_2$ depends upon both $X^*_{s,t}$ and $X^*_{s-1,t}$. This breaks the assumption in the forward algorithm that $\bfA_{s,t}$ depends only on $X^*_{s,t}$. One way to deal with this issues is to introduce a new hidden state $Z^*_{s,t} = (X^*_{s-1,t},X^*_{s,t})$. This fixes the issue, but now $Z^*_{s,t}$ can take one of $s^2$ values instead of $s$. This grows the state space of our model and can make inference harder.
- 
- \fi
- 
-%Figure (\ref{fig:smoothing}) also shows the calculated ODBA as a function of time for one a specific dive. The acceleration exhibits sinusoidal behavior at several points in time which cannot be modeled using HMMs straightforwardly. As a result, the data was split into two-second intervals (100 data points each), and each interval was summarized by the Fourier transform of the ODBA and the velocity at the \textit{end} of the time interval. Velocity was taken at the end of the time interval because the behavior of the whale during the time interval has no impact on the velocity of the whale at the beginning of the time interval. Because velocity is highly correlated with the average acceleration within an interval, the mean was subtracted out of each ODBA time series before the Fourier transform was taken. To reduce the dimension of the ODBA Fourier transform, Fourier coefficients corresponding to frequencies less than or equal to 5 hertz were summed and frequencies above 5 hertz were ignored. One nice property of this process is that it reduces the number of data points by a factor of 100, which drastically speeds up parameter estimation. The optimal length of the time interval over which to take the Fourier transform is a tuning parameter that is difficult to find. An ideal time interval should be long enough give useful Fourier coefficients, but short enough to preserve as much information about the vertical velocity of the animal as possible.
 
-%\subsection{Lag Plot}
+%%% Acceleration %%%
+For acceleration ($Z^{*(1)}$), both the CarHMM and the CarHHMM2 regularly converged to the correct parameters with very little standard error. Note, however, that both have relatively large observed fisher standard error in $\hat \mu$. This likely is due to the very large autocorrelation terms ($\phi^{(1)} = 0.99$ and $\phi^{(2)} = 0.95$) since as $\phi \to 1$, the value of $\mu$ does not matter in the likelihood evaluation as $\phi \to 1$ implies that $\mathbb{E}(Z^{*(1)}_{t,s^*}) = \phi*(Z^{*(1)}_{t,s^*-1}) + (1-\phi)\mu \to Z^{*(1)}_{t,s^*-1}$. The HHMM overestimates the variance of $Z^{*(1)}$ since it does not incorporate auto-correlation into the emission distribution of $Z^{*(1)}$, and the CarHHMM1 has large biases in many of its parameter estimates, especially in subdive state 2, because it sees the ``wigliness" of the acceleration data as raw acceleration rather than as Fourier modes, which deflates the value of $\hat \phi$ and inflates the value of $\hat \sigma$. See (table \ref{table:acceleration}) for a detailed breakdown of parameter values for acceleration emission distributions.
 
-%In order to find the appropriate HMM to model whale behavior, a lag plot was made for both velocity and the ODBA fourier sum. The results of doing so are shown in figure (\ref{fig:lag}). Unfortunately, the number of behavioral states is not clear from the lag plot, but it is clear that the velocity exhibits a large degree of autocorrelation. While the ODBA Fourier sum also exhibits some autocorrelation, the relationship is less strong, so autocorrelation was not incorporated in the ODBA Fourier sums emission distribution.
+%%% FoVeDBA %%%
+
+Finally, the distribution of parameters for the Fourier sums ($Z^{*(2)}$) for all models (except for the CarHHMM1) converge to the correct values, and the observed fisher information standard errors are in line with the empirical standard error. The distribution of $Z^{*(2)}$ is very different between subdive states 1 and 2, so the signal is therefore very easy for each model to pick up on. (Table \ref{table:FoVeDBA}) shows a detailed breakdown of the emission distribution of $Z^{*(2)}$ for all models.
+
+\textcolor{red}{I also have similar tables for $\Gamma$ and $\Gamma^*$, and I also have plots corresponding to each table. For example, I have included figure \ref{fig:MLE_dist} as an example below for the emission distribution of the MLEs for dive duration of the CarHMM. Should I use those instead? But there are just SO many plots (4 models * 3 observations * 2 states = 24 plots)}
+
+\begin{figure}[!ht]
+	\centering
+	\includegraphics[width=5in]{../Plots/hmm_FV_MLE_density_dive_duration_-1.png}
+	\caption{\textcolor{red}{KDE plot of $\hat \mu$ and $\hat \sigma$ for the dive duration emission distribution for the CarHMM. This plot is for Marie and Nancy to look over.}}
+	\label{fig:MLE_dist}
+\end{figure}
+
+
+
+%%% Accuracy %%%
+
+\begin{table}[]
+\centering
+\caption{Accuracies and run times for all models. All reported values are averages, and $\pm$ refers to the standard deviation.}
+\scalebox{0.8}{
+\begin{tabular}{ccccccc}
+Model                      & \multicolumn{1}{c}{Training Time (Minutes)} & \multicolumn{1}{c}{Dive Type} & \multicolumn{1}{c}{Subdive Type} & \multicolumn{1}{c}{Dive Accuracy} & \multicolumn{1}{c}{Subdive Accuracy}  \\ \hline
+\multirow{5}{*}{CarHMM}    & \multirow{5}{*}{$15.74 \pm 2.46$}   & Both                          & Both                             & -------------                     & $1.00 \pm 0.00$                       \\
+                           &                                    & 1                             & 1                                & \multirow{2}{*}{-------------}    & $1.00 \pm 0.00$                       \\ 
+                           &                                    & 1                             & 2                                &                                   & $1.00 \pm 0.00$                       \\ 
+                           &                                    & 2                             & 1                                & \multirow{2}{*}{-------------}    & $1.00 \pm 0.00$                       \\ 
+                           &                                    & 2                             & 2                                &                                   & $1.00 \pm 0.00$                       \\ \hline 
+\multirow{5}{*}{HHMM}      & \multirow{5}{*}{$82.43 \pm 11.48$}   & Both                          & Both                             & $0.94 \pm 0.02$                   & $1.00 \pm 0.00$                       \\
+                           &                                    & 1                             & 1                                & \multirow{2}{*}{$0.94\pm0.03$}    & $1.00 \pm 0.00$                       \\ 
+                           &                                    & 1                             & 2                                &                                   & $1.00 \pm 0.00$                       \\ 
+                           &                                    & 2                             & 1                                & \multirow{2}{*}{$0.94\pm0.03$}    & $1.00 \pm 0.00$                       \\ 
+                           &                                    & 2                             & 2                                &                                   & $1.00 \pm 0.00$                       \\ \hline
+\multirow{5}{*}{CarHHMM1}  & \multirow{5}{*}{$70.85 \pm 15.89$}   & Both                          & Both                             & $0.91 \pm 0.03$                   & $0.89 \pm 0.02$                       \\
+                           &                                    & 1                             & 1                                & \multirow{2}{*}{$0.87\pm0.04$}    & $0.44 \pm 0.12$                       \\ 
+                           &                                    & 1                             & 2                                &                                   & $1.00 \pm 0.00$                       \\ 
+                           &                                    & 2                             & 1                                & \multirow{2}{*}{$0.95\pm0.03$}    & $0.81 \pm 0.04$                       \\ 
+                           &                                    & 2                             & 2                                &                                   & $1.00 \pm 0.00$                       \\ \hline
+\multirow{5}{*}{CarHHMM2}  & \multirow{5}{*}{$81.22 \pm 16.10$}   & Both                          & Both                             & $0.94 \pm 0.02$                   & $1.00 \pm 0.00$                       \\
+                           &                                    & 1                             & 1                                & \multirow{2}{*}{$0.94\pm0.03$}    & $1.00 \pm 0.00$                       \\ 
+                           &                                    & 1                             & 2                                &                                   & $1.00 \pm 0.00$                       \\ 
+                           &                                    & 2                             & 1                                & \multirow{2}{*}{$0.94\pm0.03$}    & $1.00 \pm 0.00$                       \\ 
+                           &                                    & 2                             & 2                                &                                   & $1.00 \pm 0.00$                       \\ \hline
+\end{tabular}
+}
+\label{table:accuracy}
+\end{table}
+
+%%% dive duration %%%
+
+\begin{table}[]
+\centering
+\caption{Estimates and standard errors of parameters for dive duration distribution for all four models. All reported values are averages, except for the Fisher observed standard error, which are medians. $\pm$ refers to the IQR.}
+\scalebox{0.9}{
+\begin{tabular}{ccccccc}
+Model                      & \multicolumn{1}{c}{Parameter} & \multicolumn{1}{c}{Dive Type} & \multicolumn{1}{c}{Estimate} & \multicolumn{1}{c}{Bias} & \multicolumn{1}{c}{Empirical SE} & \multicolumn{1}{c}{Observed Fischer SE}           \\ \hline
+\multirow{4}{*}{CarHMM}    & \multirow{2}{*}{$\mu$}        & 1                             & $49.72$                         & $-0.28$                     & $4.78$                             & $2.47 \pm 0.34$                             \\
+                           &                               & ---                           & ---                            & ---                        & ---                                & ---                                         \\
+                           & \multirow{2}{*}{$\sigma$}     & 1                             & $39.00$                         & $-7.51$                     & $5.05$                             & $2.50 \pm 0.40$                             \\
+                           &                               & ---                           & ---                            & ---                        & ---                                & ---                                         \\ \hline
+\multirow{4}{*}{HHMM}      & \multirow{2}{*}{$\mu$}        & 1                             & $19.99$                         & $-0.01$                     & $0.75$                             & $0.69 \pm 0.11$                             \\
+                           &                               & 2                             & $79.85$                         & $-0.15$                     & $8.05$                             & $5.85 \pm 1.10$                             \\
+                           & \multirow{2}{*}{$\sigma$}     & 1                             & $4.90$                         & $-0.10$                     & $0.61$                             & $0.53 \pm 0.10$                             \\
+                           &                               & 2                             & $48.74$                         & $-1.26$                     & $6.50$                             & $5.15 \pm 1.02$                             \\ \hline
+\multirow{4}{*}{CarHHMM 1} & \multirow{2}{*}{$\mu$}        & 1                             & $19.91$                         & $-0.09$                     & $0.77$                             & $0.71 \pm 0.12$                             \\
+                           &                               & 2                             & $75.80$                         & $-4.20$                     & $7.72$                             & $5.32 \pm 0.98$                             \\
+                           & \multirow{2}{*}{$\sigma$}     & 1                             & $4.73$                         & $-0.27$                     & $0.59$                             & $0.55 \pm 0.10$                             \\
+                           &                               & 2                             & $49.48$                         & $-0.52$                     & $6.26$                             & $4.79 \pm 0.93$                             \\ \hline
+\multirow{4}{*}{CarHHMM 2} & \multirow{2}{*}{$\mu$}        & 1                             & $19.99$                         & $-0.01$                     & $0.75$                             & $0.69 \pm 0.12$                             \\
+                           &                               & 2                             & $79.85$                         & $-0.15$                     & $8.05$                             & $5.85 \pm 1.10$                             \\
+                           & \multirow{2}{*}{$\sigma$}     & 1                             & $4.90$                         & $-0.10$                     & $0.61$                             & $0.53 \pm 0.10$                             \\
+                           &                               & 2                             & $48.74$                         & $-1.26$                     & $6.50$                             & $5.15 \pm 1.02$                             
+\end{tabular}
+}
+\label{table:dive_duration}
+\end{table}
+
+
+%%% Acceleration %%%
+
+\begin{table}[]
+\centering
+\caption{Estimates and standard errors of parameters for $Z^{*(1)}_{t,s^*}$ for all four models. All reported values are averages, except for the Fisher observed standard error, which are medians. $\pm$ refers to the IQR.}
+\scalebox{0.8}{
+\begin{tabular}{ccccccc}
+Model                      & \multicolumn{1}{c}{Parameter} & \multicolumn{1}{c}{Subdive Type} & \multicolumn{1}{c}{Estimate} & \multicolumn{1}{c}{Bias} & \multicolumn{1}{c}{Empirical SE} & \multicolumn{1}{c}{Observed Fischer SE}        \\ \hline
+\multirow{6}{*}{CarHMM}    & \multirow{2}{*}{$\mu$}        & 1                             & $0.00$                         & $0.00$                     & $0.00$                             & $0.14 \pm 0.13$                             \\
+                           &                               & 2                             & $0.00$                         & $0.00$                     & $0.01$                             & $0.06 \pm 0.02$                             \\
+                           & \multirow{2}{*}{$\sigma$}     & 1                             & $0.05$                         & $-0.00$                     & $0.00$                             & $0.00 \pm 0.00$                             \\
+                           &                               & 2                             & $0.10$                         & $-0.00$                     & $0.00$                             & $0.00 \pm 0.00$                             \\ 
+                           & \multirow{2}{*}{$\phi$}       & 1                             & $0.99$                         & $-0.00$                     & $0.01$                             & $0.01 \pm 0.00$                             \\
+                           &                               & 2                             & $0.95$                         & $-0.00$                     & $0.01$                             & $0.01 \pm 0.00$                             \\ \hline
+\multirow{6}{*}{HHMM}      & \multirow{2}{*}{$\mu$}        & 1                             & $-0.01$                         & $-0.01$                     & $0.02$                             & $0.01 \pm 0.00$                             \\
+                           &                               & 2                             & $-0.00$                         & $-0.00$                     & $0.02$                             & $0.01 \pm 0.00$                             \\
+                           & \multirow{2}{*}{$\sigma$}     & 1                             & $0.25$                         & $0.20$                     & $0.04$                             & $0.00 \pm 0.00$                             \\
+                           &                               & 2                             & $0.24$                         & $0.14$                     & $0.03$                             & $0.00 \pm 0.00$                             \\ 
+                           & \multirow{2}{*}{$\phi$}       & 1                             & ------                         & ------                     & ------                             & ------                                      \\
+                           &                               & 2                             & ------                         & ------                     & ------                             & ------                                      \\ \hline
+\multirow{6}{*}{CarHHMM 1} & \multirow{2}{*}{$\mu$}        & 1                             & $0.00$                         & $0.00$                     & $0.00$                             & $0.08 \pm 0.04$                             \\
+                           &                               & 2                             & $-0.01$                         & $-0.01$                     & $0.01$                             & $0.01 \pm 0.00$                             \\
+                           & \multirow{2}{*}{$\sigma$}     & 1                             & $0.05$                         & $0.00$                     & $0.04$                             & $0.00 \pm 0.00$                             \\
+                           &                               & 2                             & $0.27$                         & $0.17$                     & $0.01$                             & $0.00 \pm 0.00$                             \\ 
+                           & \multirow{2}{*}{$\phi$}       & 1                             & $0.97$                         & $-0.02$                     & $0.10$                             & $0.00 \pm 0.00$                             \\
+                           &                               & 2                             & $0.49$                         & $-0.46$                     & $0.05$                             & $0.02 \pm 0.00$                             \\ \hline
+\multirow{6}{*}{CarHHMM 2} & \multirow{2}{*}{$\mu$}        & 1                             & $0.00$                         & $0.00$                     & $0.00$                             & $0.13 \pm 0.12$                             \\
+                           &                               & 2                             & $0.00$                         & $0.00$                     & $0.00$                             & $0.06 \pm 0.02$                             \\
+                           & \multirow{2}{*}{$\sigma$}     & 1                             & $0.05$                         & $-0.00$                     & $0.00$                             & $0.00 \pm 0.00$                             \\
+                           &                               & 2                             & $0.10$                         & $-0.00$                     & $0.00$                             & $0.00 \pm 0.00$                             \\ 
+                           & \multirow{2}{*}{$\phi$}       & 1                             & $0.99$                         & $-0.00$                     & $0.01$                             & $0.01 \pm 0.00$                             \\
+                           &                               & 2                             & $0.95$                         & $-0.00$                     & $0.01$                             & $0.01 \pm 0.00$                             \\ \hline
+\end{tabular}
+}
+\label{table:acceleration}
+\end{table}
+
+
+%%% FoVeDBA %%%
+
+\begin{table}[]
+\centering
+\caption{Estimates and standard errors of parameters for $Z^{*(2)}_{t,s^*}$ for all four models. All reported values are averages, except for the Fisher observed standard error, which are medians. $\pm$ refers to the IQR.}
+\scalebox{0.8}{
+\begin{tabular}{ccccccc}
+Model                      & \multicolumn{1}{c}{Parameter} & \multicolumn{1}{c}{Subdive Type} & \multicolumn{1}{c}{Estimate} & \multicolumn{1}{c}{Bias} & \multicolumn{1}{c}{Empirical SE} & \multicolumn{1}{c}{Observed Fischer SE}        \\ \hline
+\multirow{4}{*}{CarHMM}    & \multirow{2}{*}{$\mu$}        & 1                             & $10.10$                         & $-0.00$                     & $0.09$                             & $0.08 \pm 0.01$                             \\
+                           &                               & 2                             & $305.97$                         & $0.03$                     & $0.54$                             & $0.51 \pm 0.03$                             \\
+                           & \multirow{2}{*}{$\sigma$}     & 1                             & $3.18$                         & $-0.00$                     & $0.07$                             & $0.06 \pm 0.01$                             \\
+                           &                               & 2                             & $17.46$                         & $-0.03$                     & $0.37$                             & $0.36 \pm 0.02$                             \\ \hline
+\multirow{4}{*}{HHMM}      & \multirow{2}{*}{$\mu$}        & 1                             & $10.10$                         & $-0.00$                     & $0.09$                             & $0.08 \pm 0.01$                             \\
+                           &                               & 2                             & $305.97$                         & $0.03$                     & $0.54$                             & $0.51 \pm 0.03$                             \\
+                           & \multirow{2}{*}{$\sigma$}     & 1                             & $3.18$                         & $-0.00$                     & $0.07$                             & $0.06 \pm 0.01$                             \\
+                           &                               & 2                             & $17.46$                         & $-0.03$                     & $0.37$                             & $0.36 \pm 0.02$                             \\ \hline
+\multirow{4}{*}{CarHHMM 1} & \multirow{2}{*}{$\mu$}        & 1                             & ------                         & ------                     & ------                             & ------                                      \\
+                           &                               & 2                             & ------                         & ------                     & ------                             & ------                                      \\
+                           & \multirow{2}{*}{$\sigma$}     & 1                             & ------                         & ------                     & ------                             & ------                                      \\
+                           &                               & 2                             & ------                         & ------                     & ------                             & ------                                      \\ \hline
+\multirow{4}{*}{CarHHMM 2} & \multirow{2}{*}{$\mu$}        & 1                             & $10.10$                         & $-0.00$                     & $0.09$                             & $0.08 \pm 0.01$                             \\
+                           &                               & 2                             & $305.97$                         & $0.03$                     & $0.54$                             & $0.51 \pm 0.03$                             \\
+                           & \multirow{2}{*}{$\sigma$}     & 1                             & $3.18$                         & $-0.00$                     & $0.07$                             & $0.06 \pm 0.01$                             \\
+                           &                               & 2                             & $17.46$                         & $-0.03$                     & $0.37$                             & $0.36 \pm 0.02$                             
+\end{tabular}
+}
+\label{table:FoVeDBA}
+\end{table}
+

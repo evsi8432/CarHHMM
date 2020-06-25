@@ -58,3 +58,74 @@ Both $(1-\psi_{s+1})$ and $\psi_{s+1}$ are positive, and the term $\bfY_{t+2} - 
 \subsection{Step-Size Normalization}
 
 Lawler et al recommend dividing all step lengths by the mean observed step length to eliminate units and allow for easy comparison across data sources and animals. This process should be done with care, however, since scaling a random variable can sometimes change its distribution. Luckily, step length in the CarHMM is modeled using a gamma distribution, and gamma random variables still follow a gamma distribution when scaled by a constant. Step-size standardization can only be done if the analysis is done offline, since the mean step length is in flux for online analysis.  
+
+
+
+%%%%%%%%%%%% THROWAWAY STUFF FOR LATER HERE %%%%%%%%%%
+
+\iffalse
+
+\section{for simulation results}
+
+\subsection{Model Misspecification}
+
+There are two ways to simulate the fourier modes of the acceleration vector $\bfA_{s,t}$:
+
+\begin{enumerate}
+	\item $$\bbE_1\left(\bfA_{s,t} | \bfA_{s-1,t}, X^*_{s,t}\right) = \phi \bfA_{s-1,t} + (1-\phi) \mu_{X^*_{s,t}} $$
+	
+	\item $$\bbE_2(\bfA_{s,t} | \bfA_{s-1,t}, X^*_{s,t}, X^*_{s-1,t}) = \left\{\begin{array}{lr}
+	\phi \bfA_{s-1,t} + (1-\phi) \mu_{X^*_{s,t}} & \text{for } X^*_{s,t} = X^*_{s-1,t}\\
+	\mu_{X^*_{s,t}} & \text{for } X^*_{s,t} \neq X^*_{s-1,t}
+	\end{array}\right\}$$
+\end{enumerate}
+
+\subsubsection{$\bbE_1$}
+
+First, look at $\bbE_1$. This comes with an issue in that when $X^*_{s,t}$ changes values, it will take a while for the process to ``converge" long-run mean $\mu_{X^*_{s,t}}$. In particular, if the behavioral process $X^*$ had been in state 1 for a while and then switches to state 2 for a while, then:
+
+\begin{align*}
+	\bbE_1\left(\bfA_{s+1,t}|X^*_{s:s+1,t} = 2, X^*_{s,t} = 1\right) &=  \phi \mu_1 + (1-\phi) \mu_2 \\
+	%
+	\bbE_1\left(\bfA_{s+2,t}|X^*_{s:s+2,t} = 2, X^*_{s,t} = 1\right) &= \phi\left( \phi \mu_1 + (1-\phi) \mu_2\right) + (1-\phi)\mu_2 \\
+	&= \phi^2 \mu_1 + (1-\phi^2) \mu_2\\
+	%
+	\bbE_1\left(\bfA_{s+n,t}|X^*_{s:s+n,t} = 2, X^*_{s,t} = 1\right) &=  \phi^n \mu_1 + (1-\phi^n) \mu_2 \\
+\end{align*}
+
+So, if using $\bbE_1$, there is an assumption that the fourier modes of the acceleration vector $\bfA$ linearly ``converge" to the new value $\mu_i$ from $\mu_j$ when $X^*_{s,t}$ changes from $i$ to $j$. An example of this can be seen in figure (\ref{fig:FOVEDBA}).
+
+ \begin{figure}[h!]
+ 	\centering
+ 	\includegraphics[height=3in]{../Code/test.png}
+ 	\caption{The FoVeDBA of simulated data using $\bbE_1$. Note that the FoVeDBA approaches $\approx$ 300 in state 2 from $\approx$ 10 in state 1 with roughly linear convergence.}
+ 	\label{fig:FOVEDBA}
+ \end{figure}
+ 
+ Note that if the generative model is correlated, but the inference model isn't, then quick jumps between states 1 and 2 can be missed because the chain never ``converges" to the new mean $\mu_i$, as shown in figure (\ref{fig:STATE}).
+ 
+\begin{figure}[h!]
+	\centering
+	\includegraphics[height=3in]{../Code/test2.png}
+	\caption{The probability of being in each behavioral state $X^*_{s,t}$ as estimated by the HHMM. The colors represent the true behavioral state.}
+	\label{fig:STATE}
+\end{figure}
+ 
+ \subsubsection{$\bbE_2$}
+ 
+Clearly, the model has issues decodeing the behavioral state when the model is misspecified. Therefore, if the true generative process does not have correlation when jumping between states, then it is better to use $\bbE_2$:
+
+$$\bbE_2(\bfA_{s,t} | \bfA_{s-1,t}, X^*_{s,t}, X^*_{s-1,t}) = \left\{\begin{array}{lr}
+\phi \bfA_{s-1,t} + (1-\phi) \mu_{X^*_{s,t}} & \text{for } X^*_{s,t} = X^*_{s-1,t}\\
+\mu_{X^*_{s,t}} & \text{for } X^*_{s,t} \neq X^*_{s-1,t}
+\end{array}\right\}$$
+
+This fixes the issue of having to ``converge" to the new value of $\mu_i$ when jumping to state $i$. However, note that $\bbE_2$ depends upon both $X^*_{s,t}$ and $X^*_{s-1,t}$. This breaks the assumption in the forward algorithm that $\bfA_{s,t}$ depends only on $X^*_{s,t}$. One way to deal with this issues is to introduce a new hidden state $Z^*_{s,t} = (X^*_{s-1,t},X^*_{s,t})$. This fixes the issue, but now $Z^*_{s,t}$ can take one of $s^2$ values instead of $s$. This grows the state space of our model and can make inference harder.
+ 
+ \fi
+ 
+%Figure (\ref{fig:smoothing}) also shows the calculated ODBA as a function of time for one a specific dive. The acceleration exhibits sinusoidal behavior at several points in time which cannot be modeled using HMMs straightforwardly. As a result, the data was split into two-second intervals (100 data points each), and each interval was summarized by the Fourier transform of the ODBA and the velocity at the \textit{end} of the time interval. Velocity was taken at the end of the time interval because the behavior of the whale during the time interval has no impact on the velocity of the whale at the beginning of the time interval. Because velocity is highly correlated with the average acceleration within an interval, the mean was subtracted out of each ODBA time series before the Fourier transform was taken. To reduce the dimension of the ODBA Fourier transform, Fourier coefficients corresponding to frequencies less than or equal to 5 hertz were summed and frequencies above 5 hertz were ignored. One nice property of this process is that it reduces the number of data points by a factor of 100, which drastically speeds up parameter estimation. The optimal length of the time interval over which to take the Fourier transform is a tuning parameter that is difficult to find. An ideal time interval should be long enough give useful Fourier coefficients, but short enough to preserve as much information about the vertical velocity of the animal as possible.
+
+%\subsection{Lag Plot}
+
+%In order to find the appropriate HMM to model whale behavior, a lag plot was made for both velocity and the ODBA fourier sum. The results of doing so are shown in figure (\ref{fig:lag}). Unfortunately, the number of behavioral states is not clear from the lag plot, but it is clear that the velocity exhibits a large degree of autocorrelation. While the ODBA Fourier sum also exhibits some autocorrelation, the relationship is less strong, so autocorrelation was not incorporated in the ODBA Fourier sums emission distribution.

@@ -7,6 +7,79 @@
 
 \setcounter{subsection}{0}
 
+\subsection{Detailed Description of Data Simulation}
+
+$\hat{Y}^*_{t,s^*}$ was simulated using the following procedure. Note that the $k^{th}$ Fourier mode of $\hat{Y}^*_{t,s^*}$ is denoted as $\hat{Y}^{*(k)}_{t,s^*}$:
+
+\begin{align*}
+	(\hat{Y}^{*(0)}_{t,0}|X^*_{t,0} = i) &\sim \mathcal{N} \left(0, \sigma^{*(i)} \right) & \\
+	%
+	(\hat{Y}^{*(0)}_{t,s^*}|X^*_{t,s^*} = i) &\sim \mathcal{N} \left(\phi^{*(i)} * \hat{Y}^{*(0)}_{t,s^*-1}, \sigma^{*(i)} \right), & s^* = 1,2,\ldots, \lfloor Y_t/2 \rfloor \\
+	%
+	\hat{Y}^{*(k)}_{t,s^*} &= a_{t,s^*}^{(k)} i\sqrt{b^{(k)}_{t,s^*}}, & k = 1,\ldots,49 \\
+\end{align*}
+\begin{align*}
+    a_{t,s^*}^{(k)} &\sim  \left\{\begin{array}{lr}
+	-1 & \quad w.p. \enspace 1/2 \\
+	1  & \quad w.p. \enspace 1/2
+	\end{array}\right. \\
+	%
+	(b^{(k)}_{t,s^*}|X^*_{t,s^*}  = 1) &\sim {\rm{Gamma}}(1/k^2, 1) \\
+	%
+	(b^{(k)}_{t,s^*}|X^*_{t,s^*} = 2) &\sim \left\{\begin{array}{lr}
+	{\rm{Gamma}}(1/k^2, 1), \quad & k \notin \{1,2\} \\
+	{\rm{Gamma}}(100,1), & k = 1 \\
+	{\rm{Gamma}}(50,1), & k = 2
+	\end{array}\right. 
+\end{align*}
+
+\begin{align*}
+    \hat{Y}^{*(50)}_{t,s^*} &= 0 & \\
+	%
+	\hat{Y}^{*(k)}_{t,s^*}  &= -\hat{Y}^{*(100-n)}_{t,s^*}, & \qquad k = 51,\ldots,99
+\end{align*}
+
+$Y^*_{t,(100s^*+1):(100s^*+100)}$ was set using the inverse discrete Fourier transform of $\hat{Y}^*_{t,s^*}$:
+
+$$Y^*_{t,(100s^*+1):(100s^*+100)} = IDFT\left(\hat{Y}^*_{t,s^*}\right), \qquad s^* = 0,\ldots,\lfloor Y_t/2 \rfloor - 1$$
+
+There are several practical reasons behind this construction. First, $\hat{Y}^*_{t,s^*}$ is anti-symmetric about $\hat{Y}^{*(50)}_{t,s^*}$ so that its inverse Fourier transform is real-valued. $\hat{Y}^{*(k)}_{t,s^*}$ also decays like $1/k^2$ so that $Y^*_{t,t^*}$ remains continuous within a 2-second window. Note, however, that $Y^*_{t,s^*}$ is not continuous \textit{between} windows, as can be seen in (fig \ref{fig:fourier_example}). However, the jumps are not too severe since $\hat{Y}^{*(0)}_{t,s^*}$ and $\hat{Y}^{*(0)}_{t,s^*+1}$ are highly correlated. See (fig. \ref{fig:sim_data}) for details.
+
+From here it is straightforward to calculate both $Z^{*(1)}$ and $Z^{*(2)}$ after setting $\tilde{f}$. We pick $\tilde{f} = 10$ periods per window, or 5 hertz. Note that $Z^{*(1)}_{t,s^*} = \mathcal{R}\left(\hat{Y}^{(0)}_{t,s^*}\right)$, so selecting $\sigma^{*(i)}$ and $\phi^{*(1)}$ appropriately will ensure the distributions from (eqn \ref{}). 
+
+Note that $Z^{*(2)}$, is the sum of gamma distributions with the same scale parameter, so the distribution of $Z^{*(2)}$ is also a Gamma distribution:
+
+$$Z^{*(2)} = \sum_{k=1}^{10} b^{(k)}_{t,s^*}$$
+$$Z^{*(2)} \sim {\rm{Gamma}}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\iffalse
+
+
 \subsection{Dimension Reduction on $\hat{Y_t^*}$}
 
 First, we simply use down-sampling and only record every $w^{th}$ time step of $\hat{Y}_t^*$. This both reduces the space of $\hat{Y}_t^*$ to $\mathbb{C}^{\lfloor S^*_t / w \rfloor \times w}$ and ensures that none of the sliding windows overlap when taking the STFT. This is important because HMMs assume temporal independence between observations. Next, the dimension of $\hat{Y}_t^*$ can be cut in half by recognizing that the $Y_t^*$ is real-valued, and therefore $\hat{Y}_{t,k}^*$ is equal to the complex-congugate of $\hat{Y}_{t,w-k-1}^*$. Finally, by Parseval's Thereom we have that:
@@ -34,28 +107,6 @@ Then, we have the following:
 y^*_{t+\delta} \sim \mathcal{N}\left((1-\phi_{x^*_t})\mu_{x^*_t} + \phi_{x^*_t} y^*_t,\quad \sigma_{x^*_t}^2 \right)
 \end{align*}
 %
-If $\delta$ is fixed and $x^*_t$ is adjusted to follow a Markov chain rather than a Markov process, then this model is equivalent to the CarHMM with normal emission probabilities. Note that all of the parameter transformations above are one-to-one, so it is easy to go from the CarHMM to the continuous model and back again. This allows for the pricipled construction of the continuous-time model to be combined with the computational convienence of the CarHMM.
+If $\delta$ is fixed and $x^*_t$ is adjusted to follow a Markov chain rather than a Markov process, then this model is equivalent to the CarHMM with normal emission probabilities. Note that all of the parameter transformations above are one-to-one, so it is easy to go from the CarHMM to the continuous model and back again. This allows for the principled construction of the continuous-time model to be combined with the computational convenience of the CarHMM.
 
-%\subsection{Proof of correlation between $d_{t-1}$ and $d_t$}
-
-%THIS IS WRONG
-%The correlation between $d_{t-1}$ and $d_t$ is defined as $\left(\mathbbm{E}(d_t d_{t-1}) - \mu_{RL,b}^2 \right) / \sigma_b^2$. Let the probability distribution function of $d_t$ and $d_{t-1}$ be denoted as $p$. Then:
-
-%\begin{align*}
-%	\mathbbm{E}(d_t d_{t-1}) &= \int_0^\infty \int_0^\infty x_t x_{t-1} p(x_{t-1}) p(x_t|x_{t-1}) dx_t dx_{t-1} \\
-	%
-%	&= \int_0^\infty x_{t-1} p(x_{t-1}) \left( \int_0^\infty x_t p(x_t|x_{t-1}) dx_t \right) dx_{t-1} \\
-	%
-%	&= \int_0^\infty x_{t-1} p(x_{t-1}) \left( (1-\phi_b)\mu_{RL,b} + \phi_b x_{t-1} \right) dx_{t-1} \\
-%	&= (1-\phi_b)\mu_{RL,b} \int_0^\infty x_{t-1} p(x_{t-1}) dx_{t-1} + \phi_b \int_0^\infty x_{t-1}^2 p(x_{t-1}) dx_{t-1} \\
-%	&= (1-\phi_b)\mu_{RL,b}^2 + \phi_b (\mu_{RL,b}^2 + \sigma_b^2) \\
-%	&= \mu_{RL,b}^2 + \phi_b\sigma_b^2
-%\end{align*}
-
-%So:
-
-%\begin{align*}
-%	corr(d_t,d_{t-1}) &= \frac{\mathbbm{E}(d_t d_{t-1}) - \mu_{RL,b}^2}{\sigma_b^2} \\
-%	&= \frac{\mu_{RL,b}^2 + \phi_b\sigma_b^2 - \mu_{RL,b}^2}{\sigma_b^2} \\
-%	&= \phi_b
-%\end{align*}
+\fi
