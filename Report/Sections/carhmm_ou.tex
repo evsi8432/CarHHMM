@@ -2,7 +2,7 @@
 
 \section{Results regarding CarHMMs and the Ornstein-Uhlenbeck process}
 
-\subsection{Continuous Time models}
+%\subsection{Continuous Time models}
 
 Although the CarHMM can incorporate auto-correlation into the structure of an HMM, they break down when observations are taken at irregular time intervals since the probability transition matrix $\Gamma$ would then have to depend upon the time step between observations. A common solution to this issue is to use a continuous-time method such as the one introduced by Michelot et al \cite{Michelot:2019}, which models the movement of an animal as an Ornstein-Uhlenbeck process with parameters that depend upon the underlying behavioural state of the animal. Namely, a state-switching Ornstein-Uhlenbeck process $Y$ is the solution to the following stochastic differential equation:
 %
