@@ -109,8 +109,6 @@ class Visualisor:
             ncols = len(self.hhmm.theta[0])
         else:
             features = list(self.hhmm.theta[1][0].keys())
-            print(features)
-            features = ['Ahat_low']
             nrows = self.pars.K[0]
             ncols = len(features)
 
@@ -141,13 +139,13 @@ class Visualisor:
                     if dist == 'gamma':
                         shape = np.square(mu)/np.square(sig)
                         scale = np.square(sig)/np.array(mu)
-                        x = np.linspace(0.1,1e5,100000)
+                        x = np.linspace(0.01,max(mu)+5*max(sig),100000)
                         y = gamma.pdf(x,shape[state],0,scale[state])
                     elif dist == 'normal':
-                        x = np.linspace(min(mu)-3*max(sig),max(mu)+3*max(sig),1000)
-                        y = norm.pdf(x,0,sig[state])
+                        x = np.linspace(min(mu)-3*max(sig),max(mu)+3*max(sig),100000)
+                        y = norm.pdf(x,mu[state],sig[state])
                     elif dist == 'vonmises':
-                        x = np.linspace(-np.pi,np.pi,1000)
+                        x = np.linspace(-np.pi,np.pi,100000)
                         y = vonmises.pdf(x,sig[state],loc=mu[state])
                     else:
                         raise('distribution %s not recognized' % dist)
@@ -158,13 +156,13 @@ class Visualisor:
                         title = 'State Specific Emission Probabilites for Dive Duration'#%s'%feature
                         ax[row_num,col_num].set_xlabel('Dive Duration (seconds)')
                     else:
-                        title = 'State Specific Emission Probabilites for Fourier Component'#%(feature,row_num+1)
-                        ax[row_num,col_num].set_xlabel('$\sum \hat{\mathbf{A}}^2$')
-                        #ax[row_num,col_num].set_xlim([-1,1000])
-                        ax[row_num,col_num].set_xscale('log')
-                        ax[row_num,col_num].set_yscale('log')
-                        ax[row_num,col_num].set_ylim([10e-8,10e-1])
-                        ax[row_num,col_num].set_xlim([10e-1,10e4])
+                        title = 'State Specific Emission Probabilites for %s'%feature
+                        if feature == 'Ahat_low':
+                            ax[row_num,col_num].set_xlabel('$\sum \hat{\mathbf{A}}^2$')
+                            ax[row_num,col_num].set_xscale('log')
+                            ax[row_num,col_num].set_yscale('log')
+                            ax[row_num,col_num].set_ylim([10e-8,10e-1])
+                            ax[row_num,col_num].set_xlim([10e-1,10e4])
                     ax[row_num,col_num].set_title(title,fontsize=16)
                     ax[row_num,col_num].legend(legend,prop={'size':14})
 
@@ -232,9 +230,6 @@ class Visualisor:
             else:
                 nrows += 2
 
-        nrows = 1
-        plt.subplots(nrows,1,figsize=(30,nrows*5))
-
         # get df state-by-state
         subdive = df[(df['dive_num'] >= sdive) & (df['dive_num'] <= edive)].copy()
         subdive['sec_from_start'] -= min(subdive['sec_from_start'])
@@ -248,18 +243,15 @@ class Visualisor:
         for state in range(self.pars.K[0]):
             dives.append(dive[dive['ML_dive'] == state])
 
-        fignum = 1
-
         for col in df_cols:
 
-
             # dive-level coloring
-            plt.subplot(nrows,1,fignum)
+            plt.figure(figsize=(30,5))
             colors = [cm.get_cmap('tab20')(i) for i in [1,0]]
             legend = ['Dive Type %d' % (i+1) for i in range(self.pars.K[0])]
             for state,dive_df in enumerate(dives):
                 plt.plot(dive_df['sec_from_start']/60,dive_df[col],
-                         '.',color=colors[state],markersize=5)
+                         '.',color=colors[state],markersize=10)
             if 'prob' in col:
                 plt.plot(dive[dive[col] > -0.01]['sec_from_start']/60,dive[dive[col] > -0.01][col],'k-')
                 plt.axhline(0.5,color='k')
@@ -267,47 +259,37 @@ class Visualisor:
             else:
                 plt.plot(dive['sec_from_start']/60,dive[col],'k--')
             plt.yticks(fontsize=24)
-            plt.ylabel('Depth $(m)$',fontsize=24)
+            plt.ylabel(col,fontsize=24)
             plt.xticks(fontsize=24)
             plt.xlabel('Time (mins)',fontsize=24)
             plt.legend(legend,prop={'size': 20})
-            plt.title('Depth Data',fontsize=24)
-
-            #plt.ylabel(col,fontsize = 14)
-            #plt.xlabel('Time (s)',fontsize=14)
-            #plt.legend(legend,prop={'size': 14})
+            plt.title(col + ', dives %d-%d'%(sdive,edive),fontsize=24)
             if col == 'depth':
                 plt.gca().invert_yaxis()
+            plt.show()
 
-            '''
             # subdive-level coloring
-            plt.subplot(nrows,1,fignum)
+            plt.figure(figsize=(30,5))
             colors = [cm.get_cmap('tab20')(i+self.pars.K[0]) for i in [2,1,0]]
             legend = ['Subdive Behavior %d' % (i+1) for i in range(self.pars.K[1])]
             for state,subdive_df in enumerate(subdives):
-                plt.plot(subdive_df['sec_from_start']/60,subdive_df[col],
-                         '.',color=colors[state],markersize=5)
+                plt.plot(subdive_df['sec_from_start'],subdive_df[col],
+                         '.',color=colors[state],markersize=10)
             if 'prob' in col:
-                plt.plot(dive[dive[col] > -0.01]['sec_from_start']/60,dive[dive[col] > -0.01][col],'k-')
+                plt.plot(dive[dive[col] > -0.01]['sec_from_start'],dive[dive[col] > -0.01][col],'k-')
                 plt.axhline(0.5,color='k')
                 plt.ylim([-0.05,1.05])
             else:
-                plt.plot(dive['sec_from_start']/60,dive[col],'k-')
+                plt.plot(dive['sec_from_start'],dive[col],'k-')
             plt.yticks(fontsize=24)
-            plt.ylabel('Depth $(m)$',fontsize=24)
+            plt.ylabel(col,fontsize=24)
             plt.xticks(fontsize=24)
             plt.xlabel('Time (mins)',fontsize=24)
             plt.legend(legend,prop={'size': 20})
-            plt.title('Depth Data',fontsize=24)
-
-
-            #plt.ylabel(col,fontsize = 14)
-            #plt.xlabel('Time (s)',fontsize=14)
-            #plt.legend(legend,prop={'size': 14})
+            plt.title(col + ', dives %d-%d'%(sdive,edive),fontsize=24)
             if col == 'depth':
                 plt.gca().invert_yaxis()
-            '''
-            fignum += 2
+            plt.show()
 
 
         t_start = dive['time'].min()
@@ -319,7 +301,7 @@ class Visualisor:
             if col in self.pars.features[0]:
 
                 # dive-level columns - color by dive type only
-                plt.subplot(nrows,1,fignum)
+                plt.figure(figsize=(30,5))
                 colors = [cm.get_cmap('tab20')(i) for i in [1,0]]
                 legend = ['Dive Type %d' % (i+1) for i in range(self.pars.K[0])]
 
@@ -340,18 +322,18 @@ class Visualisor:
                     plt.axvline(max(time))
                 for state in range(self.pars.K[0]):
                     plt.plot(times[state],features[state],
-                             '.',color=colors[state],markersize=5)
+                             '.',color=colors[state],markersize=10)
                 plt.plot(time,feature,'k--')
                 plt.ylabel(col,fontsize = 14)
-                #plt.xlabel('Time (s)',fontsize=14)
+                plt.xlabel('Time (s)',fontsize=14)
                 plt.legend(legend,prop={'size': 14})
 
-                fignum += 1
+                plt.show()
 
             else:
 
                 # subdive-level columns - color by dive type
-                plt.subplot(nrows,1,fignum)
+                plt.figure(figsize=(30,5))
                 colors = [cm.get_cmap('tab20')(i) for i in [1,0]]
                 legend = ['Dive Type %d' % (i+1) for i in range(self.pars.K[0])]
 
@@ -374,17 +356,18 @@ class Visualisor:
                     vlines.append(max(time))
                 for state in range(self.pars.K[0]):
                     plt.plot(times[state],features[state],
-                             '.',color=colors[state],markersize=5)
+                             '.',color=colors[state],markersize=10)
                 plt.plot(time,feature,'k--')
                 plt.ylabel(col,fontsize = 14)
-                #plt.xlabel('Time (s)',fontsize=14)
+                plt.xlabel('Time (s)',fontsize=14)
                 plt.legend(legend,prop={'size': 14})
                 for vline in vlines:
                     plt.axvline(vline)
+                plt.show()
 
 
                 # subdive-level columns - color by subdive type
-                plt.subplot(nrows,1,fignum+1)
+                plt.figure(figsize=(30,5))
                 colors = [cm.get_cmap('tab20')(i+self.pars.K[0]) for i in [2,1,0]]
                 legend = ['Subdive Behavior %d' % (i+1) for i in range(self.pars.K[1])]
 
@@ -403,22 +386,17 @@ class Visualisor:
                             features[ML_state].append(seg[col])
                             feature.append(seg[col])
                 for state in range(self.pars.K[1]):
-                    plt.plot([t/60 for t in times[state]],features[state],
-                             '.',color=colors[state],markersize=25)
-                plt.plot([t/60 for t in time],feature,'k--')
+                    plt.plot([t for t in times[state]],features[state],
+                             '.',color=colors[state],markersize=10)
+                plt.plot([t for t in time],feature,'k--')
                 plt.yticks(fontsize=24)
-                plt.ylabel('Acceleration $(m/s^2)$',fontsize=24)
+                plt.ylabel(col,fontsize=24)
                 plt.xticks(fontsize=24)
-                plt.xlabel('Time (mins)',fontsize=24)
+                plt.xlabel('Time (secs)',fontsize=24)
                 plt.legend(legend,prop={'size': 20})
                 plt.title('Depth Data',fontsize=24)
-                #for vline in vlines:
-                #    plt.axvline(vline)
-                fignum += 2
-
-        if file is None:
-            plt.show()
-        else:
-            plt.savefig(file)
+                for vline in vlines:
+                    plt.axvline(vline)
+                plt.show()
 
         return

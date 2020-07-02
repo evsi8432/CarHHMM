@@ -26,8 +26,8 @@ class Parameters:
     def __init__(self):
 
         # loading parameters
-        self.cvc_file = '../../Data/20190902-182840-CATs_OB_1.cvc'
-        self.csv_file = '../../Data/20190902-182840-CATs_OB_1_001.csv'
+        self.cvc_file = '../Data/20190902-182840-CATs_OB_1.cvc'
+        self.csv_file = '../Data/20190902-182840-CATs_OB_1_001.csv'
 
         self.cvc_cols = ['date','time',
                          'GPS lat','GPS long','GPS alt','GPS speed',
@@ -55,7 +55,7 @@ class Parameters:
         self.etime = '2019-09-02 18:00:00'
         self.drop_times = [[1.6,1.8],[3.3,4.3]] # in hr after start
         self.smoother = [0.2]*5
-        self.smooth_cols = ['VeDBA','depth','elevation']#,'Vz','heading','roll',]
+        self.smooth_cols = ['depth','elevation']#,'Vz','heading','roll',]
 
 
         # parameters for HHMM features
