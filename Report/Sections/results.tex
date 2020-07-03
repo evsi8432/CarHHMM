@@ -1,16 +1,16 @@
 % !TeX root = ../main.tex
 
-\section{Killer Whale Case Study}
+%\section{Killer Whale Case Study}
 
-%\subsection{Data Collection and Preprocessing}
+\subsection{Data Collection and Preprocessing}
 
-To demonstrate this methodology as applied to real-world data, the CarHHMM was used to analyze dive data from a killer whale off the coast of British Columbia, Canada. The data was collected on September 2, 2019 from 12:49 pm to 6:06 pm and consists of depth and acceleration in three orthogonal directions. Observations were collected at a rate of 50 hertz. Tagging the killer whale caused anomalous behavior before 1:20 pm and after 6:00 pm, so observations in this time range were ignored. In addition, the tagging technology dropped data between 2:25pm and 2:37pm as well as between 4:07 and 5:07 pm, so any partially observed data within this time range were ignored as well. A killer whale ``dive" is considered to be any continuous chunk of data that occurs below 0.5 meters in depth and lasts for at least 10 seconds. Accelerometer and depth data were smoothed by taking a moving average with a window of 1/10th of a second. Data preprocessing was done in part with the \textit{divebomb} package in Python \cite{Nunes:2018}.
+To demonstrate this methodology as applied to real-world data, the CarHHMM was used to analyze dive data from a killer whale off the coast of British Columbia, Canada. The data was collected on September 2, 2019 from 12:49 pm to 6:06 pm and consists of depth and acceleration in three orthogonal directions. Observations were collected at a rate of 50 hertz. Tagging the killer whale caused anomalous behavior before 1:20 pm and after 6:00 pm, so observations in this time range were ignored. In addition, the tagging technology dropped data between 2:25pm and 2:37pm as well as between 4:07 and 5:07 pm, so any partially observed data within this time range were ignored as well. A killer whale ``dive" is considered to be any continuous chunk of data that occurs below 0.5 meters in depth and lasts for at least 10 seconds. This process resulted in a total of 267 dives. Accelerometer and depth data were smoothed by taking a moving average with a window of 1/10th of a second. Data preprocessing was done in part with the \textit{divebomb} package in Python \cite{Nunes:2018}.
 
-Figure (\ref{fig:smoothing}) also shows the calculated ODBA as a function of time for one a specific dive. The acceleration exhibits sinusoidal behavior at several points in time which cannot be modeled using HMMs straightforwardly. We set $\tilde{f} = 5$ hertz and $w = 2$ seconds to calculate $Z^{*(1)}_{t,t^*}$ and $Z^{*(2)}_{t,t^*}$. This reduces the dimension of each window from $50 1/s * 2 s = 100$ to 2.
+\subsection{Model Selection}
 
-\subsection{Lag Plot}
+The collection of all dive durations were set to be the coarse-scale observations $Y$, and the acceleration data was used to determine the fine-scale observations $Y^*$. Figure (\ref{fig:raw_data_one_dive}) shows both the depth profile and the raw accelerometer data for one specific dive. The acceleration exhibits sinusoidal behavior at several points in time which cannot be modeled using HMMs without signal processing of the raw acceleration data. Therefore, the STFT was used to process the raw acceleration data and calculate both $Y{*(1)}$ and $Y^{*(2)}$. We set $\tilde{f} = 5$ hertz and $h = 2$ seconds, which reduced the dimension of each window from $50 s^{-1} * 2 s = 100$ to 2.
 
-In order to find if the CarHHMM was appropriate for this data, a lag plot was made for both $Z^{*(1)}_{t,t^*}$ and $Z^{*(2)}_{t,t^*}$. The results of doing so are shown in figure (\ref{fig:lag}). Unfortunately, the number of behavioral states is not clear from the lag plot, but it is clear that $Z^{*(1)}_{t,t^*}$ exhibits a large degree of autocorrelation. While $Z^{*(2)}_{t,t^*}$ also exhibits some auto-correlation, the relationship is less strong, so autocorrelation was not incorporated in the emission distribution of $Z^{*(2)}_{t,t^*}$ for computational purposes.
+In order to find if the CarHHMM was appropriate for this data, a lag plot was made for both $Y^{*(1)}_{t,s^*}$ and $Y^{*(2)}_{t,s^*}$. The results of doing so are shown in figure (\ref{fig:lag}). Unfortunately, the number of behavioral states is not clear from the lag plot, but it is clear that $Y^{*(1)}_{t,s^*}$ exhibits a large degree of auto-correlation. While $Y^{*(2)}_{t,s^*}$ also exhibits some auto-correlation, the relationship is less strong, so auto-correlation was not incorporated in the emission distribution of $Y^{*(2)}_{t,s^*}$. 
 
 \begin{figure}[h!]
 	\centering
@@ -19,9 +19,11 @@ In order to find if the CarHHMM was appropriate for this data, a lag plot was ma
 	\label{fig:lag}
 \end{figure}
 
+Since information criteria tend to overestimate the number of states in biological processes \cite{Pohle:2017}, we instead selected $N = 2$ dive types and $N^* = 3$ sub-dive behaviours heuristically and admittedly somewhat arbitrarily.
+
 \subsection{Results}
 
-The parameters of the estimated emission distributions for each behavioral state are shown in table (\ref{table:emis_dist}) below. Each distribution is also plotted in figure (\ref{fig:emis_dist}). Note that the autocorrelation within the velocity sequence is not captured in figure (\ref{fig:emis_dist}), so it is important to refer to the estimated auto-correlation parameter $\hat \phi$ from table (\ref{table:emis_dist}) when considering the emission distributions shown in figure (\ref{fig:emis_dist}).
+The parameters of the estimated emission distributions for each behavioral state are shown in table (\ref{table:emis_dist}). Each distribution is also plotted in figure (\ref{fig:emis_dist}). Note that the auto-correlation within the velocity sequence is not captured in figure (\ref{fig:emis_dist}), so it is important to refer to the estimated auto-correlation parameter $\hat \phi$ from table (\ref{table:emis_dist}) when considering the emission distributions shown in figure (\ref{fig:emis_dist}).
 %
 \begin{figure}[h!]
 	\centering
@@ -74,3 +76,6 @@ This analysis is largely exploratory with a purely heuristic approach to decide 
 Parameter estimation via likelihood maximization can be slow, especially with an observation rate of 50 hertz. If dives are modeled as uncorrelated batches of data, then using stochastic gradient ascent to maximize the likelihood may considerably speed up parameter estimation.
 
 Finally, this work was run exclusively on dives deeper than 20 meters so that within-dive behaviors would be similar between dives. Future analysis could find a way to include a more heterogeneous set of dives using a framework such as the hierarchical hidden Markov model (HHMM) introduced by Leos-Barajas et al \cite{Barajas:2017}.
+
+\subsection{Model evaluation}
+
