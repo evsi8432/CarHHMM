@@ -14,7 +14,7 @@ Although the CarHMM can incorporate auto-correlation into the structure of an HM
 where $X_t$ follows some stochastic process which defines the hidden behaviour of the animal at time $t$, $\beta^{(X_t)}$ relates to rate at which the process returns to its mean value, $\gamma^{(X_t)}$ is the long-term mean value of the process, $\omega^{(X_t)}$ is related to short-term variance, and $W$ is a Wiener process. One notable difference between the state-switching OU process and the CarHMM is that the time index $t \in \mathbb{R}$ exists in continuous time and is not necessarily an integer. If the behavioral state $X_t$ is known and does not change between observations, the solution to (eqn \ref{eqn:SDE}) is known to be the following \cite{Michelot:2019}:
 %
 \begin{align}
-Y_{t+\Delta t} | X_{t} \sim \mathcal{N}\left((1-e^{-\beta^{(X_t)}\Delta t})\gamma^{(X_t)} + e^{-\beta^{(X_t)}\Delta t} Y_t,\quad \frac{\omega^{(X_t)}^2}{2\beta^{(X_t)}} (1-e^{-2\beta^{(X_t)}\Delta t})\right)
+Y_{t+\Delta t} | X_{t} \sim \mathcal{N}\left((1-e^{-\beta^{(X_t)}\Delta t})\gamma^{(X_t)} + e^{-\beta^{(X_t)}\Delta t} Y_t,\quad \frac{\omega^{(X_t)^2}}{2\beta^{(X_t)}} (1-e^{-2\beta^{(X_t)}\Delta t})\right)
 \label{eqn:OU_sol}
 \end{align}
 %
