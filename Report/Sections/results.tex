@@ -63,6 +63,7 @@ The parameters of the estimated emission distributions for each behavioral state
     \end{tabular}
 \end{table}
 %
+While the ecological meaning of these behavioral states is tenuous, we hypothesize the following interpretations. For the coarse-scale, dive type 1 corresponds to shorter, shallower dives that the killer whale uses to rest before performing a dive of type 2, which corresponds to a deeper, more sustained dive. For the fine-scale, behavioral state 1 corresponds to gliding and passive swimming. The mean of $Y^{*(2)}$ in this state is at least an order of magnitude smaller than sub-dive behavior 2, the variance of $Y^{*(1)}$ is smaller, and the autocorrelation of $Y^{*(1)}$ is higher than every other behavioral state.  This indicates a relatively constant reading of acceleration and therefore low levels of activity. On the other hand, sub-dive state 3 corresponds to vigorous swimming activity, as the mean of $Y^{*(2)}$ and variance of $Y^{*(1)}$ are much higher than every other state. The auto-correlation of $Y^{*(1)}$ is also much lower in this state, implying more variation in acceleration every 2 seconds. Behavioral state 2 is between the other two behavioral states in almost every parameter estimate.
 The estimated probability transition matrices and associated stationary distributions are shown below:
 %
 $$\hat \Gamma = \begin{pmatrix} 
@@ -84,24 +85,57 @@ $$\hat \Gamma^{*(1)} = \begin{pmatrix}
 $$\hat \delta^{*(1)} = \begin{pmatrix} 0.143 & 0.698 & 0.159 \end{pmatrix} \qquad
 \hat \delta^{*(2)} = \begin{pmatrix} 0.476 & 0.456 & 0.067 \end{pmatrix}$$
 %
-Finally, the decoded dive behavior within a selected dive (deeper than 20 meters) is shown in figure (\ref{fig:viterbi}).
+About 85\% of the dives observed here are short, as the whale usually rests for many dives in a row before performing a deep dive. Interestingly, the probability transition matrix $\hat \Gamma$ shows that the current dive does not effect the dive type of the following dive much. In addition, the fine-scale probability transition matrices imply that the killer whale is much more likely to be in a less active sub-dive state when performing deep dives than when performing shallow dives- 14\% of shallow dives are spend in sub-dive state 1 while 48\% of deep dives are spent in sub-dive state 1. This is likely because the killer whale needs to conserve energy when diving at depth and holding its breath for longer.
+
+Finally, the decoded dive behavior within a selected dive (deeper than 20 meters) is shown in figure (\ref{fig:labeled_dives}). In addition, the probability of each dive type and sub-dive state is shown in (fig \ref{fig:coarse_probs}) and (fig \ref{fine_probs}), respectively.
 
 \begin{figure}[h!]
 	\centering
-	\includegraphics[height=8in]{../Plots/viterbi.png}
-	\caption{Features of a particular killer whale dive and Viterbi-decoded estimates for the intra-dive behavioral states.}
-	\label{fig:viterbi}
+	\includegraphics[width=5in]{../Plots/labeled_dives.png}
+	\caption{Features of a particular set of killer whale dives and Viterbi-decoded estimates for the intra-dive behavioral states.}
+	\label{fig:labeled_dives}
 \end{figure}
-
-While the ecological meaning of these behavioral states is tenuous, we hypothesize the following interpretations. Roughly speaking, behavioral state 1 corresponds to mildly active swimming. The mean of $\tilde a$ in this state is larger than behavioral state 2, indicating more activity by the whale, but the autocorrleation term $\hat \phi$ is still very high, indicating that velocities don't change very much every two seconds. Behavioral state 2 corresponds to gliding or turning, where no active swimming is taking place. It is characterized by a low mean $\tilde a$ value and a very high autocorrelation term $\hat \phi$, both of which indicate little activity. Finally, behavioral state 3 represents sudden jerking or more vigorous and active swimming than behavioral state 1. This behavior is so rigorous that $\hat \phi$ drops almost to zero and $\hat \sigma^2$ subsequently rises significantly. In behavioral state 3, the velocity readings of the killer whale are essentially uncorrelated when recorded every two seconds.
-
-\subsection{Future Work}
-
-This analysis is largely exploratory with a purely heuristic approach to decide the number of behavioral states. Future work should repeat the analysis using several different values for the number of behavioral states. It is also important to validate these results by plotting psuedoresiduals and performing goodness-of-fit tests on the emission distributions.
-
-Parameter estimation via likelihood maximization can be slow, especially with an observation rate of 50 hertz. If dives are modeled as uncorrelated batches of data, then using stochastic gradient ascent to maximize the likelihood may considerably speed up parameter estimation.
-
-Finally, this work was run exclusively on dives deeper than 20 meters so that within-dive behaviors would be similar between dives. Future analysis could find a way to include a more heterogeneous set of dives using a framework such as the hierarchical hidden Markov model (HHMM) introduced by Leos-Barajas et al \cite{Barajas:2017}.
+%
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=5in]{../Plots/Coarse_state_probs.png}
+	\caption{Probability of dive types for a particular set of killer whale dives.}
+	\label{fig:coarse_probs}
+\end{figure}
+%
+\begin{figure}[h!]
+	\centering
+	\begin{subfigure}[t]{1.0\textwidth}
+        \centering
+        \includegraphics[width=5in]{../Plots/Fine_state_probs_1.png}
+        \caption{Fine-scale state 1 probabilities}
+    \end{subfigure}
+    \newline
+    \begin{subfigure}[t]{1.0\textwidth}
+        \centering
+        \includegraphics[width=5in]{../Plots/Fine_state_probs_3.png}
+        \caption{Fine-scale state 3 probabilities}
+    \end{subfigure}
+	\caption{Probability of sub-dive types for a particular set of killer whale dives.}
+	\label{fig:fine_probs}
+\end{figure}
 
 \subsection{Model evaluation}
 
+Two visual tools were used to evaluate the model for this data: pseudo-residuals and empirical histograms. A pseudo-residual of a particular observation, as described in \cite{Zucchini:2016}, is the marginal cdf of an observation, conditioned on all other observations, and mapped to the quantile function of a standard normal distribution. In particular, the pseudo-residual of an observation $y_{t,s^*}$ is $\Phi^{-1} \left(Pr(Y_{t,s^*} < y_{t,s^*}|Y/Y_{t,s^*}) \right)$, where $\Phi$ is the cdf of a standard normal distribution. If the model is well-specified, then all pseudoresiduals should be independent and follow a standard normal distribution. While histograms of the pseudoresiduals support this for all features, one notable exception is the case of $Y^{*(2)}$, shown in (fig \ref{fig:pseudoresids}). These psuedoresiduals are noticeably right-skewed, implying that the true distribution of $Y^{*(2)}$ may follow a heavier-tailed distribution compared to a gamma distribution such as a power law. 
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=5in]{../Plots/Coarse_state_probs.png}
+	\caption{Psuedoresiduals of $Y^{*(2)}$}
+	\label{fig:pseudoresids}
+\end{figure}
+
+In addition to psuedoresiduals, we plotted a histogram of observations for each feature where the observations were weighted by the probability that the whale was in a particular hidden state. This empirical distribution was then be plotted on top of the estimated true pdf of that feature conditioned on the hidden state. This procedure is similar to that for pseudo-residuals, but it produces individual plots for each sub-dive state. Again, our results mostly support the model in question with the exception of $Y^{*(2)}$, which is right-skewed. In addition, $Y^{*(1)}$ has heavy tails for sub-dive state 3 (see fig \ref{fig:empirical_dist}), indicating the existence of rare events corresponding to very violent trashing of the killer whale. These outliers are potential subjects for future studies to better understand rare behavioral events for this killer whale.
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=5in]{../Plots/Coarse_state_probs.png}
+	\caption{Empirical Distribution of $Y^*(1)_x$ for sub-dive state 3 plotted against its estimated pdf}
+	\label{fig:empirical_dist}
+\end{figure}
