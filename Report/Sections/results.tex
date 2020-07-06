@@ -4,7 +4,21 @@
 
 \subsection{Data Collection and Preprocessing}
 
-To apply this methodology to real-world data, the CarHHMM was used to analyze dive data from a killer whale off the coast of British Columbia, Canada. The data was collected on September 2, 2019 from 12:49 pm to 6:06 pm and consists of depth and acceleration in three orthogonal directions. Observations were collected at a rate of 50 hertz. Tagging the killer whale caused anomalous behavior before 1:20 pm and after 6:00 pm, so observations in this time range were ignored. In addition, the tagging technology dropped data between 2:25pm and 2:37pm as well as between 4:07 and 5:07 pm, so any partially observed data within this time range were ignored as well. A killer whale ``dive" is considered to be any continuous chunk of data that occurs below 0.5 meters in depth and lasts for at least 10 seconds. Accelerometer and depth data were smoothed by taking a moving average with a window of 1/10th of a second. Data preprocessing was done in part with the \textit{divebomb} package in Python \cite{Nunes:2018}. After preprocessing the raw data, a total of 267 dives were observed. A plot of the processed data for all dives and one selected dive can be seen in figures \ref{fig:data} and \ref{fig:data_one_dive}, respectively.
+To apply this methodology to real-world data, the CarHHMM was used to analyze dive data from a killer whale off the coast of British Columbia, Canada. The data was collected on September 2, 2019 from 12:49 pm to 6:06 pm and consists of depth and acceleration in three orthogonal directions. Observations were collected at a rate of 50 hertz. Tagging the killer whale caused anomalous behavior before 1:20 pm and after 6:00 pm, so observations in this time range were ignored. In addition, the tagging technology dropped data between 2:25pm and 2:37pm as well as between 4:07 and 5:07 pm, so any partially observed data within this time range were ignored as well. A killer whale ``dive" is considered to be any continuous chunk of data that occurs below 0.5 meters in depth and lasts for at least 10 seconds. Accelerometer and depth data were smoothed by taking a moving average with a window of 1/10th of a second. Data preprocessing was done in part with the \textit{divebomb} package in Python \cite{Nunes:2018}. After preprocessing the raw data, a total of 267 dives were observed. A plot of the processed data for all dives and a collection of five selected dive can be seen in figures \ref{fig:data} and \ref{fig:data_one_dive}, respectively.
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[height=5in]{../Plots/lagplot.png}
+	\caption{Lag plot of vertical velocity and $\tilde a$ (left) and a the associated normal kernel density estimates (right)}
+	\label{fig:data}
+\end{figure}
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[height=5in]{../Plots/lagplot.png}
+	\caption{Lag plot of vertical velocity and $\tilde a$ (left) and a the associated normal kernel density estimates (right)}
+	\label{fig:data_one_dive}
+\end{figure}
 
 \subsection{Model Selection}
 
@@ -19,7 +33,7 @@ In order to determine if the CarHHMM was appropriate for this data, a lag plot w
 	\label{fig:lag}
 \end{figure}
 
-Information criteria tends to overestimate the number of states in biological processes \cite{Pohle:2017}, so we instead selected $N = 2$ dive types and $N^* = 3$ sub-dive behaviours heuristically and admittedly somewhat arbitrarily. This is a common inssue in statistical ecology, so it is important to use model validation techniques in lieu of information criteria. Section \ref{subsec:model_validation} describes our process of validating this model in particular.
+Information criteria tends to overestimate the number of states in biological processes \cite{Pohle:2017}, so we instead selected $N = 2$ dive types and $N^* = 3$ sub-dive behaviours heuristically and admittedly somewhat arbitrarily. This is a common issue in statistical ecology, so it is important to use model validation techniques in lieu of information criteria. Section \ref{subsec:model_validation} describes our process of validating this model in particular.
 
 \subsection{Results}
 
@@ -120,13 +134,14 @@ Finally, the decoded dive behavior within a selected dive (deeper than 20 meters
 	\label{fig:fine_probs}
 \end{figure}
 
-\subsection{Model evaluation}
+\subsection{Model Validation}
+\label{model_validation}
 
 Two visual tools were used to evaluate the model for this data: pseudo-residuals and empirical histograms. A pseudo-residual of a particular observation, as described in \cite{Zucchini:2016}, is the marginal cdf of an observation, conditioned on all other observations, and mapped to the quantile function of a standard normal distribution. In particular, the pseudo-residual of an observation $y_{t,s^*}$ is $\Phi^{-1} \left(Pr(Y_{t,s^*} < y_{t,s^*}|Y/Y_{t,s^*}) \right)$, where $\Phi$ is the cdf of a standard normal distribution. If the model is well-specified, then all pseudoresiduals should be independent and follow a standard normal distribution. While histograms of the pseudoresiduals support this for all features, one notable exception is the case of $Y^{*(2)}$, shown in (fig \ref{fig:pseudoresids}). These psuedoresiduals are noticeably right-skewed, implying that the true distribution of $Y^{*(2)}$ may follow a heavier-tailed distribution compared to a gamma distribution such as a power law. 
 
 \begin{figure}[h!]
 	\centering
-	\includegraphics[width=5in]{../Plots/Coarse_state_probs.png}
+	\includegraphics[width=5.5in]{../Plots/pseudoresids.png}
 	\caption{Psuedoresiduals of $Y^{*(2)}$}
 	\label{fig:pseudoresids}
 \end{figure}
@@ -135,7 +150,7 @@ In addition to psuedoresiduals, we plotted a histogram of observations for each 
 
 \begin{figure}[h!]
 	\centering
-	\includegraphics[width=5in]{../Plots/Coarse_state_probs.png}
-	\caption{Empirical Distribution of $Y^*(1)_x$ for sub-dive state 3 plotted against its estimated pdf}
+	\includegraphics[width=5.5in]{../Plots/empirical_dist.png}
+	\caption{Empirical Distribution of $Y^{*(1)}_z$ for sub-dive state 3 plotted against its estimated pdf}
 	\label{fig:empirical_dist}
 \end{figure}
