@@ -47,7 +47,7 @@ $$\gamma^{*(2)} = 0, \enspace \beta^{*(2)} = -\frac{\log(\phi^{*(2)})}{\Delta t^
 
 A visualization of the first 5 dives of one simulated data set can be seen in (fig. \ref{fig:sim_data}).
 
-\begin{figure}[!ht]
+\begin{figure}[ht]
 	\centering
 	\includegraphics[width=5in]{../Plots/sim_data.png}
 	\caption{Simulated acceleration data for one dive. The color of the line corresponds to the true fine-scale state of the sub-dive process, while the color of the background corresponds to the true dive type of the simulated whale, where blue corresponds to dive type 1 and orange corresponds to dive type 2.}
@@ -71,15 +71,15 @@ The purpose of including each of these models is to leave one important aspect o
 %%% Accuracy %%%
 Every model was able to decode the fine-scale hidden states of the process effectively perfectly except for the CarHHMM1, which did not have access to the Fourier modes $Z^{*(2)}$. This is intuitively clear because the fine-scale states are much more distinct in their Fourier modes than in their average acceleration. For the coarse-scale hidden state, the CarHMM lacked a hierarchical structure and could not make any predictions at all. The other three models all achieved an accuracy of approximately 90\%, with the CarHHMM slightly more likely to categorize a dive as dive type 2 than the other models. (Fig. \ref{fig:acc}) shows the decoded state probabilities of both the fine and coarse hidden states for the first 10 dives of one simulated data set. (Tbl. \ref{table:accuracy}) also lists more details regarding the accuracy and training times of each model for each true dive and sub-dive state.
 
-\begin{figure}[t!]
+\begin{figure}[ht]
     \centering
-    \begin{subfigure}{1.0\textwidth}
+    \begin{subfigure}[t]{1.0\textwidth}
         \centering
         \includegraphics[width=5in]{Plots/Posterior_Coarse_States.png}
         \caption{Coarse-scale hidden process}
     \end{subfigure}
     \newline
-    \begin{subfigure}{1.0\textwidth}
+    \begin{subfigure}[t]{1.0\textwidth}
         \centering
         \includegraphics[width=5in]{Plots/Posterior_Fine_States.png}
         \caption{Fine-scale hidden process}
@@ -89,7 +89,7 @@ Every model was able to decode the fine-scale hidden states of the process effec
 \end{figure}
 
 %%% dive duration %%%
-For the emission distributions of dive duration, estimates of standard error using the observed fisher information tended to be underestimates due to correlation between $\hat \mu$ and $\hat \sigma$. In addition, $\hat \sigma$ tends to underestimate $\sigma$ for all models, which is a finding consistent with properties of MLEs, especially because the sample size for a particular dive type is approximately 50 for each simulation. The CarHMM model in particular severely underestimates $\sigma$. This is likely due to the fact that dive duration follows a mixture of gammas rather than a gamma distribution, and the CarHMM does not have the machinary to capture this fact. A full table of parameter estimates for all models is shown in (table \ref{table:dive_duration}).
+For the emission distributions of dive duration, estimates of standard error using the observed fisher information tended to be underestimates due to correlation between $\hat \mu$ and $\hat \sigma$. In addition, $\hat \sigma$ tends to underestimate $\sigma$ for all models, which is a finding consistent with properties of MLEs, especially because the sample size for a particular dive type is approximately 50 for each simulation. The CarHMM model in particular severely underestimates $\sigma$. This is likely due to the fact that dive duration follows a mixture of gammas rather than a gamma distribution, and the CarHMM does not have the machinery to capture this fact. A full table of parameter estimates for all models is shown in (table \ref{table:dive_duration}).
 
 
 %%% Acceleration %%%
@@ -101,7 +101,7 @@ Finally, the distribution of parameters for the Fourier sums ($Z^{*(2)}$) for al
 
 \textcolor{red}{I also have similar tables for $\Gamma$ and $\Gamma^*$, and I also have plots corresponding to each table. For example, I have included figure \ref{fig:MLE_dist} as an example below for the emission distribution of the MLEs for dive duration of the CarHMM. Should I use those instead? But there are just SO many plots (4 models * 3 observations * 2 states = 24 plots)}
 
-\begin{figure}[!ht]
+\begin{figure}[ht]
 	\centering
 	\includegraphics[width=5in]{../Plots/hmm_FV_MLE_density_dive_duration_-1.png}
 	\caption{\textcolor{red}{KDE plot of $\hat \mu$ and $\hat \sigma$ for the dive duration emission distribution for the CarHMM. This plot is for Marie and Nancy to look over.}}
@@ -112,7 +112,7 @@ Finally, the distribution of parameters for the Fourier sums ($Z^{*(2)}$) for al
 
 %%% Accuracy %%%
 
-\begin{table}[]
+\begin{table}
 \centering
 \caption{Accuracies and run times for all models. All reported values are averages, and $\pm$ refers to the standard deviation.}
 \scalebox{0.8}{
@@ -145,7 +145,7 @@ Model                      & \multicolumn{1}{c}{Training Time (Minutes)} & \mult
 
 %%% dive duration %%%
 
-\begin{table}[]
+\begin{table}
 \centering
 \caption{Estimates and standard errors of parameters for dive duration distribution for all four models. All reported values are averages, except for the Fisher observed standard error, which are medians. $\pm$ refers to the IQR.}
 \scalebox{0.9}{
@@ -175,10 +175,10 @@ Model                      & \multicolumn{1}{c}{Parameter} & \multicolumn{1}{c}{
 
 %%% Acceleration %%%
 
-\begin{table}[]
+\begin{table}
 \centering
 \caption{Estimates and standard errors of parameters for $Z^{*(1)}_{t,s^*}$ for all four models. All reported values are averages, except for the Fisher observed standard error, which are medians. $\pm$ refers to the IQR.}
-\scalebox{0.8}{
+\scalebox{0.7}{
 \begin{tabular}{ccccccc}
 Model                      & \multicolumn{1}{c}{Parameter} & \multicolumn{1}{c}{Subdive Type} & \multicolumn{1}{c}{Estimate} & \multicolumn{1}{c}{Bias} & \multicolumn{1}{c}{Empirical SE} & \multicolumn{1}{c}{Observed Fischer SE}        \\ \hline
 \multirow{6}{*}{CarHMM}    & \multirow{2}{*}{$\mu$}        & 1                             & $0.00$                         & $0.00$                     & $0.00$                             & $0.14 \pm 0.13$                             \\
@@ -213,7 +213,7 @@ Model                      & \multicolumn{1}{c}{Parameter} & \multicolumn{1}{c}{
 
 %%% FoVeDBA %%%
 
-\begin{table}[]
+\begin{table}
 \centering
 \caption{Estimates and standard errors of parameters for $Z^{*(2)}_{t,s^*}$ for all four models. All reported values are averages, except for the Fisher observed standard error, which are medians. $\pm$ refers to the IQR.}
 \scalebox{0.8}{

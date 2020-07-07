@@ -45,7 +45,7 @@ $$Y^*_{t,(100s^*+1):(100s^*+100)} = IDFT\left(\hat{Y}^*_{t,s^*}\right), \qquad s
 
 There are several practical reasons behind this construction. First, $\hat{Y}^*_{t,s^*}$ is anti-symmetric about $\hat{Y}^{*(50)}_{t,s^*}$ so that its inverse Fourier transform is real-valued. $\hat{Y}^{*(k)}_{t,s^*}$ also decays like $1/k^2$ so that $Y^*_{t,t^*}$ remains continuous within a 2-second window. Note, however, that $Y^*_{t,s^*}$ is not continuous \textit{between} windows, as can be seen in (fig \ref{fig:fourier_example}). However, the jumps are not too severe since $\hat{Y}^{*(0)}_{t,s^*}$ and $\hat{Y}^{*(0)}_{t,s^*+1}$ are highly correlated. See (fig. \ref{fig:sim_data}) for details.
 
-From here it is straightforward to calculate both $Z^{*(1)}$ and $Z^{*(2)}$ after setting $\tilde{f}$. We pick $\tilde{f} = 10$ periods per window, or 5 hertz. Note that $Z^{*(1)}_{t,s^*} = \mathcal{R}\left(\hat{Y}^{(0)}_{t,s^*}\right)$, so selecting $\sigma^{*(i)}$ and $\phi^{*(1)}$ appropriately will ensure the distributions from (eqn \ref{}). 
+From here it is straightforward to calculate both $Z^{*(1)}$ and $Z^{*(2)}$ after setting $\tilde{f}$. We pick $\tilde{f} = 10$ periods per window, or 5 hertz. Note that $Z^{*(1)}_{t,s^*} = \mathcal{R}\left(\hat{Y}^{(0)}_{t,s^*}\right)$, so selecting $\sigma^{*(i)}$ and $\phi^{*(1)}$ appropriately will ensure correct distribution. 
 
 Note that $Z^{*(2)}$, is the sum of gamma distributions with the same scale parameter, so the distribution of $Z^{*(2)}$ is also a Gamma distribution:
 
