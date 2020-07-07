@@ -11,7 +11,7 @@
 \usepackage{psfrag}
 \usepackage{graphicx}
 \usepackage[dvipsnames]{xcolor}
-
+\usepackage{url}
 \input{header}
 \input{defs}
 
@@ -90,7 +90,7 @@ can't prepare it themselves.\Frenchabscopyright
 \makechaptertitle
 
 % Email address for corresponding author
-\correspondingauthor[*]{\\\email{Insert your email address here only after your paper has been accepted}}
+\correspondingauthor[*]{\\\email{after accept}}
 
 %%%%%%%%%%%%
 \vfill\eject
@@ -101,27 +101,7 @@ can't prepare it themselves.\Frenchabscopyright
 
 %
 \section{Introduction}
-
-{\bf{NH: These are my comments.  I hope they help you.}}
-
-This is where you describe how your method contributes to statistical methodology. That is the big goal.  So there will be literature review of directly relevant work.  You don't want to leave the non-expert completely lost though, so it is a balance, how much background you give.
-Thank goodness for the Zucchini book, a great place to direct readers for further background.  
-The introduction is a good place to put information about the motivating data set and how researchers have modelled it, what the shortcomings have been.  I see that you have some great statements about this in your Background section.  Those statements can be moved to the introduction (with editing -- you can see how I edited).
-
-A hard part about the introduction is that you want to use terminology like CarHMM without getting into too many technical details.  Sometimes you just have to be technical.  But I think you can avoid a lot of that.
-
-Here is a great thing you wrote that would go well in the introduction, with some editing so that it doesn't rely on notation that hasn't been introduced. You could introduce the basic HMM notation in the intro, if you need to.  I don't think introducing HMM notation is too technical.
-\begin{quote}
- One of the key assumptions of both HMMs and HHMMs is \textit{conditional independence} between observations on both the coarse and fine scale. Namely, when given the state $X_t$, $Y_t$ is assumed to be independent from all other observations, including $Y_{t-1}$. Therefore, traditional HMMs and HHMMs can fail when the observations $Y$ exhibit significant correlation in time.
- [leave in these examples for intro]  Examples include fluking in marine mammals in Vancouver, BC (see the results section) and the swimming behavior of horn sharks off the coast of Southern California \cite{Adam:2019}.
-
-One way to deal with auto-correlation in fine-scale behavioral processes is to use the CarHMM, or \textit{conditionally auto-regressive hidden Markov model}, introduced by Lawler et al \cite{Lawler:2019}. .....
-The CarHMM therefore explicitly models auto-correlation into the emission distributions of the HMM while maintaining the structure needed to run the forward algorithm. It also only adds one additional parameter per possible hidden state $(\phi^{(i)})$. 
-\end{quote}
-
-
-
-%\input Sections/intro.tex
+\input Sections/intro.tex
 %
 \section{Models and parameter estimation (NH)}
 \input Sections/model_Nancy.tex
@@ -151,7 +131,7 @@ The CarHMM therefore explicitly models auto-correlation into the emission distri
 \clearpage
 
 \newcommand{\newblock}{}
-\bibliographystyle{plain}
+\bibliographystyle{abbrvnat}
 \bibliography{references}
 
 \clearpage
