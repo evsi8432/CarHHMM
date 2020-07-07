@@ -1,38 +1,28 @@
 %\section{Models and parameter estimation (NH)}
 %\input Sections/model_Nancy.tex
 
-
-
-We consider several models for the data, the classical hierarchical hidden Markov model (HHMM) (reference), the CarHMM model of (reference), and our new model that blends the two (CarHHMM).
-The HHMM consists of a coarse-scale process and a fine-scale process, with standard HMMs modelling both the coarse- and fine-scale processes.
-The CarHMM  modifies the usual HMM by modelling additional dependence into the sequence of observed data.
-In our combination of the HHMM and the CarHHMM models, we keep the usual Markov structure for the coarse-scale process, but use the CarHMM model for the fine-scale process.
-
-{\bf{NH: It strikes me that the above might belong in the introduction.  In that case, the what appears above in this section would be modified to something much shorter. 
-}} 
-We first remind the reader of the definition of a hidden Markov model,   the model of the coarse-scale process.
+We first remind the reader of the definition of a hidden Markov model and extend this to the CarHMM. We then introduce hierarchical structures within HMMs using both the short-time Fourier transform (STFT) and the hierarchical hidden Markov model (HHMM)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{The hidden Markov model (HMM)}
 
 A \textit{hidden Markov model}  is comprised of a sequence of  unobserved states $X_t$, $t = 1, \ldots, T$, and an associated sequence of  possibly high-dimensional observations $Y_t$, $t = 1, \ldots, T$,
 The $Y_t$s are often referred to as ``emissions'' and the index $t$ typically refers to time. 
- The $X_t$s form a Markov chain and take possible values $1, \ldots, N$. Their distribution is governed by the distribution of the initial state $X_1$ and the  $N \times N$ transition probability matrix $\Gamma$ where $\Gamma_{ij} = \Pr(X_{t+1} = j | X_t = i)$, $t=1,\ldots, T-1$, ~$i, j = 1,\ldots, N$. 
- %
- We assume that $X_1$ follows the chain's stationary distribution, which is denoted by $\delta \in \bbR^N$, with $i$th component
+The $X_t$s form a Markov chain and take possible values $1, \ldots, N$. Their distribution is governed by the distribution of the initial state $X_1$ and the $N \times N$ transition probability matrix $\Gamma$ where $\Gamma_{ij} = \Pr(X_{t+1} = j | X_t = i)$, for $t=1,\ldots, T-1$, and $i, j = 1,\ldots, N$. 
+%
+We assume that $X_1$ follows the chain's stationary distribution, which is denoted by $\delta \in \bbR^N$, with $i$th component
 $\delta_i = \Pr\{X_1 = i\},~ i = 1,\ldots,N.$
 %
-Recall that a Markov chain's stationary distribution is determined by its probability transition matrix via $\delta = \delta \Gamma$.
-
+Recall that a Markov chain's stationary distribution is determined by its probability transition matrix via $\delta = \delta \Gamma$ and $\sum_{i=1}^N \delta_i = 1$.
 %
-The distribution of an emission $Y_t$ depends only on the corresponding state $X_t$, that is, the distribution of  $Y_t$ conditional on $X_1,\ldots, X_T$ and $\{Y_1,\ldots, Y_T\}/ \{Y_t\}$ is simply the distribution of $Y_t$ given $X_t$.  
+The distribution of an emission $Y_t$ depends only on the corresponding state $X_t$ and no other observations or hidden states: $p\left(y_t|\{X_1,\ldots, X_T\},\{Y_1,\ldots, Y_T\}/ \{Y_t\}\right) = p(y_t|X_t)$.
 %
-These conditional distributions are governed by state-dependent parameters:  if $X_t = i$, the state-dependent parameter is $\theta^{(i)}$ and we denote the conditional distribution of $Y_t$ given $X_t=i$ by its conditional density or probability mass function, denoted $f^{(i)}(\cdot ; \theta^{(i)})$, or sometimes  $f^{(i)}(\cdot)$.
+These conditional distributions are governed by state-dependent parameters: if $X_t = i$, the state-dependent parameter is $\theta^{(i)}$ and we denote the conditional distribution of $Y_t$ given $X_t=i$ by its conditional density or probability mass function, denoted $f^{(i)}(\cdot ; \theta^{(i)})$, or sometimes  $f^{(i)}(\cdot)$.
 %
-A visualization of the dependence structure can be seen in Figure \ref{fig:HMM}.
+(Fig \ref{fig:HMM}) represents the dependence structure.
 
 To find the maximum likelihood estimates of the parameters $\Gamma$ and $\Theta \equiv (\theta^{(1)},\ldots,\theta^{(N)})$, let $y = (y_1,\ldots,y_T)$ be the observed emissions. 
- To facilitate calculations we write the likelihood $\calL_{\text{HMM}}$ in a specific form, using the  well-known \textit{forward algorithm} \cite{Zucchini:2016} as follows:
+ To facilitate calculations we write the likelihood $\calL_{\text{HMM}}$ in a specific form, using the  well-known \textit{forward algorithm} \citep{Zucchini:2016} as follows:
 %
 $$\calL_{\text{HMM}}(y;\Theta,\Gamma) = \delta P(y_1;\Theta) \prod_{t=2}^T \Gamma P(y_t;\Theta) \mathbf{1}_N$$
 %
@@ -41,7 +31,7 @@ where $\mathbf{1}_N$ is an $N$-dimensional column vector of ones and
 $P(y_t;\Theta)$ is an $N \times N$ diagonal matrix with $ii$th entry  $f^{(i)}(y_t; \theta^{(i)})$.
 %
 
-We will always parameterize transition probability matrices to remove constraints that the entries of the matrix are non-negative and that  the rows sum to 1.  We do this by parameterizing the $N \times N$ transition probability matrix $\Gamma$ using $\eta \in \bbR^{N \times N}$ \cite{Barajas:2017}:
+We will always parameterize transition probability matrices to remove the constraints that the entries of the matrix are non-negative and that the rows sum to 1.  We do this by parameterizing the $N \times N$ transition probability matrix $\Gamma$ using $\eta \in \bbR^{N \times N}$ \citep{Barajas:2017}:
 %
 \[
 \Gamma_{ij} = \frac{\exp(\eta_{ij})}{\sum_{k=1}^N \exp(\eta_{ik})}, 
@@ -49,19 +39,59 @@ We will always parameterize transition probability matrices to remove constraint
 %
 setting $\eta_{ii}$  to zero, $i=1,\ldots, N$, for identifiability.  Then $\calL_{\text{HMM}}(y;\Theta,\Gamma)$ can be maximized using any numerical optimizer.  For simplicity, we will continue to use $\Gamma$ in our notation, suppressing the reparameterization in terms of  $\eta$.
 
-\begin{figure}[h!]
+\begin{figure}[ht]
 	\centering
 	\includegraphics[width=5in]{../Plots/HMM.png}
 	\caption{Graphical representation of a traditional HMM.}
 	\label{fig:HMM}
 \end{figure}
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{The conditionally auto-regressive hidden Markov model (CarHMM)}
+
+One of the key assumptions of an HMM is \textit{conditional independence} between observations, given the state sequence.  Therefore, traditional HMMs do not hold when the observations exhibit certain forms of significant correlation in time.
+
+One way to model extra correlation in an HMM type structure is via a CarHMM, or \textit{conditionally auto-regressive hidden Markov model}, introduced by \citep{Lawler:2019}. Like a traditional HMM, A CarHMM is made up of a Markov chain of unobserved states $X_1,\ldots, X_T$ that can take on values $1, \ldots, N$, with transition probability matrix $\Gamma$ and initial distribution $\delta$ equal to the stationary distribution. Unlike a traditional HMM, the CarHMM assumes that the distribution of the $t$th emission, $Y_t$, conditional on $X_1,\ldots, X_T$ and $ \{Y_1,\ldots, Y_{t-1}\}$, depends on both $X_t$ \textit{and} $Y_{t-1}$. 
+The first emission $Y_1$ is assumed to be fixed as an initial value which does not depend upon $X_1$. (Fig \ref{fig:CarHMM}) shows the structure of a CarHMM.
+
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=3in]{../Plots/CarHMM.png}
+	\caption{Graphical representation of a traditional CarHMM.}
+	\label{fig:CarHMM}
+\end{figure}
+
+%
+We denote the conditional distribution of $Y_t$ given $Y_{t-1}= y_{t-1}$ and $ X_t=i$ as $f^{(i)}( \cdot | y_{t-1})$ or as
+$f^{(i)}( \cdot | y_{t-1}; \theta^{(i)})$.
+As an example, we could assume that this conditional distribution is normal with parameters $\theta^{(i)} = \{\mu^{(i)},\sigma^{2(i)},\phi^{(i)}\}$, with:
+%
+\[
+\mathbb{E}(Y_t|Y_{t-1} = y_{t-1},X_t=i) = \phi^{(i)} ~ y_{t-1} ~+ ~(1-\phi^{(i)})  ~\mu^{(i)}
+\]
+and
+\[
+\mathbb{V}(Y_t| Y_{t-1} =y_{t-1}, X_t = i) = \sigma^{2(i)}.
+\]
+%
+{\bf{Ah - now I see the issue about changing states.  It would be great to have something about the distribution of $Y_t$ given $X_t=i, X_{t-1}=j$. You'd want a different conditional distribution, depending on if $i=j$ or not.
+}}
+%
+The CarHMM therefore explicitly models auto-correlation into the emission distributions of the HMM while maintaining the structure needed to write the likelihood using the forward algorithm. In our normal model formulation, we have added only one additional parameter, $\phi^{(i)}$,  per possible hidden state. 
+
+The likelihood for the CarHMM can be easily calculated using the forward algorithm.  As previously, let $y$ be the vector of observed emissions.  Then
+\begin{equation}
+\calL_{\text{CarHMM}}(y;\Theta,\Gamma) = \delta \prod_{t=2}^T \Gamma P(y_t;\Theta) \mathbf{1}_N
+\label{CarHMM_likelihood}
+\end{equation}
+where
+%
+$P(y_t;\Theta)$ is an $N \times N$ diagonal matrix with $ii$th entry equal to $f^{(i)}(y_t|y_{t-1}; \theta^{(i)})$.
+%
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{The hierarchical hidden Markov model (HHMM)}
-
-{\bf{NH:
-I wonder if it would be easier on the reader to put the CarHMM first, since the CarHMM deals with just one Markov chain.
-}}
 
 A hierarchical hidden Markov model contains two process levels, a coarse-scale process and a fine-scale process.  The coarse-scale process is a hidden Markov model as defined in the previous subsection,  with  $X_1\ldots, X_T$ the unobserved Markov chain of states and $Y_1,\ldots, Y_T$ the corresponding observed responses.  The possible states are $1,\ldots, N$.   
 %
@@ -116,71 +146,14 @@ where 	$P(y_t,y_t^*;\Theta,\Theta^*,\Gamma^*)$ is an $N^ \times N$ diagonal matr
 $f^{(i)}(y_t)\calL_{\text{HMM}}\left(y_t^*;\Theta^{*(i)},
 \Gamma^{*(i)}\right)$. 
 
-For more information on specific considerations for HHMMs such as incorporating covariates into the probability transition matrix, model selection and model checking, see Adam et al \cite{Adam:2019}.
+For more information on specific considerations for HHMMs such as incorporating covariates into the probability transition matrix, model selection and model checking, see Adam et al \citep{Adam:2019}.
 
-\begin{figure}[h!]
+\begin{figure}[ht]
 	\centering
-	\includegraphics[width=6.5in]{../Plots/HHMM.png}
+	\includegraphics[width=5in]{../Plots/HHMM.png}
 	\caption{Graphical representation of a traditional HHMM.}
 	\label{fig:HHMM}
 \end{figure}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Conditionally auto-regressive hidden Markov models (CarHMM)}
-
-{\bf{NH: 
-I've taken what you have written and edited. 
-
-Here is a comment about a big change I made.  You give a definition of the distribution of the correlated emissions in terms of means and variances, and I think you want to say something in a more general form, that is, that the distribution of $Y_t$ is determined by $X_t$ and $Y_{t-1}$.  Also,  you only define the conditional variance of $Y_t$ given $X_t$,  excluding $Y_{t-1}$.  You should have the left side of that equation for the variance be conditional on both $X_t$ and $Y_{t-1}$ for your math to go through.  It's no problem if you want to assume that the variance on the right side only has $i$ in it.  That is an assumption about the distribution of $Y_t$  conditional on both $X_t$ and $Y_{t-1}$ 
-}}
-
-
-One of the key assumptions of an HMM is \textit{conditional independence} between observations, given the state sequence.  Therefore, traditional HMMs do not hold when the observations exhibit certain forms of significant correlation in time.  The same issue arises in HHMMs. 
-
-One way to model extra correlation in an HMM type structure is via a CarHMM, or \textit{conditionally auto-regressive hidden Markov model}, introduced by Lawler et al \cite{Lawler:2019}. 
-In a CarHMM, we have a Markov chain of unobserved states $X_1,\ldots, X_T$ that can take on values $1, \ldots, N$, with transition probability matrix $\Gamma$ and initial distribution $\delta$ equal to the stationary distribution.
-The CarHMM assumes that the distribution of the $t$th emission, $Y_t$, conditional on $X_1,\ldots, X_T$ and $ \{Y_1,\ldots, Y_T\}/\{Y_t\}$, depends only on $X_t$ and $Y_{t-1}$. 
-{\bf{NH:  True?  or just conditional on the $X_t$s and $Y_1,\ldots, Y_{t-1}$?}}
-The first emission $Y_1$ is assumed to be fixed as an initial value.
-%
-{\bf{NH: does $Y_1$ depend on $X_1$?}}
-%
- The graphical model associated with the structure of a CarHMM is shown in Figure (\ref{fig:CarHMM}).
-
-\begin{figure}[h!]
-	\centering
-	\includegraphics[width=3in]{../Plots/CarHMM.png}
-	\caption{Graphical representation of a traditional CarHMM. The additional arrows representing auto-correlation between observations are shown in red for emphasis.}
-	\label{fig:CarHMM}
-\end{figure}
-
-%
-We denote the conditional distribution of $Y_t$ given $Y_{t-1}= y_{t-1}$ and $ X_t=i$ as $f^{(i)}( \cdot | y_{t-1})$ or as
-$f^{(i)}( \cdot | y_{t-1}; \theta^{(i)})$.
-As an example, we could assume that this conditional distribution is normal with parameters $\theta^{(i)} = \{\mu^{(i)},\sigma^{2(i)},\phi^{(i)}\}$, with:
-%
-\[
-\mathbb{E}(Y_t|Y_{t-1} = y_{t-1},X_t=i) = \phi^{(i)} ~ y_{t-1} ~+ ~(1-\phi^{(i)})  ~\mu^{(i)}
-\]
-and
-\[
-\mathbb{V}(Y_t| Y_{t-1} =y_{t-1}, X_t = i) = \sigma^{2(i)}.
-\]
-%
-{\bf{Ah - now I see the issue about changing states.  It would be great to have something about the distribution of $Y_t$ given $X_t=i, X_{t-1}=j$. You'd want a different conditional distribution, depending on if $i=j$ or not.
-}}
-%
-The CarHMM therefore explicitly models auto-correlation into the emission distributions of the HMM while maintaining the structure needed to write the likelihood using the forward algorithm. Note that in our normal model formulation,  we have added only one additional parameter, $\phi^{(i)}$,  per possible hidden state. 
-
-The likelihood for the CarHMM can be easily calculated using the forward algorithm.  As previously, let $y$ be the vector of observed emissions.  Then
-\begin{equation}
-\calL_{\text{CarHMM}}(y;\Theta,\Gamma) = \delta \prod_{t=2}^T \Gamma P(y_t;\Theta) \mathbf{1}_N
-\label{CarHMM_likelihood}
-\end{equation}
-where
-%
-$P(y_t;\Theta)$ is an $N \times N$ diagonal matrix with $ii$th entry equal to $f^{(i)}(y_t|y_{t-1}; \theta^{(i)})$.
-%
 
 % do I need this subsections
 \subsection{Decoding}

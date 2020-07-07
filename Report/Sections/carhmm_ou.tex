@@ -4,14 +4,14 @@
 
 %\subsection{Continuous Time models}
 
-Although the CarHMM can incorporate auto-correlation into the structure of an HMM, they break down when observations are taken at irregular time intervals since the probability transition matrix $\Gamma$ would then have to depend upon the time step between observations. A common solution to this issue is to use a continuous-time method such as the one introduced by Michelot et al \cite{Michelot:2019}, which models the movement of an animal as an Ornstein-Uhlenbeck process with parameters that depend upon the underlying behavioural state of the animal. Namely, a state-switching Ornstein-Uhlenbeck process $Y$ is the solution to the following stochastic differential equation:
+Although the CarHMM can incorporate auto-correlation into the structure of an HMM, they break down when observations are taken at irregular time intervals since the probability transition matrix $\Gamma$ would then have to depend upon the time step between observations. A common solution to this issue is to use a continuous-time method such as the one introduced by Michelot et al \citep{Michelot:2019}, which models the movement of an animal as an Ornstein-Uhlenbeck process with parameters that depend upon the underlying behavioural state of the animal. Namely, a state-switching Ornstein-Uhlenbeck process $Y$ is the solution to the following stochastic differential equation:
 %
 \begin{equation}
     \label{eqn:SDE}
     dY_t = \beta^{(X_t)}(\gamma^{(X_t)} - Y_t)dt + \omega^{(X_t)} dW_t
 \end{equation}
 %
-where $X_t$ follows some stochastic process which defines the hidden behaviour of the animal at time $t$, $\beta^{(X_t)}$ relates to rate at which the process returns to its mean value, $\gamma^{(X_t)}$ is the long-term mean value of the process, $\omega^{(X_t)}$ is related to short-term variance, and $W$ is a Wiener process. One notable difference between the state-switching OU process and the CarHMM is that the time index $t \in \mathbb{R}$ exists in continuous time and is not necessarily an integer. If the behavioral state $X_t$ is known and does not change between observations, the solution to (eqn \ref{eqn:SDE}) is known to be the following \cite{Michelot:2019}:
+where $X_t$ follows some stochastic process which defines the hidden behaviour of the animal at time $t$, $\beta^{(X_t)}$ relates to rate at which the process returns to its mean value, $\gamma^{(X_t)}$ is the long-term mean value of the process, $\omega^{(X_t)}$ is related to short-term variance, and $W$ is a Wiener process. One notable difference between the state-switching OU process and the CarHMM is that the time index $t \in \mathbb{R}$ exists in continuous time and is not necessarily an integer. If the behavioral state $X_t$ is known and does not change between observations, the solution to (eqn \ref{eqn:SDE}) is known to be the following \citep{Michelot:2019}:
 %
 \begin{align}
 Y_{t+\Delta t} | X_{t} \sim \mathcal{N}\left((1-e^{-\beta^{(X_t)}\Delta t})\gamma^{(X_t)} + e^{-\beta^{(X_t)}\Delta t} Y_t,\quad \frac{\omega^{(X_t)^2}}{2\beta^{(X_t)}} (1-e^{-2\beta^{(X_t)}\Delta t})\right)
@@ -106,7 +106,7 @@ now $\calL_{\text{CarHMM}}(y;\theta,\Lambda,\delta)$ is simply maximized with re
 
 \subsection{Transition Parameters}
 
-The probability transition matrix $\bfA$ must be right stochastic, meaning that its entries must be between 0 and 1 and its rows must add to one. Lawler et al do not go into detail about how to parameterize $\bfA$ such that it is both identifiable and constraint free, but the following parameterization does the trick \cite{Barajas:2017}:
+The probability transition matrix $\bfA$ must be right stochastic, meaning that its entries must be between 0 and 1 and its rows must add to one. Lawler et al do not go into detail about how to parameterize $\bfA$ such that it is both identifiable and constraint free, but the following parameterization does the trick \citep{Barajas:2017}:
 %
 \begin{align*}
 	a_{ij} = \frac{\exp(\eta_{ij})}{\sum_{\ell = 1}^k \exp(\eta_{i\ell})}, \qquad \eta_{ii} = 0 \quad \forall i \in \{1,\ldots,k\}
@@ -136,17 +136,17 @@ $$L(\bfA,\mu_{RL,b},\phi_b,\sigma_b^2,c_b,\rho_b; \bfY) = \delta \bfP(y_1) \prod
 $$\bfP(y_1) = \text{Diag}\left( f(y_1|B_1 = 1), \ldots, f(y_1|B_1 = k) \right)$$
 $$\bfP(y_t,y_{t-1}) = \text{Diag}\left( f(y_t|B_1 = 1, y_{t-1}), \ldots, f(y_t|B_1 = k, y_{t-1}) \right)$$
 %
-$\mathbf{1}$ is a column vector of ones. Once the emission and transition parameters have been estimated, the most likely sequence of underlying behavioral states $\bfB$ can be found using the Viterbi algorithm \cite{Viterbi:1967}.
+$\mathbf{1}$ is a column vector of ones. Once the emission and transition parameters have been estimated, the most likely sequence of underlying behavioral states $\bfB$ can be found using the Viterbi algorithm \citep{Viterbi:1967}.
 
 \subsection{Similarity to Previous Work}
 
-Lawler et al are not the first to incorporate auto correlation within a hidden Markov model in an ecological setting. Woriskey et al \cite{Whoriskey:2016} developed a hidden Markov model called the HMMM, which is formulated as the following:
+Lawler et al are not the first to incorporate auto correlation within a hidden Markov model in an ecological setting. Woriskey et al \citep{Whoriskey:2016} developed a hidden Markov model called the HMMM, which is formulated as the following:
 %
 $$\left(\bfY_t - \bfY_{t-1} |\bfY_{t-1} - \bfY_{t-2}, b_{t-1}\right) \sim \mathcal{N}\left( \phi_{b_{t-1}} T(\theta_{b_{t-1}})(\bfY_{t-1} - \bfY_{t-2}),\Sigma\right)$$
 %
 where $\phi_b$ is the state-dependent auto-correlation term, $\theta_b$ is the state-dependent mean turning angle, $T(\theta)$ is a standard rotation matrix, and $\Sigma$ is a state-independent two-dimensional covariance matrix. Like Lawler, Woriskey fits $\phi_b$, $\theta_b$, and $\Sigma$ using likelihood maximization. The details of the two approaches are different, but both are similar in that they use auto-correlation within the emission probabilities of an HMM to model animal movement in two dimensions.
 
-In addition, many continuous-time approaches model auto-correlation to account for non-uniform time intervals between time steps. For example, Michelot et al. \cite{Michelot:2019} model $\bfY$ as an integrated Ornstein-Uhlenbeck process, where the position $\bfY_t$ and velocity $\bfV_t$ are modeled as draws from a normal distribution which depends upon $\bfV_{t-1}$, $\bfY_{t-1}$, the behavioral state $b_{t-1}$, and the time step between observations $\Delta_{t-1}$. It is straightforward to adapt this continuous-time approach to an HMM by setting $\Delta_{t}$ to be constant for all values of $t$ and assuming that the behavior of the animal does not change between time steps. In fact, if the CarHMM is altered so that the emission distribution of $d_t$ is normal, then the resulting sequence of step-lengths is equivalent to a one-dimensional state-switching Ornstein-Uhlenbeck process (see the appendix for details).
+In addition, many continuous-time approaches model auto-correlation to account for non-uniform time intervals between time steps. For example, Michelot et al. \citep{Michelot:2019} model $\bfY$ as an integrated Ornstein-Uhlenbeck process, where the position $\bfY_t$ and velocity $\bfV_t$ are modeled as draws from a normal distribution which depends upon $\bfV_{t-1}$, $\bfY_{t-1}$, the behavioral state $b_{t-1}$, and the time step between observations $\Delta_{t-1}$. It is straightforward to adapt this continuous-time approach to an HMM by setting $\Delta_{t}$ to be constant for all values of $t$ and assuming that the behavior of the animal does not change between time steps. In fact, if the CarHMM is altered so that the emission distribution of $d_t$ is normal, then the resulting sequence of step-lengths is equivalent to a one-dimensional state-switching Ornstein-Uhlenbeck process (see the appendix for details).
 
 While the idea of auto-correlation within HMMs is not new, Lawler et al are novel in their specific implementation of an auto-correlated HMM. In addition, they detail several additional tools for data preprocessing and interpretation which are useful when applying HMMs in an ecological setting.
 
