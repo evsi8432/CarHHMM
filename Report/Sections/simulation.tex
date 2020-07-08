@@ -2,6 +2,29 @@
 
 %\section{Simulation Study}
 
+\subsection{Model Formulation}
+\label{subsec:model_structure}
+
+Hierarchical hidden Markov models can be used to jointly model simultaneous coarse-scale and fine-scale processes. However, as mentioned before, the fine-scale process $Y^*$ can often exhibit auto-correlation and intricate structure. Transforming $Y^*_t$ to $Z^*_t$ removes fine-scale periodic behavior, but $Z^*_t$ can still exhibit auto-correlation, especially in $Z_{t,s^*}^{*(1)}$. Therefore, we replace the fine-scale HMM within the hierarchical HMM with a CarHMM as shown in (fig \ref{fig:CarHHMM}).
+%
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=5in]{../Plots/CarHHMM.png}
+	\caption{Graphical representation of a CarHHMM. The additional arrows representing auto-correlation between observations are shown in red for emphasis.}
+	\label{fig:CarHHMM}
+\end{figure}
+%
+Naturally, we refer to this model as the \textbf{CarHHMM}, and it can be implemented both with and without the short-time Fourier-transform (STFT). The likelihood of this model is still easy to calculate using the forward algorithm:
+%
+$$\calL_{\text{CarHHMM}}(y,z^*;\Theta,\Theta^*,\Gamma,\Gamma^*) = \delta P(y_1,z_1^*;\Theta,\Theta^*,\Gamma^*) \prod_{t=2}^T \Gamma P(y_t,z_t^*;\Theta,\Theta^*,\Gamma^*) \mathbf{1}_N$$
+%
+where:
+%
+\begin{align*}
+P(y_t,z_t^*;\Theta,\Theta^*,\Gamma^*)  = \text{diag}\Big[&f^{(1)}(y_t)\calL_{\text{CarHMM}}\left(z_t^*;\Theta^{*(1)},\Gamma^{*(1)}\right), \ldots , \\
+&f^{(N)}(y_t)\calL_{\text{CarHMM}}\left(z_t^*;\Theta^{*(N)},\Gamma^{*(N)}\right) \Big]
+\end{align*}
+
 \subsection{Data Simulation}
 
 To test the CarHHMM with STFT, 500 separate sequences of 100 marine-mammal dives were simulated. The coarse-scale observations $Y$ were set as the duration of each dive, and the fine-scale observations $Y^*$ were set as one-dimensional acceleration readings simulated at 50 hertz. The number of possible states for both the coarse- and fine- scale Markov chains was set to 2, i.e. $N = N^* = 2$. 

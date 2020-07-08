@@ -1,62 +1,5 @@
 % !TeX root = ../main.tex
 
-\section{Results regarding CarHMMs and the Ornstein-Uhlenbeck process}
-
-%\subsection{Continuous Time models}
-
-Although the CarHMM can incorporate auto-correlation into the structure of an HMM, they break down when observations are taken at irregular time intervals since the probability transition matrix $\Gamma$ would then have to depend upon the time step between observations. A common solution to this issue is to use a continuous-time method such as the one introduced by Michelot et al \citep{Michelot:2019}, which models the movement of an animal as an Ornstein-Uhlenbeck process with parameters that depend upon the underlying behavioural state of the animal. Namely, a state-switching Ornstein-Uhlenbeck process $Y$ is the solution to the following stochastic differential equation:
-%
-\begin{equation}
-    \label{eqn:SDE}
-    dY_t = \beta^{(X_t)}(\gamma^{(X_t)} - Y_t)dt + \omega^{(X_t)} dW_t
-\end{equation}
-%
-where $X_t$ follows some stochastic process which defines the hidden behaviour of the animal at time $t$, $\beta^{(X_t)}$ relates to rate at which the process returns to its mean value, $\gamma^{(X_t)}$ is the long-term mean value of the process, $\omega^{(X_t)}$ is related to short-term variance, and $W$ is a Wiener process. One notable difference between the state-switching OU process and the CarHMM is that the time index $t \in \mathbb{R}$ exists in continuous time and is not necessarily an integer. If the behavioral state $X_t$ is known and does not change between observations, the solution to (eqn \ref{eqn:SDE}) is known to be the following \citep{Michelot:2019}:
-%
-\begin{align}
-Y_{t+\Delta t} | X_{t} \sim \mathcal{N}\left((1-e^{-\beta^{(X_t)}\Delta t})\gamma^{(X_t)} + e^{-\beta^{(X_t)}\Delta t} Y_t,\quad \frac{\omega^{(X_t)^2}}{2\beta^{(X_t)}} (1-e^{-2\beta^{(X_t)}\Delta t})\right)
-\label{eqn:OU_sol}
-\end{align}
-%
-where $\Delta t$ is the time difference between any two observations $Y_t$ and $Y_{t+\Delta t}$. Continuous time models can be built up from arbitrarily complex stochastic differential equations and allow for uneven step lengths in the observations sequence $Y$. However, most continuous time models require MCMC algorithms to perform inference and as a result are not easily incorporated into the HHMM structure.
-
-\subsection{Equivalence of CarHMM and OU process}
-
-Although most continuous time models are difficult to incorporate into an HHMM, we show in (thrm 1) that under certain conditions, the CarHMM is equivalent to a state-switching Ornstein-Uhlenbeck process shown in (eqn \ref{eqn:OU_sol}). This gives new interpretation to the learned parameters of the CarHMM in the context of a continuous-time model.
-
-\begin{theorem}{Theorem 1.}{}%
-If:
-\begin{enumerate}
-    \item The hidden behavioural process $X$ from (Eq. \ref{eqn:SDE}) follows a Markov chain with $N$ possible states and transitions occur at equi-spaced time stamps $\left(\Delta t, \ldots, (T-1)\Delta t\right)$, and:
-    \item Observations of the SDE from (Eq. \ref{eqn:SDE}) are taken at times $\left(0, \Delta t, \ldots, (T-1)\Delta t\right)$,
-\end{enumerate}
-then the observations $y$ are equivalent to the output of a conditionally auto-regressive hidden Markov model with normal emission distributions and parameters $\Theta = (\theta^{(1)}, \ldots, \theta^{(N)}); \enspace \theta^{(i)} = \{\mu^{(i)},\sigma^{(i)},\phi^{(i)}\}$, where:
-
-\begin{align}
-\mu^{(i)} = \gamma^{(i)}, \qquad \sigma^{(i)} = \sqrt{\frac{\omega^{(i)^2}}{2\beta^{(i)}} (1-e^{-2\beta^{(i)}\Delta t})}, \qquad \phi^{(i)} = e^{-\beta^{(i)}\Delta t} \label{eqn:CarHMM_to_OU}
-\end{align}
-
-\end{theorem}
-
-\begin{proof}{Proof}{}%
-Combining equation (\ref{eqn:CarHMM_to_OU}) with equation (\ref{eqn:OU_sol}) gives:
-%
-\begin{align*}
-\left(Y_{s \Delta t} | X_{(s-1)\Delta t} = i \right) \sim \mathcal{N}\left((1-\phi^{(i)}) \mu^{(i)} + \phi^{(i)} Y_{(s-1) \Delta t}, \enspace \sigma^{2(i)} \right),\\
-s = 1, \ldots, T-1
-\end{align*}
-%
-If $X_t$ follows a Markov chain with transitions at the observation times, then the behavioural state $X_t$ does not change between observations and we can re-index $Y_{(s-1) \Delta t} = Y'_s$ and $X_{(s-2)\Delta t: (s-1) \Delta t} = X'_s$ for $s = 2,\ldots T$, yielding the desired result:
-
-\begin{align*}
-\left(Y'_s| X'_s = i \right) \sim \mathcal{N}\left((1-\phi^{(i)}) \mu^{(i)} + \phi^{(i)} Y'_{s-1}, \enspace \sigma^{2(i)} \right)\\
-s = 2, \ldots, T
-\end{align*}
-%
-$X'$ follows a Markov chain, and the distribution of $(Y'_s|X'_s,Y'_{s+1})$ is consistent with that of a CarHMM with normal emission distributions.
-\end{proof}
-
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%  End of Section  %%%%%%%%%%%%%%%%%%%%%
@@ -95,13 +38,6 @@ and:
 $$p_\theta(y_t|y_{t-1}, \Delta t, X_t = x_t) = \mathcal{N}\left((1-\phi_{x_t}(\Delta t))\mu_{x_t} + \phi_{x_t}(\Delta t) y_{t-1},\quad \sigma_{x_t}^2(\Delta t) \right).$$
 %
 now $\calL_{\text{CarHMM}}(y;\theta,\Lambda,\delta)$ is simply maximized with respect to $\theta = \{\beta,\omega,\gamma\}$, $\Lambda = \{p,\lambda\}$, and $\delta$ to find the maximum likelihood estimate of the CarHMM with uneven time steps.
-
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
-
 
 
 \subsection{Transition Parameters}
