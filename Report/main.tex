@@ -39,7 +39,7 @@
 \newcommand{\rv}{random variable}
 
 % Title, authors, affiliations
-\title[]{Modelling fine-scale dive behavior with hidden Markov models }%\query{Q1}
+\title[]{Accounting for fine-scale correlation structures in hidden Markov models}%\query{Q1}
 \author{BlindedA\authorref{1}\thanksref{*}}
 \author{BlindedB\authorref{2}}
 \affiliation[1]{Author affiliations will go here in the accepted manuscript, 
@@ -106,23 +106,17 @@ can't prepare it themselves.\Frenchabscopyright
 \section{Models and parameter estimation (NH)}
 \input Sections/models.tex
 %
-
-%%
-%\section{Background}
-%\input Sections/background.tex
-%
-%\input Sections/carhmm_ou.tex
-%
 \section{Simulation Study}
 \input Sections/simulation.tex
 %
 \section{Killer Whale Case Study}
+\label{sec:case_study}
 \input Sections/results.tex
 %
 \section{Discussion}
-%\input Sections/conclusion.tex
+\input Sections/discussion.tex
 %
-\section{Acknowledgements}
+%\section{Acknowledgements}
 
 \clearpage
 
@@ -132,6 +126,15 @@ can't prepare it themselves.\Frenchabscopyright
 
 \clearpage
 
+\begin{appendix}
+
 \input Sections/appendix.tex
+
+\end{appendix}
+
+\section{Figures and Tables}
+\input Sections/figures.tex
+
+\CJShistory
 
 \end{document}

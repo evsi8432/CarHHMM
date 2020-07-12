@@ -26,13 +26,6 @@ $$\Gamma_{ij} = \frac{\exp(\eta_{ij})}{\sum_{j'=1}^N \exp(\eta_{i(j')})}, \qquad
 %
 $\eta_{ii}$ is set to zero for identifiability, and $\calL_{\text{HMM}}(y;\theta,\Gamma)$ can be maximized using any numerical optimizer.
 
-\begin{figure}[h!]
-	\centering
-	\includegraphics[width=5in]{../Plots/HMM.png}
-	\caption{Graphical representation of a traditional HMM.}
-	\label{fig:HMM}
-\end{figure}
-
 \subsection{Hierarchical HMMs}
 
 Hidden Markov models are useful when inferring a single unobserved process, but biological processes often involve multiple simultaneous hidden processes which can occur and at different time scales. For example, a preliminary observation of the killer whale dive data shown in (fig \ref{fig:data}) shows that the behavior of the killer whale changes between approximately hour-long periods of predominately short, shallow dives and long, deep dives. Leos-Barajas et al. \citep{Barajas:2017} encounter a similar issue when modeling the movement of a harbor porpoise in the North Sea, and use it as a motivating example when they introduce hierarchical hidden Markov models.

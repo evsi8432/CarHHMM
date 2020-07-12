@@ -3,126 +3,100 @@
 \addcontentsline{toc}{section}{Appendices}
 \renewcommand*{\thesubsection}{\Alph{subsection}}
 
-\section*{Appendix}
-
-\setcounter{subsection}{0}
-
-\section{Results regarding CarHMMs and the Ornstein-Uhlenbeck process}
-
-\subsection{Continuous Time models}
-
-Although the CarHMM can incorporate auto-correlation into the structure of an HMM, they break down when observations are taken at irregular time intervals since the probability transition matrix $\Gamma$ would then have to depend upon the time step between observations. A common solution to this issue is to use a continuous-time method such as the one introduced by Michelot et al \citep{Michelot:2019}, which models the movement of an animal as an Ornstein-Uhlenbeck process with parameters that depend upon the underlying behavioural state of the animal. Namely, a state-switching Ornstein-Uhlenbeck process $Y$ is the solution to the following stochastic differential equation:
-%
-\begin{equation}
-    \label{eqn:SDE}
-    dY_t = \beta^{(X_t)}(\gamma^{(X_t)} - Y_t)dt + \omega^{(X_t)} dW_t
-\end{equation}
-%
-where $X_t$ follows some stochastic process which defines the hidden behaviour of the animal at time $t$, $\beta^{(X_t)}$ relates to rate at which the process returns to its mean value, $\gamma^{(X_t)}$ is the long-term mean value of the process, $\omega^{(X_t)}$ is related to short-term variance, and $W$ is a Wiener process. One notable difference between the state-switching OU process and the CarHMM is that the time index $t \in \mathbb{R}$ exists in continuous time and is not necessarily an integer. If the behavioral state $X_t$ is known and does not change between observations, the solution to (eqn \ref{eqn:SDE}) is known to be the following \citep{Michelot:2019}:
-%
-\begin{align}
-Y_{t+\Delta t} | X_{t} \sim \mathcal{N}\left((1-e^{-\beta^{(X_t)}\Delta t})\gamma^{(X_t)} + e^{-\beta^{(X_t)}\Delta t} Y_t,\quad \frac{\omega^{(X_t)^2}}{2\beta^{(X_t)}} (1-e^{-2\beta^{(X_t)}\Delta t})\right)
-\label{eqn:OU_sol}
-\end{align}
-%
-where $\Delta t$ is the time difference between any two observations $Y_t$ and $Y_{t+\Delta t}$. Continuous time models can be built up from arbitrarily complex stochastic differential equations and allow for uneven step lengths in the observations sequence $Y$. However, most continuous time models require MCMC algorithms to perform inference and as a result are not easily incorporated into the HHMM structure.
-
-\subsection{Equivalence of CarHMM and OU process}
-
-Although most continuous time models are difficult to incorporate into an HHMM, we show in (thrm 1) that under certain conditions, the CarHMM is equivalent to a state-switching Ornstein-Uhlenbeck process shown in (eqn \ref{eqn:OU_sol}). This gives new interpretation to the learned parameters of the CarHMM in the context of a continuous-time model.
-
-\begin{theorem}{Theorem 1.}{}%
-If:
-\begin{enumerate}
-    \item The hidden behavioural process $X$ from (Eq. \ref{eqn:SDE}) follows a Markov chain with $N$ possible states and transitions occur at equi-spaced time stamps $\left(\Delta t, \ldots, (T-1)\Delta t\right)$, and:
-    \item Observations of the SDE from (Eq. \ref{eqn:SDE}) are taken at times $\left(0, \Delta t, \ldots, (T-1)\Delta t\right)$,
-\end{enumerate}
-then the observations $y$ are equivalent to the output of a conditionally auto-regressive hidden Markov model with normal emission distributions and parameters $\Theta = (\theta^{(1)}, \ldots, \theta^{(N)}); \enspace \theta^{(i)} = \{\mu^{(i)},\sigma^{(i)},\phi^{(i)}\}$, where:
-
-\begin{align}
-\mu^{(i)} = \gamma^{(i)}, \qquad \sigma^{(i)} = \sqrt{\frac{\omega^{(i)^2}}{2\beta^{(i)}} (1-e^{-2\beta^{(i)}\Delta t})}, \qquad \phi^{(i)} = e^{-\beta^{(i)}\Delta t} \label{eqn:CarHMM_to_OU}
-\end{align}
-
-\end{theorem}
-
-\begin{proof}{Proof}{}%
+\begin{proof}{Proof of Theorem 1}{}
 Combining equation (\ref{eqn:CarHMM_to_OU}) with equation (\ref{eqn:OU_sol}) gives:
 %
 \begin{align*}
-\left(Y_{s \Delta t} | X_{(s-1)\Delta t} = i \right) \sim \mathcal{N}\left((1-\phi^{(i)}) \mu^{(i)} + \phi^{(i)} Y_{(s-1) \Delta t}, \enspace \sigma^{2(i)} \right),\\
+\left(Y_{s \Delta t} | X_{(s-1)\Delta t} = i^* \right) \sim \mathcal{N}\left((1-\phi^{(i^*)}) \mu^{(i^*)} + \phi^{(i^*)} Y_{(s-1) \Delta t}, \enspace \sigma^{2(i^*)} \right),\\
 s = 1, \ldots, T-1
 \end{align*}
 %
 If $X_t$ follows a Markov chain with transitions at the observation times, then the behavioural state $X_t$ does not change between observations and we can re-index $Y_{(s-1) \Delta t} = Y'_s$ and $X_{(s-2)\Delta t: (s-1) \Delta t} = X'_s$ for $s = 2,\ldots T$, yielding the desired result:
 
 \begin{align*}
-\left(Y'_s| X'_s = i \right) \sim \mathcal{N}\left((1-\phi^{(i)}) \mu^{(i)} + \phi^{(i)} Y'_{s-1}, \enspace \sigma^{2(i)} \right)\\
+\left(Y'_s| X'_s = i^* \right) \sim \mathcal{N}\left((1-\phi^{(i^*)}) \mu^{(i^*)} + \phi^{(i^*)} Y'_{s-1}, \enspace \sigma^{2(i^*)} \right)\\
 s = 2, \ldots, T
 \end{align*}
 %
 $X'$ follows a Markov chain, and the distribution of $(Y'_s|X'_s,Y'_{s+1})$ is consistent with that of a CarHMM with normal emission distributions.
 \end{proof}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\subsection{Detailed Description of Data Simulation}
+\begin{proof}{Description of simulated data}{}
 
-$\hat{Y}^*_{t,s^*}$ was simulated using the following procedure. Note that the $k^{th}$ Fourier mode of $\hat{Y}^*_{t,s^*}$ is denoted as $\hat{Y}^{*(k)}_{t,s^*}$:
+$\hat{Y}^*_{t,t^*}$ was simulated using the following procedure. The $k^{th}$ Fourier mode of $\hat{Y}^*_{t,t^*}$ is denoted as $\hat{Y}^{*(k)}_{t,t^*}$:
+
+\begin{align}
+	(\hat{Y}^{*(0)}_{t,0}|X^*_{t,0} = i^*) &\sim \mathcal{N} \left(0, \sigma^{*(i^*)} \right) & \nonumber \\
+	%
+	(\hat{Y}^{*(0)}_{t,t^*}|X^*_{t,t^*} = i^*) &\sim \mathcal{N} \left(\phi^{*(i^*)} * \hat{Y}^{*(0)}_{t,t^*-1}, \sigma^{*(i^*)} \right), & t^* = 1,2,\ldots, \lfloor Y_t/2 \rfloor \label{eqn:y_hat0} \\
+	%
+	\hat{Y}^{*(k)}_{t,t^*} &= a_{t,t^*}^{(k)} i\sqrt{b^{(k)}_{t,t^*}}, & k = 1,\ldots,49 \nonumber
+\end{align}
 
 \begin{align*}
-	(\hat{Y}^{*(0)}_{t,0}|X^*_{t,0} = i) &\sim \mathcal{N} \left(0, \sigma^{*(i)} \right) & \\
-	%
-	(\hat{Y}^{*(0)}_{t,s^*}|X^*_{t,s^*} = i) &\sim \mathcal{N} \left(\phi^{*(i)} * \hat{Y}^{*(0)}_{t,s^*-1}, \sigma^{*(i)} \right), & s^* = 1,2,\ldots, \lfloor Y_t/2 \rfloor \\
-	%
-	\hat{Y}^{*(k)}_{t,s^*} &= a_{t,s^*}^{(k)} i\sqrt{b^{(k)}_{t,s^*}}, & k = 1,\ldots,49 \\
-\end{align*}
-\begin{align*}
-    a_{t,s^*}^{(k)} &\sim  \left\{\begin{array}{lr}
+    a_{t,t^*}^{(k)} &\sim  \left\{\begin{array}{lr}
 	-1 & \quad w.p. \enspace 1/2 \\
 	1  & \quad w.p. \enspace 1/2
 	\end{array}\right. \\
 	%
-	(b^{(k)}_{t,s^*}|X^*_{t,s^*}  = 1) &\sim {\rm{Gamma}}(1/k^2, 1) \\
+	(b^{(k)}_{t,t^*}|X^*_{t,t^*}  = 1) &\sim {\rm{Gamma}}(5/k^2, 1) \\
 	%
-	(b^{(k)}_{t,s^*}|X^*_{t,s^*} = 2) &\sim \left\{\begin{array}{lr}
-	{\rm{Gamma}}(1/k^2, 1), \quad & k \notin \{1,2\} \\
-	{\rm{Gamma}}(100,1), & k = 1 \\
+	(b^{(k)}_{t,t^*}|X^*_{t,t^*} = 2) &\sim \left\{\begin{array}{lr}
+	{\rm{Gamma}}(5/k^2, 1), \quad & k \notin \{1,2\} \\
+	{\rm{Gamma}}(250,1), & k = 1 \\
 	{\rm{Gamma}}(50,1), & k = 2
 	\end{array}\right. 
 \end{align*}
 
 \begin{align*}
-    \hat{Y}^{*(50)}_{t,s^*} &= 0 & \\
+    \hat{Y}^{*(50)}_{t,t^*} &= 0 & \\
 	%
-	\hat{Y}^{*(k)}_{t,s^*}  &= -\hat{Y}^{*(100-n)}_{t,s^*}, & \qquad k = 51,\ldots,99
+	\hat{Y}^{*(k)}_{t,t^*}  &= -\hat{Y}^{*(100-k)}_{t,t^*}, & \qquad k = 51,\ldots,99
 \end{align*}
 
-$Y^*_{t,(100s^*+1):(100s^*+100)}$ was set using the inverse discrete Fourier transform of $\hat{Y}^*_{t,s^*}$:
+$Y^*_{t,t^*,1:100}$ was set using the inverse discrete Fourier transform of $\hat{Y}^*_{t,t^*}$:
 
-$$Y^*_{t,(100s^*+1):(100s^*+100)} = IDFT\left(\hat{Y}^*_{t,s^*}\right), \qquad s^* = 0,\ldots,\lfloor Y_t/2 \rfloor - 1$$
+$$Y^*_{t,t^*,1:100} = IDFT\left(\hat{Y}^*_{t,t^*}\right), \qquad t^* = 1,\ldots,\lfloor Y_t/2 \rfloor$$
 
-There are several practical reasons behind this construction. First, $\hat{Y}^*_{t,s^*}$ is anti-symmetric about $\hat{Y}^{*(50)}_{t,s^*}$ so that its inverse Fourier transform is real-valued. $\hat{Y}^{*(k)}_{t,s^*}$ also decays like $1/k^2$ so that $Y^*_{t,t^*}$ remains continuous within a 2-second window. Note, however, that $Y^*_{t,s^*}$ is not continuous \textit{between} windows, as can be seen in (fig \ref{fig:fourier_example}). However, the jumps are not too severe since $\hat{Y}^{*(0)}_{t,s^*}$ and $\hat{Y}^{*(0)}_{t,s^*+1}$ are highly correlated. See (fig. \ref{fig:sim_data}) for details.
+$\hat{Y}^*_{t,t^*}$ is anti-symmetric about $\hat{Y}^{*(50)}_{t,t^*}$ so that its inverse Fourier transform is real-valued. $\hat{Y}^{*(k)}_{t,t^*}$ also decays like $1/k$ so that $Y^*_{t,t^*}$ remains continuous within a 2-second window. $Y^*_{t,t^*}$ is not continuous \textit{between} windows, but the jump discontinuities are not very severe since $\hat{Y}^{*(0)}_{t,t^*}$ and $\hat{Y}^{*(0)}_{t,t^*+1}$ are highly correlated. See (fig. \ref{fig:sim_data}) for details. 
 
-From here it is straightforward to calculate both $Z^{*(1)}$ and $Z^{*(2)}$ after setting $\tilde{f}$. We pick $\tilde{f} = 10$ periods per window, or 5 hertz. Note that $Z^{*(1)}_{t,s^*} = \mathcal{R}\left(\hat{Y}^{(0)}_{t,s^*}\right)$, so selecting $\sigma^{*(i)}$ and $\phi^{*(1)}$ appropriately will ensure correct distribution. 
+From here it is straightforward to calculate both $Z^{*(1)}$ and $Z^{*(2)}$. We pick $\tilde{\omega} = 10$ periods per window, or 5 hertz. To find the distribution of $Z^{*(1)}_{t,t^*} = \mathcal{R}\left(\hat{Y}^{(0)}_{t,t^*}\right)$, use (eqn \ref{eqn:y_hat0}):
+%
+$$\left(Z^{*(1)}_{t,t^*} | X^*_{t,t^*} = i^* \right) = \left(\mathcal{R}\left(\hat{Y}^{(0)}_{t,t^*}\right) | X^*_{t,t^*} = i^* \right) \sim \mathcal{N} \left(\phi^{*(i^*)} * Z^{*(1)}_{t,t^*-1}, \sigma^{*(i^*)} \right)$$
+%
+$Z^{*(2)}_{t,t^*}$ is the sum of Gamma-distributed random variables with the same scale parameter, so the distribution of $Z^{*(2)}_{t,t^*}$ is also a Gamma distribution:
+%
+$$Z^{*(2)}_{t,t^*} = \sum_{k=1}^{10} b^{(k)}_{t,t^*}$$
+$$\left(Z^{*(2)}_{t,t^*}|X^*_{t,t^*} = 1\right) \sim {\rm{Gamma}}\left(\alpha = \sum_{k=1}^{10} 5/k^2 = 10.10, \beta = 1.00 \right)$$
+$$\left(Z^{*(2)}_{t,t^*}|X^*_{t,t^*} = 1\right) \sim {\rm{Gamma}}\left(\alpha = 300 + \sum_{k=3}^{10} 5/k^2 = 305.94 , \beta = 1.00 \right)$$
+\end{proof}
 
-Note that $Z^{*(2)}$, is the sum of gamma distributions with the same scale parameter, so the distribution of $Z^{*(2)}$ is also a Gamma distribution:
+\begin{proof}{Likelihood of Simulation study model}{}
 
-$$Z^{*(2)} = \sum_{k=1}^{10} b^{(k)}_{t,s^*}$$
-$$Z^{*(2)} \sim {\rm{Gamma}}$$
+The overall likelihood of the CarHHMM-DFT model is as follows:
+%
+$$\calL_{\text{CarHHMM-DFT}}(y,z^*;\Theta,\Theta^*,\Gamma,\Gamma^*) = \delta P(y_1,z_1^*;\Theta,\Theta^*,\Gamma^*) \prod_{t=2}^T \Gamma P(y_t,z_t^*;\Theta,\Theta^*,\Gamma^*) \mathbf{1}_N$$
+%
+where:
+%
+\begin{align*}
+P(y_t,z_t^*;\Theta,\Theta^*,\Gamma^*)  = \text{diag}\Big[&f^{(1)}(y_t;\Theta^{(i)})\calL_{\text{CarHMM-DFT}}\left(z_t^*;\Theta^{*(1)},\Gamma^{*(1)}\right), \ldots , \\
+&f^{(N)}(y_t;\Theta^{(i)})\calL_{\text{CarHMM-DFT}}\left(z_t^*;\Theta^{*(N)},\Gamma^{*(N)}\right) \Big]
+\end{align*}
+%
+$f^{(i)}(y_t;\Theta^{(i)})$ is the emission distribution of the dive duration $y_t$ conditioned on the fact that $X_t = i$.
 
+$\calL_{\text{CarHMM-DFT}}$ corresponds to the fine-scale chain:
+%
+$$\calL_{\text{CarHMM-DFT}}\left(z_t^*;\Theta^{*(i)},\Gamma^{*(i)}\right) = \delta^{*(i)} \prod_{t=2}^T \Gamma^{*(i)} P(z^*_{t,t^*}|z^*_{t,t^*-1};\Theta^{*(i^*)}) \mathbf{1}_N$$
+%
+where $P(z^*_{t,t^*}|z^*_{t,t^*-1};\Theta^{*(i)})$ is an $N^* \times N^*$ diagonal matrix with $i^*i^*$th entry equal to $f^{(i,i^*)}(z^*_{t,t^*}|z^*_{t,t^*-1}; \theta^{*(i,i^*)})$.
+%
+$f^{(i,i^*)}(z^*_{t,t^*}|z^*_{t,t^*-1}; \theta^{*(i,i^*)})$ is the emission distribution of $Z^*_{t,t^*}$ conditioned on the fact that $X^*_{t,t^*} = i^*$ and $Z^*_{t,t^*-1}$.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+\end{proof}
 
 
 
@@ -139,7 +113,7 @@ $$Z^{*(2)} \sim {\rm{Gamma}}$$
 
 \subsection{Dimension Reduction on $\hat{Y_t^*}$}
 
-First, we simply use down-sampling and only record every $w^{th}$ time step of $\hat{Y}_t^*$. This both reduces the space of $\hat{Y}_t^*$ to $\mathbb{C}^{\lfloor S^*_t / w \rfloor \times w}$ and ensures that none of the sliding windows overlap when taking the STFT. This is important because HMMs assume temporal independence between observations. Next, the dimension of $\hat{Y}_t^*$ can be cut in half by recognizing that the $Y_t^*$ is real-valued, and therefore $\hat{Y}_{t,k}^*$ is equal to the complex-congugate of $\hat{Y}_{t,w-k-1}^*$. Finally, by Parseval's Thereom we have that:
+First, we simply use down-sampling and only record every $w^{th}$ time step of $\hat{Y}_t^*$. This both reduces the space of $\hat{Y}_t^*$ to $\mathbb{C}^{\lfloor t^*_t / w \rfloor \times w}$ and ensures that none of the sliding windows overlap when taking the STFT. This is important because HMMs assume temporal independence between observations. Next, the dimension of $\hat{Y}_t^*$ can be cut in half by recognizing that the $Y_t^*$ is real-valued, and therefore $\hat{Y}_{t,k}^*$ is equal to the complex-congugate of $\hat{Y}_{t,w-k-1}^*$. Finally, by Parseval's Thereom we have that:
 
 $$\sum_{n = 0}^{w-1} |Y^*_{t+n}|^2 = \sum_{n = 0}^{w-1} |\hat{Y}^*_{t,n}|^2$$
 
