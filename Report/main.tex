@@ -37,9 +37,11 @@
 \newcommand{\mbb}[1]{\mathbb{#1}}
 \newcommand{\mt}[1]{\mathrm{#1}}
 \newcommand{\rv}{random variable}
+\newcommand{\newblock}{}
+\bibliographystyle{abbrvnat}
 
 % Title, authors, affiliations
-\title[]{Accounting for fine-scale correlation structures in hidden Markov models}%\query{Q1}
+\title[]{Modelling fine-scale correlation structures using hidden Markov models}%\query{Q1}
 \author{BlindedA\authorref{1}\thanksref{*}}
 \author{BlindedB\authorref{2}}
 \affiliation[1]{Author affiliations will go here in the accepted manuscript, 
@@ -66,18 +68,16 @@ likelihood\sep repeated measurements.
 
 Recent advances in high-frequency tagging
 technology have made available a vast
-amount of animal movement data. This
+amount of movement data in a variety of fields. This
 rich new data can exhibit simultaneous behavioural processes occurring at different
-time scales. One can model these processes
+time scales, resulting in very complicated dependence structures. One can model these processes
 through a hierarchical hidden Markov model
 (HHMM), where the system is modelled as a
 nested structure of hidden Markov models.
-At very short time scales, however, observations can exhibit complicated dependence
-structures that cannot be easily captured by
-traditional HMMs. We demonstrate how
+At very short time scales, however, many assumptions of traditional HMMs are violated. We demonstrate how
 to incorporate fine-scale processes into the
 larger structure of HHMMs while maintaining computational efficiency. We apply our
-method to dive and accelerometer data collected from northern resident killer whales off
+method to dive and accelerometer data collected from a northern resident killer whale off
 the coast of British Columbia, Canada.
 
 \abscopyright
@@ -94,16 +94,15 @@ can't prepare it themselves.\Frenchabscopyright
 
 %%%%%%%%%%%%
 \vfill\eject
-{\centerline{Large{Notes from Nancy}}}
+{\centerline{\Large{Notes from Nancy}}}
 \input{Sections/0627NH}
 \vfill\eject
 %%%%%%%%%%%%%
-
 %
 \section{Introduction}
 \input Sections/intro.tex
 %
-\section{Models and parameter estimation (NH)}
+\section{Models and parameter estimation}
 \input Sections/models.tex
 %
 \section{Simulation Study}
@@ -116,25 +115,18 @@ can't prepare it themselves.\Frenchabscopyright
 \section{Discussion}
 \input Sections/discussion.tex
 %
-%\section{Acknowledgements}
-
-\clearpage
-
-\newcommand{\newblock}{}
-\bibliographystyle{abbrvnat}
+\newpage
 \bibliography{references}
-
-\clearpage
-
+%
+\newpage
 \begin{appendix}
-
 \input Sections/appendix.tex
-
 \end{appendix}
-
+%
+\newpage
 \section{Figures and Tables}
 \input Sections/figures.tex
-
-\CJShistory
+%
+%\CJShistory
 
 \end{document}
