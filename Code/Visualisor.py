@@ -160,6 +160,7 @@ class Visualisor:
                         title = 'Emission Distributions, Dive Duration'
                         ax[row_num,col_num].set_xlabel('Dive Duration (seconds)')
                         ax[row_num,col_num].set_title(title,fontsize=24)
+                        plt.legend(['Dive Type 1','Dive Type 2'])
                     else:
                         titles = [r'$\left(Z^{*(1)}\right)_x$ $(m/s^2)$',
                                   r'$\left(Z^{*(1)}\right)_y$ $(m/s^2)$',
