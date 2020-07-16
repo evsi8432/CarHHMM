@@ -5,6 +5,7 @@ import matplotlib.cm as cm
 from matplotlib.patches import Patch
 from matplotlib.lines import Line2D
 from matplotlib.ticker import FormatStrFormatter
+from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 from scipy.stats import gamma
 from scipy.stats import norm
@@ -41,8 +42,8 @@ class Visualisor:
 
     def lagplot(self,lims={},file=None):
 
-        nrows = 1
-        ncols = len(self.pars.features[0]) + len(self.pars.features[1])
+        ncols = 1
+        nrows = len(self.pars.features[0]) + len(self.pars.features[1])
         fig,ax = plt.subplots(nrows,ncols,figsize=(10*ncols,10*nrows))
         fig_num = 1
 
@@ -85,18 +86,21 @@ class Visualisor:
             im = plt.imshow(np.rot90(Ztemp),extent = xlim + ylim)
             plt.title(xlabs[i],fontsize=36)
             plt.gca().ticklabel_format(style='sci',scilimits = (-3,3))
-            c = fig.colorbar(im, orientation='horizontal',pad=0.125)
+            divider = make_axes_locatable(plt.gca())
+            cax = divider.append_axes("right", size="5%", pad=0.05)
+            c = fig.colorbar(im,cax=cax)#im, orientation='horizontal',pad=0.125)
             c.ax.ticklabel_format(style='sci',scilimits = (-3,3))
             c.set_label('Density',fontsize = 30)
 
             fig_num += 1
 
-        plt.subplots_adjust(wspace=0.05, hspace=0.05)
-        fig.text(0.5, 1.0, 'Lag Plots', ha='center', fontsize=50)
+        plt.subplots_adjust(wspace=-0.6, hspace=-0.6)
+        #fig.text(0.5, 1.0, 'Lag Plots', ha='center', fontsize=50)
 
         if file is None:
             plt.show()
         else:
+            plt.tight_layout()
             plt.savefig(file)
 
         return
