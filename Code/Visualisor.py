@@ -119,81 +119,83 @@ class Visualisor:
             ncols = len(self.hhmm.theta[0])
         else:
             features = ['Ax','Ay','Az','Ahat_low'] #list(self.hhmm.theta[1][0].keys())
-            nrows = 1 #self.pars.K[0]
-            ncols = len(features)
+            nrows = 2 #self.pars.K[0]
+            ncols = int(len(features)/2)
 
         fig, ax = plt.subplots(nrows,ncols,figsize=(7.5*ncols,7.5*nrows))
         ax = np.reshape(ax,(nrows,ncols))
 
-        for col_num,feature in enumerate(features):
-            for row_num in range(nrows):
+        for feature_num,feature in enumerate(features):
 
-                if level == 0:
-                    mu = self.hhmm.theta[0][feature]['mu']
-                    sig = self.hhmm.theta[0][feature]['sig']
+            row_num = int(feature_num/2)
+            col_num = feature_num%2
 
-                    dist = self.pars.features[0][feature]['f']
-                    K = self.pars.K[0]
-                    colors = [cm.get_cmap('tab10')(i) for i in [0,1]]
-                    legend = ['Dive Type %d'%(x+1) for x in range(K)]
+            if level == 0:
+                mu = self.hhmm.theta[0][feature]['mu']
+                sig = self.hhmm.theta[0][feature]['sig']
+
+                dist = self.pars.features[0][feature]['f']
+                K = self.pars.K[0]
+                colors = [cm.get_cmap('tab10')(i) for i in [0,1]]
+                legend = ['Dive Type %d'%(x+1) for x in range(K)]
+            else:
+                mu = self.hhmm.theta[1][row_num][feature]['mu']
+                sig = self.hhmm.theta[1][row_num][feature]['sig']
+
+                dist = self.pars.features[1][feature]['f']
+                K = self.pars.K[1]
+                colors = [cm.get_cmap('viridis')(i) for i in [0.,0.5,1.]]
+                legend = ['Subdive Behavior %d'%(x+1) for x in range(K)]
+
+            for state in range(K):
+                if dist == 'gamma':
+                    shape = np.square(mu)/np.square(sig)
+                    scale = np.square(sig)/np.array(mu)
+                    x = np.linspace(0.01,max(mu)+5*max(sig),100000)
+                    y = gamma.pdf(x,shape[state],0,scale[state])
+                elif dist == 'normal':
+                    x = np.linspace(min(mu)-3*max(sig),max(mu)+3*max(sig),100000)
+                    y = norm.pdf(x,mu[state],sig[state])
+                elif dist == 'vonmises':
+                    x = np.linspace(-np.pi,np.pi,100000)
+                    y = vonmises.pdf(x,sig[state],loc=mu[state])
                 else:
-                    mu = self.hhmm.theta[1][row_num][feature]['mu']
-                    sig = self.hhmm.theta[1][row_num][feature]['sig']
+                    raise('distribution %s not recognized' % dist)
+                ax[row_num,col_num].plot(x,y,color=colors[state],linewidth=6)
+                if col_num == 0:
+                    ax[row_num,col_num].set_ylabel('Probability Density',fontsize=24)
+                if level == 0:
+                    title = 'Emission Distributions, Dive Duration'
+                    ax[row_num,col_num].set_xlabel('Dive Duration (seconds)')
+                    ax[row_num,col_num].set_title(title,fontsize=24)
+                    plt.legend(['Dive Type 1','Dive Type 2'])
+                else:
+                    titles = [r'$\left(Z^{*(1)}\right)_x$ $(m/s^2)$',
+                              r'$\left(Z^{*(1)}\right)_y$ $(m/s^2)$',
+                              r'$\left(Z^{*(1)}\right)_z$ $(m/s^2)$',
+                              r'$Z^{*(2)}$']
+                    title = titles[feature_num]
+                    ax[row_num,col_num].set_xlabel(title,fontsize=24)
+                    if feature == 'Ahat_low':
+                        ax[row_num,col_num].set_xscale('log')
+                        ax[row_num,col_num].set_yscale('log')
+                        ax[row_num,col_num].set_ylim([10e-8,10e-1])
+                        ax[row_num,col_num].set_xlim([10e-1,10e4])
 
-                    dist = self.pars.features[1][feature]['f']
-                    K = self.pars.K[1]
-                    colors = [cm.get_cmap('viridis')(i) for i in [0.,0.5,1.]]
-                    legend = ['Subdive Behavior %d'%(x+1) for x in range(K)]
+                    legend_elements = [Line2D([0], [0], marker='o', color='w', label='Subdive State 1',
+                                           markerfacecolor=colors[0], markersize=20),
+                                       Line2D([0], [0], marker='o', color='w', label='Subdive State 2',
+                                           markerfacecolor=colors[1], markersize=20),
+                                       Line2D([0], [0], marker='o', color='w', label='Subdive State 3',
+                                           markerfacecolor=colors[2], markersize=20)]
 
-                for state in range(K):
-                    if dist == 'gamma':
-                        shape = np.square(mu)/np.square(sig)
-                        scale = np.square(sig)/np.array(mu)
-                        x = np.linspace(0.01,max(mu)+5*max(sig),100000)
-                        y = gamma.pdf(x,shape[state],0,scale[state])
-                    elif dist == 'normal':
-                        x = np.linspace(min(mu)-3*max(sig),max(mu)+3*max(sig),100000)
-                        y = norm.pdf(x,mu[state],sig[state])
-                    elif dist == 'vonmises':
-                        x = np.linspace(-np.pi,np.pi,100000)
-                        y = vonmises.pdf(x,sig[state],loc=mu[state])
-                    else:
-                        raise('distribution %s not recognized' % dist)
-                    ax[row_num,col_num].plot(x,y,color=colors[state],linewidth=6)
-                    ax[row_num,0].set_ylabel('Probability Density',fontsize=24)
-                    if level == 0:
-                        title = 'Emission Distributions, Dive Duration'
-                        ax[row_num,col_num].set_xlabel('Dive Duration (seconds)')
-                        ax[row_num,col_num].set_title(title,fontsize=24)
-                        plt.legend(['Dive Type 1','Dive Type 2'])
-                    else:
-                        titles = [r'$\left(Z^{*(1)}\right)_x$ $(m/s^2)$',
-                                  r'$\left(Z^{*(1)}\right)_y$ $(m/s^2)$',
-                                  r'$\left(Z^{*(1)}\right)_z$ $(m/s^2)$',
-                                  r'$Z^{*(2)}$']
-                        title = titles[col_num]
-                        ax[row_num,col_num].set_xlabel(title,fontsize=24)
-                        if feature == 'Ahat_low':
-                            ax[row_num,col_num].set_xscale('log')
-                            ax[row_num,col_num].set_yscale('log')
-                            ax[row_num,col_num].set_ylim([10e-8,10e-1])
-                            ax[row_num,col_num].set_xlim([10e-1,10e4])
+                    fig.legend(handles=legend_elements,
+                               prop={'size': 20}, ncol=3,
+                               mode='expand',
+                               bbox_to_anchor=(0.0, -0.011, 1., .1),
+                               loc='lower left')
 
-                        legend_elements = [Line2D([0], [0], marker='o', color='w', label='1',
-                                               markerfacecolor=colors[0], markersize=20),
-                                           Line2D([0], [0], marker='o', color='w', label='2',
-                                               markerfacecolor=colors[1], markersize=20),
-                                           Line2D([0], [0], marker='o', color='w', label='3',
-                                               markerfacecolor=colors[2], markersize=20)]
-
-                        fig.legend(handles=legend_elements,
-                                   prop={'size': 24}, ncol=3,
-                                   mode='expand',
-                                   bbox_to_anchor=(0.77, 0.9, 0.2, .1),
-                                   loc='lower left',
-                                   title = 'Subdive Behavioural State')
-
-                        fig.text(0.5, 1.0, 'Fine Scale Emission Distributions', ha='center', fontsize=50)
+                    fig.text(0.5, 1.0, 'Fine Scale Emission Distributions', ha='center', fontsize=50)
 
         if file is None:
             plt.show()
