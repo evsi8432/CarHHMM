@@ -42,9 +42,10 @@ class Visualisor:
 
     def lagplot(self,lims={},file=None):
 
-        ncols = 1
-        nrows = len(self.pars.features[0]) + len(self.pars.features[1])
+        ncols = 2
+        nrows = int(np.ceil(len(self.pars.features[0]) + len(self.pars.features[1])/2))
         fig,ax = plt.subplots(nrows,ncols,figsize=(10*ncols,10*nrows))
+        fig.delaxes(ax[2,1])
         fig_num = 1
 
         features = list(self.pars.features[0].keys()) + list(self.pars.features[1].keys())
