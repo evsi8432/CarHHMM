@@ -201,7 +201,7 @@ class Visualisor:
             plt.show()
         else:
             plt.tight_layout()
-            plt.savefig(file)
+            plt.savefig(file,bbox_inches='tight')
 
         return
 
