@@ -7,14 +7,14 @@
 Combining equation (\ref{eqn:CarHMM_to_OU}) with equation (\ref{eqn:OU_sol}) gives:
 %
 \begin{align*}
-\left(Y_{s \Delta t} | X_{(s-1)\Delta t} = i^* \right) \sim \mathcal{N}\left((1-\phi^{(i^*)}) \mu^{(i^*)} + \phi^{(i^*)} Y_{(s-1) \Delta t}, \enspace \sigma^{2(i^*)} \right),\\
+\left(Y_{s \Delta t} | X_{(s-1)\Delta t} = i \right) \sim \mathcal{N}\left((1-\phi^{(i)}) \mu^{(i)} + \phi^{(i)} Y_{(s-1) \Delta t}, \enspace \left(\sigma^{(i)}\right)^2 \right),\\
 s = 1, \ldots, T-1
 \end{align*}
 %
 If $X_t$ follows a Markov chain with transitions at the observation times, then the behavioural state $X_t$ does not change between observations and we can re-index $Y_{(s-1) \Delta t} = Y'_s$ and $X_{(s-2)\Delta t: (s-1) \Delta t} = X'_s$ for $s = 2,\ldots T$, yielding the desired result:
 
 \begin{align*}
-\left(Y'_s| X'_s = i^* \right) \sim \mathcal{N}\left((1-\phi^{(i^*)}) \mu^{(i^*)} + \phi^{(i^*)} Y'_{s-1}, \enspace \sigma^{2(i^*)} \right)\\
+\left(Y'_s| X'_s = i \right) \sim \mathcal{N}\left((1-\phi^{(i)}) \mu^{(i)} + \phi^{(i)} Y'_{s-1}, \enspace \left(\sigma^{(i)}\right)^2 \right)\\
 s = 2, \ldots, T
 \end{align*}
 %
@@ -60,13 +60,13 @@ $Y^*_{t,t^*,1:100}$ was set using the inverse discrete Fourier transform of $\ha
 
 $$Y^*_{t,t^*,1:100} = IDFT\left(\hat{Y}^*_{t,t^*}\right), \qquad t^* = 1,\ldots,\lfloor Y_t/2 \rfloor$$
 
-$\hat{Y}^*_{t,t^*}$ is anti-symmetric about $\hat{Y}^{*(50)}_{t,t^*}$ so that its inverse Fourier transform is real-valued. $\hat{Y}^{*(k)}_{t,t^*}$ also decays like $1/k$ so that $Y^*_{t,t^*}$ remains continuous within a 2-second window. $Y^*_{t,t^*}$ is not continuous \textit{between} windows, but the jump discontinuities are not very severe since $\hat{Y}^{*(0)}_{t,t^*}$ and $\hat{Y}^{*(0)}_{t,t^*+1}$ are highly correlated. See (fig. \ref{fig:sim_data}) for details. 
+$\hat{Y}^*_{t,t^*}$ is anti-symmetric about $\hat{Y}^{*(50)}_{t,t^*}$ so that its inverse Fourier transform is real-valued. $\hat{Y}^{*(k)}_{t,t^*}$ also decays like $1/k$ so that $Y^*_{t,t^*}$ remains continuous within a two-second window. $Y^*_{t,t^*}$ is not continuous \textit{between} windows, but the jump discontinuities are not very severe since $\hat{Y}^{*(0)}_{t,t^*}$ and $\hat{Y}^{*(0)}_{t,t^*+1}$ are highly correlated. See Figure \ref{fig:sim_data} for details. 
 
-From here it is straightforward to calculate both $Z^{*(1)}$ and $Z^{*(2)}$. We pick $\tilde{\omega} = 10$ periods per window, or 5 hertz. To find the distribution of $Z^{*(1)}_{t,t^*} = \mathcal{R}\left(\hat{Y}^{(0)}_{t,t^*}\right)$, use (eqn \ref{eqn:y_hat0}):
+From here it is straightforward to calculate both $Z^{*(1)}$ and $Z^{*(2)}$. We pick $\tilde{\omega} = 10$ periods per window, or 5 hertz. To find the distribution of $Z^{*(1)}_{t,t^*} = \mathcal{R}\left(\hat{Y}^{(0)}_{t,t^*}\right)$, use Equation (\ref{eqn:y_hat0}):
 %
 $$\left(Z^{*(1)}_{t,t^*} | X^*_{t,t^*} = i^* \right) = \left(\mathcal{R}\left(\hat{Y}^{(0)}_{t,t^*}\right) | X^*_{t,t^*} = i^* \right) \sim \mathcal{N} \left(\phi^{*(i^*)} * Z^{*(1)}_{t,t^*-1}, \sigma^{*(i^*)} \right)$$
 %
-$Z^{*(2)}_{t,t^*}$ is the sum of Gamma-distributed random variables with the same scale parameter, so the distribution of $Z^{*(2)}_{t,t^*}$ is also a Gamma distribution:
+$Z^{*(2)}_{t,t^*}$ is the sum of gamma-distributed random variables with the same scale parameter, so the distribution of $Z^{*(2)}_{t,t^*}$ is also a gamma distribution:
 %
 $$Z^{*(2)}_{t,t^*} = \sum_{k=1}^{10} b^{(k)}_{t,t^*}$$
 $$\left(Z^{*(2)}_{t,t^*}|X^*_{t,t^*} = 1\right) \sim {\rm{Gamma}}\left(\alpha = \sum_{k=1}^{10} 5/k^2 = 10.10, \beta = 1.00 \right)$$
@@ -92,9 +92,9 @@ $\calL_{\text{CarHMM-DFT}}$ corresponds to the fine-scale chain:
 %
 $$\calL_{\text{CarHMM-DFT}}\left(z_t^*;\Theta^{*(i)},\Gamma^{*(i)}\right) = \delta^{*(i)} \prod_{t=2}^T \Gamma^{*(i)} P(z^*_{t,t^*}|z^*_{t,t^*-1};\Theta^{*(i^*)}) \mathbf{1}_N$$
 %
-where $P(z^*_{t,t^*}|z^*_{t,t^*-1};\Theta^{*(i)})$ is an $N^* \times N^*$ diagonal matrix with $i^*i^*$th entry equal to $f^{(i,i^*)}(z^*_{t,t^*}|z^*_{t,t^*-1}; \theta^{*(i,i^*)})$.
+where $P(z^*_{t,t^*}|z^*_{t,t^*-1};\Theta^{*(i)})$ is an $N^* \times N^*$ diagonal matrix with $(i^*,i^*)^{th}$ entry equal to $f^{(i,i^*)}(z^*_{t,t^*}|z^*_{t,t^*-1}; \theta^{*(i,i^*)})$.
 %
-$f^{(i,i^*)}(z^*_{t,t^*}|z^*_{t,t^*-1}; \theta^{*(i,i^*)})$ is the emission distribution of $Z^*_{t,t^*}$ conditioned on the fact that $X^*_{t,t^*} = i^*$ and $Z^*_{t,t^*-1}$.
+$f^{(i,i^*)}(z^*_{t,t^*}|z^*_{t,t^*-1}; \theta^{*(i,i^*)})$ is the emission distribution of $Z^*_{t,t^*}$ conditioned on $X^*_{t,t^*} = i^*$ and $Z^*_{t,t^*-1} = z^*_{t,t^*-1}$.
 
 \end{proof}
 
