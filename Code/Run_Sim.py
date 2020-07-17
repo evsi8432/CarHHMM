@@ -490,7 +490,7 @@ for dataset_num in range(ndatasets):
         hhmm_FV.true_theta = deepcopy(hhmm_FV_theta)
         hhmm_FV.true_eta = deepcopy(hhmm_FV_eta)
 
-        hhmm_FV.train_DM(data_FV)
+        hhmm_FV.train_DM(data_FV,max_iters=5)
         hhmm_FV.get_SEs(data_FV,h)
         data,data_V,data_FV = create_data()
 

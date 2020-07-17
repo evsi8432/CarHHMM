@@ -485,24 +485,27 @@ class HHMM:
                 x0 = np.delete(x0,i)
 
                 # optimize
-                res = minimize(loss_fn, x0, method='BFGS',options=options)
+                if len(x0) > 0:
+                    res = minimize(loss_fn, x0, method='BFGS',options=options)
 
-                # update final values
-                x = np.copy(res['x'])
-                if self.likelihood(data) >= backup_l:
-                    for j,xj in enumerate(x):
-                        if j < i:
-                            self.eta[0][i,j] = xj
-                        else:
-                            self.eta[0][i,j+1] = xj
+                    # update final values
+                    x = np.copy(res['x'])
+                    if self.likelihood(data) >= backup_l:
+                        for j,xj in enumerate(x):
+                            if j < i:
+                                self.eta[0][i,j] = xj
+                            else:
+                                self.eta[0][i,j+1] = xj
+                    else:
+                        self.eta[0][i,:] = backup
+                        print('DANGER')
+
+                    print('updated coarse eta, row %d' % i)
+                    print('original: ', backup)
+                    print('new: ', x)
+                    print(self.likelihood(data))
                 else:
-                    self.eta[0][i,:] = backup
-                    print('DANGER')
-
-                print('updated coarse eta, row %d' % i)
-                print('original: ', backup)
-                print('new: ', x)
-                print(self.likelihood(data))
+                    print('N = 1, no Coarse Gamma')
 
 
             #### then do crude theta ###
@@ -811,28 +814,34 @@ class HHMM:
                     # get plus value
                     if param == 'corr':
                         self.theta[1][0][feature][param][state_num] = corr_2_rho(theta+h0)
-                        self.theta[1][1][feature][param][state_num] = self.theta[1][0][feature][param][state_num]
+                        for i in range(1,self.pars.K[0]):
+                            self.theta[1][i][feature][param][state_num] = self.theta[1][0][feature][param][state_num]
                     else:
                         self.theta[1][0][feature][param][state_num] += h
-                        self.theta[1][1][feature][param][state_num] = self.theta[1][0][feature][param][state_num]
+                        for i in range(1,self.pars.K[0]):
+                            self.theta[1][i][feature][param][state_num] = self.theta[1][0][feature][param][state_num]
                     th_tp1 = self.likelihood(data)
 
                     # get minus value
                     if param == 'corr':
                         self.theta[1][0][feature][param][state_num] = corr_2_rho(theta-h0)
-                        self.theta[1][1][feature][param][state_num] = self.theta[1][0][feature][param][state_num]
+                        for i in range(1,self.pars.K[0]):
+                            self.theta[1][i][feature][param][state_num] = self.theta[1][0][feature][param][state_num]
                     else:
                         self.theta[1][0][feature][param][state_num] += -2*h
-                        self.theta[1][1][feature][param][state_num] = self.theta[1][0][feature][param][state_num]
+                        for i in range(1,self.pars.K[0]):
+                            self.theta[1][i][feature][param][state_num] = self.theta[1][0][feature][param][state_num]
                     th_tm1 = self.likelihood(data)
 
                     # return theta
                     if param == 'corr':
                         self.theta[1][0][feature][param][state_num] = corr_2_rho(theta)
-                        self.theta[1][1][feature][param][state_num] = self.theta[1][0][feature][param][state_num]
+                        for i in range(1,self.pars.K[0]):
+                            self.theta[1][i][feature][param][state_num] = self.theta[1][0][feature][param][state_num]
                     else:
                         self.theta[1][0][feature][param][state_num] += h
-                        self.theta[1][1][feature][param][state_num] = self.theta[1][0][feature][param][state_num]
+                        for i in range(1,self.pars.K[0]):
+                            self.theta[1][i][feature][param][state_num] = self.theta[1][0][feature][param][state_num]
 
                     # get estimate
                     if param =='corr':
