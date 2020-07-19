@@ -264,7 +264,7 @@ class Visualisor:
 
         nrows=5
 
-        plt.subplots(nrows,1,figsize=(30,5*nrows))
+        plt.subplots(nrows,1,figsize=(20,5*nrows))
         fignum = 1
 
         # get df state-by-state
@@ -461,7 +461,7 @@ class Visualisor:
                                   markerfacecolor=cm.get_cmap('viridis')(0.5), markersize=30),
                            Line2D([0], [0], marker='o', color='w', label='Subdive Type 3',
                                   markerfacecolor=cm.get_cmap('viridis')(1.0), markersize=30)]
-        plt.gca().legend(handles=legend_elements,prop={'size': 24}, ncol=5, mode="expand", borderaxespad=0.,
+        plt.gca().legend(handles=legend_elements,prop={'size': 20}, ncol=5, mode="expand", borderaxespad=0.,
                          bbox_to_anchor=(0., -0.5, 1., .102), loc='lower left')
         plt.subplots_adjust(wspace=0, hspace=0.1)
 
