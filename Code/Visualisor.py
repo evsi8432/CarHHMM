@@ -262,6 +262,8 @@ class Visualisor:
             else:
                 nrows += 2
 
+        nrows=5
+
         plt.subplots(nrows,1,figsize=(30,5*nrows))
         fignum = 1
 
@@ -278,58 +280,69 @@ class Visualisor:
         for state in range(self.pars.K[0]):
             dives.append(dive[dive['ML_dive'] == state])
 
-        ylabs = [r'$\left(Z^{*(1)}\right)_x$ $(m/s^2)$','Depth $(m)$']
+        ylabs = [r'$P\left(X_t = 1\right)$',
+                 r'$P\left(X_t = 2\right)$',
+                 r'$P\left(X^*_{t,t^*} = 1\right)$',
+                 r'$P\left(X^*_{t,t^*} = 2\right)$',
+                 r'$P\left(X^*_{t,t^*} = 3\right)$']
+
+        title = 'Hidden State Probability Estimates'
 
         for i,col in enumerate(df_cols):
 
             # dive-level coloring
-            plt.subplot(nrows,1,fignum)
-            colors = [cm.get_cmap('tab10')(i) for i in [0,1]]
-            legend = ['Dive Type %d' % (i+1) for i in range(self.pars.K[0])]
-            for state,dive_df in enumerate(dives):
-                plt.plot(dive_df['sec_from_start']/60,dive_df[col],
-                         '.',color=colors[state],markersize=10)
-            if 'prob' in col:
-                plt.plot(dive[dive[col] > -0.01]['sec_from_start']/60,dive[dive[col] > -0.01][col],'k-')
-                plt.axhline(0.5,color='k')
-                plt.ylim([-0.05,1.05])
-            else:
-                plt.plot(dive['sec_from_start']/60,dive[col],'k--')
-            plt.yticks(fontsize=30)
-            plt.ylabel(ylabs[i],fontsize=30)
-            plt.xticks([])
-            if col == df_cols[0]:
-                plt.title('Decoded Dive/Accelorometer Data',fontsize=36)
-            if col == 'depth':
-                plt.gca().invert_yaxis()
-            fignum += 2
+            if 'subdive_state_' not in col:
+
+                plt.subplot(nrows,1,fignum)
+                colors = [cm.get_cmap('tab10')(i) for i in [0,1]]
+                legend = ['Dive Type %d' % (i+1) for i in range(self.pars.K[0])]
+                for state,dive_df in enumerate(dives):
+                    plt.plot(dive_df['sec_from_start']/60,dive_df[col],
+                             '.',color=colors[state],markersize=10)
+                if 'prob' in col:
+                    plt.plot(dive[dive[col] > -0.01]['sec_from_start']/60,dive[dive[col] > -0.01][col],'k-')
+                    plt.axhline(0.5,color='k',linestyle=':',alpha=0.5)
+                    plt.ylim([-0.05,1.05])
+                    plt.yticks([0,0.5,1.0],fontsize=30)
+                else:
+                    plt.plot(dive['sec_from_start']/60,dive[col],'k--')
+                plt.yticks(fontsize=30)
+                plt.ylabel(ylabs[i],fontsize=30)
+                plt.xticks([])
+                if col == df_cols[0]:
+                    plt.title(title,fontsize=36)
+                if col == 'depth':
+                    plt.gca().invert_yaxis()
+                fignum += 1#2
 
             # subdive-level coloring
-            plt.subplot(nrows,1,fignum)
-            colors = [cm.get_cmap('viridis')(i) for i in [0.,0.5,1.]]
-            #legend = ['Subdive Behavior %d' % (i+1) for i in range(self.pars.K[1])]
-            for state,subdive_df in enumerate(subdives):
-                plt.plot(subdive_df['sec_from_start']/60,subdive_df[col],
-                         '.',color=colors[state],markersize=10)
-            if 'prob' in col:
-                plt.plot(dive[dive[col] > -0.01]['sec_from_start']/60,
-                         dive[dive[col] > -0.01][col],'k-')
-                plt.axhline(0.5,color='k')
-                plt.ylim([-0.05,1.05])
-            else:
-                plt.plot(dive['sec_from_start']/60,dive[col],'k-')
-            plt.yticks(fontsize=30)
-            plt.ylabel(ylabs[i],fontsize=30)
-            if col == df_cols[-1]:
-                plt.xlabel('Time (mins)',fontsize=30)
-                plt.xticks(fontsize=30)
-            else:
-                plt.xticks([])
-            #plt.legend(legend,prop={'size': 20})
-            #plt.title(col + ', dives %d-%d'%(sdive,edive),fontsize=24)
-            if col == 'depth':
-                plt.gca().invert_yaxis()
-            fignum -= 1
+            if 'dive_state_' not in col or 'subdive_state' in col:
+                plt.subplot(nrows,1,fignum)
+                colors = [cm.get_cmap('viridis')(i) for i in [0.,0.5,1.]]
+                #legend = ['Subdive Behavior %d' % (i+1) for i in range(self.pars.K[1])]
+                for state,subdive_df in enumerate(subdives):
+                    plt.plot(subdive_df['sec_from_start']/60,subdive_df[col],
+                             '.',color=colors[state],markersize=10)
+                if 'prob' in col:
+                    plt.plot(dive[dive[col] > -0.01]['sec_from_start']/60,
+                             dive[dive[col] > -0.01][col],'k-')
+                    plt.axhline(0.5,color='k',linestyle=':',alpha=0.5)
+                    plt.ylim([-0.05,1.05])
+                    plt.yticks([0,0.5,1.0],fontsize=30)
+                else:
+                    plt.plot(dive['sec_from_start']/60,dive[col],'k-')
+                plt.yticks(fontsize=30)
+                plt.ylabel(ylabs[i],fontsize=30)
+                if col == df_cols[-1]:
+                    plt.xlabel('Time (mins)',fontsize=30)
+                    plt.xticks(fontsize=30)
+                else:
+                    plt.xticks([])
+                #plt.legend(legend,prop={'size': 20})
+                #plt.title(col + ', dives %d-%d'%(sdive,edive),fontsize=24)
+                if col == 'depth':
+                    plt.gca().invert_yaxis()
+                fignum += 1#-1
 
         t_start = dive['time'].min()
         def time2sec(t):
