@@ -539,7 +539,7 @@ class HHMM:
                         x0 = self.theta[0][feature][param][k0]
 
                         # optimize
-                        res = minimize(loss_fn, x0, method='Nelder-Mead', options=options)
+                        res = minimize(loss_fn, x0, method='BFGS', options=options)
 
                         # update final values
                         x = np.copy(res['x'])
@@ -651,7 +651,7 @@ class HHMM:
                             x0 = self.theta[1][k0][feature][param][k1]
 
                             # optimize
-                            res = minimize(loss_fn, x0, method='Nelder-Mead', options=options)
+                            res = minimize(loss_fn, x0, method='BFGS', options=options)
 
                             # update final values
                             if self.likelihood(data) >= backup_l:
