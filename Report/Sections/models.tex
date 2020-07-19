@@ -2,7 +2,7 @@
 
 Traditional hidden Markov models (HMMs) are useful tools to \textit{blah blah blah - quick (5-7words) restatement of the main advantage of HMM}, and will be used as the core structure of our models.
 However, traditional HMMs assume conditional independence between observations given the state sequence, and thus do not hold when the observations exhibit certain forms of significant correlation in time. Traditional HMMs model process autocorrelation with a single Markov chain, however many processes have temporal dependencies acting at different scales. \textit{blah blah blah -quick restatements (5-15 words to potentially many sentences) of the main issues you are going to fix made a quick try at it, work on smoothing things. You can use some of the text I removed from below}. 
-To account for each of these common additional dependence structures, we will explore three variations on the traditional HMM: the conditionally auto-regressive hidden Markov model (CarHMM), hierarchical hidden Markov model (HHMM), and HMM-DFT. We will show how each of these variations can be altered and combined to form a wide variety of new models.
+To account for each of these common additional dependence structures, we will explore three variations on the traditional HMM: the conditionally auto-regressive hidden Markov model (CarHMM), hierarchical hidden Markov model (HHMM), and HMM with discrete Fourier transform (HMM-DFT). We will show how each of these variations can be altered and combined to form a wide variety of new models.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{The base structure of HMMs}
@@ -127,10 +127,10 @@ $f^{(i)}(y_t)\calL_{\text{HMM}}\left(y_t^*;\Theta^{*(i)},
 For more information on specific considerations for HHMMs, such as incorporating covariates into the probability transition matrix, state decoding, model selection and model checking, see Adam et al. (2019).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{The HMM with discrete Fourier transform (HMM-DFT)}
+\subsection{Accounting for periodicity with HMM-DFT}
 \label{subsec:STFT}
 
-The HMM with discrete Fourier transform, or HMM-DFT, incorporates hierarchical structure into an HMM differently than an HHMM. In particular, the fine-scale process is no longer modeled with an HMM and instead summarized using its Fourier transform. For simplicity, we assume that the length of the fine-scale processes is constant (i.e. that $T^*_t = T^*$), although this need not be the case in general. Suppose that the fine-scale process $y^*_t$ does not switch hidden states, but does exhibit significant periodic behaviour. We then suggest using the discrete Fourier transform (DFT) on $y^*_t$:
+The HMM-DFT incorporates hierarchical structure into an HMM differently than an HHMM (\textit{ref Fig 1}). In particular, the fine-scale process is no longer modeled with an HMM and instead summarized using its Fourier transform. For simplicity, we assume that the length of the fine-scale processes is constant (i.e. that $T^*_t = T^*$), although this need not be the case. Suppose that the fine-scale process $y^*_t$ does not switch hidden states, but does exhibit significant periodic behaviour. We then suggest using the discrete Fourier transform (DFT) on $y^*_t$:
 %
 \begin{align*}
     DFT\{y^*_t\}(k) := \hat{y}^{*(k)}_{t} = \sum_{t^* = 1}^{T^*} y^*_{t,t^*}\exp\left(-i \frac{2\pi k}{T^*} (t^*-1)\right), \quad k = 0, 1, \ldots, T^*-1.
@@ -143,9 +143,9 @@ Summary statistics can then drastically reduce the dimension of $\hat{y}^*_t$. O
     z_t^{*(1)} := \mathcal{R}\left(\hat{y}^{(0)}_t\right) \qquad z_t^{*(2)} := \frac{1}{T^*}\sum_{k=1}^{\tilde{\omega}}|\hat{y}^{(k)}_t|^2
 \end{equation}
 %
-In words, $z_t^{*(1)}$ is the average value of $y^*_t$ and $z_t^{*(2)}$ is the squared 2-norm of the component of $y^*_t$ that can be attributed to frequencies between $1$ and $\tilde{\omega}$ periods per window length $T^*$. The maximum frequency $\tilde{\omega}$ is a problem-specific tuning parameter which should be selected with care. These summary statistics are just one possible choice to describe each window; other choices include the dominant frequency and amplitude of $y^*_t$. Figure \ref{fig:HMM-DFT} shows a graphical representation of the HMM-DFT.
+In words, $z_t^{*(1)}$ is the average value of $y^*_t$ and $z_t^{*(2)}$ is the squared 2-norm of the component of $y^*_t$ that can be attributed to frequencies between $1$ and $\tilde{\omega}$ periods per window length $T^*$. The maximum frequency $\tilde{\omega}$ is a problem-specific tuning parameter which should be selected with care. These summary statistics are just one possible choice to describe each window; other choices include the dominant frequency and amplitude of $y^*_t$. Figure \ref{fig:HMM-DFT} represents the structure of the HMM-DFT.
 
-Once $z^*_t$ is calculated, it can be treated as an observation of the coarse-scale HMM and incorporated into the emission distribution $f^{(i)}\left(y_t,z^*_t;\theta^{(i)}\right)$, or more succinctly $f^{(i)}\left(y_t,z^*_t\right)$. In total, the likelihood of the hierarchical HMM-DFT is as follows:
+Once $z^*_t$ is calculated, it can be treated as an observation of the HMM and incorporated into the emission distribution $f^{(i)}\left(y_t,z^*_t;\theta^{(i)}\right)$, or more succinctly $f^{(i)}\left(y_t,z^*_t\right)$. The likelihood of the HMM-DFT is as follows:
 \begin{equation}
     \calL_{\text{HMM-DFT}}(y,z^*;\Theta,\Gamma) = \delta P(y_1,z^*_1;\Theta) \prod_{t=2}^T \Gamma P(y_t,z^*_t;\Theta) \mathbf{1}_N
     \label{HMMDFT_likelihood}
@@ -154,7 +154,7 @@ where $P(y_t,z^*_t;\Theta)$ is an $N \times N$ diagonal matrix with $(i,i)^{th}$
 
 It is possible to accommodate unequal time steps within $y_t^*$ by using the non-uniform discrete Fourier transform (NDFT) \citep{Bagchi:1999}. We do not describe the method in detail here, but the generalization is straightforward.
 
-\subsection{General hierarchical structures}
+\subsection{General structure for building complexity}
 
 In addition to the models described above, the fine-scale process $Y^*_t$ can be modeled using \textit{any} parametric model which admits an easy-to-compute likelihood. The fine-scale likelihood $\calL_{\text{HMM}}$ from the HHMM likelihood is then replaced by the likelihood of the general fine-scale model, $\calL_{\text{fine}}(\mathbf{y}^*_t;\Theta^{*(i)})$:
 \[
@@ -166,4 +166,4 @@ where $P(y_t,y^*_t;\Theta,\Theta^*) $ is an $N \times N$ diagonal matrix with $(
 \]
 where $P(y_t,y^*_t|y_{t-1};\Theta,\Theta^*) $ is an $N \times N$ diagonal matrix with $(i,i)^{th}$ entry corresponding to $X_t=i$ and equal to $f^{(i)}\left(y_t|y_{t-1};\Theta^{(i)}\right)\calL_{\text{fine}}\left(y^*_t;\Theta^{*(i)}\right)$.
 
-Possible candidates for the fine-scale model include any of the models described in the previous subsections (HMM, CarHMM, state-switching OU, HHMM, and HMM-DFT). These five models can act as initial building blocks in a practitioner's toolbox to construct increasingly complex hierarchical models based on HMMs. In the sections that follow, we perform both a simulation study and real-world case study modelling killer whale dive behaviour using models constructed from these building blocks.
+Possible candidates for the fine-scale model include any of the models described in the previous subsections (HMM, CarHMM, state-switching OU, HHMM, and HMM-DFT). These alternative models can act as initial building blocks in a practitioner's toolbox to construct increasingly complex hierarchical models based on HMMs. In the sections that follow, we perform both a simulation study and real-world case study modelling killer whale dive behaviour using models constructed from these building blocks.
