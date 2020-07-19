@@ -56,7 +56,7 @@ but do NOT include them in your initial submission because it must be anonymous.
 
 \subsection{Empirical joint distributions}
 
-Below are the empirical joint distributions of the parameter estimates from the simulation study:
+This subsection contains the empirical joint distributions of the parameter estimates from the simulation study.
 
 \subsubsection{\textbf{CarHMM-DFT}}
 
@@ -296,19 +296,28 @@ Model                        & \multicolumn{1}{c}{Parameter} & \multicolumn{1}{c
 \section{Case Study Results}
 \subsection{Model selection- lag plots}
 
+Below is a collection of 5 lag plots- one for each observed feature in the data. These lag plots were used to decide whether or not to include auto-correlation in the HMMs used to model these features.
+
 \includegraphics[height=7in]{../Plots/lagplot.png}
 
 \subsection{Results- decoded state probabilities}
 
-\includegraphics[width=6in]{../Plots/decoded_states.png}
+Below is a collection of 6 selected dives from the killer whale dive profile as well the decoded probability of each dive type/ subdive state as estimated using the fitted model and the \textit{forward-backward algorithm}.
+
+\includegraphics[width=5.5in]{../Plots/decoded_data.png}
+\newpage
+\includegraphics[width=5.5in]{../Plots/decoded_states.png}
 
 \newpage
 
 \subsection{Model validation- empirical distributions and pseudoresiduals}
+
+Below are the psuedoresiduals and empirical distributions for all five observed features in this killer whale dive profile. 
+
 \subsubsection{Dive Duration ($Y$)}
 
-\includegraphics[width=5in]{../Plots/empirical_hist_dive_duration.png}
-\includegraphics[width=5in]{../Plots/psedoresids_Dive_Duration.png}
+\includegraphics[width=4.5in]{../Plots/empirical_hist_dive_duration.png}
+\includegraphics[width=4.5in]{../Plots/psedoresids_Dive_Duration.png}
 
 \newpage
 \subsubsection{Acceleration ($Z^{*(1)}$)}
