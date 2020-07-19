@@ -1,43 +1,91 @@
-% !TeX root = ../main.tex
-
-%\section{Introduction}
-
-The field of animal movement is in the midst of a ``data renaissance" where advancements in tagging technology have given rise to an explosion of data available for statistical modeling. In particular, some tagging technologies are capable of recording observations at rates of tens of hertz, resulting in time series containing millions of observations over the course of several hours. In response, researchers have introduced a variety of new statistical techniques to infer animal behavior from movement data \citep{Hooten:2017}. 
-
-One of the most prevalent techniques in recent literature is the hidden Markov model (HMM), where observations depend upon the state of an associated unobserved behavioral process following Markovian dynamics \citep{Patterson:2017}. Importantly, under the traditional HMM model, subsequent observations are assumed to be independent from one another after conditioning on the underlying behavioral process. However, this assumption is often violated in real world processes, especially when observations are taken at high frequencies. For example, the location of an animal at a given time is highly correlated with the location of that animal one second later. Several publications have dealt with this issue in the past, including the hidden movement Markov model (HMMM) \citep{Whoriskey:2016} and the conditionally auto-regressive hidden Markov model (CarHMM) \citep{Lawler:2019}. The CarHMM in particular explicitly models auto-correlation into an HMM while maintaining the structure needed to run the forward algorithm. It also only adds one additional parameter per possible hidden state.
-
-Another issue that arises in high-frequency data is that several simultaneous behavioral processes may occur at different time scales. In this work, we consider an example where killer whales exhibit a variety of different types of dives at a coarse scale, but also exhibit many different types of swimming behaviors within dives at a fine scale. One solution to this issue is to use a hierarchical hidden Markov model (HHMM) \citep{Barajas:2017,Adam:2019}. HHMMs model the entire time series in question as a nested structure of hidden Markov models (HMM) where each HMM corresponds to one behavioral process.
-
-HMMs assume Markovian dynamics in the underlying process (i.e. that any observation $Y_t$ depends only on the behavioral state $X_t$ and $Y_{t-1}$ when conditioned on all previous time steps). At the shortest time scales, however, observations often exhibit complicated dependence structures which cannot be easily captured by traditional HMMs, CarHMMs, or HHMMs. Examples included periodic fluking behavior in killer whales off the coast of Vancouver, BC, and swimming patterns of horn sharks of the coast of Southern California \citep{Adam:2019}.  With improvements in tagging technology allowing for data to be collected at very high frequencies, noisy and non-Markovian fine-scale processes are likely to persist.
-
-One solution is to model the fine-scale behavior using a continuous-time model, which involves modelling the dynamics of an animal as the solution of a stochastic differential equation. Continuous-time models are more flexible than their discrete-time counterparts and can incorporate observations taken at irregular time intervals. Unfortunately, they are often computationally intractable and require approximate inference techniques such as Markov-chain Monte Carlo (MCMC) methods to fit.
-
-For periodic behavior in particular, one way to avoid the use of continuous time models is to use signal processing techniques such as the Fourier transform on the raw data. The advantages of using Fourier analysis within an HMM has been recently demonstrated in the context of describing daily behavioral cycles of marine mammals \citep{Heerah:2017}. In addition, Fourier analysis has previously been used in the field of animal movement to explain animal behavior \citep{Fehlmann:2017} and specifically fluking \citep{Shorter:2017} from accelerometer data. Thus, incorporating Fourier analysis of accelerometer data within the structure of an HMM appeared a promising simple approach to account for additional correlation in data that is cyclical in nature.
-
-This work investigates how to incorporate fine-scale processes into the larger structure of hierarchical hidden Markov models while maintaining computational efficiency. We describe a general procedure that can be used to extract features from highly structured fine-scale behaviors that otherwise could not be modeled with existing HMM models. In addition, we bridge the gap between the discrete CarHMM and certain continuous-time stochastic process models by showing that the two are equivalent under certain conditions. We then perform a simulation study to compare the performance each existing model with ours in a controlled setting. Finally, we apply our method to dive data of a killer whale (\textit{Orcinus orca}) from the threatened Northern resident population off the coast of British Columbia, Canada.
 
 
-%%%%%%%%%% Nancy's comments %%%%%%%%%%%%%
 
-\iffalse
+{\em{This still needs some editing}}
 
-\section{Introduction}
+\vskip 10pt\noindent
 
-{\bf{NH: These are my comments.  I hope they help you.}}
+Recent advances in technology allow us to gather enormous amounts of data collected almost continuously in time.
+The collection and analysis of movement data from devices such as accelerometers and GPS trackers have brought new understanding to {\bf{more references}}  physical activity levels in children \citep{Morris:2007} ...
+In this article, we focus on the study of animal movement;  tags attached to animals record observations at rates of tens of hertz, resulting in time series containing millions of observations over the course of several hours and providing biologists with new tools for understanding animal behaviour.
 
-This is where you describe how your method contributes to statistical methodology. That is the big goal.  So there will be literature review of directly relevant work.  You don't want to leave the non-expert completely lost though, so it is a balance, how much background you give.
-Thank goodness for the Zucchini book, a great place to direct readers for further background.  
-The introduction is a good place to put information about the motivating data set and how researchers have modelled it, what the shortcomings have been.  I see that you have some great statements about this in your Background section.  Those statements can be moved to the introduction (with editing -- you can see how I edited).
+Many statistical techniques have been developed and applied to these types of longitudinal or functional data.  
+Some techniques, such as time series, are highly parametric. 
+While these parametric techniques do not allow the data to ``speak for itself", the ensuing data analysis results typically are readily interpretable, providing important subject area insights.
+At the other extreme are black box type methods of machine learning.  
+While these methods are incredibly successful at predicting how processes evolve, they provide little structured insight into the driving mechanisms of the process.
+Functional Data Analysis (FDA) techniques lie somewhere in between these extremes: the output of an analysis provides visual tools for understanding processes and, often, some dimension reduction to allow for easier exploration.  
+The development of structured FDA techniques incorporating more complex dependence structures has become a topic of recent interest  (see, e.g., Crainiceanu. and references therein).
 
-A hard part about the introduction is that you want to use terminology like CarHMM without getting into too many technical details.  Sometimes you just have to be technical.  But I think you can avoid a lot of that.
+Our goal is to develop movement analysis methods that are flexible but also use subject area knowledge to provide insight into curve data with complex structure.
+We  model complexities arising  from curve to curve variation, along with the complexities of within-curve fine-scale characteristics and temporal dependence,
+combining existing methods in novel ways.
+We enforce temporal structure via Markov processes.  
+While our methodology has general applicability, [rephrase - awkward] we  showcase our ideas to study the underlying behaviour indicated by the complex dive patterns of a killer whale (\textit{Orcinus orca}) from the threatened Northern resident population off the coast of British Columbia, Canada.  
+For more information about the data, see Section \ref{sec:case_study}.
+ Figure \ref{fig:data} shows the data we will analyze.
+   The top panel shows the depth of the whale below the surface, and we clearly see dives of various time durations and maximum depths. 
+The bottom three panels show the acceleration in each of three orthogonal directions,  as recorded by an accelerometer,   
+with axes oriented relative to the whale's forward movement.
+Here, we see spikes in acceleration and, in contrast, periods of fairly constant acceleration.
+Figure {\ref{fig:labeled_dives}} gives a more detailed view, showing a segment of the data containing six dives of at least two different types.
+The plot shows the magnitude of the acceleration and from this, we can see fine-scale behaviour within each dive which seems to indicate some fine scale short-term periodicity. 
+We seek to understand both the coarse scale behaviour (e.g.~the dive type) and the fine-scale, within-dive behaviour.  
+ Such an analysis helps biologists to understand the foraging behaviour and feeding success of killer whales. 
 
-Here is a great thing you wrote that would go well in the introduction, with some editing so that it doesn't rely on notation that hasn't been introduced. You could introduce the basic HMM notation in the intro, if you need to.  I don't think introducing HMM notation is too technical.
-\begin{quote}
- One of the key assumptions of both HMMs and HHMMs is \textit{conditional independence} between observations on both the coarse and fine scale. Namely, when given the state $X_t$, $Y_t$ is assumed to be independent from all other observations, including $Y_{t-1}$. Therefore, traditional HMMs and HHMMs can fail when the observations $Y$ exhibit significant correlation in time.
- [leave in these examples for intro]  Examples include fluking in marine mammals in Vancouver, BC (see the results section) and the swimming behavior of horn sharks off the coast of Southern California \citep{Adam:2019}.
+The killer whale dives form a sequence of dependent curves.   However, in FDA, curves are typically deemed independent.  
+A noted exception involves multilevel modelling [references] which uses random effects and is appropriate when the set of curves can be partitioned into independent subsets, typically with each subset arising from one individual.  
+[NEED REFERENCES]  
+However, this approach is not appropriate here, so we consider a temporal structure for dependence, with the characteristics of each curve determined by a latent state that evolves according to a Markov model.  
+This HMM allows us to interpret each curve as arising from a type of behaviour.
 
-One way to deal with auto-correlation in fine-scale behavioral processes is to use the CarHMM, or \textit{conditionally auto-regressive hidden Markov model}, introduced by \citep{Lawler:2019}. .....  The CarHMM therefore explicitly models auto-correlation into the emission distributions of the HMM while maintaining the structure needed to run the forward algorithm. It also only adds one additional parameter per possible hidden state
-$(\phi^{(i)})$. 
-\end{quote}
+From the plotted killer whale data in Figure {\ref{fig:labeled_dives}}, we see complexities within each dive that would be difficult to model as a realization of a simple stochastic process. 
+In FDA, within curve structure is modelled by a generic smooth mean function and covariance function.
+Alternatively, this structure is sometimes generated via random regression.
+However, these classic FDA techniques would be hard-pressed to model the type of radically changing behaviour that we see in Figure 9.  
+We model the within curve dependence by combining a hidden Markov model of within-curve behaviour combined with an autoregressive-type dependence.
+Finally, for the fine-scale behaviour, we use summary information that reflects the application area's meaning for the curve.  Specifically, for the dive data, we use summaries of Fourier transforms to account for sudden and extreme ``wiggliness'' within some segments of a curve. 
+The distribution of this ``wiggliness'' depends on the hiddent state.
 
-\fi
+
+{\bf{ Make sure to reference Langrock}}
+ 
+
+Our work relies on work in the vast field of methodology for the analysis of animal movement
+\citep{Hooten:2017}.
+One of the most prevalent techniques in the literature of late is the hidden Markov model (HMM), where observations depend upon the state of an associated unobserved behavioral process following Markovian dynamics \citep{Patterson:2017}. 
+%
+%Importantly, under the traditional HMM model, subsequent observations are assumed to be independent from one another conditioned on the underlying behavioral process.
+ %However, this assumption is often violated in the real world processes, especially when observations are taken a high frequencies. 
+ %For example, the location of an animal at a given time is highly correlated with the location of that animal one second later. 
+ Several publications have dealt with this issue in the past, including the hidden movement Markov model (HMMM) \citep{Whoriskey:2016} and the conditionally auto-regressive hidden Markov model (CarHMM) \citep{Lawler:2019}. 
+ The CarHMM in particular explicitly models auto-correlation into an HMM in a way that is easily analyzed using usual HMM techniques.
+ %while maintaining the structure needed to run the forward algorithm. 
+ %It also only adds one additional parameter per possible hidden state.
+
+Animal movement modelers have recognized that several simultaneous behavioral processes may occur at different time scales. 
+One approach to the analysis of this type of data is to use a hierarchical hidden Markov model (HHMM) \citep{Barajas:2017} \citep{Adam:2019}. 
+HHMMs model the entire time series in question as a nested structure of hidden Markov models (HMM) where each HMM corresponds to one behavioral process.
+
+At the shortest time scales, however, observations often exhibit complicated dependence structures which cannot be easily captured by traditional HMMs, CarHMMs, or HHMMs. Examples included periodic fluking behavior in killer whales off the coast of Vancouver, BC, and swimming patterns of horn sharks of the coast of Southern California \citep{Adam:2019}. One solution is to model the fine-scale behavior using a continuous-time model, which usually involves modelling the dynamics of an animal as the solution to a stochastic differential equation. Continuous-time models are more flexible than their discrete-time counterparts and can incorporate observations taken at irregular time intervals. However, they are often computationally intractable and require approximate inference techniques such as Markov-chain Monte Carlo (MCMC) methods to perform inference.
+
+For periodic behavior in particular, one way to avoid the use of continuous time models is to use signal processing techniques such as the Fourier transform on the raw data. 
+The advantages of using Fourier analysis within an HMM has been recently demonstrated in the context of describing daily behavioral cycles of marine mammals \citep{Heerah:2017}.
+ In addition, Fourier analysis has previously been used in the field of animal movement to explain animal behavior \citep{Fehlmann:2017} and specifically fluking \citep{Shorter:2017} from accelerometer data. 
+ Thus, incorporating Fourier analysis of accelerometer data within the structure of an HMM appears a promising simple approach to account for additional correlation in data that is cyclical in nature.
+
+We consider several models: the classical hierarchical hidden Markov model (HHMM) \citep{Barajas:2017}, the CarHMM model of \citep{Lawler:2019}, and our new model that blends the two (CarHHMM). 
+The HHMM consists of a coarse-scale process and a fine-scale process, with standard HMMs modelling both the coarse- and fine-scale processes. 
+The CarHMM modifies the usual HMM by modelling additional dependence into the sequence of observed data. 
+In our combination of the HHMM and the CarHHMM models, we keep the usual Markov structure for the coarse-scale process, but use the CarHMM model for the fine-scale process.
+
+This work investigates how to incorporate fine-scale processes into the larger structure of hierarchical hidden Markov models while maintaining computational efficiency. 
+We describe a general procedure that can be used to extract features from highly structured fine-scale behaviors that otherwise could not be modeled with existing HMM models. 
+In addition, we bridge the gap between the discrete CarHMM and certain continuous-time stochastic process models by showing that the two are equivalent under certain conditions. 
+We then perform a simulation study to compare the performance of each existing model with ours in a controlled setting. 
+Finally, we apply our method to the dive data of Figure 6.
+
+
+
+
+
