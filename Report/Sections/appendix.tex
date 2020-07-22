@@ -22,7 +22,7 @@ where $\Delta t$ is the time difference between any two observations $Y_t$ and $
 \begin{theorem}{Theorem 1.}{}%
 If the following conditions are met:
 \begin{enumerate}
-    \item The hidden behavioural process $X$ from Equation \ref{eqn:SDE} follows a Markov chain with $N$ possible states and transitions occur at equi-spaced time stamps $\left(\Delta t, \ldots, (T-1)\Delta t\right)$,
+    \item The hidden behavioural process $X$ from Equation (\ref{eqn:SDE}) follows a Markov chain with $N$ possible states and transitions occur at equi-spaced time stamps $\left(\Delta t, \ldots, (T-1)\Delta t\right)$,
     
     \item Observations of the SDE from Equation 2 are taken at times $\left(0, \Delta t, \ldots, (T-1)\Delta t\right)$,
 \end{enumerate}
@@ -35,7 +35,7 @@ then the observations $Y$ are equivalent to the output of a conditionally auto-r
 \end{theorem}
 
 \begin{proof}{Proof of Theorem 1}{}
-Combining equation (\ref{eqn:CarHMM_to_OU}) with equation (\ref{eqn:OU_sol}) gives:
+Combining Equation (\ref{eqn:OU_sol}) with Equation (\ref{eqn:CarHMM_to_OU}) gives:
 %
 \begin{align*}
 \left(Y_{s \Delta t} | X_{(s-1)\Delta t} = i \right) \sim \mathcal{N}\left((1-\phi^{(i)}) \mu^{(i)} + \phi^{(i)} Y_{(s-1) \Delta t}, \enspace \left(\sigma^{(i)}\right)^2 \right),\\
@@ -93,15 +93,17 @@ $$Y^*_{t,t^*,1:100} = IDFT\left(\hat{Y}^*_{t,t^*}\right), \qquad t^* = 1,\ldots,
 
 $\hat{Y}^*_{t,t^*}$ is anti-symmetric about $\hat{Y}^{*(50)}_{t,t^*}$ so that its inverse Fourier transform is real-valued. $\hat{Y}^{*(k)}_{t,t^*}$ also decays like $1/k$ so that $Y^*_{t,t^*}$ remains continuous within a two-second window. $Y^*_{t,t^*}$ is not continuous \textit{between} windows, but the jump discontinuities are not very severe since $\hat{Y}^{*(0)}_{t,t^*}$ and $\hat{Y}^{*(0)}_{t,t^*+1}$ are highly correlated. See Figure \ref{fig:sim_data} for details. 
 
-From here it is straightforward to calculate both $Z^{*(1)}$ and $Z^{*(2)}$. We pick $\tilde{\omega} = 10$ periods per window, or 5 hertz. To find the distribution of $Z^{*(1)}_{t,t^*} = \mathcal{R}\left(\hat{Y}^{(0)}_{t,t^*}\right)$, use Equation \ref{eqn:y_hat0}:
+From here it is straightforward to calculate both $Z^{*(1)}$ and $Z^{*(2)}$. We pick $\tilde{\omega} = 10$ periods per window, or 5 hertz. To find the distribution of $Z^{*(1)}_{t,t^*} = \mathcal{R}\left(\hat{Y}^{(0)}_{t,t^*}\right)$, use Equation (\ref{eqn:y_hat0}):
 %
-$$\left(Z^{*(1)}_{t,t^*} | X^*_{t,t^*} = i^* \right) = \left(\mathcal{R}\left(\hat{Y}^{(0)}_{t,t^*}\right) | X^*_{t,t^*} = i^* \right) \sim \mathcal{N} \left(\phi^{*(i^*)} * Z^{*(1)}_{t,t^*-1}, \sigma^{*(i^*)} \right)$$
+$$\left(Z^{*(1)}_{t,t^*} | X^*_{t,t^*} = i^* \right) = \left(\mathcal{R}\left(\hat{Y}^{*(0)}_{t,t^*}\right) | X^*_{t,t^*} = i^* \right) \sim \mathcal{N} \left(\phi^{*(i^*)} * Z^{*(1)}_{t,t^*-1}, \sigma^{*(i^*)} \right)$$
 %
 $Z^{*(2)}_{t,t^*}$ is the sum of gamma-distributed random variables with the same scale parameter, so the distribution of $Z^{*(2)}_{t,t^*}$ is also a gamma distribution:
 %
 $$Z^{*(2)}_{t,t^*} = \sum_{k=1}^{10} b^{(k)}_{t,t^*}$$
+%
 $$\left(Z^{*(2)}_{t,t^*}|X^*_{t,t^*} = 1\right) \sim {\rm{Gamma}}\left(\alpha = \sum_{k=1}^{10} 5/k^2 = 10.10, \beta = 1.00 \right)$$
-$$\left(Z^{*(2)}_{t,t^*}|X^*_{t,t^*} = 1\right) \sim {\rm{Gamma}}\left(\alpha = 300 + \sum_{k=3}^{10} 5/k^2 = 305.94 , \beta = 1.00 \right)$$
+%
+$$\left(Z^{*(2)}_{t,t^*}|X^*_{t,t^*} = 2\right) \sim {\rm{Gamma}}\left(\alpha = 300 + \sum_{k=3}^{10} 5/k^2 = 305.94 , \beta = 1.00 \right)$$
 \end{proof}
 
 \begin{proof}{Likelihood of Simulation study model}{}
@@ -125,7 +127,7 @@ $$\calL_{\text{CarHMM-DFT}}\left(z_t^*;\Theta^{*(i)},\Gamma^{*(i)}\right) = \del
 %
 where $P(z^*_{t,t^*}|z^*_{t,t^*-1};\Theta^{*(i)})$ is an $N^* \times N^*$ diagonal matrix with $(i^*,i^*)^{th}$ entry equal to $f^{(i,i^*)}(z^*_{t,t^*}|z^*_{t,t^*-1}; \theta^{*(i,i^*)})$.
 %
-$f^{(i,i^*)}(z^*_{t,t^*}|z^*_{t,t^*-1}; \theta^{*(i,i^*)})$ is the emission distribution of $Z^*_{t,t^*}$ conditioned on $X^*_{t,t^*} = i^*$ and $Z^*_{t,t^*-1} = z^*_{t,t^*-1}$.
+Note that $f^{(i,i^*)}(z^*_{t,t^*}|z^*_{t,t^*-1}; \theta^{*(i,i^*)})$ is the emission distribution of $Z^*_{t,t^*}$ conditioned on $X^*_{t,t^*} = i^*$ and $Z^*_{t,t^*-1} = z^*_{t,t^*-1}$.
 
 \end{proof}
 
