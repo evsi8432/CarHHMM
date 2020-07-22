@@ -3,6 +3,37 @@
 \addcontentsline{toc}{section}{Appendices}
 \renewcommand*{\thesubsection}{\Alph{subsection}}
 
+Michelot \& Blackwell (2019) model the movement of an animal as the solution to the following stochastic differential equation, which they refer to as a state-switching Ornstein-Uhlenbeck process:
+%
+\begin{equation}
+    \label{eqn:SDE}
+    dY_t = \beta^{(X_t)}(\gamma^{(X_t)} - Y_t)dt + \omega^{(X_t)} dW_t
+\end{equation}
+%
+where $X_t$ is some stochastic process which defines the hidden behaviour of the animal at time $t$, $\beta^{(X_t)}$ relates to rate at which the process returns to its mean value, $\gamma^{(X_t)}$ is the long-term mean value of the process, $\omega^{(X_t)}$ is related to short-term variance, and $W$ is a Wiener process. Unlike HMMs, $t \in \mathbb{R}$ indexes a continuous time process and is therefore not necessarily an integer. If the behavioral state $X_t$ is known and does not change between observations, the solution to Equation (\ref{eqn:SDE}) is known to be the following \citep{Michelot:2019}:
+%
+\begin{align}
+    Y_{t+\Delta t} | X_{t} \sim \mathcal{N}\left((1-e^{-\beta^{(X_t)}\Delta t})\gamma^{(X_t)} + e^{-\beta^{(X_t)}\Delta t} Y_t,\quad \frac{\omega^{(X_t)^2}}{2\beta^{(X_t)}} (1-e^{-2\beta^{(X_t)}\Delta t})\right)
+    \label{eqn:OU_sol}
+\end{align}
+%
+where $\Delta t$ is the time difference between any two observations $Y_t$ and $Y_{t+\Delta t}$
+
+\begin{theorem}{Theorem 1.}{}%
+If the following conditions are met:
+\begin{enumerate}
+    \item The hidden behavioural process $X$ from Equation \ref{eqn:SDE} follows a Markov chain with $N$ possible states and transitions occur at equi-spaced time stamps $\left(\Delta t, \ldots, (T-1)\Delta t\right)$,
+    
+    \item Observations of the SDE from Equation 2 are taken at times $\left(0, \Delta t, \ldots, (T-1)\Delta t\right)$,
+\end{enumerate}
+then the observations $Y$ are equivalent to the output of a conditionally auto-regressive hidden Markov model with normal emission distributions and parameters $\Theta = (\theta^{(1)}, \ldots, \theta^{(N)}); \enspace \theta^{(i)} = \{\mu^{(i)},\sigma^{(i)},\phi^{(i)}\}$, where:
+
+\begin{align}
+\mu^{(i)} = \gamma^{(i)}, \qquad \sigma^{(i)} = \sqrt{\frac{\omega^{(i)^2}}{2\beta^{(i)}} (1-e^{-2\beta^{(i)}\Delta t})}, \qquad \phi^{(i)} = e^{-\beta^{(i)}\Delta t} \label{eqn:CarHMM_to_OU}
+\end{align}
+
+\end{theorem}
+
 \begin{proof}{Proof of Theorem 1}{}
 Combining equation (\ref{eqn:CarHMM_to_OU}) with equation (\ref{eqn:OU_sol}) gives:
 %
@@ -62,7 +93,7 @@ $$Y^*_{t,t^*,1:100} = IDFT\left(\hat{Y}^*_{t,t^*}\right), \qquad t^* = 1,\ldots,
 
 $\hat{Y}^*_{t,t^*}$ is anti-symmetric about $\hat{Y}^{*(50)}_{t,t^*}$ so that its inverse Fourier transform is real-valued. $\hat{Y}^{*(k)}_{t,t^*}$ also decays like $1/k$ so that $Y^*_{t,t^*}$ remains continuous within a two-second window. $Y^*_{t,t^*}$ is not continuous \textit{between} windows, but the jump discontinuities are not very severe since $\hat{Y}^{*(0)}_{t,t^*}$ and $\hat{Y}^{*(0)}_{t,t^*+1}$ are highly correlated. See Figure \ref{fig:sim_data} for details. 
 
-From here it is straightforward to calculate both $Z^{*(1)}$ and $Z^{*(2)}$. We pick $\tilde{\omega} = 10$ periods per window, or 5 hertz. To find the distribution of $Z^{*(1)}_{t,t^*} = \mathcal{R}\left(\hat{Y}^{(0)}_{t,t^*}\right)$, use Equation (\ref{eqn:y_hat0}):
+From here it is straightforward to calculate both $Z^{*(1)}$ and $Z^{*(2)}$. We pick $\tilde{\omega} = 10$ periods per window, or 5 hertz. To find the distribution of $Z^{*(1)}_{t,t^*} = \mathcal{R}\left(\hat{Y}^{(0)}_{t,t^*}\right)$, use Equation \ref{eqn:y_hat0}:
 %
 $$\left(Z^{*(1)}_{t,t^*} | X^*_{t,t^*} = i^* \right) = \left(\mathcal{R}\left(\hat{Y}^{(0)}_{t,t^*}\right) | X^*_{t,t^*} = i^* \right) \sim \mathcal{N} \left(\phi^{*(i^*)} * Z^{*(1)}_{t,t^*-1}, \sigma^{*(i^*)} \right)$$
 %
