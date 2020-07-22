@@ -118,10 +118,11 @@ class Visualisor:
             nrows = 1
             ncols = len(self.hhmm.theta[0])
         else:
-            features = ['Ax','Ay','Az','Ahat_low'] #list(self.hhmm.theta[1][0].keys())
+            features = list(self.hhmm.theta[1][0].keys())
             nrows = 2 #self.pars.K[0]
-            ncols = int(len(features)/2)
+            ncols = int((len(features)+1)/2)
 
+        print(nrows,ncols)
         fig, ax = plt.subplots(nrows,ncols,figsize=(7.5*ncols,7.5*nrows))
         ax = np.reshape(ax,(nrows,ncols))
 
@@ -262,7 +263,8 @@ class Visualisor:
             else:
                 nrows += 2
 
-        nrows=5
+        #nrows=5
+        nrows=4
 
         plt.subplots(nrows,1,figsize=(20,5*nrows))
         fignum = 1
@@ -280,14 +282,17 @@ class Visualisor:
         for state in range(self.pars.K[0]):
             dives.append(dive[dive['ML_dive'] == state])
 
-        ylabs = [r'$P\left(X_t = 1\right)$',
-                 r'$P\left(X_t = 2\right)$',
-                 r'$P\left(X^*_{t,t^*} = 1\right)$',
-                 r'$P\left(X^*_{t,t^*} = 2\right)$',
-                 r'$P\left(X^*_{t,t^*} = 3\right)$']
+        #ylabs = [r'$P\left(X_t = 1\right)$',
+        #         r'$P\left(X_t = 2\right)$',
+        #         r'$P\left(X^*_{t,t^*} = 1\right)$',
+        #         r'$P\left(X^*_{t,t^*} = 2\right)$',
+        #         r'$P\left(X^*_{t,t^*} = 3\right)$']
+        ylabs = [r'$\left(Z^{*(1)}\right)_x$ $(m/s^2)$',
+                 r'Depth $(m)$']
 
-        title = 'Hidden State Probability Estimates'
-
+        #title = 'Hidden State Probability Estimates'
+        title = 'Decoded Dive Profile / Accelerometer Data'
+        print(df_cols)
         for i,col in enumerate(df_cols):
 
             # dive-level coloring
@@ -305,7 +310,7 @@ class Visualisor:
                     plt.ylim([-0.05,1.05])
                     plt.yticks([0,0.5,1.0],fontsize=30)
                 else:
-                    plt.plot(dive['sec_from_start']/60,dive[col],'k--')
+                    plt.plot(dive['sec_from_start']/60,dive[col],'k--',alpha=0.5)
                 plt.yticks(fontsize=30)
                 plt.ylabel(ylabs[i],fontsize=30)
                 plt.xticks([])
@@ -330,7 +335,7 @@ class Visualisor:
                     plt.ylim([-0.05,1.05])
                     plt.yticks([0,0.5,1.0],fontsize=30)
                 else:
-                    plt.plot(dive['sec_from_start']/60,dive[col],'k-')
+                    plt.plot(dive['sec_from_start']/60,dive[col],'k--',alpha=0.5)
                 plt.yticks(fontsize=30)
                 plt.ylabel(ylabs[i],fontsize=30)
                 if col == df_cols[-1]:
@@ -375,7 +380,7 @@ class Visualisor:
                 for state in range(self.pars.K[0]):
                     plt.plot(times[state],features[state],
                              '.',color=colors[state],markersize=10)
-                plt.plot(time,feature,'k--')
+                plt.plot(time,feature,'k--',alpha=0.5)
                 plt.ylabel(col,fontsize = 14)
                 plt.xlabel('Time (s)',fontsize=14)
                 plt.legend(legend,prop={'size': 14})
@@ -409,7 +414,7 @@ class Visualisor:
                 for state in range(self.pars.K[0]):
                     plt.plot(times[state],features[state],
                              '.',color=colors[state],markersize=10)
-                plt.plot(time,feature,'k--')
+                plt.plot(time,feature,'k--',alpha=0.5)
                 plt.ylabel(col,fontsize = 14)
                 plt.xlabel('Time (s)',fontsize=14)
                 plt.legend(legend,prop={'size': 14})
@@ -440,7 +445,7 @@ class Visualisor:
                 for state in range(self.pars.K[1]):
                     plt.plot([t for t in times[state]],features[state],
                              '.',color=colors[state],markersize=10)
-                plt.plot([t for t in time],feature,'k--')
+                plt.plot([t for t in time],feature,'k--',alpha=0.5)
                 plt.yticks(fontsize=24)
                 plt.ylabel(col,fontsize=24)
                 plt.xticks(fontsize=24)
