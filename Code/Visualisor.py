@@ -251,20 +251,18 @@ class Visualisor:
         return
 
 
-    def plot_dive_features(self,sdive,edive,df_cols,data_cols,file=None,ylabs=None):
+    def plot_dive_features(self,sdive,edive,df_cols,data_cols,file=None,ylabs=None,nrows=None):
 
         df = self.df
         data = self.data
 
-        nrows = 2*len(df_cols)
-        for col in data_cols:
-            if col in self.pars.features[0]:
-                nrows += 1
-            else:
-                nrows += 2
-
-        nrows=5
-        #nrows=4
+        if nrows is None:
+            nrows = 2*len(df_cols)
+            for col in data_cols:
+                if col in self.pars.features[0]:
+                    nrows += 1
+                else:
+                    nrows += 2
 
         plt.subplots(nrows,1,figsize=(20,5*nrows))
         fignum = 1
