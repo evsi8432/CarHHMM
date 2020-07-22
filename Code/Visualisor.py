@@ -251,7 +251,7 @@ class Visualisor:
         return
 
 
-    def plot_dive_features(self,sdive,edive,df_cols,data_cols,file=None):
+    def plot_dive_features(self,sdive,edive,df_cols,data_cols,file=None,ylabs=None):
 
         df = self.df
         data = self.data
@@ -263,8 +263,8 @@ class Visualisor:
             else:
                 nrows += 2
 
-        #nrows=5
-        nrows=4
+        nrows=5
+        #nrows=4
 
         plt.subplots(nrows,1,figsize=(20,5*nrows))
         fignum = 1
@@ -282,13 +282,14 @@ class Visualisor:
         for state in range(self.pars.K[0]):
             dives.append(dive[dive['ML_dive'] == state])
 
-        #ylabs = [r'$P\left(X_t = 1\right)$',
-        #         r'$P\left(X_t = 2\right)$',
-        #         r'$P\left(X^*_{t,t^*} = 1\right)$',
-        #         r'$P\left(X^*_{t,t^*} = 2\right)$',
-        #         r'$P\left(X^*_{t,t^*} = 3\right)$']
-        ylabs = [r'$\left(Z^{*(1)}\right)_x$ $(m/s^2)$',
-                 r'Depth $(m)$']
+        if ylabs is None:
+            ylabs = [r'$P\left(X_t = 1\right)$',
+                     r'$P\left(X_t = 2\right)$',
+                     r'$P\left(X^*_{t,t^*} = 1\right)$',
+                     r'$P\left(X^*_{t,t^*} = 2\right)$',
+                     r'$P\left(X^*_{t,t^*} = 3\right)$']
+            #ylabs = [r'$\left(Z^{*(1)}\right)_x$ $(m/s^2)$',
+            #         r'Depth $(m)$']
 
         #title = 'Hidden State Probability Estimates'
         title = 'Decoded Dive Profile / Accelerometer Data'
