@@ -4,13 +4,13 @@
 
 \begin{table}[h]
 \centering
-\caption{Accuracies and run times for all models. All reported values are averages, and $\pm$ refers to the standard deviation.}
+\caption{Accuracies and run times for all models. All reported values are averages, and $\pm$ refers to the standard deviation. The run times heavily depend upon the optimization method.}
 \begin{tabular}{ccccccc}
 Model       & \multicolumn{1}{c}{Training Time (Minutes)} & \multicolumn{1}{c}{Dive Accuracy} & \multicolumn{1}{c}{Subdive Accuracy}  \\ \hline
-CarHMM-DFT  & $15.74 \pm 2.46$                            & -------------                     & $1.00 \pm 0.00$                       \\ 
-HHMM-DFT    & $82.43 \pm 11.48$                           & $0.94 \pm 0.02$                   & $1.00 \pm 0.00$                       \\
-CarHHMM     & $70.85 \pm 15.89$                           & $0.91 \pm 0.03$                   & $0.89 \pm 0.02$                       \\
-CarHHMM-DFT & $81.22 \pm 16.10$                           & $0.94 \pm 0.02$                   & $1.00 \pm 0.00$                       \\
+CarHMM-DFT  & $61.68 \pm 10.21$                            & -------------                     & $1.00 \pm 0.00$                       \\ 
+HHMM-DFT    & $139.76 \pm 28.93$                           & $0.94 \pm 0.03$                   & $1.00 \pm 0.00$                       \\
+CarHHMM     & $257.58 \pm 81.64$                           & $0.87 \pm 0.11$                   & $0.89 \pm 0.01$                       \\
+CarHHMM-DFT & $150.18 \pm 36.94$                           & $0.94 \pm 0.02$                   & $1.00 \pm 0.00$                       \\
 \end{tabular}
 \label{table:accuracy}
 \end{table}
