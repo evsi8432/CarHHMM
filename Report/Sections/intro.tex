@@ -9,19 +9,31 @@ Recent advances in technology allow us to gather enormous amounts of data collec
 The collection and analysis of movement data from devices such as accelerometers and GPS trackers have brought new understanding to {\bf{more references}}  physical activity levels in children \citep{Morris:2007} ...
 In this article, we focus on the study of animal movement;  tags attached to animals record observations at rates of tens of hertz, resulting in time series containing millions of observations over the course of several hours and providing biologists with new tools for understanding animal behaviour.
 
-Many statistical techniques have been developed and applied to these types of longitudinal or functional data.  
-Some techniques, such as time series, are highly parametric. 
-While these parametric techniques do not allow the data to ``speak for itself", the ensuing data analysis results typically are readily interpretable, providing important subject area insights.
-At the other extreme are black box type methods of machine learning.  
-While these methods are incredibly successful at predicting how processes evolve, they provide little structured insight into the driving mechanisms of the process.
-Functional Data Analysis (FDA) techniques lie somewhere in between these extremes: the output of an analysis provides visual tools for understanding processes and, often, some dimension reduction to allow for easier exploration.  
-The development of structured FDA techniques which incorporate more complex dependence structures has become a topic of recent interest  (see, e.g., Crainiceanu. and references therein).
+%Many statistical techniques have been developed and applied to these types of longitudinal or functional data.  
+%Some techniques, such as time series, are highly parametric. 
+%While these parametric techniques do not allow the data to ``speak for itself", the ensuing data analysis results typically are readily interpretable, providing important subject area insights.
+%At the other extreme are black box type methods of machine learning.  
+%While these methods are incredibly successful at predicting how processes evolve, they provide little structured insight into the driving mechanisms of the process.
+%Functional Data Analysis (FDA) techniques lie somewhere in between these extremes: the output of an analysis provides visual tools for understanding processes and, often, some dimension reduction to allow for easier exploration.  
+%The development of structured FDA techniques which incorporate more complex dependence structures has become a topic of recent interest  (see, e.g., Crainiceanu. and references therein).
+
+Often, movement data can be viewed as a set of many curves.   In Morris, each child in the data set is associated with two curves from two different days.   In our data, we will consider curves from a sequence of dives of one killer whale (\textit{Orcinus orca}) from the threatened Northern resident population off the coast of British Columbia, Canada. 
+These types of data are amenable to techniques of Functional Data Analysis (FDA).
+FDA was originally developed for curves that can be considered independent replicates  (Ramsay ref, a theoretical ref).  
+However, the structure of the data is often more complicated.
+For instance, in Morris, clearly, the two curves from the same child are dependent.
+And in our dive data, the sequence of days exhibits temporal dependence.
+
+
+More complicated structures in FDA have been considered in the form of hierarchical ...  typically incorporating random effects.
+Time series of curves  ...  RELATED would be appropriate here.
+Here, we consider Markov modelling of a curve sequence.  Common in animal movement because it gives biological insight.
 
 Our goal is to develop movement analysis methods that are flexible but also use subject area knowledge to provide insight into curve data with complex structure.
 We  model complexities arising  from curve to curve variation, along with the complexities of within-curve fine-scale characteristics and temporal dependence,
 combining existing methods in novel ways.
 We enforce temporal structure via Markov processes.  
-While our methodology is generally applicable, [rephrase - awkward] we  showcase our ideas to study the underlying behaviour indicated by the complex dive patterns of a killer whale (\textit{Orcinus orca}) from the threatened Northern resident population off the coast of British Columbia, Canada.  
+While our methodology is generally applicable, we  showcase our ideas to study the underlying behaviour indicated by the complex dive patterns of a killer whale (\textit{Orcinus orca}) from the threatened Northern resident population off the coast of British Columbia, Canada.  
 For more information about the data, see Section \ref{sec:case_study}.
 Figure \ref{fig:data} shows the data we will analyze.
 The top panel shows the depth of the whale below the surface, and we clearly see dives of various time durations and maximum depths. 
@@ -40,7 +52,7 @@ However, this approach is not appropriate here, so we consider a temporal struct
 This HMM allows us to interpret each curve as arising from a type of behaviour.
 
 From the plotted killer whale data in Figure {\ref{fig:labeled_dives}}, we see complexities within each dive that would be difficult to model as a realization of a simple stochastic process. 
-In FDA, within curve structure is modelled by a generic smooth mean function and covariance function.
+In FDA, within-curve structure is modelled by a generic smooth mean function and covariance function.
 Alternatively, this structure is sometimes generated via random regression.
 However, these classic FDA techniques would be hard-pressed to model the type of radically changing behaviour that we see in Figure 9.
 We model the within-curve dependence by combining a hidden Markov model of within-curve behaviour with an autoregressive-type dependence. Finally, for the fine-scale behaviour, we use summary information that reflects the application area's meaning for the curve.  Specifically, for the dive data, we use summaries of Fourier transforms to account for sudden and extreme ``wiggliness'' within some segments of a curve. The distribution of this ``wiggliness'' depends on the hidden state.
@@ -50,7 +62,7 @@ We model the within-curve dependence by combining a hidden Markov model of withi
  
 
 Our work relies on work in the vast field of methodology for the analysis of animal movement
-\citep{Hooten:2017}.
+\citep{Hooten:2017,Mcclintock:2020}.
 One of the most prevalent techniques in the literature of late is the hidden Markov model (HMM), where observations depend upon the state of an associated unobserved behavioral process following Markovian dynamics \citep{Patterson:2017}. 
 %
 %Importantly, under the traditional HMM model, subsequent observations are assumed to be independent from one another when conditioned on the underlying behavioral process.

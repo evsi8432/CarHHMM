@@ -11,47 +11,47 @@ Five hundred separate sequences of 100 killer whale dives were simulated accordi
 $$\Gamma = \begin{pmatrix} 0.5 & 0.5 \\ 0.5 & 0.5 \end{pmatrix}, \qquad \delta =  \begin{pmatrix} 0.5 & 0.5 \end{pmatrix},$$
 $$Y_t|X_t \sim \rm{Gamma},$$
 \begin{align*}
-	&\bbE(Y_t|X_t = 1) = 15 s, &\bbE(Y_t|X_t = 2) = 60 s, \\
+	&\mu^{(1)} \equiv \bbE(Y_t|X_t = 1) = 15 s, &\bbE(Y_t|X_t = 2) = 60 s, \\
 	%
 	&\bbV(Y_t|X_t = 1) = 25 s^2, &\bbV(Y_t|X_t = 2) = 100 s^2.
 \end{align*}
 %
 Once the dive durations were calculated for all 100 dives, dive $t$ was broken into a sequence of $T^*_t = \lfloor Y_t/2 \rfloor$ two-second segments, which made up a second fine-scale hidden Markov model. The last $Y_t - 2\lfloor Y_t/2 \rfloor$ seconds of the dive were discarded. Each two-second segment was assigned one of $N^*=2$ behaviours (active swimming or passive gliding) according to a fine-scale Markov chain $X^*_t \equiv \left(X^*_{t,1}, \ldots, X^*_{t,T^*_t} \right)$. The probability transition matrices for these fine-scale Markov chains were set as
 %
-$$\Gamma^{*(1)} = \begin{pmatrix} 0.5 & 0.5 \\ 0.1 & 0.9 \end{pmatrix}, \qquad \Gamma^{*(2)} = \begin{pmatrix} 0.8 & 0.2 \\ 0.3 & 0.7 \end{pmatrix},$$ 
+$$\Gamma^{*(1)} = \begin{pmatrix} 0.5 & 0.5 \\ 0.1 & 0.9 \end{pmatrix} \quad \text{ and } \quad \Gamma^{*(2)} = \begin{pmatrix} 0.8 & 0.2 \\ 0.3 & 0.7 \end{pmatrix},$$ 
 %
 where $\Gamma^{*(1)}$ was used for dives where $X_t = 1$ and $\Gamma^{*(2)}$ was used for dives where $X_t = 2$. 
 
-Each two-second sub-dive window had 100 associated acceleration readings, $Y^*_{t,t^*} \equiv \left(Y^*_{t,t^*,1}, \ldots, Y^*_{t,t^*,100}\right)$. To accurately recreate active swimming versus passive gliding on the fine-scale Markov chain, the DFT of each two-second segment $\hat Y^*_{t,t^*}$ was simulated such that $Z^{*(1)}_{t,t^*}$ and $Z^{*(2)}_{t,t^*}$ (see Eq. \ref{eqn:z}) have the following distributions: 
+Each two-second subdive window had 100 associated acceleration readings, $Y^*_{t,t^*} \equiv \left(Y^*_{t,t^*,1}, \ldots, Y^*_{t,t^*,100}\right)$. To accurately recreate active swimming versus passive gliding on the fine-scale Markov chain, the DFT of each two-second segment $\hat Y^*_{t,t^*}$ was simulated such that $Z^{*(1)}_{t,t^*}$ and $Z^{*(2)}_{t,t^*}$ (see Eq. \ref{eqn:z}) have the following distributions: 
 
 \begin{gather*}
-    \left(Z^{*(1)}_{t,t^*} | Z^{*(1)}_{t,t^*-1}, X^*_{t,t^*} = 1 \right) \sim \mathcal{N} \left(\phi^{*(1)}Z^{*(1)}_{t,t^*-1} + (1-\phi^{*(1)})\mu^{*(1)}, (\sigma^{*(1)})^2 \right) \\
+    \left(Z^{*(1)}_{t,t^*} | Z^{*(1)}_{t,t^*-1}, X^*_{t,t^*} = 1 \right) \sim \mathcal{N} \left(\phi^{*(1)}Z^{*(1)}_{t,t^*-1} + (1-\phi^{*(1)})\mu^{*(1)}, (\sigma^{*(1)})^2 \right), \\
     %
-    \left(Z^{*(1)}_{t,t^*} | Z^{*(1)}_{t,t^*-1}, X^*_{t,t^*} = 2 \right) \sim \mathcal{N} \left(\phi^{*(2)}Z^{*(1)}_{t,t^*-1} + (1-\phi^{*(2)})\mu^{*(2)}, (\sigma^{*(2)})^2 \right) \\
+    \left(Z^{*(1)}_{t,t^*} | Z^{*(1)}_{t,t^*-1}, X^*_{t,t^*} = 2 \right) \sim \mathcal{N} \left(\phi^{*(2)}Z^{*(1)}_{t,t^*-1} + (1-\phi^{*(2)})\mu^{*(2)}, (\sigma^{*(2)})^2 \right), \\
     %
-    \mu^{*(1)} = 0.0,\enspace \sigma^{*(1)} = 0.05,\enspace \phi^{*(1)} = 0.99 \\
+    \mu^{*(1)} = 0.0,\enspace \sigma^{*(1)} = 0.05,\enspace \phi^{*(1)} = 0.99, \\
     %
-    \mu^{*(2)} = 0.0,\enspace \sigma^{*(2)} = 0.1,\enspace \phi^{*(2)} = 0.95 \\\\
+    \mu^{*(2)} = 0.0,\enspace \sigma^{*(2)} = 0.1,\enspace \phi^{*(2)} = 0.95, \\\\
     %
-    \left(Z^{*(2)}_{t,t^*} | X^*_{t,t^*} = 1\right) \sim {\rm{Gamma}}\left(\alpha^{*(1)}, \beta^{*(1)} \right) \\
+    \left(Z^{*(2)}_{t,t^*} | X^*_{t,t^*} = 1\right) \sim {\rm{Gamma}}\left(\alpha^{*(1)}, \beta^{*(1)} \right), \\
     %
-    \left(Z^{*(2)}_{t,t^*} | X^*_{t,t^*} = 2\right) \sim {\rm{Gamma}}\left(\alpha^{*(2)}, \beta^{*(2)} \right) \\
+    \left(Z^{*(2)}_{t,t^*} | X^*_{t,t^*} = 2\right) \sim {\rm{Gamma}}\left(\alpha^{*(2)}, \beta^{*(2)} \right), \\
     %
-    \alpha^{*(1)} = 10.10, \enspace \enspace \beta^{*(1)} = 1.00 \\
+    \alpha^{*(1)} = 10.10, \enspace \enspace \beta^{*(1)} = 1.00, \\
     %
-    \alpha^{*(2)} = 305.94, \enspace \enspace \beta^{*(2)} = 1.00
+    \alpha^{*(2)} = 305.94, \enspace \enspace \beta^{*(2)} = 1.00.
 \end{gather*}
 %
-Sub-dive behavior 1 corresponds to passive gliding while sub-dive behaviour 2 corresponds to active swimming with a dominant frequency of $\frac{1}{2}s^{-1}$. Sub-dive behaviors 1 and 2 are the same for both dive types. See the appendix for more details regarding procedure for simulating $\hat Y^*$ and $Y^*$ such that $Z^*$ has the preceding distribution. Figure \ref{fig:sim_data} shows the first 5 dives of one simulated data set.
+subdive behavior 1 corresponds to passive gliding while subdive behaviour 2 corresponds to active swimming with a dominant frequency of $1/2 s^{-1}$. subdive behaviors 1 and 2 are the same for both dive types. See the appendix for more details regarding procedure for simulating $\hat Y^*$ and $Y^*$ such that $Z^*$ has the preceding distribution. Figure \ref{fig:sim_data} shows the first 5 dives of one simulated data set.
 
 \subsection{Model Formulation}
 \label{subsec:model_structure}
 
-The building blocks from the previous section were used to build a well-specified model for this simulated data. Specifically, we used a hierarchical HMM where the sequence of dive durations $Y$ was modeled using a simple HMM, and the fine-scale process $Z^*$ was modeled using a HMM-DFT with explicit auto-correlation in $Z^{*(1)}$. Naturally, we refer to this model as the \textbf{CarHHMM-DFT}. Figure \ref{fig:CarHHMM-DFT} shows a graphical representation of this model. 
+The building blocks from the previous section were used to build a well-specified model for these simulated data. Specifically, we used a hierarchical HMM where the sequence of dive durations $Y$ was modeled using a simple HMM, and the fine-scale process $Z^*$ was modeled using a HMM-DFT with explicit auto-correlation in $Z^{*(1)}$. Naturally, we refer to this model as the \textbf{CarHHMM-DFT}. Figure \ref{fig:CarHHMM-DFT} shows a graphical representation of this model. 
 
 On the coarse scale, the dive types follow a Markov chain with $N=2$ possible states and unknown probability transition matrix $\Gamma$. The duration of a dive follows a gamma distribution which depends upon the dive type and unknown parameters $\Theta = \{\{\mu^{(1)},\sigma^{(1)}\},\{\mu^{(2)},\sigma^{(2)}\}\}$.
 
-On the fine scale, the sub-dive behavior of each two-second window comprises a Markov chain with $N^*=2$ possible states and unknown probability transition matrices $\Gamma^{*(1)}$ and $\Gamma^{*(2)}$, depending upon the dive type. Each two-second window is summarized by the observations $Z^{*(1)}_{t,t^*}$ and $Z^{*(2)}_{t,t^*}$. The distribution of $Z^{*(1)}_{t,t^*}$ is Normal and its parameters depend upon the sub-dive behavior $X^*_{t,t^*}$ and $Z^{*(1)}_{t,t^*-1}$. In particular:
+On the fine scale, the subdive behavior of each two-second window comprises a Markov chain with $N^*=2$ possible states and unknown probability transition matrices $\Gamma^{*(1)}$ and $\Gamma^{*(2)}$, depending upon the dive type. Each two-second window is summarized by the observations $Z^{*(1)}_{t,t^*}$ and $Z^{*(2)}_{t,t^*}$. The distribution of $Z^{*(1)}_{t,t^*}$ is Normal and its parameters depend upon the subdive behavior $X^*_{t,t^*}$ and $Z^{*(1)}_{t,t^*-1}$. In particular:
 
 $$\mathbb{E}(Z^{*(1)}_{t,t^*}|Z^{*(1)}_{t,t^*-1} = z,X^*_{t,t^*} = i) = \phi_1^{*(i)}z + (1-\phi_1^{*(i)}) \mu_1^{*(i)}$$
 $$\mathbb{V}(Z^{*(1)}_{t,t^*}|Z^{*(1)}_{t,t^*-1} = z,X^*_{t,t^*} = i) = \left(\sigma_1^{*(i)}\right)^2.$$
@@ -91,15 +91,15 @@ All models were run on the Cedar Compute Canada cluster with 1 CPU and 4 GB of d
 
 %%% 
 
-As expected, the full CarHHMM-DFT was the best-performing model. It was able to decode the fine-scale hidden states of the process almost perfectly (mean error $< 10^{-12}$ for all simulations) and decode the hidden dive types with an average accuracy of $94 \pm 3 \%$, where $\pm$ refers to the standard deviation across simulations (see Table \ref{table:accuracy}). All parameter estimates have biases which are at least approximately one order of magnitude smaller than the associated standard error, which is consistent with a sample size of 500 (section S-1.2, tables 2-5). One exception is for estimates of $\hat \sigma$, which were regularly underestimated. For dive duration $(Y_t)$ this finding is consistent with properties of MLEs for standard deviation, especially with a small sample size. For acceleration $(Z^{*(1)})$ this is likely due to over-fitting the auto-correlation parameter $\phi$. The Fourier sums $(Z^{*(2)})$ show no significant bias in $\hat \sigma^*_2$. The empirical standard error of all parameters estimates ($\hat \Theta$, $\hat \Gamma$, $\hat \Theta^*$, $\hat \Gamma^*$) were well-approximated by the inverse of the observed fisher information matrix (section S-1.2, tables 2-5). One exception is $\hat \Theta$, whose standard errors were slightly underestimated using the observed fisher information matrix. 
+As expected, the full CarHHMM-DFT was the best-performing model. It was able to decode the fine-scale hidden states of the process almost perfectly (mean error $< 10^{-12}$ for all simulations) and decode the hidden dive types with an average accuracy of $94 \pm 3 \%$, where $\pm$ refers to the standard deviation across simulations (see Table \ref{table:accuracy}). All parameter estimates have biases which are at least approximately one order of magnitude smaller than the associated standard error, which is consistent with a sample size of 500 (section S-1.2, tables 2-5). One exception is for estimates of $\hat \sigma$, which were regularly underestimated. For dive duration $(Y_t)$ this finding is consistent with properties of MLEs for standard deviation, especially with a small sample size. For acceleration $(Z^{*(1)})$ this is likely due to over-fitting the auto-correlation parameter $\phi$. The Fourier sums $(Z^{*(2)})$ show no significant bias in $\hat \sigma^*_2$. The empirical standard error of all parameters estimates ($\hat \Theta$, $\hat \Gamma$, $\hat \Theta^*$, $\hat \Gamma^*$) were well-approximated by the inverse of the observed Fisher information matrix (section S-1.2, tables 2-5). One exception is $\hat \Theta$, whose standard errors were slightly underestimated using the observed Fisher information matrix. 
 %The empirical standard error of $\hat \mu_2$ was 8.5, while the estimate of standard error using the observed Fisher information was 5.8. 
 See Section S-1.2, tables 2-5 for more information.
 
 The HHMM-DFT performed almost identically to the CarHHMM-DFT in most respects, including its decoding accuracy and parameter bias. 
 %- it had very low error for the fine-scale hidden states and $\approx 94\%$ accuracy on the dive types (see Table \ref{table:accuracy}). In addition, the standard errors of the parameter estimates were comparable to those of the CarHHMM-DFT. The estimates of standard error using the observed Fisher information were also comparable to the CarHHMM-DFT. 
-The HHMM-DFT \textit{did} differ from the CarHHMM-DFT in its estimate of the standard deviation of acceleration, $\hat \sigma_1^*$. For both sub-dive states, $\hat \sigma_1^*$ greatly overestimated the true standard deviation. In particular, $\overline{\hat \sigma_1^{*(1)}} = 0.248$ and $\overline{\hat \sigma_1^{*(2)}} = 0.242$, but $\sigma_1^{*(1)} = 0.05$ and $\sigma_1^{*(2)} = 0.1$. In addition, the empirical standard error of both $\hat \mu_1^*$ and $\hat \sigma_1^*$ was much larger than the estimates of standard error using the observed fisher information (see Section S-1.2, Table 3). This implies that parameter uncertainty can be underestimated when auto-correlation is ignored.
+The HHMM-DFT \textit{did} differ from the CarHHMM-DFT in its estimate of the standard deviation of acceleration, $\hat \sigma_1^*$. For both subdive states, $\hat \sigma_1^*$ greatly overestimated the true standard deviation. In particular, $\overline{\hat \sigma_1^{*(1)}} = 0.248$ and $\overline{\hat \sigma_1^{*(2)}} = 0.242$, but $\sigma_1^{*(1)} = 0.05$ and $\sigma_1^{*(2)} = 0.1$. In addition, the empirical standard error of both $\hat \mu_1^*$ and $\hat \sigma_1^*$ was much larger than the estimates of standard error using the observed Fisher information (see Section S-1.2, Table 3). This implies that parameter uncertainty can be underestimated when auto-correlation is ignored.
 
-The CarHHMM was the worst-performing model in terms of decoding accuracy, with an accuracy of $89 \pm 1\%$ when determining sub-dive behavior and an accuracy of $87 \pm 11\%$ when determining dive types. It was much more likely to misclassify sub-dive behavior 1 than sub-dive behavior 2 (see Section S-1.2, Table 1). It was also the worst model in terms of parameter estimates, in part due to its relatively poor decoding accuracy. $\hat \Theta^{*(2)}$ and $\hat \Gamma^{*(2)}$ in particular were poor estimates of the true parameters (see Section S-1.1.3).
+The CarHHMM was the worst-performing model in terms of decoding accuracy, with an accuracy of $89 \pm 1\%$ when determining subdive behavior and an accuracy of $87 \pm 11\%$ when determining dive types. It was much more likely to misclassify subdive behavior 1 than subdive behavior 2 (see Section S-1.2, Table 1). It was also the worst model in terms of parameter estimates, in part due to its relatively poor decoding accuracy. $\hat \Theta^{*(2)}$ and $\hat \Gamma^{*(2)}$ in particular were poor estimates of the true parameters (see Section S-1.1.3).
 
 Finally, the CarHMM-DFT was comparable to the CarHHMM-DFT in terms of decoding accuracy, parameter bias, and parameter standard error for the fine-scale observations. In addition, the time required to fit the CarHHMM was less than half of that of the other models (Tbl \ref{table:accuracy}). However, it lacked any hierarchical structure, so it was unable to decode the coarse-scale dive types. The CarHMM-DFT still did fit a gamma distribution to the dive duration of \textit{all} dives. The parameter estimates $\hat \mu$ and $\hat \sigma$ are highly correlated, and $\hat \sigma$ underestimates the true standard deviation of all dive types by $\approx$ 5 seconds.
 
@@ -124,7 +124,7 @@ A full table of parameter estimates for all models is shown in the supplementary
 %%% Acceleration %%%
 For acceleration ($Z^{*(1)}$), both the CarHMM-DFT and the CarHHMM-DFT regularly converged to the correct parameters with very little standard error. However, the estimated standard error based on the observed Fisher information regularly overestimated the empirical standard error of $\hat \mu$ for both of these models. 
 %This likely is due to the very large auto-correlation terms ($\phi^{(1)} = 0.99$ and $\phi^{(2)} = 0.95$) since as $\phi \to 1$, the value of $\mu$ does not matter in the likelihood evaluation as $\phi \to 1$ implies that $\mathbb{E}(Z^{*(1)}_{t,s^*}) = \phi*(Z^{*(1)}_{t,s^*-1}) + (1-\phi)\mu \to Z^{*(1)}_{t,s^*-1}$. 
-The HHMM-DFT regularly overestimates the variance $Z^{*(1)}$ since it does not incorporate auto-correlation into the emission distribution of $Z^{*(1)}$. The CarHHMM has large biases in many of its parameter estimates, especially in sub-dive state 2. 
+The HHMM-DFT regularly overestimates the variance $Z^{*(1)}$ since it does not incorporate auto-correlation into the emission distribution of $Z^{*(1)}$. The CarHHMM has large biases in many of its parameter estimates, especially in subdive state 2. 
 %because it sees the ``wigliness" of the acceleration data as raw acceleration rather than as Fourier modes, which deflates the value of $\hat \phi$ and inflates the value of $\hat \sigma$. 
 
 The supplementary material provides a detailed breakdown of parameter values for acceleration emission distributions and the empirical joint densities for all models and features.
