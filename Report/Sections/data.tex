@@ -1,0 +1,64 @@
+% !TeX root = ../main.tex
+
+%\section{Data Collection and Model Construction}
+
+To illustrate the process of constructing a model using the HMM model building blocks, we investigate the dive behavior of a Northern Resident Killer Whale (NRKW) off the coast of British Columbia, Canada, and construct several candidate generative models.
+
+Acceleration data can be used to approximate an animal's energy expenditure \citep{Green:2009,Wilson:2019}, which can be helpful for conservation efforts. However, studies suggest that the animal's behavioral state must be taken into account to obtain accurate estimates \citep{Dot:2016}. Understanding both the behavioral state of the killer whale and the distribution of accelerometer data within each behavioral state is important to understand the energetic requirements of killer whales. This knowledge can help ecologists understand the animal's energetic requirements and which in turn can help conservation efforts.
+
+We begin by describing the data collection process used by ecologists. We then detail the procedure used to build several candidate generative models from this data. Next, we perform a simulation study by selecting a preferred model, simulating data from it, and fit the candidate models to the simulated data to compare their performance in terms of parameter estimates and decoding accuracy. Finally, we fit each candidate model to the original data and analyze the results.
+
+\subsection{Data collection and preprocessing}
+
+The data used in this study was collected on September 2, 2019 from 12:49 pm to 6:06 pm and consists of depth and acceleration in three orthogonal directions. Observations were collected at a rate of 50 Hz. Tagging the killer whale caused anomalous behavior before 1:20 pm and after 6:00 pm, so observations in these time periods were ignored. In addition, the tagging technology malfunctioned between 2:25pm and 2:37pm as well as between 4:07 and 5:07 pm, so all dives within this time range were ignored as well. A killer whale ``dive" is considered to be any continuous section of data that occurs below 0.5 meters in depth and lasts for at least 10 seconds. Accelerometer and depth data were smoothed by taking a moving average with a window of 1/10th of a second. Data preprocessing was done in part with the \textit{divebomb} package in Python \citep{Nunes:2018}. After preprocessing the raw data, a total of 267 dives were observed. Figure \ref{fig:data} displays the dive profile and accelerometer data.
+
+Each dive is treated as one curve, and the collection of dives make up the coarse-scale process. As such, the coarse-scale observations $Y$ were a time series of dive durations in seconds ($s$) with corresponding hidden dive types $X$. In addition, the fine-scale processes $Y^*$ were the within-dive acceleration data in meters per second squared ($m/s^2$) with corresponding subdive types $X^*$.
+
+\subsection{Model Selection}
+
+The coarse-scale level exhibited no significant amount of auto-correlation (See section S-2.1) and no obvious intricate structure. As such, we selected a simple HMM to model this data. The dive durations $Y_t$ were assumed to follow a gamma distribution with unknown parameters $\{\mu,\sigma\}$:
+$$\mathbb{E}(Y_t|X_t = i) = \mu^{(i)},$$
+$$\mathbb{V}(Y_t|X_t = i) = \left(\sigma^{(i)}\right)^2.$$
+
+The fine-scale acceleration data exhibited significant sinusoidal behavior, thus the fine-scale observations $y^*$ were transformed to $z^*$ using the DFT summary statistics of a two-second sliding window. A two-second window was selected heuristically since it appeared to be the smallest window size that could capture the sinusoidal behavior. Because the data was collected at the rate of 50 Hz, each two-second window contained a total of 100 raw acceleration readings. The acceleration data here was collected in three dimensions which together represent the complete range of movement of an animal (forward/backward, upward/downward, right/left) and is often collected by these types of tags \citep{Cade:2017,Fehlmann:2017,Wright:2017}. As a result, the transformation from the raw accelerometer data $\mathbf{y}^*$ to the observation sequence $z^*$ was calculated as follows:
+%
+$$\mathbf{z}_{t,t^*}^{*(1)} := \mathcal{R}\left(\hat{\mathbf{y}}^{*(0)}_{t,t^*}\right) \qquad z_{t,t^*}^{*(2)} := \frac{1}{100}\sum_{k=1}^{10}||\hat{\mathbf{y}}^{(k)}_{t,t^*}||^2.$$
+%
+Each observation was therefore made up of $\mathbf{z}_{t,t^*}^{*(1)}$, a 3-dimensional vector, and $z_t^{*(2)}$, a scalar. We calculated $z_t^{*(2)}$ by summing the first 10 Fourier modes, which corresponds to a maximum frequency of $\tilde \omega = 5$ Hz. 
+
+Even after accounting for fine-scale structure in the raw acceleration data, there was still strong auto-correlation within $\mathbf{Z}^{*(1)}_{t,t^*}$ (section S-2.1), thus a CarHMM was used to model $\mathbf{Z}^{*(1)}_{t,t^*}$. In particular, we assumed $\mathbf{Z}^{*(1)}_{t,t^*}$ to be Normally distributed with unknown parameters $\phi_1^{*(i)} \in \mathbb{R}$, $\mathbf{\mu}_1^{*(i)} \in \mathbb{R}^3$, and $\mathbf{\sigma}_1^{*(i)} \in \mathbb{R}^3$.
+%
+%$$\mathbb{E}(\mathbf{Z}^{*(1)}_{t,t^*}|\mathbf{Z}^{*(1)}_{t,t^*-1} = \mathbf{z}, X^*_{t,t^*} = i) = \phi_1^{*(i)} \mathbf{z} + (1-\phi_1^{*(i)}) \mathbf{\mu}_1^{*(i)},$$
+%$$\mathbb{V}(\mathbf{Z}^{*(1)}_{t,t^*}|\mathbf{Z}^{*(1)}_{t,t^*-1} = z,X^*_{t,t^*} = i) = \text{diag}\left[\left(\mathbf{\sigma}_1^{*(i)}\right)^2\right].$$
+%
+
+While $Z^{*(2)}$ also exhibits some auto-correlation, the relationship is less strong than that of $\mathbf{Z}^{*(1)}$, and the biological interpretation of auto-correlation within $Z^{*(2)}$ is less clear. Therefore, a simple HMM was used to model $Z^{*(2)}$ and the distribution of $Z^{*(2)}_{t,t^*}$ was assumed to be gamma and parameterized by its mean $\mu_2^{*(i)}$ and variance $\sigma_2^{*(i)}$.
+%
+%$$\mathbb{E}(Z^{*(2)}_{t,t^*}|Z^{*(1)}_{t,t^*-1} = z,X^*_{t,t^*} = i) = \mu_2^{*(i)}$$
+%$$\mathbb{V}(Z^{*(2)}_{t,t^*}|Z^{*(1)}_{t,t^*-1} = z,X^*_{t,t^*} = i) = \left(\sigma_2^{*(i)}\right)^2.$$
+%
+The observations $Z^{*(2)}_{t,t^*}$ and $\mathbf{Z}^{*(1)}_{t,t^*}$ shared a subdive state $X^*_{t,t^*}$, but were assumed to be independent of one another when conditioned on $X_{t,t^*}$. In addition, the distribution of $Z^*_{t,t^*}$ is assumed to depend only upon the subdive type and the previous observation $Z^*_{t,t^*-1}$, not the dive type $X_t$.
+
+Finally, to select the number of dive types and subdive types, information criteria tends to overestimate the number of states in biological processes \citep{Pohle:2017}. Instead, we selected $N = 2$ dive types and $N^* = 3$ subdive behaviors heuristically. The absence of principled method to select the number of hidden states is a common issue in statistical ecology, so it is important to use model validation techniques in lieu of information criteria (see section \ref{subsec:model_validation}).
+
+The final model is a hierarchical hidden Markov model with a traditional HMM at the coarse scale. On the fine scale, $y^*$ was transformed to $z^*$, $z^{*(1)}$ was modeled with a CarHMM, and $z^{*(2)}$ was modeled with an HMM. We refer to this final model as the \textbf{CarHHMM-DFT} since it has elements of all HMM models discussed here. The parameters to estimate are
+%
+\begin{gather*}
+    \Gamma, \qquad \Gamma^{*} = \{\Gamma^{*(1)},\Gamma^{*(2)}\} \qquad \text{(probability transition matrices)}, \\
+    %
+    \Theta = \{\{\mu^{(1)},\sigma^{(1)}\},\{\mu^{(2)},\sigma^{(2)}\}\} \qquad \text{(coarse-scale emission parameters), and} \\
+    %
+    \Theta^* = \{\Theta^{*(1)},\Theta^{*(2)}\}  \qquad \text{(fine-scale emission parameters), where} \\
+    %
+    \Theta^{*(i)} =  \{\{\mu_1^{*(i)},\sigma_1^{*(i)},\phi_1^{*(i)}\},\{\mu_2^{*(i)},\sigma_2^{*(i)}\}\} \qquad \text{(}Z^{*(1)} \text{ and } Z^{*(2)} \text{ parameters).}
+\end{gather*}
+%
+The likelihood of this model is still easy to calculate using the forward algorithm, and it can be maximized with respect to the parameters above. See the appendix for details of likelihood evaluation. Figure \ref{fig:CarHHMM-DFT} also shows the corresponding graphical model.
+
+In addition to the preferred CarHHMM-DFT, we consider three similar variations for comparison:
+\begin{enumerate}
+    \item An \textbf{HHMM-DFT}, which models the coarse-scale observations with an HMM and transforms the fine-scale observations using the DFT, but models \textit{both} $\mathbf{Z}^{*(1)}$ \textit{and} $Z^{*(2)}$ with a simple HMM rather than a CarHMM.
+    \item A \textbf{CarHHMM}, which models the coarse-scale observations with an HMM, transforms the fine-scale observations \textit{without} using the DFT, and models $Z^{*(1)}$ using a CarHMM. The Fourier sums $\mathbf{Z}^{*(2)}$ are omitted as observations in this model.
+    \item A \textbf{CarHMM-DFT}, which models the coarse-scale observations \textit{as an independent and identically distributed sequence of dives}, transforms the fine-scale observations using the DFT, and models $\mathbf{Z}^{*(1)}$ with a CarHMM and $Z^{*(2)}$ with an HMM. This model assumes that there is only one dive type, so the fine-scale probability transition matrix $\Gamma^*$ is the same for every dive. 
+\end{enumerate}
+All models have the same emission distributions as the CarHHMM-DFT, when applicable. Each of the three models leaves out one important aspect of the full CarHHMM-DFT. The HHMM-DFT is missing auto-correlation within the fine-scale observations, the CarHHMM does not have access to the Fourier transform sums $(Z^{*(2)})$ as observations, and the CarHMM-DFT lacks a hierarchical structure by only modelling the fine-scale behavior of the whale.

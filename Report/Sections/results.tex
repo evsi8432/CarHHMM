@@ -2,48 +2,20 @@
 
 %\section{Killer Whale Case Study}
 
-In order to test the advantages of the CarHHM-DFT over the other models on real-world data, we used the four models described in the simulation study to analyze dive data from a Northern Resident Killer Whale (NRKW) off the coast of British Columbia, Canada. Acceleration data can be used to approximate an animal's energy expenditure \citep{Green:2009,Wilson:2019}, which can be helpful for conservation efforts. However, studies suggest that the animal's behavioral state must be taken into account to obtain accurate estimates \citep{Dot:2016}. Understanding both the behavioral state of the killer whale and the distribution of accelerometer data within each behavioral state is important to understand the energetic requirements of killer whales. This knowledge can help ecologists understand the animal's energetic requirements and which in turn can help conservation efforts.
+%In order to test the advantages of the CarHHM-DFT over the other models on real-world data, we used the four models described in the simulation study to analyze dive data from a Northern Resident Killer Whale (NRKW) off the coast of British Columbia, Canada. 
 
-\subsection{Data Collection and Preprocessing}
+%\section{Results}
 
-The data used in this study was collected on September 2, 2019 from 12:49 pm to 6:06 pm and consists of depth and acceleration in three orthogonal directions. Observations were collected at a rate of 50 Hz. Tagging the killer whale caused anomalous behavior before 1:20 pm and after 6:00 pm, so observations in these time periods were ignored. In addition, the tagging technology malfunctioned between 2:25pm and 2:37pm as well as between 4:07 and 5:07 pm, so all dives within this time range were ignored as well. A killer whale ``dive" is considered to be any continuous section of data that occurs below 0.5 meters in depth and lasts for at least 10 seconds. Accelerometer and depth data were smoothed by taking a moving average with a window of 1/10th of a second. Data preprocessing was done in part with the \textit{divebomb} package in Python \citep{Nunes:2018}. After preprocessing the raw data, a total of 267 dives were observed. Figure \ref{fig:data} displays the dive profile and accelerometer data.
+We report the results from fitting the CarHHMM-DFT in detail, validate the results, and then compare the results of this model with those from the other candidate models.
 
-\subsection{Model Selection}
+The estimates for the emission distribution parameters suggest that the killer whale has at least two distinct dive behaviors (Table \ref{table:emis_dists_CarHHMM-DFT}, Figure \ref{fig:coarse_emis}). 
+Dive type 1 corresponds to shorter, shallower dives. Ecologists have attributed a variety of purposes to such short dives, including resting (CITATION, you can ask Ian and Sarah for help here - look at the Tennessen paper with HMM).
+Dive type 2 is longer and deeper. These types of deep sustained dives have been associated with foraging behaviors in killer whales (Citation Tennessen maybe HMM and the other Tennesen with foraging data).
 
-We used a hierarchical HHM, where the coarse-scale observations were a time series of dive durations in seconds, and the fine-scale observations were the within-dive acceleration data (Figure \ref{fig:CarHHMM-DFT}). The coarse-scale level was comprised of an HMM with hidden states corresponding to dive types. The dive durations $Y_t$ were assumed to follow a gamma distribution with unknown parameters $\{\mu,\sigma\}$:
-$$\mathbb{E}(Y_t|X_t = i) = \mu^{(i)},$$
-$$\mathbb{V}(Y_t|X_t = i) = \left(\sigma^{(i)}\right)^2.$$
-
-The fine-scale acceleration data exhibits significant sinusoidal behavior, thus the fine-scale observations $Y^*$ were transformed using the DFT summary statistics of a two-second sliding window. Unlike the simulation study, where the time series of acceration was one-dimensional, the acceleration data here was collected in three dimensions. These three dimensions represent the complete range of movement of an animal (forward/backward, upward/downward, right/left) and is often collected by these types of tags \citep{Cade:2017,Fehlmann:2017,Wright:2017}. The following two sets of observations $z^*$ were calculated:
-%
-$$\mathbf{z}_{t,t^*}^{*(1)} := \mathcal{R}\left(\hat{\mathbf{y}}^{*(0)}_{t,t^*}\right) \qquad z_{t,t^*}^{*(2)} := \frac{1}{100}\sum_{k=1}^{10}||\hat{\mathbf{y}}^{(k)}_{t,t^*}||^2.$$
-The observations are therefore made up of $\mathbf{z}_{t,t^*}^{*(1)}$, a 3-dimensional vector, and $z_t^{*(2)}$, a scalar. We calculated $z_t^{*(2)}$ by summing the first 10 Fourier modes, which corresponds to a maximum recorded frequency of $\tilde \omega = 5$ Hz. 
-
-There is strong auto-correlation within $\mathbf{Z}^{*(1)}_{t,t^*}$ for all dimensions (section S-2.1), thus auto-correlation was directly modeled into the distribution of $\mathbf{Z}^{*(1)}_{t,t^*}$ using a CarHMM. We assumed $\mathbf{Z}^{*(1)}_{t,t^*}$ to be Normally distributed with the following parameters:
-%
-$$\mathbb{E}(\mathbf{Z}^{*(1)}_{t,t^*}|\mathbf{Z}^{*(1)}_{t,t^*-1} = \mathbf{z}, X^*_{t,t^*} = i) = \phi_1^{*(i)} \mathbf{z} + (1-\phi_1^{*(i)}) \mathbf{\mu}_1^{*(i)}$$
-$$\mathbb{V}(\mathbf{Z}^{*(1)}_{t,t^*}|\mathbf{Z}^{*(1)}_{t,t^*-1} = z,X^*_{t,t^*} = i) = \text{diag}\left[\left(\mathbf{\sigma}_1^{*(i)}\right)^2\right]$$
-%
-where $\phi_1^{*(i)} \in \mathbb{R}$, $\mathbf{\mu}_1^{*(i)} \in \mathbb{R}^3$, and $\mathbf{\sigma}_1^{*(i)} \in \mathbb{R}^3$.
-
-While $Z^{*(2)}_{t,t^*}$ also exhibits some auto-correlation, the relationship is less strong, and the biological interpretation of auto-correlation within $Z^{*(2)}_{t,t^*}$ is less clear. Auto-correlation was therefore not incorporated into the emission distribution of $Z^{*(2)}_{t,t^*}$. In particular, the distribution of $Z^{*(2)}_{t,t^*}$ was assumed to be gamma and parameterized by its mean and variance:
-%
-$$\mathbb{E}(Z^{*(2)}_{t,t^*}|Z^{*(1)}_{t,t^*-1} = z,X^*_{t,t^*} = i) = \mu_2^{*(i)}$$
-$$\mathbb{V}(Z^{*(2)}_{t,t^*}|Z^{*(1)}_{t,t^*-1} = z,X^*_{t,t^*} = i) = \left(\sigma_2^{*(i)}\right)^2.$$
-%
-The observations $Z^{*(2)}_{t,t^*}$ and $\mathbf{Z}^{*(1)}_{t,t^*}$ were assumed to be independent of one another when conditioned of the subdive state $X_{t,t^*}$.
-
-Information criteria tends to overestimate the number of states in biological processes \citep{Pohle:2017}, so we instead selected $N = 2$ dive types and $N^* = 3$ subdive behaviors heuristically. The absence of principled method to select the number of hidden states is a common issue in statistical ecology, so it is important to use model validation techniques in lieu of information criteria (see section \ref{subsec:model_validation}).
-
-The final model is nearly identical to the one from the simulation study, with the exception that the fine-scale Markov chain has three subdive behaviors instead of two ($N^* = 3$), and that the observation $\mathbf{z}^{*(1)}_{t,t^*}$ is a 3-dimensional vector rather than a scalar.
-
-\subsection{Results}
-
-The estimates for the emission distribution parameters suggest that this whale has at least two distinct dive behaviors (Table \ref{table:emis_dists_CarHHMM-DFT}, Figure \ref{fig:coarse_emis}). Dive type 1 corresponds to shorter, shallower dives. Ecologists have attributed a variety of purposes to such short dives, including resting (CITATION, you can ask Ian and Sarah for help here - look at the Tennessen paper with HMM). Dive type 2 is longer and deeper. These types of deep sustained dives have been associated with foraging behaviors in killer whales (Citation Tennessen maybe HMM and the other Tennesen with foraging data).
-
-The three subdive behaviors also appeared distinct, particularly with respect to their Fourier sums, as the mean of $Z^{*(2)}$ is separated by an order of magnitude between the three subdive types (Table \ref{table:emis_dists_CarHHMM-DFT},  Figure  \ref{fig:fine_emis}). Subdive type 1 corresponds to gliding and less overall activity compared to the other subdive types. The mean of $Z^{*(2)}$ and the variance of $\mathbf{Z}^{*(1)}$ in this state is smaller than the other subdive types. The auto-correlation of $\mathbf{Z}^{*(1)}$ also is higher for subdive type 1 than every other subdive type.
-Subdive type 2 is characterized by a mean Fourier sum ($Z^{*(2)}$) one order of magnitude high than subdive type 1. Acceleration has about twice the variance in this subdive type compared to subdive type 2, and slightly lower auto-correlation. Subdive type 2 corresponds to fluking (active swimming), as strong sinusoidal behavior in acceleration is characteristic of this behavior marine mammals \citep{Simon:2012}.
-Finally, subdive type 3 corresponds to vigorous swimming activity, especially as the killer whale submerges or surfaces. The mean of $Z^{*(2)}$ and variance of $\mathbf{Z}^{*(1)}$ is much higher in subdive type 3 compared to every other state. The auto-correlation of $\mathbf{Z}^{*(1)}$ is also much lower in this subdive type, implying more variation in acceleration.
+The three subdive behaviors also appeared distinct with respect to their Fourier sums, as the mean of $Z^{*(2)}$ is separated by an order of magnitude between the three subdive types (Table \ref{table:emis_dists_CarHHMM-DFT}, Figure \ref{fig:fine_emis}). 
+For subdive type 1, the mean of $Z^{*(2)}$ and the variance of $\mathbf{Z}^{*(1)}$ in this state is smaller than the other subdive types. The auto-correlation of $\mathbf{Z}^{*(1)}$ also is higher for subdive type 1 than every other subdive type. This corresponds to less overall activity compared to the other subdive types. 
+Subdive type 2 is characterized by a mean Fourier sum ($Z^{*(2)}$) one order of magnitude higher than subdive type 1. Acceleration has about twice the variance in this subdive type compared to subdive type 1, and slightly lower auto-correlation. Subdive type 2 corresponds to fluking (active swimming), as strong sinusoidal behavior in acceleration is characteristic of this behavior in marine mammals \citep{Simon:2012}.
+In subdive type 3, the mean of $Z^{*(2)}$ and variance of $\mathbf{Z}^{*(1)}$ is much higher compared to every other state. The auto-correlation of $\mathbf{Z}^{*(1)}$ is also much lower in this subdive type, implying more variation in acceleration. This corresponds to vigorous swimming activity, especially as the killer whale begins a dive or surfaces from a dive. 
 
 The estimated probability transition matrices and associated stationary distributions are
 %
@@ -63,10 +35,9 @@ $$\hat \Gamma^{*(1)} = \begin{pmatrix}
 0.114 & 0.841 & 0.045 \\
 0.000 & 0.216 & 0.784
 \end{pmatrix},$$
-$$\hat \delta^{*(1)} = \begin{pmatrix} 0.087 & 0.731 & 0.182 \end{pmatrix}, \qquad
-\hat \delta^{*(2)} = \begin{pmatrix} 0.401 & 0.496 & 0.103 \end{pmatrix}.$$
+$$\hat \delta^{*(1)} = \begin{pmatrix} 0.087 & 0.731 & 0.182 \end{pmatrix}, \enspace \text{and} \enspace \hat \delta^{*(2)} = \begin{pmatrix} 0.401 & 0.496 & 0.103 \end{pmatrix}.$$
 %
-The coarse-scale stationary distribution indicates that most dives are short type 1 dives. The coarse-scale transition probability matrix further indicates that the whale usually performs multiple short type 1 dives before doing only one (or a few) long type 2 dive. The fine-scale stationary distributions indicate that this killer whale is more likely to be in the less active subdive type 1 when performing long deep dives than when performing short shallow dives. Using less active swimming behavior when diving, and holding breath, for long periods of time has been suggested to be an energy reduction strategy in bottle-nose dolphins \citep{Williams:1999}. Such strategy could explain why subdive type 1 makes up 9\% of shallow dives for this killer whale, but it makes up 40\% of deep dives. Figure \ref{fig:labeled_dives} shows the decoded dive behavior of 6 selected dives. The supplementary material also shows the estimated \textit{probability} of each dive time and subdive hidden state (section S-2.2).
+The coarse-scale stationary distribution indicates that most dives are short type 1 dives. The coarse-scale transition probability matrix further indicates that the whale usually performs multiple short type 1 dives before doing only one (or a few) long type 2 dive. The fine-scale stationary distributions indicate that this killer whale is more likely to be in the less active subdive type 1 when performing long deep dives than when performing short shallow dives. Using less active swimming behavior when diving, and holding breath, for long periods of time has been suggested to be an energy reduction strategy in bottle-nose dolphins \citep{Williams:1999}. Figure \ref{fig:labeled_dives} shows the decoded dive behavior of 6 selected dives. The supplementary material also shows the estimated probability of each dive and subdive type (section S-2.2).
 
 \subsection{Model Validation}
 \label{subsec:model_validation}
@@ -74,3 +45,14 @@ The coarse-scale stationary distribution indicates that most dives are short typ
 Two visual tools were used to evaluate this model: pseudo-residuals and empirical histograms. A pseudo-residual of a particular observation is the marginal CDF of an observation conditioned on all other observations under the learned model \citep{Zucchini:2016}. To easily visualize outliers, this pseudo-residual is often passed through the quantile function of the standard Normal distribution. Mathematically, the pseudo-residual of an observation $y_t$ in a traditional HMM is equal to $\Phi^{-1} \left(Pr(Y_t < y_t|\{Y_1,\ldots,Y_T\}/\{Y_t\}) \right)$, where $\Phi$ is the cumulative distribution function of a standard Normal distribution. If the model is correct, then all pseudo-residuals are independent and follow a standard Normal distribution. We find that histograms of the pseudoresiduals of this model mostly support that the model is well-specified. $Z^{*(2)}$ is an exception, as its pseudo-residuals are noticeably right-skewed (Figure \ref{fig:pseudoresids}). This implies that the true distribution of $Z^{*(2)}$ may follow a heavier-tailed distribution than the gamma distribution. 
 
 We also plotted histograms of each feature where observations were weighted by the probability of a particular hidden state. This empirical distribution was then plotted over its corresponding fitted emission distribution (Figure \ref{fig:empirical_dist}). Our results mostly support a well-specified model with the exception of $Z^{*(2)}$, which is again right-skewed. In addition, $\mathbf{Z}^{*(1)}$ has heavy tails for subdive state 3, indicating the existence of rare events corresponding to exceptionally violent thrashing of the killer whale. These outliers are potential subjects for future study. See the supplementary material for empirical distributions of every feature and every hidden state. 
+
+\subsection{Comparison with candidate models}
+
+The CarHMM-DFT produced very similar to those of the CarHHMM-DFT on the fine scale. However, it failed to differentiate between short and long dives, and it therefore did not infer any information relating to the dive level Markov chain or the relationship between the dive level and the subdive level. For example, the CarHMM-DFT missed the insight that the whale was much more likely to be in subdive type 1 when engaged in longer dives than when engaged in shorter dives.
+
+The HHMM-DFT decoded the dive and subdive types similarly to the CarHHMM-DFT, but was less likely to categorize the beginning and end of dives as subdive type 3. In addition, the HHMM-DFT produced estimates $\hat \sigma_1^*$ that were approximately 50-100 \% larger than those for the CarHHMM-DFT, and the estimated uncertainty of $\hat \mu^*_1$ was less than half of that for the CarHHMM-DFT for all dimensions and subdive states. These findings are consistent with the trend to overestimate variance and produce overconfident parameter estimates when auto-correlation is ignored. Further, the empirical auto-correlation of $\mathbf{Z}^{*(1)}$ within each decoded subdive type was at least 0.5 for all dimensions and subdive types. Finally, the pseudoresiduals of the HHMM-DFT had many more outliers than the pseudoresiduals of the CarHHMM-DFT, providing evidence that the HHMM-DFT was a worse fit to this data than the CarHHMM-DFT.
+
+The CarHHMM did not have access to the Fourier sums of the acceleration data, so it failed to decode the subdive types into biologically interpretable results. In addition, the pseudoresiduals corresponding to the CarHHMM appears to be less heavy-tailed than a normal distribution. 
+
+See section S-??? for a more complete set of results for each of the candidate models.
+

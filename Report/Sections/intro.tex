@@ -1,13 +1,10 @@
 
 
 
-{\em{This still needs some editing}}
 
-\vskip 10pt\noindent
-
-Recent advances in technology allow us to gather enormous amounts of data collected almost continuously in time.
-The collection and analysis of movement data from devices such as accelerometers and GPS trackers have brought new understanding to {\bf{more references}}  physical activity levels in children \citep{Morris:2007} ...
-In this article, we focus on the study of animal movement;  tags attached to animals record observations at rates of tens of hertz, resulting in time series containing millions of observations over the course of several hours and providing biologists with new tools for understanding animal behaviour.
+Recent advances in technology for tracking movement provide researchers with data collected almost continuously in time.
+The collection and analysis of data from devices such as accelerometers have brought new understanding to areas ranging from  {\bf{more references}}  to physical activity levels in children \citep{Morris:2007}.
+In this article, we focus on the study of animal movement;  tags attached to animals record observations at rates of tens of hertz, resulting in time series containing millions of observations over the course of several hours and providing biologists with new information about  animal behaviour.
 
 %Many statistical techniques have been developed and applied to these types of longitudinal or functional data.  
 %Some techniques, such as time series, are highly parametric. 
@@ -17,53 +14,60 @@ In this article, we focus on the study of animal movement;  tags attached to ani
 %Functional Data Analysis (FDA) techniques lie somewhere in between these extremes: the output of an analysis provides visual tools for understanding processes and, often, some dimension reduction to allow for easier exploration.  
 %The development of structured FDA techniques which incorporate more complex dependence structures has become a topic of recent interest  (see, e.g., Crainiceanu. and references therein).
 
-Often, movement data can be viewed as a set of many curves.   In Morris, each child in the data set is associated with two curves from two different days.   In our data, we will consider curves from a sequence of dives of one killer whale (\textit{Orcinus orca}) from the threatened Northern resident population off the coast of British Columbia, Canada. 
-These types of data are amenable to techniques of Functional Data Analysis (FDA).
-FDA was originally developed for curves that can be considered independent replicates  (Ramsay ref, a theoretical ref).  
-However, the structure of the data is often more complicated.
-For instance, in Morris, clearly, the two curves from the same child are dependent.
-And in our dive data, the sequence of days exhibits temporal dependence.
+Movement data are sometimes modelled as a set of curves that can  be analyzed by methods of Functional Data Analysis (FDA, see, e.g., \citealt{Ramsay:2005}).  In \cite{Morris:2007}, a child's activity level throughout the day can be viewed as a curve, specifically, as activity as a function of time.   
+In the data  we consider, a single dive of a whale can be viewed as a curve:  acceleration as a function of time.
+FDA was originally developed for curves that can be considered independent replicates.
+However, the structure of the data is often more complex.
 
 
-More complicated structures in FDA have been considered in the form of hierarchical ...  typically incorporating random effects.
-Time series of curves  ...  RELATED would be appropriate here.
-Here, we consider Markov modelling of a curve sequence.  Common in animal movement because it gives biological insight.
-
-Our goal is to develop movement analysis methods that are flexible but also use subject area knowledge to provide insight into curve data with complex structure.
+Our goal is to develop movement analysis methods that provide subject-area insight  into the complex structure of curve data.
 We  model complexities arising  from curve to curve variation, along with the complexities of within-curve fine-scale characteristics and temporal dependence,
 combining existing methods in novel ways.
-We enforce temporal structure via Markov processes.  
-While our methodology is generally applicable, we  showcase our ideas to study the underlying behaviour indicated by the complex dive patterns of a killer whale (\textit{Orcinus orca}) from the threatened Northern resident population off the coast of British Columbia, Canada.  
+We enforce temporal structure and dependence from dive to dive via a hidden Markov model (HMM).
+We model within dive variation by combining an HMM and a time series.
+Using HMMs at both the dive level and the fine scale allows us to interpret the data as arising from different types of behaviour.
+While our methodology is generally applicable, we  showcase our methods in a  study of the underlying behaviour indicated by the complex dive patterns of a killer whale (\textit{Orcinus orca}) from the threatened Northern resident population off the coast of British Columbia, Canada.  
 For more information about the data, see Section \ref{sec:case_study}.
 Figure \ref{fig:data} shows the data we will analyze.
 The top panel shows the depth of the whale below the surface, and we clearly see dives of various time durations and maximum depths. 
-The bottom three panels show the acceleration in each of three orthogonal directions, as recorded by an accelerometer,   
+The bottom three panels show the acceleration in each of three orthogonal directions as recorded by an accelerometer,   
 with axes oriented relative to the whale's forward movement.
 Here, we see spikes in acceleration which contrast with periods of fairly constant acceleration.
 Figure {\ref{fig:labeled_dives}} gives a more detailed view, showing a segment of the data containing six dives of at least two different types.
-The plot shows one component of the acceleration, and from this we can see fine-scale behaviour within each dive which seems to indicate some fine scale short-term periodicity. 
+The plot shows one component of the acceleration, and from this we can see fine-scale behaviour within each dive,  behaviour that seems to indicate some fine-scale short-term periodicity. 
 We seek to understand both the coarse scale behaviour (e.g.~the dive type) and the fine-scale, within-dive behaviour. 
 Such an analysis helps biologists to understand the foraging behaviour and feeding success of killer whales. 
 
-The killer whale dives form a sequence of dependent curves. However, in FDA, curves are typically deemed independent.  
-A noted exception involves multilevel modelling [references] which uses random effects and is appropriate when the set of curves can be partitioned into independent subsets, typically with each subset arising from one individual.  
-[NEED REFERENCES]  
-However, this approach is not appropriate here, so we consider a temporal structure for dependence, with the characteristics of each curve determined by a latent state that evolves according to a Markov model.  
-This HMM allows us to interpret each curve as arising from a type of behaviour.
+Particular types of between curve dependence structures have received attention in the FDA literature, 
+notablly multilevel models that incorporate dependence via random effects.
+For instance, in the aforementioned study of children's activity levels in  \cite{Morris:2007}, the authors use a multilevel approach since each child yields not one but two daily activity curves and so the model includes a random effect for ``child''.
+Perhaps the first work with this multilevel structure is \cite{Bromback:1998} in a study of ....   More recent work on multilevel models includes that of \cite{di:2009}, \cite{chen:2012}} and Crainiceanu [REF]. 
+For our data, the multilevel models are not appropriate, since they do not account for the temporal dependence.
+
+FDA researchers have modelled temporal dependence in a sequence of curves  via functional time series, extending the ideas of classic time series to model how one curve evolves into the next curve.  See, for instance, \cite{Kokoszka:2018}. 
+While  functional time series methods can be applied to our dive data, they would not account for the different dive types.
+Our HMM models account for both temporal dive-to-dive dependence and dive types.
+
+
+%A noted exception involves multilevel modelling [references] which uses random effects and is appropriate when the set of curves can be partitioned into independent subsets, typically with each subset arising from one individual.  
+ 
 
 From the plotted killer whale data in Figure {\ref{fig:labeled_dives}}, we see complexities within each dive that would be difficult to model as a realization of a simple stochastic process. 
 In FDA, within-curve structure is modelled by a generic smooth mean function and covariance function.
 Alternatively, this structure is sometimes generated via random regression.
 However, these classic FDA techniques would be hard-pressed to model the type of radically changing behaviour that we see in Figure 9.
-We model the within-curve dependence by combining a hidden Markov model of within-curve behaviour with an autoregressive-type dependence. Finally, for the fine-scale behaviour, we use summary information that reflects the application area's meaning for the curve.  Specifically, for the dive data, we use summaries of Fourier transforms to account for sudden and extreme ``wiggliness'' within some segments of a curve. The distribution of this ``wiggliness'' depends on the hidden state.
+We model the within-curve dependence by combining a hidden Markov model of within-curve behaviour with an autoregressive-type dependence. Finally, for the fine-scale behaviour, we use summary information that is biologically meaninful.   Specifically, for the dive data, we use summaries of Fourier transforms to account for the ``wiggliness'' in some segments of a curve. The distribution of this ``wiggliness'' depends on the hidden state.
 
 
-{\bf{ Make sure to reference Langrock}}
- 
 
 Our work relies on work in the vast field of methodology for the analysis of animal movement
-\citep{Hooten:2017,Mcclintock:2020}.
-One of the most prevalent techniques in the literature of late is the hidden Markov model (HMM), where observations depend upon the state of an associated unobserved behavioral process following Markovian dynamics \citep{Patterson:2017}. 
+\citep{Hooten:2017,Mcclintock:2020}, where
+one of the most prevalent techniques in the literature of late is the HMM \citep{Patterson:2017}. 
+However, HMMs have seen little use in FDA.  
+One exception is the work of Roland Langrock (see, for instance \citealt{Langrock:2018}).
+Animal movement modelers have also used  hierarchical hidden Markov models (HHMMs) to model  simultaneous behavioral processes that occur at different time scales \citep{Barajas:2017,Adam:2019}, and we borrow from that work here. 
+Part of the purpose of our article is to introduce the FDA community to these very useful approaches to modelling complex curves. 
+
 %
 %Importantly, under the traditional HMM model, subsequent observations are assumed to be independent from one another when conditioned on the underlying behavioral process.
 %However, this assumption is often violated in the real world processes, especially when observations are taken a high frequencies. 
@@ -73,14 +77,19 @@ One of the most prevalent techniques in the literature of late is the hidden Mar
 %while maintaining the structure needed to run the forward algorithm. 
 %It also only adds one additional parameter per possible hidden state.
 
-Animal movement modelers have recognized that several simultaneous behavioral processes may occur at different time scales. 
-One approach to the analysis of this type of data is to use a hierarchical hidden Markov model, or HHMM \citep{Barajas:2017,Adam:2019}. 
-HHMMs model the entire time series in question as a nested structure of hidden Markov models where each HMM corresponds to one behavioral process.
 
-At the shortest time scales, however, observations often exhibit complicated dependence structures which cannot be easily captured by traditional HMMs, CarHMMs, or HHMMs. Examples included periodic fluking behavior in killer whales off the coast of Vancouver, BC, and swimming patterns of horn sharks of the coast of Southern California \citep{Adam:2019}. 
+We also borrow techniques from animal movement to model fine-scale behaviour, beyond simply using an HMM.  
+Under the traditional HMM model,  observations are independent given  the underlying hidden state process.
+However, this assumption is often violated in the real world processes, especially when observations are taken a high frequencies. 
+%For example, the location of an animal at a given time is highly correlated with the location of that animal one second later. 
+Several solutions have been proposed, such as  the hidden movement Markov model \citep{Whoriskey:2016} and the conditionally auto-regressive hidden Markov model, or CarHMM \citep{Lawler:2019}. 
+The CarHMM in particular explicitly models auto-correlation into an HMM in a way that is easily analyzed using usual HMM techniques.
+
+An additional complication is that, at the shortest time scales,  observations often exhibit complicated  structure which cannot easily be captured by traditional HMMs, CarHMMs, or HHMMs. Examples included periodic fluking behavior in killer whales off the coast of Vancouver, BC, and swimming patterns of horn sharks of the coast of Southern California \citep{Adam:2019}. 
 %One solution is to model the fine-scale behavior using a continuous-time model, which usually involves modelling the dynamics of an animal as the solution to a stochastic differential equation. Continuous-time models are more flexible than their discrete-time counterparts and can incorporate observations taken at irregular time intervals. However, they are often computationally intractable and require approximate inference techniques such as Markov-chain Monte Carlo (MCMC) methods to perform inference.
-One way to model periodic behavior in particular is to use signal processing techniques such as the Fourier transform on the raw data. 
-The advantages of using Fourier analysis within an HMM has been recently demonstrated in the context of describing daily behavioral cycles of marine mammals \citep{Heerah:2017}.
+Our dive data exhibit  fine-scale periodic behaviour, so we transform the data via
+ the signal processing technique of the Fourier transform. 
+\cite{Heerah:2017} have demonstrated the advantages of using Fourier analysis within an HMM  in the context of describing daily behavioral cycles of marine mammals.
 In addition, Fourier analysis has previously been used in the field of animal movement to explain animal behavior \citep{Fehlmann:2017} and specifically fluking \citep{Shorter:2017} from accelerometer data. 
 Thus, incorporating Fourier analysis of accelerometer data within the structure of an HMM appears a promising simple approach to account for additional correlation in data that is cyclical in nature.
 
@@ -89,6 +98,8 @@ We describe a general procedure that can be used to extract features from highly
 In addition, we bridge the gap between the discrete CarHMM and certain continuous-time stochastic process models by showing that the two are equivalent under certain conditions. 
 We then perform a simulation study to compare the performance of each existing model with ours in a controlled setting. 
 Finally, we apply our method to the dive data of Figure 6.
+
+In the following section, we describe HMMs, CarHMMs and HHMMs.  We show how these models can be combined in order to analyze complex data. We also discuss transforming data.  In Section 3, we study various models for complex ...  Section 4 contains data analysis and Section 5 discussion.
 
 
 
