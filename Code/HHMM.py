@@ -195,6 +195,8 @@ class HHMM:
             # find new mean if there is autocorrelation
             if self.pars.features[level][feature]['corr'] and data_tm1 is not None:
                 mu = (1.0-corr)*mu + corr*data_tm1[feature]
+            elif self.pars.features[level][feature]['corr'] and data_tm1 is None:
+                return 0
 
             if sample > 0:
                 return multivariate_normal.rvs(mu,sig,sample)
@@ -207,6 +209,8 @@ class HHMM:
             # find new mean if there is autocorrelation
             if self.pars.features[level][feature]['corr'] and data_tm1 is not None:
                 mu = (1.0-corr)*mu + corr*data_tm1[feature]
+            elif self.pars.features[level][feature]['corr'] and data_tm1 is None:
+                return 0
 
             if sample > 0:
                 return norm.rvs(mu,sig,sample)
@@ -218,6 +222,8 @@ class HHMM:
             # find new mean if there is autocorrelation
             if self.pars.features[level][feature]['corr'] and data_tm1 is not None:
                 mu = (1.0-corr)*mu + corr*data_tm1[feature]
+            elif self.pars.features[level][feature]['corr'] and data_tm1 is None:
+                return 0
 
             shape = np.square(mu)/np.square(sig)
             scale = np.square(sig)/np.array(mu)
@@ -239,6 +245,8 @@ class HHMM:
                 mu = ((mu+np.pi)%(2*np.pi))-np.pi
             elif self.pars.features[1][feature]['corr'] and data_tm1 is not None:
                 mu = (1.0-corr)*mu + corr*data_tm1[feature]
+            elif self.pars.features[level][feature]['corr'] and data_tm1 is None:
+                return 0
             else:
                 pass
 
@@ -270,10 +278,10 @@ class HHMM:
 
         # initialize values
         log_L = 0
-        seg_tm1 = dive_data[0]
+        seg_tm1 = None
 
         # iterate through dive segments
-        for i,seg in enumerate(dive_data):
+        for seg in dive_data:
 
             log_p_yt_given_xt = np.zeros(self.pars.K[1])
 
@@ -539,7 +547,7 @@ class HHMM:
                         x0 = self.theta[0][feature][param][k0]
 
                         # optimize
-                        res = minimize(loss_fn, x0, method='BFGS', options=options)
+                        res = minimize(loss_fn, x0, method='Nelder–Mead', options=options)
 
                         # update final values
                         x = np.copy(res['x'])
@@ -651,7 +659,7 @@ class HHMM:
                             x0 = self.theta[1][k0][feature][param][k1]
 
                             # optimize
-                            res = minimize(loss_fn, x0, method='BFGS', options=options)
+                            res = minimize(loss_fn, x0, method='Nelder-Mead', options=options)
 
                             # update final values
                             if self.likelihood(data) >= backup_l:
@@ -754,10 +762,15 @@ class HHMM:
 
         # coarse-scale theta
         for feature in self.theta[0]:
+            print('')
+            print(feature)
             SEs[feature] = {}
             for param in self.theta[0][feature]:
+                print('')
+                print(param)
                 SEs[feature][param] = []
                 for state_num,theta in enumerate(self.theta[0][feature][param]):
+                    print(state_num)
 
                     if param == 'corr':
                         theta = deepcopy(expit(self.theta[0][feature][param][state_num]))
@@ -799,10 +812,15 @@ class HHMM:
 
         # fine-scale theta (shared states)
         for feature in self.theta[1][0]:
+            print('')
+            print(feature)
             SEs[feature] = {}
             for param in self.theta[1][0][feature]:
+                print('')
+                print(param)
                 SEs[feature][param] = []
                 for state_num,theta in enumerate(self.theta[1][0][feature][param]):
+                    print(state_num)
 
                     if param == 'corr':
                         theta = deepcopy(expit(self.theta[1][0][feature][param][state_num]))
@@ -810,6 +828,7 @@ class HHMM:
 
                     # get middle value
                     th_t = self.likelihood(data)
+                    print(th_t)
 
                     # get plus value
                     if param == 'corr':
@@ -821,6 +840,7 @@ class HHMM:
                         for i in range(1,self.pars.K[0]):
                             self.theta[1][i][feature][param][state_num] = self.theta[1][0][feature][param][state_num]
                     th_tp1 = self.likelihood(data)
+                    print(th_tp1)
 
                     # get minus value
                     if param == 'corr':
@@ -832,6 +852,7 @@ class HHMM:
                         for i in range(1,self.pars.K[0]):
                             self.theta[1][i][feature][param][state_num] = self.theta[1][0][feature][param][state_num]
                     th_tm1 = self.likelihood(data)
+                    print(th_tm1)
 
                     # return theta
                     if param == 'corr':

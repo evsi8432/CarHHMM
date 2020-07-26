@@ -41,7 +41,7 @@ pars.features = [{'dive_duration':{'corr':False,'f':'gamma'}},
 pars.K = [2,3]
 pars.share_fine_states = True
 
-if model == 'CarHHM':
+if model == 'CarHMM':
     pars.K = [1,3]
 elif model == 'HHMM':
     pars.features[1]['Ax']['corr'] = False

@@ -107,7 +107,7 @@ class Visualisor:
         return
 
 
-    def plot_emission_probs(self,level,file=None):
+    def plot_emission_probs(self,level,file=None,features=None):
 
         if self.hhmm is None:
             print('No trained model')
@@ -118,7 +118,8 @@ class Visualisor:
             nrows = 1
             ncols = len(self.hhmm.theta[0])
         else:
-            features = ['Ax','Ay','Az','Ahat_low']#list(self.hhmm.theta[1][0].keys())
+            if features is None:
+                features = ['Ax','Ay','Az','Ahat_low']#list(self.hhmm.theta[1][0].keys())
             nrows = 2 #self.pars.K[0]
             ncols = int((len(features)+1)/2)
 
