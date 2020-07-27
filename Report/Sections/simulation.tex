@@ -50,6 +50,8 @@ The CarHHMM was the worst-performing model in terms of decoding accuracy, with a
 
 Finally, the CarHMM-DFT was comparable to the CarHHMM-DFT in terms of decoding accuracy, parameter bias, and parameter standard error for the fine-scale observations. In addition, the time required to fit the CarHMM-DFT was less than half of that of the other models (see Table \ref{table:accuracy}). However, it lacked any hierarchical structure, so it was unable to estimate the coarse-scale dive types. The CarHMM-DFT still did fit a gamma distribution to the dive duration of \textit{all} dives. These parameter estimates $\hat \mu$ and $\hat \sigma$ are highly correlated, and $\hat \sigma$ underestimates the true standard deviation of all dive types by $\approx$ 5 seconds.
 
+See Figure \ref{fig:acc_coarse} \& \ref{fig:acc_fine} for a visualization of the simulated data set as well as the decoded dive/subdive type probabilities as determined by each model.
+
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

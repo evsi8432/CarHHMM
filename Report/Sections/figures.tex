@@ -117,19 +117,16 @@ Model                       & \multicolumn{1}{c}{Train Time (m)} & \multicolumn{
 
 \begin{figure}[ht]
     \centering
-    \begin{subfigure}[t]{1.0\textwidth}
-        \centering
-        \includegraphics[width=3.5in]{../Plots/Posterior_Coarse_States.png}
-        \caption{Coarse-scale hidden process}
-    \end{subfigure}
-    %
-    \begin{subfigure}[t]{1.0\textwidth}
-        \centering
-        \includegraphics[width=3.5in]{../Plots/Posterior_Fine_States.png}
-        \caption{Fine-scale hidden process}
-    \end{subfigure}
-	\caption{Decoded state probabilities of each model for 5 dives of one simulated data set. The colors correspond to the true behavioral state / dive type.}
-	\label{fig:acc}
+    \includegraphics[width=5in]{../Plots/Posterior_Coarse_States.png}
+    \caption{Decoded probabilities of each dive type for 5 dives of one simulated data set. The colors correspond to the true dive or subdive type}
+    \label{fig:acc_coarse}
+\end{figure}
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=5in]{../Plots/Posterior_Fine_States.png}
+    \caption{Decoded probabilities of each subdive type for 5 dives of one simulated data set. The colors correspond to the true dive or subdive type}
+    \label{fig:acc_fine}
 \end{figure}
 
 %%% Case Study %%%
