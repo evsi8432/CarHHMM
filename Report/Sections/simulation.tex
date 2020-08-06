@@ -2,7 +2,7 @@
 
 %\section{Simulation Study}
 
-To evaluate the performance of each candidate model when the ground-truth is known, we perform a simulation study based on data generated from the full CarHHMM-DFT. The parameters used to generate the data are loosely based on those learned from the case study in Section \ref{sec:case_study}. The ground-truth parameters differ slightly from those learned in the case study primarily for simplicity of presentation. For example, we set $\Gamma$ such that the simulated data has approximately equal numbers of short and long dives. This allows meaningful conclusions to be made for both dive types. In addition, the number subdive states is set to $N^*=2$ and $Z^{*(2)}$ is set as a scalar for additional simplicity. Metrics used to evaluate each model include decoding accuracy of hidden states, bias in parameter estimates, standard error of parameter estimates, and fitting times. We also compare the empirical standard error of each model's parameter estimates with the estimated standard error using the inverse of the observed Fisher information under that model. This allows us to judge how accurate each model is when estimating its own uncertainty.
+To evaluate the performance of each candidate model when the ground-truth is known, we perform a simulation study based on data generated from the full CarHHMM-DFT. The parameters used to generate the data are loosely based on those estimated in the case study in Section \ref{sec:case_study} (see table \ref{table:emis_dists_CarHHMM-DFT}), with slight modifications made to simplify presentation. For example, we set $\Gamma$ such that the simulated data has approximately equal numbers of short and long dives. This allows meaningful conclusions to be made for both dive types. In addition, the number subdive states is set to $N^*=2$ and $\Ztwo$ is set as a scalar for additional simplicity. Metrics used to evaluate each model include decoding accuracy of hidden states, bias in parameter estimates, standard error of parameter estimates, and fitting times. To assess how accurate each model is when estimating its own uncertainty, we also compare the empirical standard error of each model's parameter estimates with the estimated standard error using the inverse of the observed Fisher information under that model.
 
 \subsection{Data Simulation}
 
@@ -16,33 +16,33 @@ $$
     \mu^{(2)} = 80s, \enspace \text{and} \enspace \sigma^{(2)} = 25s.
 $$
 %
-After calculating the dive durations for all 100 dives in each data set, dive $t$ is broken into a sequence of $T^*_t = \lfloor Y_t/2 \rfloor$ two-second segments which make up the fine-scale hidden Markov model. The last $Y_t - 2\lfloor Y_t/2 \rfloor$ seconds of the dive are discarded. Each two-second segment is assigned one of $N^*=2$ behaviours according to a fine-scale Markov chain $X^*_t \equiv \left(X^*_{t,1}, \ldots, X^*_{t,T^*_t} \right)$ with probability transition matrices
+After calculating the dive durations for all 100 dives in each data set, dive $t$ is broken into a sequence of $T^*_t = \lfloor Y_t/2 \rfloor$ two-second segments which make up the fine-scale hidden Markov model. Each two-second segment is assigned one of $N^*=2$ behaviours according to a fine-scale Markov chain $X^*_t \equiv \left(X^*_{t,1}, \ldots, X^*_{t,T^*_t} \right)$ with probability transition matrices
 %
 $$\Gamma^{*(1)} = \begin{pmatrix} 0.5 & 0.5 \\ 0.1 & 0.9 \end{pmatrix} \quad \text{ and } \quad \Gamma^{*(2)} = \begin{pmatrix} 0.8 & 0.2 \\ 0.3 & 0.7 \end{pmatrix}.$$ 
 %
 The observations $Z^*$ are generated using the following parameters:
 %
 \begin{gather*}
-    \mu_1^{*(1)} = 0.0 s, \enspace \sigma_1^{*(1)} = 0.05s, \enspace \phi_1^{*(1)} = 0.99, \\
+    \mu_A^{*(1)} = 0.0 s, \enspace \sigma_A^{*(1)} = 0.05s, \enspace \phi_A^{*(1)} = 0.99, \\
     %
-    \mu_1^{*(2)} = 0.0 s, \enspace \sigma_1^{*(2)} = 0.1s, \enspace \phi_1^{*(2)} = 0.95, \\
+    \mu_A^{*(2)} = 0.0 s, \enspace \sigma_A^{*(2)} = 0.1s, \enspace \phi_A^{*(2)} = 0.95, \\
     %
-    \mu_2^{*(1)} = 10.10, \quad \sigma_2^{*(1)} = 3.18, \\
+    \mu_W^{*(1)} = 10.10, \quad \sigma_W^{*(1)} = 3.18, \\
     %
-    \mu_2^{*(2)} = 305.94, \quad \sigma_2^{*(2)} = 17.49.
+    \mu_W^{*(2)} = 305.94, \quad \sigma_W^{*(2)} = 17.49.
 \end{gather*}
 %
-Recall that $Z^{*(1)}$ follows a CarHMM and is Normally distributed while $Z^{*(2)}$ follows an HMM and is Gamma distributed. It is not possible to uniquely recreate the raw accelerometer data $Y^*$ from $Z^*$ alone, but we describe one possible mapping from $Z^*$ to $Y^*$ in the appendix. Figure \ref{fig:sim_data} shows this reconstructed sequence along with $Z^*$ for five dives of one simulated data set. 
+Recall that $\Zone$ follows a CarHMM and is Normally distributed while $\Ztwo$ follows an HMM and is Gamma distributed. It is not possible to uniquely recreate the raw accelerometer data $Y^*$ from $Z^*$ alone, but we describe one possible mapping from $Z^*$ to $Y^*$ in the appendix. Figure \ref{fig:sim_data} shows this reconstructed sequence along with one realization of $Z^*$ for five dives of one simulated data set. 
 
-The two dive types differ in that dives of type 1 are much shorter on average than dives of type 2. The two subdive types differ primarily due to $\mu_2^*$ and $\sigma_2^*$, both of which are much higher in subdive state 2. This corresponds to much more vigorous and variable periodic behavior in the acceleration data for subdive state 2.
-
-\subsection{Simulation Results}
+The two dive types differ in that dives of type 1 are much shorter on average than dives of type 2. The two subdive types differ primarily due to $\mu_W^*$ and $\sigma_W^*$, both of which are much higher in subdive state 2 than subdive state 1. This corresponds to much more vigorous and variable periodic behavior in the acceleration data.
 
 All four candidate models (CarHHMM-DFT, HHMM-DFT, CarHHMM, and CarHMM-DFT) are fit to all 500 data sets using the Cedar Compute Canada cluster with 1 CPU and 4 GB of dedicated memory per model.
 
-As expected, the full CarHHMM-DFT is the best-performing model. Using the forward-backward algorithm, the CarHHMM-DFT decodes the correct subdive type given the fine-scale data with an average confidence of $1 - 10^{-12}$ across all simulations. For dive type the average confidence was above 0.9 (see Table \ref{table:accuracy}). All parameter estimates have statistically insignificant biases except for $\hat \sigma$ and $\hat \phi$, whose MLEs are known to be biased. Even still, these biases are the least severe for the CarHHMM-DFT among the four models. The empirical standard error of all parameter estimates ($\hat \Theta$, $\hat \Gamma$, $\hat \Theta^*$, $\hat \Gamma^*$) are well-approximated by the inverse of the observed Fisher information matrix, although the estimated standard errors tend to be slight underestimates of the empirical standard error. See Section S-1.2, tables 2-5 for more information.
+\subsection{Simulation Results}
 
-The HHMM-DFT performs almost identically to the CarHHMM-DFT in most respects, including its decoding accuracy and parameter bias. However, the HHMM-DFT differed from the CarHHMM-DFT in its estimate of the standard deviation of acceleration, $\hat \sigma_1^*$. For both subdive types, $\hat \sigma_1^*$ greatly overestimates the true standard deviation. The estimated standard errors of $\hat \mu_1^*$ and $\hat \sigma_1^*$ using the observed Fisher information are both much smaller than the empirical standard error (see Section S-1.2, Table 3). This implies that variance can be overestimated and parameter estimates can be too confident when auto-correlation is ignored.
+As expected, since it is the generating model, the full CarHHMM-DFT is the best-performing model. Using the forward-backward algorithm, the CarHHMM-DFT decodes the correct subdive type given the fine-scale data with an average confidence of $1 - 10^{-12}$ across all simulations. For dive type the average confidence was above 0.9 (see Table \ref{table:accuracy}). All parameter estimates have statistically insignificant biases except for $\hat \sigma$ and $\hat \phi$, whose MLEs are known to be biased. Even still, these biases are the least severe for the CarHHMM-DFT among the four models. The empirical standard error of all parameter estimates ($\hat \Theta$, $\hat \Gamma$, $\hat \Theta^*$, $\hat \Gamma^*$) are well-approximated by the inverse of the observed Fisher information matrix, although the estimated standard errors tend to be slight underestimates of the empirical standard error. See Section S-1.2, tables 2-5 for more information.
+
+The HHMM-DFT performs almost identically to the CarHHMM-DFT in most respects, including its decoding accuracy and parameter bias. However, the HHMM-DFT differed from the CarHHMM-DFT in its estimate of the standard deviation of acceleration, $\hat \sigma_A^*$. For both subdive types, $\hat \sigma_A^*$ greatly overestimates the true standard deviation. The estimated standard errors of $\hat \mu_A^*$ and $\hat \sigma_A^*$ using the observed Fisher information are both much smaller than the empirical standard error (see Section S-1.2, Table 3). This implies that variance can be overestimated and parameter estimates can be too confident when auto-correlation is ignored.
 
 The CarHHMM is the worst-performing model in terms of decoding accuracy, with an average confidence below $0.9$ when determining both dive and subdive types. This result is consistent with expectations because the CarHHMM does not have access to the ``wiggles" of the fine-scale process, which are the most informative observations when determining subdive type. The CarHHMM is also much more likely to mis-classify subdive type 1 than subdive type 2 (see Section S-1.2, Table 1). The CarHHMM is the worst of the four at estimating parameters, and this is in part due to its relatively poor decoding accuracy. $\hat \Theta^{*(2)}$ and $\hat \Gamma^{*(2)}$ are especially poor estimates (see Section S-1.1.3).
 
