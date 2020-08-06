@@ -76,6 +76,10 @@ class Visualisor:
                 xlim = [min(x),max(x)]
                 ylim = [min(y),max(y)]
 
+            # print autocorrelation
+            print(feature)
+            print(np.corrcoef(x,y))
+
             # KDE of lag plot
             plt.subplot(nrows,ncols,fig_num)
             kernel = gaussian_kde([x,y])

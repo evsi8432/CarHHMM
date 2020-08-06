@@ -547,7 +547,7 @@ class HHMM:
                         x0 = self.theta[0][feature][param][k0]
 
                         # optimize
-                        res = minimize(loss_fn, x0, method='Nelder–Mead', options=options)
+                        res = minimize(loss_fn, x0, method='Nelder-Mead', options=options)
 
                         # update final values
                         x = np.copy(res['x'])
