@@ -41,7 +41,8 @@
 \bibliographystyle{abbrvnat}
 
 % Title, authors, affiliations
-\title[]{Modelling temporal dependence and multilevel structure using hidden Markov models}%\query{Q1}
+%\title[]{Modelling temporal dependence and multilevel structure using hidden Markov models}%\query{Q1}
+\title[]{Modelling state-switching behaviour in functional data with hidden Markov models}
 \author{BlindedA\authorref{1}\thanksref{*}}
 \author{BlindedB\authorref{2}}
 \affiliation[1]{Author affiliations will go here in the accepted manuscript, 
@@ -66,11 +67,11 @@ likelihood\sep repeated measurements.
 %list the key words in alphabetical order.  The MSC 2010 subject classification codes can be found here:
 %http://www.ams.org/mathscinet/msc/pdfs/classifications2010.pdf.
 
-Advances in tagging technology have made a vast amount of high-frequency time series data available in several fields. These data often exhibit complicated temporal dependence structure which cannot be modelled using common methods of Functional Data Analysis (FDA). The field of animal movement suggests a hierarchical approach using hidden Markov models (HMMs), but many intricate fine-scale processes violate basic assumptions of HMMs.
-We detail a generalization of the hierarchical HMM approach that incorporates a wider class of parametric models at problematic fine scales. 
+Advances in biologging technology have made a vast amount of high-frequency time series data available in a variety of fields. These data often exhibit complicated temporal dependence structure which cannot be modelled using common methods of Functional Data Analysis (FDA). Animal movement modellers often employ a hierarchical approach using hidden Markov models (HMMs), but many intricate fine-scale processes violate basic assumptions of HMMs.
+We detail a generalization of the hierarchical HMM approach that incorporates a wider class of parametric models at fine scales. 
 %We also provide several examples of viable fine-scale models.
 As a case study, we build a hierarchical model that combines an HMM with a moving-window auto-regressive process to describe the movement of a killer whale off the western coast of Canada. 
-Our model outputs more interpretable results as well as more accurate parameter and standard error estimates compared to existing models.
+Our model produces more interpretable results as well as more accurate parameter and standard error estimates compared to existing models.
 
 \abscopyright
 \fabstractsection{}
@@ -98,17 +99,17 @@ can't prepare it themselves.\Frenchabscopyright
 \label{sec:models}
 \input Sections/models.tex
 %
-\section{Data Collection and Model Construction}
+\section{Killer Whale Case Study}
 \label{sec:data}
-\input Sections/data.tex
+\input Sections/results.tex
 %
 \section{Simulation Study}
 \label{sec:sim_study}
 \input Sections/simulation.tex
 %
-\section{Case Study Results}
-\label{sec:case_study}
-\input Sections/results.tex
+%\section{Case Study Results}
+%\label{sec:case_study}
+%\input Sections/results.tex
 %%
 \section{Discussion}
 \input Sections/discussion.tex

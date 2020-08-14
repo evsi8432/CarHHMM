@@ -3,6 +3,32 @@
 %%% Tables %%%
 
 \begin{table}[ht]
+    \centering
+    \caption{Estimates and standard errors of emission parameters for killer whale data under the CarHHMM-DFT.}
+    \scalebox{0.75}{
+\begin{tabular}{ccccc}
+    \multirow{2}{*}{Feature}                                                       & \multirow{2}{*}{Dive / Subdive Type} & \multicolumn{3}{c}{Parameter Estimate}              \\
+                                                                                   &                                      & $\hat \mu$      & $\hat \sigma$   & $\hat \phi$     \\ \hline
+    \multirow{2}{*}{Dive Duration $(s)$ - $Y$}                                     & 1                                    & $25.687 \pm 0.602$ & $9.573 \pm 0.514$ & ---             \\
+                                                                                   & 2                                    & $104.601 \pm 9.395$ & $64.678 \pm 7.468$ & ---             \\ \hline
+    \multirow{3}{*}{x-acceleration $(m/s^2)$ - $\left(\mathbf{Z}^{*(1)}\right)_x$} & 1                                    & $0.020 \pm 0.042$ & $0.034 \pm 0.001$ & $0.976 \pm 0.007$ \\
+                                                                                   & 2                                    & $0.244 \pm 0.013$ & $0.079 \pm 0.001$ & $0.886 \pm 0.005$ \\
+                                                                                   & 3                                    & $0.218 \pm 0.028$ & $0.265 \pm 0.007$ & $0.626 \pm 0.029$ \\ \hline
+    \multirow{3}{*}{y-acceleration $(m/s^2)$ - $\left(\mathbf{Z}^{*(1)}\right)_y$} & 1                                    & $0.469 \pm 0.052$ & $0.044 \pm 0.001$ & $0.976 \pm 0.009$ \\
+                                                                                   & 2                                    & $0.436 \pm 0.014$ & $0.082 \pm 0.001$ & $0.886 \pm 0.012$ \\
+                                                                                   & 3                                    & $0.384 \pm 0.033$ & $0.321 \pm 0.009$ & $0.626 \pm 0.034$ \\ \hline
+    \multirow{3}{*}{z-acceleration $(m/s^2)$ - $\left(\mathbf{Z}^{*(1)}\right)_z$} & 1                                    & $-0.683 \pm 0.061$ & $0.052 \pm 0.001$ & $0.976 \pm 0.005$ \\
+                                                                                   & 2                                    & $-0.593 \pm 0.016$ & $0.096 \pm 0.001$ & $0.886 \pm 0.009$ \\
+                                                                                   & 3                                    & $-0.366 \pm 0.033$ & $0.317 \pm 0.009$ & $0.626 \pm 0.033$ \\ \hline
+    \multirow{3}{*}{Fourier sum - $Z^{*(2)}$}                                      & 1                                    & $23.340 \pm 0.282$ & $12.948 \pm 0.269$ & ---             \\
+                                                                                   & 2                                    & $301.189 \pm 3.244$ & $330.050 \pm 4.166$ & ---             \\
+                                                                                   & 3                                    & $10204.010 \pm 211.242$ & $15299.066 \pm 352.674$ & ---             \\ \hline
+    \end{tabular}
+    }
+    \label{table:emis_dists_CarHHMM-DFT}
+\end{table}
+
+\begin{table}[ht]
 \centering
 \caption{Accuracies and run times for all models. All reported values are averages, and $\pm$ refers to the standard deviation. The run times heavily depend upon the optimization method.}
 \scalebox{0.8}{
@@ -33,32 +59,6 @@ Model                       & \multicolumn{1}{c}{Train Time (m)} & \multicolumn{
 \label{table:accuracy}
 \end{table}
 
-\begin{table}[ht]
-    \centering
-    \caption{Estimates and standard errors of emission parameters for killer whale data under the CarHHMM-DFT.}
-    \scalebox{0.75}{
-\begin{tabular}{ccccc}
-    \multirow{2}{*}{Feature}                                                       & \multirow{2}{*}{Dive / Subdive Type} & \multicolumn{3}{c}{Parameter Estimate}              \\
-                                                                                   &                                      & $\hat \mu$      & $\hat \sigma$   & $\hat \phi$     \\ \hline
-    \multirow{2}{*}{Dive Duration $(s)$ - $Y$}                                     & 1                                    & $25.687 \pm 0.602$ & $9.573 \pm 0.514$ & ---             \\
-                                                                                   & 2                                    & $104.601 \pm 9.395$ & $64.678 \pm 7.468$ & ---             \\ \hline
-    \multirow{3}{*}{x-acceleration $(m/s^2)$ - $\left(\mathbf{Z}^{*(1)}\right)_x$} & 1                                    & $0.020 \pm 0.042$ & $0.034 \pm 0.001$ & $0.976 \pm 0.007$ \\
-                                                                                   & 2                                    & $0.244 \pm 0.013$ & $0.079 \pm 0.001$ & $0.886 \pm 0.005$ \\
-                                                                                   & 3                                    & $0.218 \pm 0.028$ & $0.265 \pm 0.007$ & $0.626 \pm 0.029$ \\ \hline
-    \multirow{3}{*}{y-acceleration $(m/s^2)$ - $\left(\mathbf{Z}^{*(1)}\right)_y$} & 1                                    & $0.469 \pm 0.052$ & $0.044 \pm 0.001$ & $0.976 \pm 0.009$ \\
-                                                                                   & 2                                    & $0.436 \pm 0.014$ & $0.082 \pm 0.001$ & $0.886 \pm 0.012$ \\
-                                                                                   & 3                                    & $0.384 \pm 0.033$ & $0.321 \pm 0.009$ & $0.626 \pm 0.034$ \\ \hline
-    \multirow{3}{*}{z-acceleration $(m/s^2)$ - $\left(\mathbf{Z}^{*(1)}\right)_z$} & 1                                    & $-0.683 \pm 0.061$ & $0.052 \pm 0.001$ & $0.976 \pm 0.005$ \\
-                                                                                   & 2                                    & $-0.593 \pm 0.016$ & $0.096 \pm 0.001$ & $0.886 \pm 0.009$ \\
-                                                                                   & 3                                    & $-0.366 \pm 0.033$ & $0.317 \pm 0.009$ & $0.626 \pm 0.033$ \\ \hline
-    \multirow{3}{*}{Fourier sum - $Z^{*(2)}$}                                      & 1                                    & $23.340 \pm 0.282$ & $12.948 \pm 0.269$ & ---             \\
-                                                                                   & 2                                    & $301.189 \pm 3.244$ & $330.050 \pm 4.166$ & ---             \\
-                                                                                   & 3                                    & $10204.010 \pm 211.242$ & $15299.066 \pm 352.674$ & ---             \\ \hline
-    \end{tabular}
-    }
-    \label{table:emis_dists_CarHHMM-DFT}
-\end{table}
-
 %%% data %%%
 
 \begin{figure}[ht]
@@ -71,7 +71,7 @@ Model                       & \multicolumn{1}{c}{Train Time (m)} & \multicolumn{
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=5in]{../Plots/CarHHMM2_decoded_dives.png}
-	\caption{Features of a particular set of killer whale dives and decoded estimates for the intra-dive behavioral states. The color of the plot corresponds to the behavioral or dive state with the highest probability.}
+	\caption{Features of a particular set of killer whale dives and decoded estimates for the intra-dive behavioural states. The colour of the plot corresponds to the behavioural or dive state with the highest probability.}
 	\label{fig:labeled_dives}
 \end{figure}
 
@@ -115,14 +115,7 @@ Model                       & \multicolumn{1}{c}{Train Time (m)} & \multicolumn{
     \label{fig:models}
 \end{figure}
 
-%%% simulation study %%%
-
-\begin{figure}[ht]
-	\centering
-	\includegraphics[width=5in]{../Plots/sim_data.png}
-	\caption{Simulated acceleration data for one dive. The color of the line corresponds to the true fine-scale state of the subdive process, while the color of the background corresponds to the true dive type of the simulated whale.}
-	\label{fig:sim_data}
-\end{figure}
+%%% Case Study %%%
 
 \begin{figure}[ht]
 	\centering
@@ -130,22 +123,6 @@ Model                       & \multicolumn{1}{c}{Train Time (m)} & \multicolumn{
 	\caption{Graphical representation the model used in the simulation and case study, the \textbf{CarHHMM-DFT}.}
 	\label{fig:CarHHMM-DFT}
 \end{figure}
-
-\begin{figure}[ht]
-    \centering
-    \includegraphics[width=5in]{../Plots/Posterior_Coarse_States.png}
-    \caption{Decoded probabilities of each dive type for 5 dives of one simulated data set. The colors correspond to the true dive or subdive type}
-    \label{fig:acc_coarse}
-\end{figure}
-
-\begin{figure}[ht]
-    \centering
-    \includegraphics[width=5in]{../Plots/Posterior_Fine_States.png}
-    \caption{Decoded probabilities of each subdive type for 5 dives of one simulated data set. The colors correspond to the true dive or subdive type}
-    \label{fig:acc_fine}
-\end{figure}
-
-%%% Case Study %%%
 
 \begin{figure}[ht]
 	\centering
@@ -157,7 +134,7 @@ Model                       & \multicolumn{1}{c}{Train Time (m)} & \multicolumn{
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=5in]{../Plots/CarHHMM2-fine-emissions.png}
-	\caption{Estimated probability distributions for each fine-scale observation in each behavioral state. Note that the distributions of acceleration do not take auto-correlation into account (see Table \ref{table:emis_dists_CarHHMM-DFT})}
+	\caption{Estimated probability distributions for each fine-scale observation in each behavioural state. Note that the distributions of acceleration do not take auto-correlation into account (see Table \ref{table:emis_dists_CarHHMM-DFT})}
 	\label{fig:fine_emis}
 \end{figure}
 
@@ -176,4 +153,27 @@ Model                       & \multicolumn{1}{c}{Train Time (m)} & \multicolumn{
     \end{subfigure}
     \caption{Examples of psuedoresiduals and a weighted empirical distribution as model checking tools}
     \label{fig:model_checking}
+\end{figure}
+
+%%% simulation study %%%
+
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=5in]{../Plots/sim_data.png}
+	\caption{Simulated acceleration data for one dive. The colour of the line corresponds to the true fine-scale state of the subdive process, while the colour of the background corresponds to the true dive type of the simulated whale.}
+	\label{fig:sim_data}
+\end{figure}
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=5in]{../Plots/Posterior_Coarse_States.png}
+    \caption{Decoded probabilities of each dive type for 5 dives of one simulated data set. The colours correspond to the true dive or subdive type}
+    \label{fig:acc_coarse}
+\end{figure}
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=5in]{../Plots/Posterior_Fine_States.png}
+    \caption{Decoded probabilities of each subdive type for 5 dives of one simulated data set. The colours correspond to the true dive or subdive type}
+    \label{fig:acc_fine}
 \end{figure}

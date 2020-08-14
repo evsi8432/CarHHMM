@@ -1,7 +1,6 @@
 % !TeX root = ../main.tex
 
-\addcontentsline{toc}{section}{Appendices}
-\renewcommand*{\thesubsection}{\Alph{subsection}}
+\subsection{Equivalence of State-Switching OU process and CarHMM}
 
 \citet{Michelot:2019} model the movement of an animal as the solution to the following stochastic differential equation, which they refer to as a state-switching Ornstein-Uhlenbeck process:
 %
@@ -54,7 +53,7 @@ $X'$ follows a (possibly unobserved) Markov chain, and the distribution of $(Y'_
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\begin{proof}{Detailed description of simulated data}{}
+\subsection{Detailed description of simulated data}
 
 Assume that $X$, $Y$, and $X^*$ are known and simulated using the procedure detailed in Section \ref{sec:sim_study}. Let $DFT\{Y^*_{t,t^*}\}(k)$ be denoted as $\hat{Y}^{*(k)}_{t,t^*}$ and let $DFT\{Y^*_{t,t^*}\}$ be denoted as $\hat{Y}^*_{t,t^*}$ for shorthand. 
 
@@ -115,32 +114,29 @@ $$\left(\Ztwo_{t,t^*}|X^*_{t,t^*} = 1\right) \sim {\rm{Gamma}}\left(\alpha = \su
 $$\left(\Ztwo_{t,t^*}|X^*_{t,t^*} = 2\right) \sim {\rm{Gamma}}\left(\alpha = 300 + \sum_{k=3}^{10} 5/k^2 = 305.94 , \beta = 1.00 \right).$$
 %
 It follows that $\mu_W^{*(1)} = 10.10$, $\sigma_W^{*(1)} = 3.18$, $\mu_W^{*(2)} = 305.94$, and $\sigma_W^{*(2)} = 17.49$.
-\end{proof}
 
-\begin{proof}{Likelihood of Simulation study model}{}
+\subsection{Likelihood of Simulation study model}
 
 The overall likelihood of the CarHHMM-DFT model is as follows:
 %
-$$\calL_{\text{CarHHMM-DFT}}(y,z^*;\Theta,\Theta^*,\Gamma,\Gamma^*) = \delta P(y_1,z_1^*;\Theta,\Theta^*,\Gamma^*) \prod_{t=2}^T \Gamma P(y_t,z_t^*;\Theta,\Theta^*,\Gamma^*) \mathbf{1}_N.$$
+$$\calL_{\text{CarHHMM-DFT}}(\Theta,\Theta^*,\Gamma,\Gamma^*;y,z^*) = \delta P(y_1,z_1^*;\Theta,\Theta^*,\Gamma^*) \prod_{t=2}^T \Gamma P(y_t,z_t^*;\Theta,\Theta^*,\Gamma^*) \mathbf{1}_N.$$
 %
 In particular,
 %
 \begin{align*}
-P(y_t,z_t^*;\Theta,\Theta^*,\Gamma^*)  = \text{diag}\Big[&f^{(1)}(y_t;\Theta^{(i)})\calL_{\text{CarHMM-DFT}}\left(z_t^*;\Theta^{*(1)},\Gamma^{*(1)}\right), \ldots , \\
-&f^{(N)}(y_t;\Theta^{(i)})\calL_{\text{CarHMM-DFT}}\left(z_t^*;\Theta^{*(N)},\Gamma^{*(N)}\right) \Big],
+P(y_t,z_t^*;\Theta,\Theta^*,\Gamma^*)  = \text{diag}\Big[&f^{(1)}(y_t;\Theta^{(i)})\calL_{\text{CarHMM-DFT}}\left(\Theta^{*(1)},\Gamma^{*(1)};z_t^*\right), \ldots , \\
+&f^{(N)}(y_t;\Theta^{(i)})\calL_{\text{CarHMM-DFT}}\left(\Theta^{*(N)},\Gamma^{*(N)};z_t^*\right) \Big],
 \end{align*}
 %
 where $f^{(i)}(y_t;\Theta^{(i)})$ is the emission distribution of the dive duration $Y_t$ conditioned on the fact that $X_t = i$.
 
 The likelihood $\calL_{\text{CarHMM-DFT}}$ corresponds to the fine-scale chain and has the following expression:
 %
-$$\calL_{\text{CarHMM-DFT}}\left(z_t^*;\Theta^{*(i)},\Gamma^{*(i)}\right) = \delta^{*(i)} \prod_{t=2}^T \Gamma^{*(i)} P(z^*_{t,t^*}|z^*_{t,t^*-100};\Theta^{*(i^*)}) \mathbf{1}_N,$$
+$$\calL_{\text{CarHMM-DFT}}\left(\Theta^{*(i)},\Gamma^{*(i)};z_t^*\right) = \delta^{*(i)} \prod_{t=2}^T \Gamma^{*(i)} P(z^*_{t,t^*}|z^*_{t,t^*-100};\Theta^{*(i^*)}) \mathbf{1}_N,$$
 %
 where $P(z^*_{t,t^*}|z^*_{t,t^*-100};\Theta^{*(i^*)})$ is an $N^* \times N^*$ diagonal matrix with $(i^*,i^*)^{th}$ entry equal to $f^{*(\cdot,i^*)}(z^*_{t,t^*}|z^*_{t,t^*-100}; \theta^{*(\cdot,i^*)})$.
 %
 Note that $f^{*(\cdot,i^*)}(z^*_{t,t^*}|z^*_{t,t^*-100}; \theta^{*(\cdot,i^*)})$ is the emission distribution of $\Z_{t,t^*}$ conditioned on $X^*_{t,t^*} = i^*$ and $\Z_{t,t^*-100} = z^*_{t,t^*-100}$.
-
-\end{proof}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
