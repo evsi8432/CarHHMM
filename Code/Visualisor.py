@@ -50,10 +50,10 @@ class Visualisor:
 
         features = list(self.pars.features[0].keys()) + list(self.pars.features[1].keys())
         xlabs = ['Dive Duration $(s)$',
-                 r'$\left(Z^{*(1)}\right)_x$ $(m/s^2)$',
-                 r'$\left(Z^{*(1)}\right)_y$ $(m/s^2)$',
-                 r'$\left(Z^{*(1)}\right)_z$ $(m/s^2)$',
-                 r'$Z^{*(2)}$']
+                 r'$A^*_x$ $(m/s^2)$',
+                 r'$A^*_y$ $(m/s^2)$',
+                 r'$A^*_z$ $(m/s^2)$',
+                 r'$W^*$']
 
         # lag plots of dive-level data
         for i,feature in enumerate(features):
@@ -176,10 +176,10 @@ class Visualisor:
                     ax[row_num,col_num].set_title(title,fontsize=24)
                     plt.legend(['Dive Type 1','Dive Type 2'])
                 else:
-                    titles = [r'$\left(Z^{*(1)}\right)_x$ $(m/s^2)$',
-                              r'$\left(Z^{*(1)}\right)_y$ $(m/s^2)$',
-                              r'$\left(Z^{*(1)}\right)_z$ $(m/s^2)$',
-                              r'$Z^{*(2)}$']
+                    titles = [r'$A^*_x$ $(m/s^2)$',
+                              r'$A^*_y$ $(m/s^2)$',
+                              r'$A^*_z$ $(m/s^2)$',
+                              r'$W^*$']
                     title = titles[feature_num]
                     ax[row_num,col_num].set_xlabel(title,fontsize=24)
                     if feature == 'Ahat_low':
@@ -310,11 +310,11 @@ class Visualisor:
                              '.',color=colors[state],markersize=10)
                 if 'prob' in col:
                     plt.plot(dive[dive[col] > -0.01]['sec_from_start']/60,dive[dive[col] > -0.01][col],'k-')
-                    plt.axhline(0.5,color='k',linestyle=':',alpha=0.5)
+                    plt.axhline(0.5,color='k',linestyle=':',alpha=0.5,linewidth=1)
                     plt.ylim([-0.05,1.05])
                     plt.yticks([0,0.5,1.0],fontsize=30)
                 else:
-                    plt.plot(dive['sec_from_start']/60,dive[col],'k--',alpha=0.5)
+                    plt.plot(dive['sec_from_start']/60,dive[col],'k--',alpha=0.5,linewidth=1)
                 plt.yticks(fontsize=30)
                 plt.ylabel(ylabs[i],fontsize=30)
                 plt.xticks([])
@@ -335,11 +335,11 @@ class Visualisor:
                 if 'prob' in col:
                     plt.plot(dive[dive[col] > -0.01]['sec_from_start']/60,
                              dive[dive[col] > -0.01][col],'k-')
-                    plt.axhline(0.5,color='k',linestyle=':',alpha=0.5)
+                    plt.axhline(0.5,color='k',linestyle=':',alpha=0.5,linewidth=1)
                     plt.ylim([-0.05,1.05])
                     plt.yticks([0,0.5,1.0],fontsize=30)
                 else:
-                    plt.plot(dive['sec_from_start']/60,dive[col],'k--',alpha=0.5)
+                    plt.plot(dive['sec_from_start']/60,dive[col],'k--',alpha=0.5,linewidth=1)
                 plt.yticks(fontsize=30)
                 plt.ylabel(ylabs[i],fontsize=30)
                 if col == df_cols[-1]:
@@ -384,7 +384,7 @@ class Visualisor:
                 for state in range(self.pars.K[0]):
                     plt.plot(times[state],features[state],
                              '.',color=colors[state],markersize=10)
-                plt.plot(time,feature,'k--',alpha=0.5)
+                plt.plot(time,feature,'k--',alpha=0.5,linewidth=1)
                 plt.ylabel(col,fontsize = 14)
                 plt.xlabel('Time (s)',fontsize=14)
                 plt.legend(legend,prop={'size': 14})
@@ -418,7 +418,7 @@ class Visualisor:
                 for state in range(self.pars.K[0]):
                     plt.plot(times[state],features[state],
                              '.',color=colors[state],markersize=10)
-                plt.plot(time,feature,'k--',alpha=0.5)
+                plt.plot(time,feature,'k--',alpha=0.5,linewidth=1)
                 plt.ylabel(col,fontsize = 14)
                 plt.xlabel('Time (s)',fontsize=14)
                 plt.legend(legend,prop={'size': 14})
@@ -449,7 +449,7 @@ class Visualisor:
                 for state in range(self.pars.K[1]):
                     plt.plot([t for t in times[state]],features[state],
                              '.',color=colors[state],markersize=10)
-                plt.plot([t for t in time],feature,'k--',alpha=0.5)
+                plt.plot([t for t in time],feature,'k--',alpha=0.5,linewidth=1)
                 plt.yticks(fontsize=24)
                 plt.ylabel(col,fontsize=24)
                 plt.xticks(fontsize=24)
