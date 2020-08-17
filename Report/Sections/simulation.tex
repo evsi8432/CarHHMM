@@ -4,7 +4,7 @@
 
 To evaluate the performance of each candidate model when the ground-truth is known, we perform a simulation study based on data generated from the full CarHHMM-DFT. The parameters used to generate the data are loosely based on those estimated in the case study (see able \ref{table:emis_dists_CarHHMM-DFT}), with slight modifications made for simplicity. For example, we set $\Gamma$ such that the simulated data has approximately equal numbers of short and long dives. This allows meaningful conclusions to be made for both dive types. In addition, the number subdive states is set to $N^*=2$ and $\Ztwo$ is set to a scalar. Metrics used to evaluate each model include decoding accuracy of hidden states, bias in parameter estimates, standard error of parameter estimates, and fitting times. To assess the accuracy of uncertainty estimates, we also compare the empirical standard error of each model's parameter estimates with the estimated standard error using the inverse of the observed Fisher information under that model.
 
-\subsection{Data Simulation}
+\subsection{Data simulation}
 
 We generate 500 independent data sets from the CarHHMM-DFT. Each data set consists of a sequence of 100 curves which we call a sequence of killer whale dives. Each dive can be one of $N=2$ dive types based on a Markov chain with probability transition matrix
 %
