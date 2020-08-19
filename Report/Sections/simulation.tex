@@ -38,7 +38,7 @@ The two dive types differ in that dives of type 1 are much shorter on average th
 
 All four candidate models (CarHHMM-DFT, HHMM-DFT, CarHHMM, and CarHMM-DFT) are fit to all 500 data sets using the Cedar Compute Canada cluster with 1 CPU and 4 GB of dedicated memory per model.
 
-\subsection{Simulation Results}
+\subsection{Simulation results}
 
 As expected, since it is the generating model, the full CarHHMM-DFT is the best-performing model. Using the forward-backward algorithm, the CarHHMM-DFT decodes the correct subdive type given the fine-scale data with an average confidence of $1 - 10^{-12}$ across all simulations. In other words, it predicts the \textit{incorrect} subdive state with an average probability of $10^{-12}$. For dive type, the average confidence was above 0.9 (see Table \ref{table:accuracy}). All parameter estimates have statistically insignificant biases except for $\hat \sigma$ and $\hat \phi$, whose MLEs are known to be biased (see section 1 of the supplementary material). Even still, these biases are the least severe for the CarHHMM-DFT among the four models. The empirical standard error of all parameter estimates ($\hat \Theta$, $\hat \Gamma$, $\hat \Theta^*$, $\hat \Gamma^*$) are well-approximated by the inverse of the observed Fisher information matrix, although the estimated standard errors tend to be slight underestimates of the empirical standard error. See section 1.2 and tables 2-5 of the supplementary material for more information.
 
