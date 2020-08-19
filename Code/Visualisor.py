@@ -44,12 +44,12 @@ class Visualisor:
 
         ncols = 2
         nrows = int(np.ceil(len(self.pars.features[0]) + len(self.pars.features[1])/2))
-        fig,ax = plt.subplots(nrows,ncols,figsize=(10*ncols,10*nrows))
+        fig,ax = plt.subplots(nrows,ncols,figsize=(2.5*ncols,2.5*nrows))
         fig.delaxes(ax[2,1])
         fig_num = 1
 
         features = list(self.pars.features[0].keys()) + list(self.pars.features[1].keys())
-        xlabs = ['Dive Duration $(s)$',
+        xlabs = ['$Y$ $(s)$',
                  r'$A^*_x$ $(m/s^2)$',
                  r'$A^*_y$ $(m/s^2)$',
                  r'$A^*_z$ $(m/s^2)$',
@@ -89,24 +89,31 @@ class Visualisor:
 
             np.set_printoptions(suppress=True,precision=4)
             im = plt.imshow(np.rot90(Ztemp),extent = xlim + ylim)
-            plt.title(xlabs[i],fontsize=36)
+            plt.xlabel(xlabs[i],fontsize=12)
+            plt.xticks(fontsize=10)
+            plt.yticks(fontsize=10)
             plt.gca().ticklabel_format(style='sci',scilimits = (-3,3))
+            plt.gca().yaxis.get_offset_text().set_fontsize(10)
+            plt.gca().xaxis.get_offset_text().set_fontsize(10)
             divider = make_axes_locatable(plt.gca())
             cax = divider.append_axes("right", size="5%", pad=0.05)
             c = fig.colorbar(im,cax=cax)#im, orientation='horizontal',pad=0.125)
+            c.ax.tick_params(labelsize=10)
             c.ax.ticklabel_format(style='sci',scilimits = (-3,3))
-            c.set_label('Density',fontsize = 30)
+            c.ax.yaxis.get_offset_text().set_fontsize(10)
+            if i%2 == 1 or i==4:
+                c.set_label('Density',fontsize = 10)
 
             fig_num += 1
 
-        plt.subplots_adjust(wspace=-0.6, hspace=-0.6)
+        plt.subplots_adjust(wspace=0.5, hspace=0.5)
         #fig.text(0.5, 1.0, 'Lag Plots', ha='center', fontsize=50)
 
         if file is None:
             plt.show()
         else:
-            plt.tight_layout()
-            plt.savefig(file)
+            #plt.tight_layout()
+            plt.savefig(file,dpi=500)
 
         return
 
@@ -128,7 +135,7 @@ class Visualisor:
             ncols = int((len(features)+1)/2)
 
         print(nrows,ncols)
-        fig, ax = plt.subplots(nrows,ncols,figsize=(7.5*ncols,7.5*nrows))
+        fig, ax = plt.subplots(nrows,ncols,figsize=(max(5,2.5*ncols),max(5,2.5*nrows)))
         ax = np.reshape(ax,(nrows,ncols))
 
         for feature_num,feature in enumerate(features):
@@ -167,41 +174,41 @@ class Visualisor:
                     y = vonmises.pdf(x,sig[state],loc=mu[state])
                 else:
                     raise('distribution %s not recognized' % dist)
-                ax[row_num,col_num].plot(x,y,color=colors[state],linewidth=6)
+                ax[row_num,col_num].plot(x,y,color=colors[state])
                 if col_num == 0:
-                    ax[row_num,col_num].set_ylabel('Probability Density',fontsize=24)
+                    ax[row_num,col_num].set_ylabel('Probability Density',fontsize=12)
                 if level == 0:
                     title = 'Emission Distributions, Dive Duration'
                     ax[row_num,col_num].set_xlabel('Dive Duration (seconds)')
-                    ax[row_num,col_num].set_title(title,fontsize=24)
-                    plt.legend(['Dive Type 1','Dive Type 2'])
+                    #ax[row_num,col_num].set_title(title,fontsize=12)
+                    plt.legend(['Dive Type 1','Dive Type 2'],fontsize=10)
                 else:
                     titles = [r'$A^*_x$ $(m/s^2)$',
                               r'$A^*_y$ $(m/s^2)$',
                               r'$A^*_z$ $(m/s^2)$',
                               r'$W^*$']
                     title = titles[feature_num]
-                    ax[row_num,col_num].set_xlabel(title,fontsize=24)
+                    ax[row_num,col_num].set_xlabel(title,fontsize=12)
                     if feature == 'Ahat_low':
                         ax[row_num,col_num].set_xscale('log')
                         ax[row_num,col_num].set_yscale('log')
                         ax[row_num,col_num].set_ylim([10e-8,10e-1])
                         ax[row_num,col_num].set_xlim([10e-1,10e4])
 
-                    legend_elements = [Line2D([0], [0], marker='o', color='w', label='Subdive State 1',
-                                           markerfacecolor=colors[0], markersize=20),
-                                       Line2D([0], [0], marker='o', color='w', label='Subdive State 2',
-                                           markerfacecolor=colors[1], markersize=20),
-                                       Line2D([0], [0], marker='o', color='w', label='Subdive State 3',
-                                           markerfacecolor=colors[2], markersize=20)]
+                    legend_elements = [Line2D([0], [0], marker='o', color='w', label='Subdive 1',
+                                           markerfacecolor=colors[0], markersize=8),
+                                       Line2D([0], [0], marker='o', color='w', label='Subdive 2',
+                                           markerfacecolor=colors[1], markersize=8),
+                                       Line2D([0], [0], marker='o', color='w', label='Subdive 3',
+                                           markerfacecolor=colors[2], markersize=8)]
 
                     fig.legend(handles=legend_elements,
-                               prop={'size': 20}, ncol=3,
+                               prop={'size': 10}, ncol=3,
                                mode='expand',
-                               bbox_to_anchor=(0.0, -0.011, 1., .1),
+                               bbox_to_anchor=(0.0, 1.011, 1., .1),
                                loc='lower left')
 
-                    fig.text(0.5, 1.0, 'Fine Scale Emission Distributions', ha='center', fontsize=50)
+                    #fig.text(0.5, 1.0, 'Fine Scale Emission Distributions', ha='center', fontsize=50)
 
         if file is None:
             plt.show()
@@ -269,7 +276,7 @@ class Visualisor:
                 else:
                     nrows += 2
 
-        plt.subplots(nrows,1,figsize=(20,5*nrows))
+        plt.subplots(nrows,1,figsize=(6,1.5*nrows))
         fignum = 1
 
         # get df state-by-state
@@ -307,19 +314,21 @@ class Visualisor:
                 legend = ['Dive Type %d' % (i+1) for i in range(self.pars.K[0])]
                 for state,dive_df in enumerate(dives):
                     plt.plot(dive_df['sec_from_start']/60,dive_df[col],
-                             '.',color=colors[state],markersize=10)
+                             '.',color=colors[state],markersize=4)
                 if 'prob' in col:
-                    plt.plot(dive[dive[col] > -0.01]['sec_from_start']/60,dive[dive[col] > -0.01][col],'k-')
-                    plt.axhline(0.5,color='k',linestyle=':',alpha=0.5,linewidth=1)
+                    plt.plot(dive[dive[col] > -0.01]['sec_from_start']/60,dive[dive[col] > -0.01][col],
+                             'k-',alpha=0.5,linewidth=0.5)
+                    plt.axhline(0.5,color='k',linestyle=':',alpha=0.5,linewidth=0.5)
                     plt.ylim([-0.05,1.05])
                     plt.yticks([0,0.5,1.0],fontsize=30)
                 else:
-                    plt.plot(dive['sec_from_start']/60,dive[col],'k--',alpha=0.5,linewidth=1)
-                plt.yticks(fontsize=30)
-                plt.ylabel(ylabs[i],fontsize=30)
+                    plt.plot(dive['sec_from_start']/60,dive[col],'k--',alpha=0.5,linewidth=0.5)
+                plt.yticks(fontsize=10)
+                plt.ylabel(ylabs[i],fontsize=10)
                 plt.xticks([])
                 if col == df_cols[0]:
-                    plt.title(title,fontsize=36)
+                    #plt.title(title,fontsize=36)
+                    pass
                 if col == 'depth':
                     plt.gca().invert_yaxis()
                 fignum += 1#2
@@ -331,20 +340,20 @@ class Visualisor:
                 #legend = ['Subdive Behavior %d' % (i+1) for i in range(self.pars.K[1])]
                 for state,subdive_df in enumerate(subdives):
                     plt.plot(subdive_df['sec_from_start']/60,subdive_df[col],
-                             '.',color=colors[state],markersize=10)
+                             '.',color=colors[state],markersize=4)
                 if 'prob' in col:
                     plt.plot(dive[dive[col] > -0.01]['sec_from_start']/60,
-                             dive[dive[col] > -0.01][col],'k-')
-                    plt.axhline(0.5,color='k',linestyle=':',alpha=0.5,linewidth=1)
+                             dive[dive[col] > -0.01][col],'k-',alpha=0.5,linewidth=0.5)
+                    plt.axhline(0.5,color='k',linestyle=':',alpha=0.5,linewidth=0.5)
                     plt.ylim([-0.05,1.05])
-                    plt.yticks([0,0.5,1.0],fontsize=30)
+                    plt.yticks([0,0.5,1.0],fontsize=10)
                 else:
-                    plt.plot(dive['sec_from_start']/60,dive[col],'k--',alpha=0.5,linewidth=1)
-                plt.yticks(fontsize=30)
-                plt.ylabel(ylabs[i],fontsize=30)
+                    plt.plot(dive['sec_from_start']/60,dive[col],'k--',alpha=0.5,linewidth=0.5)
+                plt.yticks(fontsize=10)
+                plt.ylabel(ylabs[i],fontsize=10)
                 if col == df_cols[-1]:
-                    plt.xlabel('Time (mins)',fontsize=30)
-                    plt.xticks(fontsize=30)
+                    plt.xlabel('Time (mins)',fontsize=10)
+                    plt.xticks(fontsize=10)
                 else:
                     plt.xticks([])
                 #plt.legend(legend,prop={'size': 20})
@@ -383,11 +392,11 @@ class Visualisor:
                     plt.axvline(max(time))
                 for state in range(self.pars.K[0]):
                     plt.plot(times[state],features[state],
-                             '.',color=colors[state],markersize=10)
+                             '.',color=colors[state],markersize=4)
                 plt.plot(time,feature,'k--',alpha=0.5,linewidth=1)
-                plt.ylabel(col,fontsize = 14)
-                plt.xlabel('Time (s)',fontsize=14)
-                plt.legend(legend,prop={'size': 14})
+                plt.ylabel(col,fontsize = 10)
+                plt.xlabel('Time (s)',fontsize=10)
+                plt.legend(legend,prop={'size': 10})
 
                 fignum += 1
 
@@ -417,11 +426,11 @@ class Visualisor:
                     vlines.append(max(time))
                 for state in range(self.pars.K[0]):
                     plt.plot(times[state],features[state],
-                             '.',color=colors[state],markersize=10)
+                             '.',color=colors[state],markersize=4)
                 plt.plot(time,feature,'k--',alpha=0.5,linewidth=1)
                 plt.ylabel(col,fontsize = 14)
-                plt.xlabel('Time (s)',fontsize=14)
-                plt.legend(legend,prop={'size': 14})
+                plt.xlabel('Time (s)',fontsize=10)
+                plt.legend(legend,prop={'size': 10})
                 for vline in vlines:
                     plt.axvline(vline)
                 fignum += 1
@@ -448,34 +457,36 @@ class Visualisor:
                             feature.append(seg[col])
                 for state in range(self.pars.K[1]):
                     plt.plot([t for t in times[state]],features[state],
-                             '.',color=colors[state],markersize=10)
-                plt.plot([t for t in time],feature,'k--',alpha=0.5,linewidth=1)
-                plt.yticks(fontsize=24)
-                plt.ylabel(col,fontsize=24)
-                plt.xticks(fontsize=24)
-                plt.xlabel('Time (secs)',fontsize=24)
-                plt.legend(legend,prop={'size': 20})
-                plt.title('Depth Data',fontsize=24)
+                             '.',color=colors[state],markersize=4)
+                plt.plot([t for t in time],feature,'k--',alpha=0.5,linewidth=0.5)
+                plt.yticks(fontsize=10)
+                plt.ylabel(col,fontsize=10)
+                plt.xticks(fontsize=10)
+                plt.xlabel('Time (secs)',fontsize=10)
+                plt.legend(legend,prop={'size': 10})
+                plt.title('Depth Data',fontsize=10)
                 for vline in vlines:
                     plt.axvline(vline)
                 fignum += 1
 
-        legend_elements = [Line2D([0], [0], marker='o', color='w', label='Dive Type 1',
-                                  markerfacecolor=cm.get_cmap('tab10')(0), markersize=30),
-                           Line2D([0], [0], marker='o', color='w', label='Dive Type 2',
-                                  markerfacecolor=cm.get_cmap('tab10')(1), markersize=30),
-                           Line2D([0], [0], marker='o', color='w', label='Subdive Type 1',
-                                  markerfacecolor=cm.get_cmap('viridis')(0.0), markersize=30),
-                           Line2D([0], [0], marker='o', color='w', label='Subive Type 2',
-                                  markerfacecolor=cm.get_cmap('viridis')(0.5), markersize=30),
-                           Line2D([0], [0], marker='o', color='w', label='Subdive Type 3',
-                                  markerfacecolor=cm.get_cmap('viridis')(1.0), markersize=30)]
-        plt.gca().legend(handles=legend_elements,prop={'size': 20}, ncol=5, mode="expand", borderaxespad=0.,
-                         bbox_to_anchor=(0., -0.5, 1., .102), loc='lower left')
+        legend_elements = [Line2D([0], [0], marker='o', color='w', label='Subdive 1',
+                                  markerfacecolor=cm.get_cmap('viridis')(0.0), markersize=8),
+                           Line2D([0], [0], marker='o', color='w', label='Subive 2',
+                                  markerfacecolor=cm.get_cmap('viridis')(0.5), markersize=8),
+                           Line2D([0], [0], marker='o', color='w', label='Subdive 3',
+                                  markerfacecolor=cm.get_cmap('viridis')(1.0), markersize=8),
+                           Line2D([0], [0], marker='o', color='w', label='Dive 1',
+                                  markerfacecolor=cm.get_cmap('tab10')(0), markersize=8),
+                           Line2D([0], [0], marker='o', color='w', label='Dive 2',
+                                  markerfacecolor=cm.get_cmap('tab10')(1), markersize=8)]
+        plt.subplot(nrows,1,1)
+        plt.gca().legend(handles=legend_elements,prop={'size': 8}, ncol=5, mode="expand", borderaxespad=0.,
+                         bbox_to_anchor=(0., 1.1, 1.0, .102), loc='lower left')
         plt.subplots_adjust(wspace=0, hspace=0.1)
 
         if file:
-            plt.savefig(file)
+            #plt.tight_layout()
+            plt.savefig(file,dpi=500)
         else:
             plt.show()
 
