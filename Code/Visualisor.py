@@ -3,6 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 from matplotlib.patches import Patch
+from matplotlib.transforms import Bbox
 from matplotlib.lines import Line2D
 from matplotlib.ticker import FormatStrFormatter
 from mpl_toolkits.axes_grid1 import make_axes_locatable
@@ -176,7 +177,7 @@ class Visualisor:
                     raise('distribution %s not recognized' % dist)
                 ax[row_num,col_num].plot(x,y,color=colors[state])
                 if col_num == 0:
-                    ax[row_num,col_num].set_ylabel('Probability Density',fontsize=12)
+                    ax[row_num,col_num].set_ylabel('Density',fontsize=12)
                 if level == 0:
                     title = 'Emission Distributions, Dive Duration'
                     ax[row_num,col_num].set_xlabel('Dive Duration (seconds)')
@@ -205,7 +206,7 @@ class Visualisor:
                     fig.legend(handles=legend_elements,
                                prop={'size': 10}, ncol=3,
                                mode='expand',
-                               bbox_to_anchor=(0.0, 1.011, 1., .1),
+                               bbox_to_anchor=(0.0, 0.99, 1., .1),
                                loc='lower left')
 
                     #fig.text(0.5, 1.0, 'Fine Scale Emission Distributions', ha='center', fontsize=50)
@@ -214,7 +215,8 @@ class Visualisor:
             plt.show()
         else:
             plt.tight_layout()
-            plt.savefig(file,bbox_inches='tight')
+            bbox = Bbox([[0,0],[5,5.5]])
+            plt.savefig(file,bbox_inches=bbox,dpi=500)
 
         return
 
