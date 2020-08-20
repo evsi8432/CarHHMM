@@ -20,6 +20,8 @@ Papers/*
 ## parameter estimates and data
 Params/*
 Data/*
+Params.nosync/*
+Data.nosync/*
 
 ## Intermediate documents:
 *.dvi
