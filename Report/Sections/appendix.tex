@@ -55,57 +55,56 @@ $X'$ follows a (possibly unobserved) Markov chain, and the distribution of $(Y'_
 
 \subsection{Detailed description of simulated data}
 
-Assume that $X$, $Y$, and $X^*$ are known and simulated using the procedure detailed in Section \ref{sec:sim_study}. Let $DFT\{Y^*_{t,t^*}\}(k)$ be denoted as $\hat{Y}^{*(k)}_{t,t^*}$ and let $DFT\{Y^*_{t,t^*}\}$ be denoted as $\hat{Y}^*_{t,t^*}$ for shorthand. 
+Assume that $X$, $Y$, and $X^*$ are known and simulated using the procedure detailed in Section \ref{sec:sim_study}, leaving only $Y^*$ to be simulated. Let $DFT\{Y^*_{t,t^*}\}(k)$ be denoted as $\hat{Y}^{*(k)}_{t,t^*}$ and let $DFT\{Y^*_{t,t^*}\}$ be denoted as $\hat{Y}^*_{t,t^*}$ for convenience. We simulate $\hat Y^*$ and then take the inverse $DFT$ to find $Y^*$. 
 
-Then, $\hat{Y}^*_{t}$ is simulated using the following procedure for every dive. First, simulate the average acceleration of the first two-second window of the dive:
-$$
-	(\hat{Y}^{*(0)}_{t,1}|X^*_{t,1} = i^*) \sim \mathcal{N} \left(0, \left(\sigma^{*(i^*)}\right)^2 \right)
-$$
-Remember that the average acceleration within a window is equal to the real part of the $0^{th}$ Fourier mode, so $\hat{Y}^{*(0)}_{t,1}$ is the average acceleration within the first window. Next, simulate the average acceleration for each subsequent two-second window:
-\begin{equation}
-	\Big(\hat{Y}^{*(0)}_{t,t^*}|X^*_{t,t^*} = i^*,\hat{Y}^{*(0)}_{t,t^*-100}\Big) \sim \mathcal{N} \left(\phi^{*(i^*)} \hat{Y}^{*(0)}_{t,t^*-100}, \left(\sigma^{*(i^*)}\right)^2 \right), \quad t^* = 101,201,\ldots
-	\label{eqn:yhat_0}
-\end{equation}
-Note that $t^*$ has increments of 100 because $h=100$ when using two-second window sizes. Finally, simulate the other Fourier modes within each window:
-$$
-	\hat{Y}^{*(k)}_{t,t^*} = a_{t,t^*}^{(k)} i\sqrt{b^{(k)}_{t,t^*}}, \quad k = 1,\ldots,49;
-$$
-where $a$ and $b$ are random variables with the following distributions:
-\begin{align*}
-    a_{t,t^*}^{(k)} &\sim  \left\{\begin{array}{lr}
-	-1 & \quad w.p. \enspace 1/2 \\
-	1  & \quad w.p. \enspace 1/2
-	\end{array}\right. \\
-	%
-	(b^{(k)}_{t,t^*}|X^*_{t,t^*}  = 1) &\sim {\rm{Gamma}}(5/k^2, 1) \\
-	%
-	(b^{(k)}_{t,t^*}|X^*_{t,t^*} = 2) &\sim \left\{\begin{array}{lr}
-	{\rm{Gamma}}(5/k^2, 1), \quad & k \notin \{1,2\} \\
-	{\rm{Gamma}}(250,1), & k = 1 \\
-	{\rm{Gamma}}(50,1), & k = 2.
-	\end{array}\right. 
-\end{align*}
-Note that $b_{t,t^*}$ decays like $1/k^2$ to ``smooth out" the raw acceleration. For Fourier modes 50 through 99, we use the following procedure to ensure that the raw acceleration is real-valued:
-$$
+\begin{enumerate}
+    \item We begin by simulating $\hat{Y}^{*(0)}_{t,1}$:
+    $$
+    	(\hat{Y}^{*(0)}_{t,1}|X^*_{t,1} = i^*) \sim \mathcal{N} \left(0, \left(\sigma_A^{*(i^*)}\right)^2 \right)
+    $$
+    where $\sigma_A^{*(1)} = 0.05s$ and $\sigma_A^{*(2)} = 0.1s$. 
+    \item Next, we simulate $\hat{Y}^{*(0)}_{t,101},\enspace \hat{Y}^{*(0)}_{t,201}, \enspace \ldots$ using Equation (\ref{eqn:yhat_0}):
+    \begin{equation}	
+        \Big(\hat{Y}^{*(0)}_{t,t^*}|X^*_{t,t^*} = i^*,\hat{Y}^{*(0)}_{t,t^*-100}\Big) \sim \mathcal{N} \left(\phi_A^{*(i^*)} \hat{Y}^{*(0)}_{t,t^*-100}, \left(\sigma_A^{*(i^*)}\right)^2 \right), \quad t^* = 101,201,\ldots
+    	\label{eqn:yhat_0}
+    \end{equation}
+    where $\phi_A^{*(1)} = 0.99$ and $\phi_A^{*(2)} = 0.95$. Note that $t^*$ has increments of 100 because $h=100$ when using two-second window sizes. 
+    %
+    \item We then simulate Fourier modes 1 through 49 within each window:
+    $$
+    	\hat{Y}^{*(k)}_{t,t^*} = a_{t,t^*}^{(k)} i\sqrt{b^{(k)}_{t,t^*}}, \quad k = 1,\ldots,49;
+    $$
+    where $a$ is equals 1 or -1 with probability 1/2 and $b^{(k)}_{t,t^*}$ has the following distribution:
+    \begin{align*}
+    	(b^{(k)}_{t,t^*}|X^*_{t,t^*}  = 1) &\sim {\rm{Gamma}}(5/k^2, 1) \\
+    	%
+    	(b^{(k)}_{t,t^*}|X^*_{t,t^*} = 2) &\sim \left\{\begin{array}{lr}
+    	{\rm{Gamma}}(5/k^2, 1), \quad & k \notin \{1,2\} \\
+    	{\rm{Gamma}}(250,1), & k = 1 \\
+    	{\rm{Gamma}}(50,1), & k = 2.
+    	\end{array}\right. 
+    \end{align*}
+    This means that the expected values of Fourier modes 1 and 2 are much higher for subdive state 2. Note that $\mathbb{E}\left(|\hat{Y}^{(k)}_{t,t^*}|^2\right)$ is proportional to $1/k^2$. This silences the higher Fourier modes, which ``smooths out" the raw acceleration. 
+    \item For Fourier modes 50 through 99, we use the following procedure to ensure that the inverse DFT is real-valued:
+    $$
     \hat{Y}^{*(50)}_{t,t^*} = 0; \qquad
 	\hat{Y}^{*(k)}_{t,t^*} = -\hat{Y}^{*(100-k)}_{t,t^*} \enspace \text{for} \enspace k = 51,\ldots,99.
-$$
-%
-$\Big(Y^*_{t,t^*},\ldots,Y^*_{t,t^*+99}\Big)$ is finally set using the inverse discrete Fourier transform of $\hat{Y}^*_{t,t^*}$:
-%
-$$Y^*_{t,t^*+n} = IDFT\left\{\hat{Y}^*_{t,t^*}\right\}(n); \quad n = 0,\ldots,99; \quad t^* = 1,101,\ldots$$
+    $$
+    %
+    \item Finally, $\Big(Y^*_{t,t^*},\ldots,Y^*_{t,t^*+99}\Big)$ is set using the inverse discrete Fourier transform of $\hat{Y}^*_{t,t^*}$:
+    %
+    $$Y^*_{t,t^*+n} = IDFT\left\{\hat{Y}^*_{t,t^*}\right\}(n); \quad n = 0,\ldots,99; \quad t^* = 1,101,\ldots$$
+\end{enumerate}
 %
 %$\hat{Y}^*_{t,t^*}$ is anti-symmetric about $\hat{Y}^{*(50)}_{t,t^*}$ so that its inverse Fourier transform is real-valued. $\hat{Y}^{*(k)}_{t,t^*}$ also decays like $1/k$ so that $Y^*_{t,t^*}$ remains continuous within a two-second window. $Y^*_{t,t^*}$ is not continuous \textit{between} windows, but the jump discontinuities are not very severe since $\hat{Y}^{*(0)}_{t,t^*}$ and $\hat{Y}^{*(0)}_{t,t^*+1}$ are highly correlated. See Figure \ref{fig:sim_data} for details. 
 
-We now prove that this construction of $Y^*$ results in the correct distributions listed in Section \ref{sec:sim_study}. 
-
-It is straightforward to calculate both $\Zone$ and $\Ztwo$ from $Y^*$. We pick $\tilde{\omega} = 10$ periods per window, or 5 Hz. To find the distribution of $\Zone_{t,t^*}$, use Equation (\ref{eqn:yhat_0}) together with the substitution $\Zone_{t,t^*} = \text{Re}\left(\hat{Y}^{(0)}_{t,t^*}\right) = \hat{Y}^{(0)}_{t,t^*}$:
+We now prove that this construction of $Y^*$ results in the correct distributions listed in Section \ref{sec:sim_study}. To find the distribution of $\Zone_{t,t^*}$, use Equation (\ref{eqn:yhat_0}) and note that $\Zone_{t,t^*} = \text{Re}\left(\hat{Y}^{(0)}_{t,t^*}\right) = \hat{Y}^{(0)}_{t,t^*}$, since the 0th Fourier mode is equal to the average value of an interval and $\hat{Y}^{(0)}_{t,t^*}$ is real-valued by construction:
 %
-$$\left(\Zone_{t,t^*} | X^*_{t,t^*} = i^*, \Zone_{t,t^*-100} \right) \sim \mathcal{N} \left(\phi^{*(i^*)} \Zone_{t,t^*-100}, \left(\sigma^{*(i^*)}\right)^2 \right).$$
+$$\left(\Zone_{t,t^*} | X^*_{t,t^*} = i^*, \Zone_{t,t^*-100} \right) \sim \mathcal{N} \left(\phi_A^{*(i^*)} \Zone_{t,t^*-100}, \left(\sigma_A^{*(i^*)}\right)^2 \right).$$
 %
-This distributions is consistent with a CarHMM with Normal emission distributions and $\mu_A^{*(i^*)} = 0$. The other parameters $\sigma_A^{*(i^*)}$ and $\phi_A^{*(i^*)}$ are free, and we select $\sigma_A^{*(1)} = 0.05s$, $\phi_A^{*(1)} = 0.99$, $\sigma_A^{*(2)} = 0.1s$, and $\phi_A^{*(2)} = 0.95$.
+This distribution is consistent with a CarHMM with Normal emission distributions and $\mu_A^{*(i^*)} = 0$. We also have that $\sigma_A^{*(1)} = 0.05s$, $\phi_A^{*(1)} = 0.99$, $\sigma_A^{*(2)} = 0.1s$, and $\phi_A^{*(2)} = 0.95$.
 
-The wiggliness $\Ztwo_{t,t^*}$ is the sum of gamma-distributed random variables with identical scale parameters, so the distribution of $\Ztwo_{t,t^*}$ is also gamma:
+To calculate the wiggliness $\Ztwo$, we pick $\tilde{\omega} = 10$ periods per window, or 5 Hz. Recall that $\Ztwo_{t,t^*}$ is the sum of gamma-distributed random variables with identical scale parameters, so the distribution of $\Ztwo_{t,t^*}$ is also gamma:
 %
 $$\Ztwo_{t,t^*} = \sum_{k=1}^{10} b^{(k)}_{t,t^*}$$
 %
@@ -115,7 +114,7 @@ $$\left(\Ztwo_{t,t^*}|X^*_{t,t^*} = 2\right) \sim {\rm{Gamma}}\left(\alpha = 300
 %
 It follows that $\mu_W^{*(1)} = 10.10$, $\sigma_W^{*(1)} = 3.18$, $\mu_W^{*(2)} = 305.94$, and $\sigma_W^{*(2)} = 17.49$.
 
-\subsection{Likelihood of Simulation study model}
+\subsection{Likelihood of simulation study model}
 
 The overall likelihood of the CarHHMM-DFT model is as follows:
 %
