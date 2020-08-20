@@ -153,8 +153,8 @@ class Visualisor:
                 colors = [cm.get_cmap('tab10')(i) for i in [0,1]]
                 legend = ['Dive Type %d'%(x+1) for x in range(K)]
             else:
-                mu = self.hhmm.theta[1][row_num][feature]['mu']
-                sig = self.hhmm.theta[1][row_num][feature]['sig']
+                mu = self.hhmm.theta[1][0][feature]['mu']
+                sig = self.hhmm.theta[1][0][feature]['sig']
 
                 dist = self.pars.features[1][feature]['f']
                 K = self.pars.K[1]

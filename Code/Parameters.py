@@ -26,8 +26,8 @@ class Parameters:
     def __init__(self):
 
         # loading parameters
-        self.cvc_file = '../Data/20190902-182840-CATs_OB_1.cvc'
-        self.csv_file = '../Data/20190902-182840-CATs_OB_1_001.csv'
+        self.cvc_file = '../Data.nosync/20190902-182840-CATs_OB_1.cvc'
+        self.csv_file = '../Data.nosync/20190902-182840-CATs_OB_1_001.csv'
 
         self.cvc_cols = ['date','time',
                          'GPS lat','GPS long','GPS alt','GPS speed',
