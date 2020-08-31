@@ -50,11 +50,16 @@ class Visualisor:
         fig_num = 1
 
         features = list(self.pars.features[0].keys()) + list(self.pars.features[1].keys())
-        xlabs = ['$Y$ $(s)$',
-                 r'$A^*_x$ $(m/s^2)$',
-                 r'$A^*_y$ $(m/s^2)$',
-                 r'$A^*_z$ $(m/s^2)$',
-                 r'$W^*$']
+        xlabs = ['$Y_t$',
+                 r'$\left(A^*_{t,t^*}\right)_x$',
+                 r'$\left(A^*_{t,t^*}\right)_y$',
+                 r'$\left(A^*_{t,t^*}\right)_z$',
+                 r'$W^*_{t,t^*}$']
+        ylabs = ['$Y_{t+1}$',
+                 r'$\left(A^*_{t,t^*+1}\right)_x$',
+                 r'$\left(A^*_{t,t^*+1}\right)_y$',
+                 r'$\left(A^*_{t,t^*+1}\right)_z$',
+                 r'$W^*_{t,t^*+1}$']
 
         # lag plots of dive-level data
         for i,feature in enumerate(features):
@@ -91,6 +96,7 @@ class Visualisor:
             np.set_printoptions(suppress=True,precision=4)
             im = plt.imshow(np.rot90(Ztemp),extent = xlim + ylim)
             plt.xlabel(xlabs[i],fontsize=12)
+            plt.ylabel(ylabs[i],fontsize=12)
             plt.xticks(fontsize=10)
             plt.yticks(fontsize=10)
             plt.gca().ticklabel_format(style='sci',scilimits = (-3,3))
@@ -107,7 +113,7 @@ class Visualisor:
 
             fig_num += 1
 
-        plt.subplots_adjust(wspace=0.5, hspace=0.5)
+        plt.subplots_adjust(wspace=0.9, hspace=0.9)
         #fig.text(0.5, 1.0, 'Lag Plots', ha='center', fontsize=50)
 
         if file is None:
@@ -180,14 +186,14 @@ class Visualisor:
                     ax[row_num,col_num].set_ylabel('Density',fontsize=12)
                 if level == 0:
                     title = 'Emission Distributions, Dive Duration'
-                    ax[row_num,col_num].set_xlabel('Dive Duration (seconds)')
+                    ax[row_num,col_num].set_xlabel('$Y_t$ $(s)$')
                     #ax[row_num,col_num].set_title(title,fontsize=12)
                     plt.legend(['Dive Type 1','Dive Type 2'],fontsize=10)
                 else:
-                    titles = [r'$A^*_x$ $(m/s^2)$',
-                              r'$A^*_y$ $(m/s^2)$',
-                              r'$A^*_z$ $(m/s^2)$',
-                              r'$W^*$']
+                    titles = [r'$\left(A^*_{t,t^*}\right)_x$ $(m/s^2)$',
+                              r'$\left(A^*_{t,t^*}\right)_y$ $(m/s^2)$',
+                              r'$\left(A^*_{t,t^*}\right)_z$ $(m/s^2)$',
+                              r'$W^*_{t,t^*}$']
                     title = titles[feature_num]
                     ax[row_num,col_num].set_xlabel(title,fontsize=12)
                     if feature == 'Ahat_low':
@@ -295,11 +301,11 @@ class Visualisor:
             dives.append(dive[dive['ML_dive'] == state])
 
         if ylabs is None:
-            ylabs = [r'$P\left(X_t = 1\right)$',
-                     r'$P\left(X_t = 2\right)$',
-                     r'$P\left(X^*_{t,t^*} = 1\right)$',
-                     r'$P\left(X^*_{t,t^*} = 2\right)$',
-                     r'$P\left(X^*_{t,t^*} = 3\right)$']
+            ylabs = [r'$Pr\left(X_t = 1\right)$',
+                     r'$Pr\left(X_t = 2\right)$',
+                     r'$Pr\left(X^*_{t,t^*} = 1\right)$',
+                     r'$Pr\left(X^*_{t,t^*} = 2\right)$',
+                     r'$Pr\left(X^*_{t,t^*} = 3\right)$']
             #ylabs = [r'$\left(Z^{*(1)}\right)_x$ $(m/s^2)$',
             #         r'Depth $(m)$']
 
