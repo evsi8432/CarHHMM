@@ -4,23 +4,23 @@
 
 \begin{table}[ht]
 \centering
-\caption{Estimates and standard errors of emission parameters for Dive Duration ($Y$), acceleration ($\Zone$), and willingness ($\Ztwo$) of the killer whale case study data under the full CarHHMM-DFT.}
+\caption{Estimates and standard errors of emission parameters for Dive Duration ($Y$), acceleration ($\Zone_{t,t^*}$), and willingness ($\Ztwo_{t,t^*}$) of the killer whale case study data under the full CarHHMM-DFT.}
 \scalebox{0.75}{
 \begin{tabular}{ccccc}
     \multirow{2}{*}{Feature}                                                       & \multirow{2}{*}{Dive / Subdive Type} & \multicolumn{3}{c}{Parameter Estimate}              \\
                                                                                    &                                      & $\hat \mu$      & $\hat \sigma$   & $\hat \phi$     \\ \hline
-    \multirow{2}{*}{Dive Duration $(s)$ - $Y$}                                     & 1                                    & $25.687 \pm 0.602$ & $9.573 \pm 0.514$ & ---             \\
+    \multirow{2}{*}{Dive Duration $(s)$ - $Y_t$}                                     & 1                                    & $25.687 \pm 0.602$ & $9.573 \pm 0.514$ & ---             \\
                                                                                    & 2                                    & $104.601 \pm 9.395$ & $64.678 \pm 7.468$ & ---             \\ \hline
-    \multirow{3}{*}{x-acceleration $(m/s^2)$ - $\Zone_x$} & 1                                    & $0.020 \pm 0.042$ & $0.034 \pm 0.001$ & $0.976 \pm 0.007$ \\
+    \multirow{3}{*}{x-acceleration $(m/s^2)$ - $\left(\Zone_{t,t^*}\right)_x$} & 1                                    & $0.020 \pm 0.042$ & $0.034 \pm 0.001$ & $0.976 \pm 0.007$ \\
                                                                                    & 2                                    & $0.244 \pm 0.013$ & $0.079 \pm 0.001$ & $0.886 \pm 0.005$ \\
                                                                                    & 3                                    & $0.218 \pm 0.028$ & $0.265 \pm 0.007$ & $0.626 \pm 0.029$ \\ \hline
-    \multirow{3}{*}{y-acceleration $(m/s^2)$ - $\Zone_y$} & 1                                    & $0.469 \pm 0.052$ & $0.044 \pm 0.001$ & $0.976 \pm 0.009$ \\
+    \multirow{3}{*}{y-acceleration $(m/s^2)$ - $\left(\Zone_{t,t^*}\right)_y$} & 1                                    & $0.469 \pm 0.052$ & $0.044 \pm 0.001$ & $0.976 \pm 0.009$ \\
                                                                                    & 2                                    & $0.436 \pm 0.014$ & $0.082 \pm 0.001$ & $0.886 \pm 0.012$ \\
                                                                                    & 3                                    & $0.384 \pm 0.033$ & $0.321 \pm 0.009$ & $0.626 \pm 0.034$ \\ \hline
-    \multirow{3}{*}{z-acceleration $(m/s^2)$ - $\Zone_z$} & 1                                    & $-0.683 \pm 0.061$ & $0.052 \pm 0.001$ & $0.976 \pm 0.005$ \\
+    \multirow{3}{*}{z-acceleration $(m/s^2)$ - $\left(\Zone_{t,t^*}\right)_z$} & 1                                    & $-0.683 \pm 0.061$ & $0.052 \pm 0.001$ & $0.976 \pm 0.005$ \\
                                                                                    & 2                                    & $-0.593 \pm 0.016$ & $0.096 \pm 0.001$ & $0.886 \pm 0.009$ \\
                                                                                    & 3                                    & $-0.366 \pm 0.033$ & $0.317 \pm 0.009$ & $0.626 \pm 0.033$ \\ \hline
-    \multirow{3}{*}{Fourier sum - $\Ztwo$}                                      & 1                                    & $23.340 \pm 0.282$ & $12.948 \pm 0.269$ & ---             \\
+    \multirow{3}{*}{Fourier sum - $\Ztwo_{t,t^*}$}                                      & 1                                    & $23.340 \pm 0.282$ & $12.948 \pm 0.269$ & ---             \\
                                                                                    & 2                                    & $301.189 \pm 3.244$ & $330.050 \pm 4.166$ & ---             \\
                                                                                    & 3                                    & $10204.010 \pm 211.242$ & $15299.066 \pm 352.674$ & ---             \\ \hline
     \end{tabular}
@@ -71,7 +71,7 @@ Model                       & \multicolumn{1}{c}{Train Time (m)} & \multicolumn{
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=5in]{../Plots/CarHHMM2_decoded_dives.png}
-	\caption{The $x$-component of acceleration $\left(y^*_{t,t^*}\right)_x$ and dive profile of a Northern resident killer whale for dives $160,161,162,163,164,$ and $165$. The line colour of the first and third panels correspond to the estimated dive types while the line colour of the second and fourth panels show the estimated subdive states. Both the dive types and subdive states are estimated by fitting the CarHHMM-DFT to the data.}
+	\caption{The $x$-component of acceleration $\left(y^*_{t,t^*}\right)_x$ and dive profile of a Northern resident killer whale for dives $t = 160,161,162,163,164,$ and $165$. The line colour of the first and third panels correspond to the estimated dive types while the line colour of the second and fourth panels show the estimated subdive states. Both the dive types and subdive states are estimated by fitting the CarHHMM-DFT to the data.}
 	\label{fig:labeled_dives}
 \end{figure}
 
@@ -127,14 +127,14 @@ Model                       & \multicolumn{1}{c}{Train Time (m)} & \multicolumn{
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=5in]{../Plots/CarHHMM2-coarse-emissions.png}
-	\caption{Estimated probability densities of dive duration ($Y$) corresponding to dive type 1 (short dives) and dive type 2 (longer dives). These are Gamma distributions and are fit using the CarHHMM-DFT and the killer whale case study data.}
+	\caption{Estimated probability densities of dive duration ($Y_t$) corresponding to dive type 1 (short dives) and dive type 2 (longer dives). These are Gamma distributions and are fit using the CarHHMM-DFT and the killer whale case study data.}
 	\label{fig:coarse_emis}
 \end{figure}
 
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=5in]{../Plots/CarHHMM2-fine-emissions.png}
-	\caption{Estimated probability densities acceleration ($\Zone$) and wiggliness ($\Ztwo$) corresponding to subdive states 1, 2 and 3. Densities corresponding to acceleration ($\Zone$) are Normal and do not take auto-correlation into account, meaning that the true long-run variation is larger than what is pictured here (see Table \ref{table:emis_dists_CarHHMM-DFT}). The estimated density of wiggliness ($\Ztwo$) is Gamma, and plotted on a log-log scale here for clarity.}
+	\caption{Estimated probability densities acceleration ($\Zone_{t,t^*}$) and wiggliness ($\Ztwo_{t,t^*}$) corresponding to subdive states 1, 2 and 3. Densities corresponding to acceleration ($\Zone_{t,t^*}$) are Normal and do not take auto-correlation into account, meaning that the true long-run variation is larger than what is pictured here (see Table \ref{table:emis_dists_CarHHMM-DFT}). The estimated density of wiggliness ($\Ztwo_{t,t^*}$) is Gamma, and plotted on a log-log scale here for clarity.}
 	\label{fig:fine_emis}
 \end{figure}
 
@@ -151,7 +151,7 @@ Model                       & \multicolumn{1}{c}{Train Time (m)} & \multicolumn{
     	\caption{Empirical distribution of $Y$}
     	\label{fig:empirical_dist}
     \end{subfigure}
-    \caption{Psuedoresiduals of wiggliness ($\Zone$, left) plotted over a standard normal density as well as a weighted empirical distribution of dive duration ($Y$, left) plotted over the fitted gamma distributions. Both plots are generated using the fitted CarHHMM-DFT and the Killer whale case study data. They severe as examples of model-checking tools for HMMs.}
+    \caption{Psuedoresiduals of wiggliness ($\Ztwo_{t,t^*}$, left) plotted over a standard normal density as well as a weighted empirical distribution of dive duration ($Y_t$, right) plotted over the corresponding fitted gamma distribution. Both plots are generated using the fitted CarHHMM-DFT and the killer whale case study data. They severe as examples of model-checking tools for HMMs.}
     \label{fig:model_checking}
 \end{figure}
 
@@ -160,7 +160,7 @@ Model                       & \multicolumn{1}{c}{Train Time (m)} & \multicolumn{
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=5in]{../Plots/sim_data.png}
-	\caption{Acceleration data for one dive of a selected simulated data set. $Y^*$ refers to the raw accelerometer data, and $A^*$ and $W^*$ are kept constant over each two-second window used to train the models. The colour of the line corresponds to the true fine-scale state, while the colour of the background corresponds to the true dive type.}
+	\caption{Acceleration data for one dive of a selected simulated data set. $Y^*_{t,t^*}$ is the raw accelerometer data, while $A^*_{t,t^*}$ and $W^*_{t,t^*}$ are kept constant over each two-second window used to train the models. The colour of the line corresponds to the true fine-scale state, while the colour of the background corresponds to the true dive type.}
 	\label{fig:sim_data}
 \end{figure}
 

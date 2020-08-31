@@ -23,13 +23,13 @@ $$\Gamma^{*(1)} = \begin{pmatrix} 0.5 & 0.5 \\ 0.1 & 0.9 \end{pmatrix} \quad \te
 The observations $Z^*$ are generated using the following parameters:
 %
 \begin{gather*}
-    \mu_A^{*(1)} = 0.0 s, \enspace \sigma_A^{*(1)} = 0.05s, \enspace \phi_A^{*(1)} = 0.99, \\
+    \mu_A^{*(\cdot,1)} = 0.0 s, \enspace \sigma_A^{*(\cdot,1)} = 0.05s, \enspace \phi_A^{*(\cdot,1)} = 0.99, \\
     %
-    \mu_A^{*(2)} = 0.0 s, \enspace \sigma_A^{*(2)} = 0.1s, \enspace \phi_A^{*(2)} = 0.95, \\
+    \mu_A^{*(\cdot,2)} = 0.0 s, \enspace \sigma_A^{*(\cdot,2)} = 0.1s, \enspace \phi_A^{*(\cdot,2)} = 0.95, \\
     %
-    \mu_W^{*(1)} = 10.10, \quad \sigma_W^{*(1)} = 3.18, \\
+    \mu_W^{*(\cdot,1)} = 10.10, \quad \sigma_W^{*(\cdot,1)} = 3.18, \\
     %
-    \mu_W^{*(2)} = 305.94, \quad \sigma_W^{*(2)} = 17.49.
+    \mu_W^{*(\cdot,2)} = 305.94, \quad \sigma_W^{*(\cdot,2)} = 17.49.
 \end{gather*}
 %
 Recall that $\Zone_{t,t^*}$ follows a CarHMM and is Normally distributed while $\Ztwo_{t,t^*}$ follows an HMM and is Gamma distributed. It is not possible to uniquely recreate the raw accelerometer data $Y^*$ from $Z^*$ alone, but we describe one possible mapping from $Z^*$ to $Y^*$ in the appendix. Figure \ref{fig:sim_data} shows this reconstructed sequence along with one realization of $Z^*$ for five dives of one simulated data set. 
