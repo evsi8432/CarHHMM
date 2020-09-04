@@ -1,16 +1,16 @@
 %\section{Models and parameter estimation}
 
-Consider a sequence of $T$ curves (or dives, in our context). Any particular dive $t$, $t = 1,
-\ldots,T$, has a possibly high-dimensional associated curve-level (or coarse-scale) observation $Y_t$ as well as a sequence of within-curve (or fine-scale) observations $Y^*_{t} \equiv \Big\{Y^*_{t,1},\ldots,Y^*_{t,T^*_t}\Big\}$. The sequence $Y^*_{t}$ is made up of function values from curve $t$. We call the sequence of coarse-scale observations $Y \equiv \Big\{Y_1, \ldots, Y_T\Big\}$ and the collection of all fine-scale observations $Y^* \equiv \Big\{Y^*_1,\ldots,Y^*_T \Big\}$.
+Consider a sequence of $T$ curves (or dives, in our context). For any particular $t = 1,
+\ldots,T$, dive $t$ is characterized by a possibly high-dimensional curve-level (or coarse-scale) observation $Y_t$ as well as a sequence of $T^*_t$ within-curve (or fine-scale) observations, $Y^*_{t} \equiv \big\{Y^*_{t,1},\ldots,Y^*_{t,T^*_t}\big\}$. The sequence $Y^*_{t}$ is made up of function values from curve $t$. We call the sequence of coarse-scale observations $Y \equiv \big\{Y_1, \ldots, Y_T\big\}$ and the collection of all fine-scale observations $Y^* \equiv \big\{Y^*_1,\ldots,Y^*_T \big\}$.
 
 Hidden Markov models describe state-switching Markovian processes in discrete time and will be the core structure of the models we use for $Y$ and $Y^*$. We first detail the structure of a traditional HMM. We then review a variation described by \cite{Lawler:2019} called the conditionally auto-regressive hidden Markov model (CarHMM), which explicitly models auto-correlation between observations. Either the HMM or the CarHMM can be used to model a sequence of observations at one of the two scales: for the coarse scale sequence $Y$ or for each of the fine scale sequences, $Y_1^*,\ldots, Y_T^*$. To simultaneously model $Y$ and $Y^*$, we use the hierarchical hidden Markov model (HHMM) \citep{Barajas:2017,Adam:2019}.
-%which is comprised of two distinct, but related, HMMs that jointly model these time series. 
+%which is comprised of two distinct,x but related, HMMs that jointly model these time series. 
 Next, we describe how to reduce fine-scale correlation by transforming raw observations into meaningful summary statistics. In particular, we apply a discrete Fourier transform (DFT) to the components of $Y^*$ using a moving window to summarize its periodic behaviour. Finally, we show how each of these models can be altered and combined to form a wide variety of new models.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{The base structure of HMMs}
 
-An HMM is comprised of a sequence of unobserved states $X = \big\{X_1, \ldots, X_T\big\}$ where $X_t$ is associated with the observation $Y_t$. Here we focus on the coarse scale sequence of observations $Y_1,\ldots, Y_T$, but an HMM can also be used as a sub-model for the fine-scale sequence for a particular dive. The $Y_t$'s are often referred to as ``emissions'' and the index $t$ typically refers to time. 
+An HMM is comprised of a sequence of unobserved states $X \equiv \big\{X_1, \ldots, X_T\big\}$ where $X_t$ is associated with the observation $Y_t$. Here we focus on the coarse scale sequence of observations $Y_1,\ldots, Y_T$, but an HMM can also be used as a sub-model of the fine-scale sequence for a particular dive. The $Y_t$'s are often referred to as ``emissions'' and the index $t$ typically refers to time. 
 The $X_t$'s form a Markov chain and take possible values $1, \ldots, N$. Their distribution is governed by the distribution of the initial state $X_1$ and the $N \times N$ transition probability matrix $\Gamma$, where $\Gamma_{ij} = \Pr(X_{t+1} = j | X_t = i)$. 
 %
 We assume that $X_1$ follows the chain's stationary distribution, which is denoted by $\delta \in \bbR^N$, with $i^{th}$ component
@@ -32,7 +32,7 @@ where $\mathbf{1}_N$ is an $N$-dimensional column vector of ones and
 $P(y_t;\theta)$ is an $N \times N$ diagonal matrix with $(i,i)^{th}$ entry  $f^{(i)}(y_t; \theta^{(i)})$.
 %
 
-Following \citet{Barajas:2017}, we parameterize the $N \times N$ transition probability matrix $\Gamma$ such that the entries of the matrix are forced to be non-negative and the rows to sum to 1:
+Following \citet{Barajas:2017}, we reparameterize the $N \times N$ transition probability matrix $\Gamma$ such that the entries of the matrix are forced to be non-negative and the rows to sum to 1:
 %
 \[
 \Gamma_{ij} = \frac{\exp(\eta_{ij})}{\sum_{k=1}^N \exp(\eta_{ik})}, 
@@ -56,12 +56,12 @@ For example, if $Y_t$ is a scalar, one could assume that its conditional distrib
 \end{split}
 \end{align}
 %
-If $Y_t$ is a vector, equation (\ref{eqn:carhmm}) above can model either a subset of the dimensions of $Y_t$ if only a subset of those dimensions exhibit significant auto-correlation. Figure \ref{fig:models}b shows a graphical representation of the dependence structure of a CarHMM.
+If $Y_t$ is a vector, Equation (\ref{eqn:carhmm}) above can model either all dimensions of $Y_t$ simultaneously or just a subset of the dimensions, depending upon considerations such as subject mater expertise or expository data analysis. Figure \ref{fig:models}b shows a graphical representation of the dependence structure of a CarHMM.
 
-The likelihood for the CarHMM can be easily calculated using the forward algorithm. As previously, let $y$ be the vector of observed emissions. Then
+The likelihood for the CarHMM can be easily calculated using the forward algorithm. As previously, let $y$ be the vector of observed emissions. Then:
 \begin{equation*}
-    \calL_{\text{CarHMM}}(\theta,\Gamma;y) = \delta \prod_{t=2}^T \Gamma P(y_t|y_{t-1};\theta) \mathbf{1}_N
-    \label{CarHMM_likelihood}
+    \calL_{\text{CarHMM}}(\theta,\Gamma;y) = \delta \prod_{t=2}^T \Gamma P(y_t|y_{t-1};\theta) \mathbf{1}_N,
+    \label{eqn:CarHMM_likelihood}
 \end{equation*}
 where
 %
@@ -69,11 +69,11 @@ $P(y_t|y_{t-1};\theta)$ is an $N \times N$ diagonal matrix with $(i,i)^{th}$ ent
 
 \subsection{Incorporating multiple scales with an HHMM}
 
-An HHMM accounts for different levels of correlation by modelling both the coarse-scale process and fine-scale process with distinct HMMs \citep{Barajas:2017,Adam:2019}. The coarse-scale process is an HMM as defined previously, where $X_1, \ldots, X_T$ make up an unobserved Markov chain with $N$ possible states and $Y_1,\ldots, Y_T$ are the corresponding observations.   
+An HHMM accounts for different scales of correlation by modelling both the coarse-scale process and fine-scale process with distinct HMMs \citep{Barajas:2017,Adam:2019}. The coarse-scale model is an HMM as defined previously, where $X_1, \ldots, X_T$ make up an unobserved Markov chain with $N$ possible states and $Y_1,\ldots, Y_T$ are the corresponding observations.   
 %
-In the hierarchical setting, each state $X_t$ also emits another sequence of fine-scale unobserved states, $X_t^* \equiv (X_{t,1}^*,\ldots, X_{t,T_t^*})$. The fine-scale state sequence in turn emits a sequence of fine-scale observations $Y_t^* \equiv (Y_{t,1}^*,\ldots, Y_{t,T_t^*})$. For each $t$, the fine-scale process ($X_t^*, Y_t^*$) then follows another HMM whose parameters depend on the value of $X_t$. Specifically, if $X_t=i$, then the components of $X_t^*$ are a Markov chain with an $N^*_t \times N^*_t$ transition probability matrix $\Gamma^{*(i)}$ and initial distribution $\delta^{*(i)}$, which we assume is equal to the stationary distribution of the chain. For simplicity, we take $N_t^* \equiv N^*$ although this is not necessary in general. The distribution of $Y_{t,t^*}$ given $X_{t,t^*}=i^*$ and $X_t=i$ is governed by the parameter $\theta^{*(i,i^*)}$ and has density or probability mass function denoted $f^{*(i,i^*)}\left(\cdot; \theta^{*(i,i^*)}\right)$ or simply $f^{*(i,i^*)}(\cdot)$. We denote the fine-scale emission parameter vector corresponding to $X_t=i$ as $\theta^{*(i)}=\left(\theta^{*(i,1)}, \ldots, \theta^{*(i,N^*)}\right)$. Given the coarse-scale hidden states, the $T$ fine-scale HMMs $(X_1^*, Y_1^*), \ldots, (X_T^*, Y_T^*)$, are all assumed to be independent of one another.
+In the hierarchical setting, each state $X_t$ also emits another sequence of fine-scale unobserved states, $X_t^* \equiv \{X_{t,1}^*,\ldots, X_{t,T_t^*}\}$, which in turn emits a sequence of fine-scale observations $Y_t^* \equiv \{Y_{t,1}^*,\ldots, Y_{t,T_t^*}\}$. For each $t$, the fine-scale process $\{X_t^*, Y_t^*\}$ then follows another HMM whose parameters depend on the value of $X_t$. Specifically, if $X_t=i$, then the components of $X_t^*$ are a Markov chain with an $N^*_t \times N^*_t$ transition probability matrix $\Gamma^{*(i)}$ and initial distribution $\delta^{*(i)}$, which we assume is equal to the stationary distribution of the chain. For simplicity, we take $N_t^* \equiv N^*$ although this is not necessary in general. The distribution of $Y_{t,t^*}$ given $X_{t,t^*}=i^*$ and $X_t=i$ is governed by the parameter $\theta^{*(i,i^*)}$ and has density or probability mass function denoted $f^{*(i,i^*)}\left(\cdot; \theta^{*(i,i^*)}\right)$ or simply $f^{*(i,i^*)}(\cdot)$. We denote the fine-scale emission parameter vector corresponding to $X_t=i$ as $\theta^{*(i)}=\left(\theta^{*(i,1)}, \ldots, \theta^{*(i,N^*)}\right)$. Given the coarse-scale hidden states, the $T$ fine-scale HMMs $\{X_1^*, Y_1^*\}, \ldots, \{X_T^*, Y_T^*\}$, are all assumed to be independent of one another.
 
-Depending upon the process being modelled, it is possible to force certain parameters to be shared to reduce the complexity of the HHMM. For example, in the killer whale case study (section \ref{sec:data}), we force the fine-scale emission parameters to be shared across coarse-scale hidden states $\left( \text{i.e. } \theta^{*(1,i^*)} = \cdots = \theta^{*(N,i^*)} \text{ for all } i^* = 1, \ldots, N^* \right)$. Figure \ref{fig:models}c represents the dependence structure for an HHMM. 
+Depending upon the process being modelled, it is possible to force certain parameters to be shared to reduce the complexity of the HHMM. For example, in the killer whale case study (see Section \ref{sec:data}), we force the fine-scale emission parameters to be shared across coarse-scale hidden states $\left( \text{i.e. } \theta^{*(1,i^*)} = \cdots = \theta^{*(N,i^*)} \text{ for all } i^* = 1, \ldots, N^* \right)$. Figure \ref{fig:models}c represents the dependence structure for an HHMM. 
 
 Due to the nested structure of the hierarchical hidden Markov model, the likelihood is easy to calculate via the forward algorithm.
 %
@@ -82,9 +82,10 @@ $y^* \equiv \left\{y^*_1, \ldots,y^*_T\right\}$ be the collection of $T$ observe
 %
 In addition, let $\theta^* \equiv \{\theta^{*(1)}, \ldots, \theta^{*(N)}\}$ denote the collection of all fine-scale emission parameters and $\Gamma^* \equiv \{\Gamma^{*(1)}, \ldots, \Gamma^{*(N)}\}$ denote the collection of all fine-scale transition probability matrices. The likelihood of the observed data is then
 %
-\[
-\calL_{\text{HHMM}}(\theta,\theta^*,\Gamma,\Gamma^*;y,y^*) = \delta P(y_1,y_1^*;\theta,\theta^*,\Gamma^*) \prod_{t=2}^T \Gamma P(y_t,y_t^*;\theta,\theta^*,\Gamma^*) \mathbf{1}_N
-\]
+\begin{equation}
+    \calL_{\text{HHMM}}(\theta,\theta^*,\Gamma,\Gamma^*;y,y^*) = \delta P(y_1,y_1^*;\theta,\theta^*,\Gamma^*) \prod_{t=2}^T \Gamma P(y_t,y_t^*;\theta,\theta^*,\Gamma^*) \mathbf{1}_N
+    \label{eqn:HHMM_likelihood}
+\end{equation}
 %
 where $P(y_t,y_t^*;\theta,\theta^*,\Gamma^*)$ is an $N \times N$ diagonal matrix with $(i,i)^{th}$ entry corresponding to $X_t=i$ and equal to 
 $f^{(i)}(y_t)\calL_{\text{HMM}}\left(\theta^{*(i)},
@@ -95,7 +96,7 @@ For more information on specific considerations for HHMMs, such as incorporating
 \subsection{Transforming observations to account for fine-scale behaviour}
 \label{subsec:STFT}
 
-In many applications where data are collected at high frequencies, intricate dependency structures may arise within the fine-scale process which cannot be adequately modelled with any of the HMM-based models mentioned thus far. For example, the accelerometer data in Figure \ref{fig:data} sporadically displays clear periodic behaviour. To handle these additional fine-scale structures, we recommend replacing the fine-scale observations $Y_t^*$ with relevant statistics that summarize this non-Markovian behaviour. To maintain the temporal structure of the fine-scale process, summary statistics can be calculated from a moving window over $Y_t^*$. Subject-area experts are often required to determine the optimal window size and the specific summary statistics used. For our case study, we use the discrete Fourier transform (DFT) of a moving window of width $h$ across $Y^*_t$:
+In many applications where data are collected at high frequencies, intricate dependency structures may arise within the fine-scale process which cannot be adequately modelled with any of the HMM-based models mentioned thus far. For example, the accelerometer data in Figure \ref{fig:data} sporadically displays clear periodic behaviour. To handle these additional fine-scale structures, we recommend replacing the fine-scale observations $Y_t^*$ with relevant statistics that summarize this non-Markovian behaviour. To maintain the temporal structure of the fine-scale process, summary statistics can be calculated from a moving window over $Y_t^*$. Subject-area experts are often required to determine the optimal window size and the specific summary statistics used. For our case study, we use the discrete Fourier transform (DFT) of a moving forward window of width $h$ across $Y^*_t$:
 %
 \begin{align*}
     DFT\{Y^*_{t,t^*}\}(k) = \sum_{n=0}^{h-1} Y^*_{t,t^*+n}\exp\left(-\frac{i 2\pi}{h} kn \right),
@@ -108,7 +109,10 @@ for $k = 0, 1, \ldots, h-1$. If $Y^*_{t,t^*}$ is high-dimensional, then the DFT 
     \Zone_{t,t^*} \equiv \frac{1}{h}\sum_{n=0}^{h-1}Y^*_{t,t^*+n} \quad \text{and} \quad \Ztwo_{t,t^*} \equiv \sum_{k=1}^{\tilde{\omega}}\bigg|\bigg|DFT\{Y^*_{t,t^*}\}(k)\bigg|\bigg|^2.
 \end{equation}
 %
-In words, $\Zone_{t,t^*}$ is the average value over the window and $\Ztwo_{t,t^*}$ is the squared 2-norm of the component of $\left(Y^*_{t,t^*}, \ldots, Y^*_{t,t^*+h-1}\right)$ that can be attributed to frequencies between $1$ and $\tilde{\omega}$ periods per window (by the Plancherel theorem). More intuitively, $\Ztwo_{t,t^*}$ corresponds to the ``wiggliness" of the acceleration data for dive $t$ within the window starting at time stamp $t^*$. The maximum frequency $\tilde{\omega}$ is a problem-specific tuning parameter which should be selected with the help of a subject-matter expert. Other DFT-based choices for window summary statistics are possible, including the dominant frequency and amplitude. To avoid introducing auto-correlation into the transformed observation sequence, we recommend down-sampling $\Z_t$ such that $\Z_t = \left(\Z_{t,1},\Z_{t,h+1},\Z_{t,2h+1},\ldots\right)$. The down-sampling avoids the artificial residual correlation that overlapping windows would introduce and reduces the dimension of the fine-scale process by a factor of $h$, allowing for faster model fitting. By summarizing the data using a relevant transformation, the method overall also reduces correlation in the raw observations due to the complex dependence structure. Figure \ref{fig:models}d represents the process of transforming $Y^*_{t}$ into $\Z_{t}$ within an HMM, including down-sampling.
+In words, $\Zone_{t,t^*}$ is the average value over the window and $\Ztwo_{t,t^*}$ is the squared two-norm of the component of the window $\left(Y^*_{t,t^*}, \ldots, Y^*_{t,t^*+h-1}\right)$ that can be attributed to frequencies between one and $\tilde{\omega}$ periods per window (by the Plancherel theorem). More intuitively, $\Ztwo_{t,t^*}$ corresponds to the ``wiggliness" of the acceleration data for dive $t$ within the window starting at time stamp $t^*$. The maximum frequency $\tilde{\omega}$ is a problem-specific tuning parameter which should be selected with the help of a subject-matter expert. Other DFT-based choices for window summary statistics are possible, including the dominant frequency and amplitude.
+
+To avoid introducing auto-correlation into the transformed observation sequence, we recommend down-sampling $\Z_t$ such that $\Z_t = \left\{\Z_{t,1},\Z_{t,h+1},\Z_{t,2h+1},\ldots\right\}$ and $X^*_t = \left\{X^*_{t,1},X^*_{t,h+1},X^*_{t,2h+1},\ldots\right\}$. When down-sampling, we redefine the fine-scale probability transition matrices such that $\Gamma^{*(i)}_{jk} = \Pr(X^*_{t,t^*+h} = k | X^*_{t,t^*} = j, X_t = i)$ for all $t$ and $t^* = 1,h+1,2h+1,\ldots$. %In addition, we assume that the hidden state within a window does not change, (i.e. $X^*_{t,t^*+s} = X^*_{t,t^*}$ for all $t$, $t^* = 1,h+1,2h+1,\ldots$ and $s = 0,1,\ldots,h-1$. 
+This down-sampling both avoids the artificial residual correlation that overlapping windows would introduce and reduces the dimension of the fine-scale process by a factor of $h$, allowing for faster model fitting. By summarizing the data using a relevant transformation, the method overall also reduces correlation in the raw observations due to the complex dependence structure. Figure \ref{fig:models}d represents the process of transforming $Y^*_{t}$ into $\Z_{t}$ within an HMM, including down-sampling.
 
 Once $\Z_t$ is calculated, it simply replaces the original fine-scale observations $Y^*_t$ in the fine-scale HMM structure. As such, the emission distributions and the likelihood remain identical to the original HMM when transforming $Y^*$ to $\Z$. In order to clearly differentiate models, we refer to an HMM with $\Z$ as observations as an HMM-DFT.
 
@@ -119,15 +123,16 @@ By definition, an HHMM treats both the coarse-scale and the fine-scale processes
 \calL_{\text{coarse}}(\theta,\theta^*,\Gamma;y,y^*) = \delta \prod_{t=2}^T \Gamma P(y_t,y^*_t|y_{t-1};\theta,\theta^*) \mathbf{1}_N
 \]
 where $P(y_t,y^*_t|y_{t-1};\theta,\theta^*) $ is an $N \times N$ diagonal matrix with $(i,i)^{th}$ entry corresponding to $X_t=i$ and equal to $f^{(i)}\left(y_t|y_{t-1};\theta^{(i)}\right)\calL_{\text{HMM}}\left(\theta^{*(i)};y^*_t\right)$. 
-On the fine scale, $Y^*_t$ can be modelled using a large variety of parametric models which admit easy-to-compute likelihoods (or penalized likelihoods). The likelihood $\calL_{\text{HMM}}$ is then replaced by the likelihood of this general fine-scale model, $\calL_{\text{fine}}(\theta^{*(i)};y^*_t)$:
+
+On the fine scale, $Y^*_t$ can be modelled using a large variety of parametric models which admit easy-to-compute likelihoods or penalized likelihoods. In this case, the fine-scale HMM likelihood term $\calL_{\text{HMM}}$ in Equation (\ref{eqn:HHMM_likelihood}) is replaced by the likelihood of a general fine-scale model, $\calL_{\text{fine}}(\theta^{*(i)};y^*_t)$:
 \[
 \calL_{\text{coarse}}(\theta,\theta^*,\Gamma;y,y^*) = \delta P(y_1,y^*_1;\theta,\theta^*) \prod_{t=2}^T \Gamma P(y_t,y^*_t;\theta,\theta^*) \mathbf{1}_N
 \]
 where $P(y_t,y^*_t;\theta,\theta^*) $ is an $N \times N$ diagonal matrix with $(i,i)^{th}$ entry corresponding to $X_t=i$ and equal to $f^{(i)}\left(y_t;\theta^{(i)}\right)\calL_{\text{fine}}\left(\theta^{*(i)};y^*_t\right)$. 
-
+%
 Possible candidates for the fine-scale model include any of the models described in the previous subsections (HMM, CarHMM, HHMM, and HHMM-DFT) in addition to many others not described here. 
-For example, a continuous-time HMM (CTHMM) may be appropriate if observations are not equi-spaced in time \citep{Liu:2015}. In particular, \citet{Xu:2018} model biologging accelerometer data by incorporating a CTHMM into a hierarchical model similar to ours. However, they take a longitudinal approach whereas we use a coarse-scale HMM in our case study.
-Further, \citet{Bebbington:2007} and \citet{Borchers:2013} model data sets with count onsets as observations, so they use variations on a Poisson process as their fine-scale model. If the fine-scale model is a simple Poisson process, this model reduces to a Markov-modulated Poisson process \citep{Fischer:1993}.
-In addition, \citep{Langrock:2018} use B-splines to model several aspects of an HMM, and this modified model admits a penalized likelihood which can be incorporated into the hierarchical structure here. 
+For example, a continuous-time HMM (CTHMM) may be appropriate if observations are not equi-spaced in time \citep{Liu:2015}. as an example, \citet{Xu:2018} explain biologging accelerometer data by incorporating a CTHMM into a hierarchical model similar to ours. However, they take a longitudinal approach whereas we use a coarse-scale HMM in our case study.
+Further, \citet{Bebbington:2007} and \citet{Borchers:2013} investigate data sets with count onsets as observations, so they use variations on a Poisson process as their fine-scale model. If the fine-scale model is a simple Poisson process, then the hierarchical structure described here reduces to a Markov-modulated Poisson process \citep{Fischer:1993}.
+As a final example, \citep{Langrock:2018} use B-splines to model the emission distribution of an HMM as well as incorporate covariates. This non-parametric approach admits a penalized likelihood which can easily be incorporated into the hierarchical structure here. 
 
-These examples are a few of many fine-scale models that can act as initial building blocks in a practitioner's toolbox to construct increasingly complex hierarchical models. As an example, consider a \textbf{CarHHMM}, in which the coarse-scale model is a traditional HMM and the fine-scale model is a CarHMM. Alternatively, one may construct an \textbf{HHHMM}, where three scales of observations are recorded ($Y$, $Y^*$, and $Y^{**}$) and traditional HMMs are used to model all three levels. It is clear that a a myriad of possible models can be built using this framework. However, these models quickly become complicated and should be constructed with care to achieve an adequate fit of the data while avoiding over-fitting and high computational costs.
+These examples are a few of many fine-scale models that can act as initial building blocks in a practitioner's toolbox to construct increasingly complex hierarchical models. As an example, consider a \textbf{CarHHMM}, in which the coarse-scale model is a traditional HMM and the fine-scale model is a CarHMM. Alternatively, one may construct an \textbf{HHHMM}, where three scales of observations are recorded ($Y$, $Y^*$, and $Y^{**}$) and traditional HMMs are used to model all three levels. It is clear that are a myriad of possible models can be built using this framework. However, these models quickly become complicated and should be constructed with care to achieve an adequate fit of the data while avoiding over-fitting and high computational costs.

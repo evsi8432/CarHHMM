@@ -9,7 +9,7 @@
     dY_t = \beta^{(X_t)}(\gamma^{(X_t)} - Y_t)dt + \omega^{(X_t)} dW_t,
 \end{equation}
 %
-where $X_t$ is some stochastic process which defines the hidden behaviour of the animal at time $t$, $\beta^{(X_t)}$ relates to rate at which the process returns to its mean value, $\gamma^{(X_t)}$ is the long-term mean value of the process, $\omega^{(X_t)}$ is related to short-term variance, and $W$ is a Wiener process. They refer to this as a state-switching Ornstein-Uhlenbeck process. Unlike an HMM, $t \in \mathbb{R}$ indexes a continuous time process and is therefore not necessarily an integer in this case. If the behavioural state $X_t$ is known and does not change between observations $\Big($i.e $X_s = X_t$ for all $s \in [t,t+\Delta t)\Big)$, the solution to Equation (\ref{eqn:SDE}) is known to be the following \citep{Michelot:2019}:
+where $X_t$ is some stochastic process which defines the hidden behaviour of the animal at time $t$, $\beta^{(X_t)}$ relates to rate at which the process returns to its mean value, $\gamma^{(X_t)}$ is the long-term mean value of the process in state $X_t$, $\omega^{(X_t)}$ is related to short-term variance, and $W$ is a Wiener process. They refer to this as a state-switching Ornstein-Uhlenbeck process. Unlike an HMM, $t \in \mathbb{R}$ indexes a continuous time process and is therefore not necessarily an integer in this case. If the behavioural state $X_t$ is known and does not change between observations $\Big($i.e $X_s = X_t$ for all $s \in [t,t+\Delta t)\Big)$, the solution to Equation (\ref{eqn:SDE}) is known to be the following \citep{Michelot:2019}:
 %
 \begin{align}
     Y_{t+\Delta t} | X_{t} \sim \mathcal{N}\left((1-e^{-\beta^{(X_t)}\Delta t})\gamma^{(X_t)} + e^{-\beta^{(X_t)}\Delta t} Y_t,\quad \frac{\omega^{(X_t)^2}}{2\beta^{(X_t)}} (1-e^{-2\beta^{(X_t)}\Delta t})\right)
@@ -37,28 +37,32 @@ then the observations $Y$ are equivalent to the output of a conditionally auto-r
 Combining Equation (\ref{eqn:OU_sol}) with Equation (\ref{eqn:CarHMM_to_OU}) gives
 %
 \begin{align*}
-\left(Y_{s \Delta t} | X_{(s-1)\Delta t} = i \right) \sim \mathcal{N}\left((1-\phi^{(i)}) \mu^{(i)} + \phi^{(i)} Y_{(s-1) \Delta t}, \enspace \left(\sigma^{(i)}\right)^2 \right),\\
-s = 1, \ldots, T-1.
+    \left(Y_{(s+1) \Delta t} | X_{s\Delta t} = i \right) \sim \mathcal{N}\left((1-\phi^{(i)}) \mu^{(i)} + \phi^{(i)} Y_{s \Delta t}, \enspace \left(\sigma^{(i)}\right)^2 \right),\\
+    s = 0, \ldots, T-2.
 \end{align*}
 %
 If $X_t$ follows a Markov chain with transitions at the observation times, then the behavioural state $X_t$ does not change between observations and we can re-index $Y_{(s-1) \Delta t} = Y'_s$ and $X_{(s-2)\Delta t} = X'_s$ for $s = 2,\ldots T$, yielding the desired result:
 
 \begin{align*}
-\left(Y'_s| X'_s = i \right) \sim \mathcal{N}\left((1-\phi^{(i)}) \mu^{(i)} + \phi^{(i)} Y'_{s-1}, \enspace \left(\sigma^{(i)}\right)^2 \right)\\
-s = 2, \ldots, T
+    \left(Y'_s| X'_s = i \right) \sim \mathcal{N}\left((1-\phi^{(i)}) \mu^{(i)} + \phi^{(i)} Y'_{s-1}, \enspace \left(\sigma^{(i)}\right)^2 \right)\\
+    s = 2, \ldots, T.
 \end{align*}
 %
-$X'$ follows a (possibly unobserved) Markov chain, and the distribution of $(Y'_s|X'_s,Y'_{s-1})$ is consistent with that of a CarHMM with Normal emission distributions.
+$X'$ is assumed to follow a (possibly unobserved) Markov chain, and the distribution of $(Y'_s|X'_s,Y'_{s-1})$ is consistent with that of a CarHMM with Normal emission distributions.
 \end{proof}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\subsection{Detailed description of simulated data}
+\subsection{Detailed description of data simulation}
 
-Assume that $X$, $Y$, and $X^*$ are known and simulated using the procedure detailed in Section \ref{sec:sim_study}, leaving only $Y^*$ to be simulated. Let $DFT\{Y^*_{t,t^*}\}(k)$ be denoted as $\hat{Y}^{*(k)}_{t,t^*}$ and let $DFT\{Y^*_{t,t^*}\}$ be denoted as $\hat{Y}^*_{t,t^*}$ for convenience. We first simulate $\hat Y^*_{t,t^*}$ for all $t$ and $t^*$ and then take the inverse $DFT$ to find $Y^*$ according to the following procedure. 
+It is straightforward to simulate realizations of the coarse-scale HMM ($X$ and $Y$) given the parameters $\Gamma$ and $\theta$. 
+
+To simulate $X^*_t$ for each dive $t$, note that we simulate accelerometer readings taken at 50 hertz and have two-second window lengths. Therefore, each window contains 100 accelerometer readings and $X^*_t = \left\{X^*_{t,1}, X^*_{t,101}, \ldots, X^*_{t,100T^*_t-99}\right\}$. In addition, the length of each fine-scale Markov chain is $T^*_t = \lfloor Y_t/2 \rfloor$. Then, given the dive types $X_t$, dive durations $Y_t$, and the fine-scale probability transition matrices $\Gamma^{*(1)}$ and $\Gamma^{*(2)}$, it is straightforward to simulate $X^*_t$ for each dive $t = 1,2,\ldots,100$. Recall that $\Gamma^{*(i)}_{jk} = Pr(X^*_{t,t^*+100} = k | X^*_{t,t^*} = j, X_t = i)$ for all $t$ and $t^* = 1, 101, \ldots$. It is much more difficult to simulate the raw acceleration data $Y^*$, and we focus on this task for the remainder of this section. 
+
+Assume that $X$, $Y$, and $X^*$ are simulated using the procedure described above and are therefore known. Additionally, let $DFT\{Y^*_{t,t^*}\}(k)$ be denoted as $\hat{Y}^{*(k)}_{t,t^*}$ and $DFT\{Y^*_{t,t^*}\}$ be denoted as $\hat{Y}^*_{t,t^*}$ for convenience. We first simulate $\hat Y^{*(k)}_{t,t^*}$ for all dives $t = 1,2,\ldots,100$, all subdive windows $t^* = 1,101,\ldots$, and all Fourier coefficients $k = 0,1,\ldots,99$. We then take the inverse DFT of $\hat{Y}^*_{t,t^*}$ for all dives $t = 1,2,\ldots,100$ and subdive windows $t^* = 1,101,\ldots$ to find $Y^*$. The details of this procedure are described below:
 
 \begin{enumerate}
-    \item We begin by simulating $\hat{Y}^{*(0)}_{t,1}$ for each dive $t = 1,\ldots,100$:
+    \item We begin by simulating $\hat{Y}^{*(0)}_{t,1}$ for each dive $t = 1,2,\ldots,100$:
     $$
     	(\hat{Y}^{*(0)}_{t,1}|X^*_{t,1} = i^*) \sim \mathcal{N} \left(0, \left(100\sigma_A^{*(\cdot,i^*)}\right)^2 \right),
     $$
@@ -71,14 +75,14 @@ Assume that $X$, $Y$, and $X^*$ are known and simulated using the procedure deta
         &t^* = 101,201,\ldots
     	\label{eqn:yhat_0}
     \end{align}
-    where $\phi_A^{*(\cdot,1)} = 0.99$ and $\phi_A^{*(\cdot,2)} = 0.95$. Note that $t^*$ has increments of 100 because $h=100$ when using two-second window sizes. After this step we have effectively simulated the average acceleration within each two-second window.
+    where $\phi_A^{*(\cdot,1)} = 0.99$ and $\phi_A^{*(\cdot,2)} = 0.95$. After this step we have simulated the average acceleration within each two-second window for all dives (see Equation (\ref{eqn:avg_val}) below).
     %
-    \item We then simulate Fourier modes 1 through 49 within each window:
+    \item We then simulate Fourier coefficients 1 through 49 within each window:
     \begin{equation}
         \hat{Y}^{*(k)}_{t,t^*} = a_{t,t^*}^{(k)} i\sqrt{b^{(k)}_{t,t^*}}, \quad k = 1,\ldots,49;
         \label{eqn:abYhat}
     \end{equation}
-    where $a^{(k)}_{t,t^*}$ is equals either 1 or -1 with probability 1/2 and $b^{(k)}_{t,t^*}$ has the following distribution:
+    where $a^{(k)}_{t,t^*}$ is equal to either 1 or -1, each with probability 1/2. In addition, $b^{(k)}_{t,t^*}$ has the following distribution:
     \begin{align}
     \begin{split}
     	(b^{(k)}_{t,t^*}|X^*_{t,t^*} = 1) &\sim {\rm{Gamma}}(5/k^2, 1) \\
@@ -91,20 +95,20 @@ Assume that $X$, $Y$, and $X^*$ are known and simulated using the procedure deta
     \end{split}
     \label{eqn:bdist}
     \end{align}
-    This means that the expected values of Fourier modes 1 and 2 are much higher in subdive state 2 $(X^*_{t,t^*} = 2)$ than in subdive state 1 $(X^*_{t,t^*} = 1)$. Note that $\mathbb{E}\left(||\hat{Y}^{(k)}_{t,t^*}||^2\right)$ is proportional to $1/k^2$. This facilitates lower expected values for higher Fourier modes and subsequently ``smooths out" the raw acceleration after taking the inverse DFT of $\hat Y$. 
+    The first argument of ${\rm{Gamma}}\left(\cdot,\cdot\right)$ is the scale parameter and the second is the shape parameter. It is important that $\mathbb{E}\left(|b^{(k)}_{t,t^*}|\right)$ is proportional to $1/k^2$, as smaller expected values for larger Fourier coefficients ``smooths out" the raw acceleration data.
     %
-    \item We set Fourier modes 50 through 99 using the following equation to ensure that the inverse DFT is real-valued:
+    \item We set Fourier coefficients 50 through 99 strategically to ensure that the inverse DFT is real-valued:
     $$
     \hat{Y}^{*(50)}_{t,t^*} = 0; \qquad
 	\hat{Y}^{*(k)}_{t,t^*} = -\hat{Y}^{*(100-k)}_{t,t^*} \enspace \text{for} \enspace k = 51,\ldots,99.
     $$
     %
-    \item Finally, for each dive $t$, $\Big(Y^*_{t,t^*},\ldots,Y^*_{t,t^*+99}\Big)$ is set using the inverse discrete Fourier transform of $\hat{Y}^*_{t,t^*}$:
+    \item Finally, for each dive $t = 1,2,\ldots,100$ and each window $t^*=1,101,\ldots$, the raw acceleration data $\left\{Y^*_{t,t^*},\ldots,Y^*_{t,t^*+99}\right\}$ is set using the inverse discrete Fourier transform of $\hat{Y}^*_{t,t^*}$:
     %
     $$Y^*_{t,t^*+n} = IDFT\left\{\hat{Y}^*_{t,t^*}\right\}(n); \quad n = 0,\ldots,99; \quad t^* = 1,101,\ldots$$
 \end{enumerate}
 
-We now show that this construction of $Y^*$ results in the correct distributions as listed in Section \ref{sec:sim_study}. First, note the following:
+We now show that this construction of $Y^*$ results in the correct distributions as listed in Section \ref{subsec:data_simulation}. First, note that $\hat{Y}^{(0)}_{t,t^*}$ is just the sum of the raw acceleration values within the corresponding window:
 %
 \begin{align}
     \hat{Y}^{(0)}_{t,t^*} = DFT\{Y^*_{t,t^*}\}(0) &= \sum_{n=0}^{99} Y^*_{t,t^*+n} \exp\left(-\frac{i2\pi}{99}*0*n\right) \nonumber \\
@@ -113,24 +117,28 @@ We now show that this construction of $Y^*$ results in the correct distributions
     \label{eqn:avg_val}
 \end{align}
 %
-Combining Equation (\ref{eqn:avg_val}) with Equation (\ref{eqn:yhat_0}) gives the distribution of $\Zone_{t,t^*}$: 
+Combining Equation (\ref{eqn:avg_val}) above with Equation (\ref{eqn:yhat_0}) gives the distribution of $\Zone_{t,t^*}$: 
 %
-$$\left(100\Zone_{t,t^*} | X^*_{t,t^*} = i^*, \Zone_{t,t^*-100} \right) \sim \mathcal{N} \left(100\phi_A^{*(\cdot,i^*)} \Zone_{t,t^*-100}, \left(100\sigma_A^{*(\cdot,i^*)}\right)^2 \right), \text{ so }$$
+$$\left(100\Zone_{t,t^*} | X^*_{t,t^*} = i^*, \Zone_{t,t^*-100} \right) \sim \mathcal{N} \left(100\phi_A^{*(\cdot,i^*)} \Zone_{t,t^*-100}, \left(100\sigma_A^{*(\cdot,i^*)}\right)^2 \right)$$
 %
-$$\left(\Zone_{t,t^*} | X^*_{t,t^*} = i^*, \Zone_{t,t^*-100} \right) \sim \mathcal{N} \left(\phi_A^{*(\cdot,i^*)} \Zone_{t,t^*-100}, \left(\sigma_A^{*(\cdot,i^*)}\right)^2 \right).$$
+$$\implies \left(\Zone_{t,t^*} | X^*_{t,t^*} = i^*, \Zone_{t,t^*-100} \right) \sim \mathcal{N} \left(\phi_A^{*(\cdot,i^*)} \Zone_{t,t^*-100}, \left(\sigma_A^{*(\cdot,i^*)}\right)^2 \right).$$
 %
 This distribution is consistent with a CarHMM with Normal emission distributions and $\mu_A^{*(\cdot,i^*)} = 0$. We also have that $\sigma_A^{*(\cdot,1)} = 0.05s$, $\phi_A^{*(\cdot,1)} = 0.99$, $\sigma_A^{*(\cdot,2)} = 0.1s$, and $\phi_A^{*(\cdot,2)} = 0.95$.
 
-To calculate the wiggliness $\Ztwo_{t,t^*}$, we pick $\tilde{\omega} = 10$ periods per window (or 5 Hz). Recall that $\Ztwo_{t,t^*}$ is the sum of gamma-distributed random variables with identical scale parameters, so the distribution of $\Ztwo_{t,t^*}$ is also gamma. From Equation (\ref{eqn:abYhat}), we have:
+To calculate the wiggliness $\Ztwo_{t,t^*}$, we pick $\tilde{\omega} = 10$ periods per window (or 5 Hz). Recall that $\Ztwo_{t,t^*}$ is the sum of Gamma-distributed random variables with identical scale parameters, so the distribution of $\Ztwo_{t,t^*}$ is also Gamma-distributed. From Equation (\ref{eqn:abYhat}), we have:
 %
-$$\Ztwo_{t,t^*} = \sum_{k=1}^{10} \big|\big|\hat{Y}^{(k)}_{t,t^*}\big|\big|^2 = \sum_{k=1}^{10} \big|\big|a^{(k)}_{t,t^*}i\sqrt{b^{(k)}_{t,t^*}}\big|\big|^2 = \sum_{k=1}^{10} \big|b^{(k)}_{t,t^*}\big|$$
-since $a^{(k)}_{t,t^*}$ is equal to either 1 or -1. Combining this with Equation block (\ref{eqn:bdist}) gives
+\begin{equation}
+    \Ztwo_{t,t^*} = \sum_{k=1}^{10} \big|\big|\hat{Y}^{(k)}_{t,t^*}\big|\big|^2 = \sum_{k=1}^{10} \big|\big|a^{(k)}_{t,t^*}i\sqrt{b^{(k)}_{t,t^*}}\big|\big|^2 = \sum_{k=1}^{10} \big|b^{(k)}_{t,t^*}\big|
+    \label{eqn:Wb}
+\end{equation}
+%
+since $a^{(k)}_{t,t^*} \in \{-1,1\}$. Combining Equation (\ref{eqn:Wb}) above with Equation block (\ref{eqn:bdist}) gives
 %
 $$\left(\Ztwo_{t,t^*}|X^*_{t,t^*} = 1\right) \sim {\rm{Gamma}}\left(\sum_{k=1}^{10} 5/k^2 = 10.10, 1.00 \right) \text { and }$$
 %
-$$\left(\Ztwo_{t,t^*}|X^*_{t,t^*} = 2\right) \sim {\rm{Gamma}}\left(300 + \sum_{k=3}^{10} 5/k^2 = 305.94 , 1.00 \right).$$
+$$\left(\Ztwo_{t,t^*}|X^*_{t,t^*} = 2\right) \sim {\rm{Gamma}}\left(300 + \sum_{k=3}^{10} 5/k^2 = 305.94 , 1.00 \right),$$
 %
-Where the first argument is the scale parameter and the second is the shape parameter. Simple calculation of the mean and variance of a gamma distribution shows that $\mu_W^{*(\cdot,1)} = 10.10$, $\sigma_W^{*(\cdot,1)} = 3.18$, $\mu_W^{*(\cdot,2)} = 305.94$, and $\sigma_W^{*(\cdot,2)} = 17.49$.
+where the first argument of ${\rm{Gamma}}\left(\cdot,\cdot\right)$ is the scale parameter and the second is the shape parameter. Simple calculation of the mean and variance of a Gamma distribution shows that $\mu_W^{*(\cdot,1)} = 10.10$, $\sigma_W^{*(\cdot,1)} = 3.18$, $\mu_W^{*(\cdot,2)} = 305.94$, and $\sigma_W^{*(\cdot,2)} = 17.49$.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -153,4 +161,4 @@ $$\calL_{\text{CarHMM-DFT}}\left(\theta^{*},\Gamma^{*(i)};z_t^*\right) = \delta^
 %
 where $P(z^*_{t,t^*}|z^*_{t,t^*-100};\theta^*)$ is an $N^* \times N^*$ diagonal matrix with $(i^*,i^*)^{th}$ entry equal to $f^{*(\cdot,i^*)}(z^*_{t,t^*}|z^*_{t,t^*-100}; \theta^{*(\cdot,i^*)})$.
 %
-Recall that $z^*_t = \Big\{z^*_{t,1},z^*_{t,101},z^*_{t,201},\ldots\Big\}$ and that $f^{*(\cdot,i^*)}(\cdot|z^*_{t,t^*-100}; \theta^{*(\cdot,i^*)})$ is the probability density function of $\Z_{t,t^*}$ conditioned on $X^*_{t,t^*} = i^*$ and $\Z_{t,t^*-100} = z^*_{t,t^*-100}$.
+Recall that $z^*_t = \left\{z^*_{t,1},z^*_{t,101},z^*_{t,201},\ldots\right\}$ and that $f^{*(\cdot,i^*)}(\cdot|z^*_{t,t^*-100}; \theta^{*(\cdot,i^*)})$ is the probability density function of $\Z_{t,t^*}$ conditioned on $X^*_{t,t^*} = i^*$ and $\Z_{t,t^*-100} = z^*_{t,t^*-100}$.

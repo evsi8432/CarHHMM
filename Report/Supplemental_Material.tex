@@ -79,7 +79,7 @@
         
             %\begin{table}[ht]
             %
-            %\caption{Estimates and standard errors of emission parameters for dive duration ($Y$), acceleration ($\Zone_{t,t^*}$), and willingness ($\Ztwo_{t,t^*}$) of the killer whale case study data under the full CarHHMM-DFT.}
+            %\caption{Estimates and standard errors of emission parameters for dive duration ($Y_t$), acceleration ($\Zone_{t,t^*}$), and willingness ($\Ztwo_{t,t^*}$) of the killer whale case study data under the full CarHHMM-DFT.}
             \begin{center}
             \scalebox{0.75}{
             \bgroup
@@ -88,7 +88,7 @@
             \begin{tabular}{ccccc}
                 \multirow{2}{*}{Feature}                                                       & \multirow{2}{*}{Dive / Subdive Type} & \multicolumn{3}{c}{Parameter Estimate}              \\
                                                                                                &                                      & $\hat \mu$      & $\hat \sigma$   & $\hat \phi$     \\ \hline
-                \multirow{2}{*}{dive duration $(s)$ - $Y$}                                     & 1                                    & $25.687 \pm 0.602$ & $9.573 \pm 0.514$ & ---             \\
+                \multirow{2}{*}{dive duration $(s)$ - $Y_t$}                                     & 1                                    & $25.687 \pm 0.602$ & $9.573 \pm 0.514$ & ---             \\
                                                                                                & 2                                    & $104.601 \pm 9.395$ & $64.678 \pm 7.468$ & ---             \\ \hline
                 \multirow{3}{*}{x-acceleration $(m/s^2)$ - $\left(\Zone_{t,t^*}\right)_x$} & 1                                    & $0.020 \pm 0.042$ & $0.034 \pm 0.001$ & $0.976 \pm 0.007$ \\
                                                                                                & 2                                    & $0.244 \pm 0.013$ & $0.079 \pm 0.001$ & $0.886 \pm 0.005$ \\
@@ -99,7 +99,7 @@
                 \multirow{3}{*}{z-acceleration $(m/s^2)$ - $\left(\Zone_{t,t^*}\right)_z$} & 1                                    & $-0.683 \pm 0.061$ & $0.052 \pm 0.001$ & $0.976 \pm 0.005$ \\
                                                                                                & 2                                    & $-0.593 \pm 0.016$ & $0.096 \pm 0.001$ & $0.886 \pm 0.009$ \\
                                                                                                & 3                                    & $-0.366 \pm 0.033$ & $0.317 \pm 0.009$ & $0.626 \pm 0.033$ \\ \hline
-                \multirow{3}{*}{Wiggliness - $\Ztwo_{t,t^*}$}                                      & 1                                    & $23.340 \pm 0.282$ & $12.948 \pm 0.269$ & ---             \\
+                \multirow{3}{*}{wiggliness - $\Ztwo_{t,t^*}$}                                      & 1                                    & $23.340 \pm 0.282$ & $12.948 \pm 0.269$ & ---             \\
                                                                                                & 2                                    & $301.189 \pm 3.244$ & $330.050 \pm 4.166$ & ---             \\
                                                                                                & 3                                    & $10204.010 \pm 211.242$ & $15299.066 \pm 352.674$ & ---             \\ \hline
                 \end{tabular}
@@ -107,7 +107,7 @@
                 }
                 \end{center}
                 
-                \noindent Table \arabic{tablenum}: Estimates and standard errors of emission parameters for dive duration ($Y$), acceleration ($\Zone_{t,t^*}$), and willingness ($\Ztwo_{t,t^*}$) of the killer whale case study data under the full CarHHMM-DFT. The $\pm$ refers to the standard deviation of the parameter estimates for all 500 data simulations.
+                \noindent Table \arabic{tablenum}: Estimates and standard errors of emission parameters for dive duration ($Y_t$), acceleration ($\Zone_{t,t^*}$), and willingness ($\Ztwo_{t,t^*}$) of the killer whale case study data under the full CarHHMM-DFT. The $\pm$ refers to the standard deviation of the parameter estimates for all 500 data simulations.
                 \addtocounter{tablenum}{1}
     
         \subsubsection{HHMM-DFT}
@@ -119,7 +119,7 @@
                 \begin{tabular}{ccccc}
                 \multirow{2}{*}{Feature}                                                       & \multirow{2}{*}{Dive / Subdive Type} & \multicolumn{3}{c}{Parameter Estimate}              \\
                                                                                                &                                      & $\hat \mu$      & $\hat \sigma$   & $\hat \phi$     \\ \hline
-                \multirow{2}{*}{dive duration $(s)$ - $Y$}                                     & 1                                    & $25.339 \pm 0.599$ & $8.824 \pm 0.511$ & ---             \\
+                \multirow{2}{*}{dive duration $(s)$ - $Y_t$}                                     & 1                                    & $25.339 \pm 0.599$ & $8.824 \pm 0.511$ & ---             \\
                                                                                                & 2                                    & $92.748 \pm 7.733$ & $63.714 \pm 6.536$ & ---             \\ \hline
                 \multirow{3}{*}{x-acceleration $(m/s^2)$ - $\left(\Zone_{t,t^*}\right)_x$} & 1                                    & $-0.023 \pm 0.002$ & $0.053 \pm 0.001$ & ---             \\
                                                                                                & 2                                    & $0.074 \pm 0.003$ & $0.149 \pm 0.002$ & ---             \\
@@ -130,7 +130,7 @@
                 \multirow{3}{*}{z-acceleration $(m/s^2)$ - $\left(\Zone_{t,t^*}\right)_z$} & 1                                    & $-0.418 \pm 0.003$ & $0.104 \pm 0.002$ & ---             \\
                                                                                                & 2                                    & $-0.478 \pm 0.003$ & $0.136 \pm 0.002$ & ---             \\
                                                                                                & 3                                    & $-0.346 \pm 0.012$ & $0.359 \pm 0.008$ & ---             \\ \hline
-                \multirow{3}{*}{Wiggliness - $\Ztwo_{t,t^*}$}                                      & 1                                    & $25.321 \pm 0.379$ & $15.938 \pm 0.382$ & ---             \\
+                \multirow{3}{*}{wiggliness - $\Ztwo_{t,t^*}$}                                      & 1                                    & $25.321 \pm 0.379$ & $15.938 \pm 0.382$ & ---             \\
                                                                                                & 2                                    & $252.403 \pm 2.786$ & $296.901 \pm 3.910$ & ---             \\
                                                                                                & 3                                    & $8798.207 \pm 149.370$ & $15579.337 \pm 286.878$ & ---             \\ \hline
                 \end{tabular}
@@ -138,7 +138,7 @@
             }
             \end{center}
             
-            \noindent Table \arabic{tablenum}: Estimates and standard errors of emission parameters for dive duration ($Y$), acceleration ($\Zone_{t,t^*}$), and willingness ($\Ztwo_{t,t^*}$) of the killer whale case study data under the HHMM-DFT. The $\pm$ refers to the standard deviation of the parameter estimates for all 500 data simulations.
+            \noindent Table \arabic{tablenum}: Estimates and standard errors of emission parameters for dive duration ($Y_t$), acceleration ($\Zone_{t,t^*}$), and willingness ($\Ztwo_{t,t^*}$) of the killer whale case study data under the HHMM-DFT. The $\pm$ refers to the standard deviation of the parameter estimates for all 500 data simulations.
             \addtocounter{tablenum}{1}
             
         \subsubsection{CarHHMM}
@@ -151,7 +151,7 @@
                 \begin{tabular}{ccccc}
                 \multirow{2}{*}{Feature}                                                       & \multirow{2}{*}{Dive / Subdive Type} & \multicolumn{3}{c}{Parameter Estimate}              \\
                                                                                                &                                      & $\hat \mu$      & $\hat \sigma$   & $\hat \phi$     \\ \hline
-                \multirow{2}{*}{dive duration $(s)$ - $Y$}                                     & 1                                    & $27.214 \pm 0.667$ & $11.635 \pm 0.699$ & ---             \\
+                \multirow{2}{*}{dive duration $(s)$ - $Y_t$}                                     & 1                                    & $27.214 \pm 0.667$ & $11.635 \pm 0.699$ & ---             \\
                                                                                                & 2                                    & $135.575 \pm 11.330$ & $63.849 \pm 9.414$ & ---             \\ \hline
                 \multirow{3}{*}{x-acceleration $(m/s^2)$ - $\left(\Zone_{t,t^*}\right)_x$} & 1                                    & $-0.061 \pm 0.088$ & $0.392 \pm 0.019$ & $0.725 \pm 0.045$ \\
                                                                                                & 2                                    & $0.228 \pm 0.017$ & $0.043 \pm 0.001$ & $0.945 \pm 0.004$ \\
@@ -167,7 +167,7 @@
             }
             \end{center}
             
-                \noindent Table \arabic{tablenum}: Estimates and standard errors of emission parameters for dive duration ($Y$), acceleration ($\Zone_{t,t^*}$), and willingness ($\Ztwo_{t,t^*}$) of the killer whale case study data under the CarHHMM. The $\pm$ refers to the standard deviation of the parameter estimates for all 500 data simulations.
+                \noindent Table \arabic{tablenum}: Estimates and standard errors of emission parameters for dive duration ($Y_t$), acceleration ($\Zone_{t,t^*}$), and willingness ($\Ztwo_{t,t^*}$) of the killer whale case study data under the CarHHMM. The $\pm$ refers to the standard deviation of the parameter estimates for all 500 data simulations.
                 \addtocounter{tablenum}{1}
             
         \subsubsection{CarHMM-DFT}
@@ -180,7 +180,7 @@
                 \begin{tabular}{ccccc}
                 \multirow{2}{*}{Feature}                                                       & \multirow{2}{*}{Dive / Subdive Type} & \multicolumn{3}{c}{Parameter Estimate}              \\
                                                                                                &                                      & $\hat \mu$      & $\hat \sigma$   & $\hat \phi$     \\ \hline
-                \multirow{1}{*}{dive duration $(s)$ - $Y$}                                     & 1                                    & $42.934 \pm 1.265$ & $31.428 \pm 1.257$ & ---             \\ \hline
+                \multirow{1}{*}{dive duration $(s)$ - $Y_t$}                                     & 1                                    & $42.934 \pm 1.265$ & $31.428 \pm 1.257$ & ---             \\ \hline
                 \multirow{3}{*}{x-acceleration $(m/s^2)$ - $\left(\Zone_{t,t^*}\right)_x$}                            & 1                                    & $0.020 \pm inf$ & $0.035 \pm 0.001$ & $1.000 \pm nan$ \\
                                                                                                & 2                                    & $0.241 \pm 0.012$ & $0.084 \pm 0.001$ & $0.861 \pm 0.006$ \\
                                                                                                & 3                                    & $0.208 \pm 0.028$ & $0.266 \pm 0.008$ & $0.619 \pm 0.031$ \\ \hline
@@ -190,7 +190,7 @@
                 \multirow{3}{*}{z-acceleration $(m/s^2)$ - $\left(\Zone_{t,t^*}\right)_z$}                            & 1                                    & $-0.446 \pm inf$ & $0.053 \pm 0.001$ & $1.000 \pm nan$ \\
                                                                                                & 2                                    & $-0.593 \pm 0.015$ & $0.101 \pm 0.002$ & $0.861 \pm 0.010$ \\
                                                                                                & 3                                    & $-0.355 \pm 0.033$ & $0.318 \pm 0.009$ & $0.619 \pm 0.033$ \\ \hline
-                \multirow{3}{*}{Wiggliness  - $\Ztwo_{t,t^*}$}                                           & 1                                    & $24.065 \pm 0.288$ & $13.611 \pm 0.278$ & ---             \\
+                \multirow{3}{*}{wiggliness  - $\Ztwo_{t,t^*}$}                                           & 1                                    & $24.065 \pm 0.288$ & $13.611 \pm 0.278$ & ---             \\
                                                                                                & 2                                    & $291.606 \pm 3.194$ & $308.209 \pm 4.076$ & ---             \\
                                                                                                & 3                                    & $10210.851 \pm 204.389$ & $15012.649 \pm 339.134$ & ---             \\ \hline
                 \end{tabular}
@@ -198,7 +198,7 @@
             }
             \end{center}
             
-                \noindent Table \arabic{tablenum}: Estimates and standard errors of emission parameters for dive duration ($Y$), acceleration ($\Zone_{t,t^*}$), and willingness ($\Ztwo_{t,t^*}$) of the killer whale case study data under the CarHMM-DFT. The $\pm$ refers to the standard deviation of the parameter estimates for all 500 data simulations.
+                \noindent Table \arabic{tablenum}: Estimates and standard errors of emission parameters for dive duration ($Y_t$), acceleration ($\Zone_{t,t^*}$), and willingness ($\Ztwo_{t,t^*}$) of the killer whale case study data under the CarHMM-DFT. The $\pm$ refers to the standard deviation of the parameter estimates for all 500 data simulations.
                 \addtocounter{tablenum}{1}
     
     \newpage
@@ -269,7 +269,7 @@
         \addtocounter{fignum}{1}
         
     \newpage
-    \subsection{Model checking - dive duration ($Y$)}
+    \subsection{Model checking - dive duration ($Y_t$)}
     
         \subsubsection{CarHHMM-DFT}
         
@@ -359,7 +359,7 @@
         \includegraphics[width=1.75in]{../Plots/HHMM_psedoresids_Az.png}
         \end{center}
         
-        \noindent Figure \arabic{fignum}: Empirical histograms (top three rows) and psuedoresiduals (bottom row) of acceleration ($\Zone_{t,t^*}$) plotted over the learned emission distributions and a standard normal density, respectively. Note that the mean of acceleration at time $t^*$ depends upon acceleration at time $t^*-1$, so only the deviation from the mean for each particular time step is plotted. All plots are generated using the fitted HHMM-DFT and the killer whale case study data.
+        \noindent Figure \arabic{fignum}: Empirical histograms (top three rows) and psuedoresiduals (bottom row) of acceleration ($\Zone_{t,t^*}$) plotted over the learned emission distributions and a standard normal density, respectively. All plots are generated using the fitted HHMM-DFT and the killer whale case study data.
         \addtocounter{fignum}{1}
         
         \newpage
