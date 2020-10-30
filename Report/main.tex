@@ -2,7 +2,7 @@
 \documentclass[12pt]{TD-CJS}
 %\documentclass{TD-CJS}
 
-% Initial and revised submissions should also be double spaced.  This command will be removed in the final version.
+% Initial and revised submissions should also be double spaced. This command will be removed in the final version.
 \renewcommand{\baselinestretch}{2}
 
 \usepackage{latexsym}
@@ -43,7 +43,7 @@
 
 % Title, authors, affiliations
 %\title[]{Modelling temporal dependence and multilevel structure using hidden Markov models}%\query{Q1}
-\title[]{Modelling state-switching behaviour in functional data with hidden Markov models}
+\title[]{Modelling state-switching functional data with hidden Markov models}
 \author{BlindedA\authorref{1}\thanksref{*}}
 \author{BlindedB\authorref{2}}
 \affiliation[1]{Author affiliations will go here in the accepted manuscript, 
@@ -54,10 +54,9 @@ but do NOT include them in your initial submission because it must be anonymous.
 \startabstract{%
 \keywords{
 \KWDtitle{Key words and phrases}
-Association parameters\sep clustered data\sep mean parameters\sep missing data\sep pairwise
-likelihood\sep repeated measurements.
+Time series modelling\sep multi-state modelling\sep hierarchical modelling\sep biologging\sep statistical ecology\sep animal movement modelling.
 % MSC 2010 subject classification codes
-\KWDtitle{MSC 2010}Primary 62???\sep secondary 62???}
+\KWDtitle{MSC 2010}Primary 62M05 \sep secondary 62P12}
 \begin{abstract}
 \abstractsection{}
 \abstractsection{Abstract}
@@ -68,11 +67,11 @@ likelihood\sep repeated measurements.
 %list the key words in alphabetical order.  The MSC 2010 subject classification codes can be found here:
 %http://www.ams.org/mathscinet/msc/pdfs/classifications2010.pdf.
 
-Advances in biologging technology have made a vast amount of high-frequency time series data available in a variety of fields. These data often exhibit complicated temporal dependence structures which cannot be modelled using common methods of Functional Data Analysis (FDA). Animal movement modellers often employ a hierarchical approach using hidden Markov models (HMMs) instead, but many intricate fine-scale processes violate basic assumptions of HMMs.
-We detail a generalization of the hierarchical HMM approach that incorporates a wider class of parametric models at fine scales. 
-%We also provide several examples of viable fine-scale models.
-As a case study, we build a hierarchical model that combines an HMM with a moving-window auto-regressive process to describe the movement of a killer whale off the western coast of Canada. 
-Our model produces more interpretable results as well as more accurate parameter and standard error estimates compared to existing baselines.
+\iffalse
+Advances in biologging technology have made a vast amount of high-frequency time series data available in a variety of fields. These data often exhibit complicated temporal dependence structures which cannot be modelled using common methods of Functional Data Analysis (FDA). Animal movement modellers often employ a hierarchical approach using hidden Markov models (HMMs) instead, but many intricate fine-scale processes violate basic assumptions of HMMs. We detail a general hierarchical approach based on HMMs which incorporates a wider class of models at fine scales. As a case study, we build a hierarchical model that combines an HMM with a moving-window auto-regressive process to describe the movement of a killer whale off the western coast of Canada. Our model produces more interpretable results as well as more accurate parameter and standard error estimates compared to existing baselines.
+\fi
+
+Sequences of curves sampled at high-frequency in time are increasingly common in practice, but they can exhibit complicated dependence structures which cannot be modelled using common methods of Functional Data Analysis (FDA). We detail a hierarchical approach which treats the curves as observations from a hidden Markov model (HMM). The distribution of each curve is then defined by another general fine-scale model which may involve a variety of methods such as moving-window transformations, Fourier analysis, and auto-correlation. As a case study, we use this framework to model the movement of a killer whale off the western coast of Canada. Through simulations we show that our model produces more interpretable state estimation and more accurate parameter estimates compared to existing baselines. This approach is broadly applicable to sequences of curves exhibiting intricate dependence structures. 
 
 \abscopyright
 \fabstractsection{}
@@ -85,13 +84,6 @@ can't prepare it themselves.\Frenchabscopyright
 
 % Email address for corresponding author
 %\correspondingauthor[*]{\\\email{}} % only put this in after acceptance
-
-%%%%%%%%%%%%
-%\vfill\eject
-%{\centerline{\Large{Notes from Nancy}}}
-%\input{Sections/0627NH}
-%\vfill\eject
-%%%%%%%%%%%%%
 %
 \section{INTRODUCTION}
 \input Sections/intro.tex
@@ -108,10 +100,6 @@ can't prepare it themselves.\Frenchabscopyright
 \label{sec:sim_study}
 \input Sections/simulation.tex
 %
-%\section{Case Study Results}
-%\label{sec:case_study}
-%\input Sections/results.tex
-%%
 \section{DISCUSSION}
 \input Sections/discussion.tex
 %

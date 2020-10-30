@@ -1,62 +1,8 @@
 % !TeX root = ../main.tex
 
-\subsection{Equivalence of state-switching OU process and CarHMM}
-
-\citet{Michelot:2019} model the movement of an animal as the solution to the following stochastic differential equation:
-%
-\begin{equation}
-    \label{eqn:SDE}
-    dY_t = \beta^{(X_t)}(\gamma^{(X_t)} - Y_t)dt + \omega^{(X_t)} dW_t,
-\end{equation}
-%
-where $X_t$ is some stochastic process which defines the hidden behaviour of the animal at time $t$, $\beta^{(X_t)}$ relates to rate at which the process returns to its mean value, $\gamma^{(X_t)}$ is the long-term mean value of the process in state $X_t$, $\omega^{(X_t)}$ is related to short-term variance, and $W$ is a Wiener process. They refer to this as a state-switching Ornstein-Uhlenbeck process. Unlike an HMM, $t \in \mathbb{R}$ indexes a continuous time process and is therefore not necessarily an integer in this case. If the behavioural state $X_t$ is known and does not change between observations $\Big($i.e $X_s = X_t$ for all $s \in [t,t+\Delta t)\Big)$, the solution to Equation (\ref{eqn:SDE}) is known to be the following \citep{Michelot:2019}:
-%
-\begin{align}
-    Y_{t+\Delta t} | X_{t} \sim \mathcal{N}\left((1-e^{-\beta^{(X_t)}\Delta t})\gamma^{(X_t)} + e^{-\beta^{(X_t)}\Delta t} Y_t,\quad \frac{\omega^{(X_t)^2}}{2\beta^{(X_t)}} (1-e^{-2\beta^{(X_t)}\Delta t})\right)
-    \label{eqn:OU_sol}
-\end{align}
-%
-where $\Delta t$ is the time difference between any two observations $Y_t$ and $Y_{t+\Delta t}$. In fact, under certain conditions, the output of a state-switching OU process is identical to that of a CarHMM, as described by Theorem 1 below.
-
-\begin{theorem}{Theorem 1.}{}%
-If the following conditions are met:
-\begin{enumerate}
-    \item The hidden behavioural process $X$ from Equation (\ref{eqn:SDE}) follows a Markov chain with $N$ possible states and transitions occur at equi-spaced time stamps $\left(\Delta t, \ldots, (T-1)\Delta t\right)$,
-    
-    \item Observations of the SDE from Equation (\ref{eqn:OU_sol}) are taken at times $\left(0, \Delta t, \ldots, (T-1)\Delta t\right)$,
-\end{enumerate}
-then the observations $Y$ are equivalent to the output of a conditionally auto-regressive hidden Markov model with normal emission distributions and parameters $\theta = (\theta^{(1)}, \ldots, \theta^{(N)}); \enspace \theta^{(i)} = \{\mu^{(i)},\sigma^{(i)},\phi^{(i)}\}$, where:
-
-\begin{align}
-\mu^{(i)} = \gamma^{(i)}, \qquad \sigma^{(i)} = \sqrt{\frac{\omega^{(i)^2}}{2\beta^{(i)}} (1-e^{-2\beta^{(i)}\Delta t})}, \qquad \phi^{(i)} = e^{-\beta^{(i)}\Delta t} \label{eqn:CarHMM_to_OU}
-\end{align}
-
-\end{theorem}
-
-\begin{proof}{Proof of Theorem 1}{}
-Combining Equation (\ref{eqn:OU_sol}) with Equation (\ref{eqn:CarHMM_to_OU}) gives
-%
-\begin{align*}
-    \left(Y_{(s+1) \Delta t} | X_{s\Delta t} = i \right) \sim \mathcal{N}\left((1-\phi^{(i)}) \mu^{(i)} + \phi^{(i)} Y_{s \Delta t}, \enspace \left(\sigma^{(i)}\right)^2 \right),\\
-    s = 0, \ldots, T-2.
-\end{align*}
-%
-If $X_t$ follows a Markov chain with transitions at the observation times, then the behavioural state $X_t$ does not change between observations and we can re-index $Y_{(s-1) \Delta t} = Y'_s$ and $X_{(s-2)\Delta t} = X'_s$ for $s = 2,\ldots T$, yielding the desired result:
-
-\begin{align*}
-    \left(Y'_s| X'_s = i \right) \sim \mathcal{N}\left((1-\phi^{(i)}) \mu^{(i)} + \phi^{(i)} Y'_{s-1}, \enspace \left(\sigma^{(i)}\right)^2 \right)\\
-    s = 2, \ldots, T.
-\end{align*}
-%
-$X'$ is assumed to follow a (possibly unobserved) Markov chain, and the distribution of $(Y'_s|X'_s,Y'_{s-1})$ is consistent with that of a CarHMM with Normal emission distributions.
-\end{proof}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 \subsection{Detailed description of data simulation}
 
 It is straightforward to simulate realizations of the coarse-scale HMM ($X$ and $Y$) given the parameters $\Gamma$ and $\theta$. 
-
 To simulate $X^*_t$ for each dive $t$, note that we simulate accelerometer readings taken at 50 hertz and have two-second window lengths. Therefore, each window contains 100 accelerometer readings and $X^*_t = \left\{X^*_{t,1}, X^*_{t,101}, \ldots, X^*_{t,100T^*_t-99}\right\}$. In addition, the length of each fine-scale Markov chain is $T^*_t = \lfloor Y_t/2 \rfloor$. Then, given the dive types $X_t$, dive durations $Y_t$, and the fine-scale probability transition matrices $\Gamma^{*(1)}$ and $\Gamma^{*(2)}$, it is straightforward to simulate $X^*_t$ for each dive $t = 1,2,\ldots,100$. Recall that $\Gamma^{*(i)}_{jk} = Pr(X^*_{t,t^*+100} = k | X^*_{t,t^*} = j, X_t = i)$ for all $t$ and $t^* = 1, 101, \ldots$. It is much more difficult to simulate the raw acceleration data $Y^*$, and we focus on this task for the remainder of this section. 
 
 Assume that $X$, $Y$, and $X^*$ are simulated using the procedure described above and are therefore known. Additionally, let $DFT\{Y^*_{t,t^*}\}(k)$ be denoted as $\hat{Y}^{*(k)}_{t,t^*}$ and $DFT\{Y^*_{t,t^*}\}$ be denoted as $\hat{Y}^*_{t,t^*}$ for convenience. We first simulate $\hat Y^{*(k)}_{t,t^*}$ for all dives $t = 1,2,\ldots,100$, all subdive windows $t^* = 1,101,\ldots$, and all Fourier coefficients $k = 0,1,\ldots,99$. We then take the inverse DFT of $\hat{Y}^*_{t,t^*}$ for all dives $t = 1,2,\ldots,100$ and subdive windows $t^* = 1,101,\ldots$ to find $Y^*$. The details of this procedure are described below:
@@ -162,3 +108,60 @@ $$\calL_{\text{CarHMM-DFT}}\left(\theta^{*},\Gamma^{*(i)};z_t^*\right) = \delta^
 where $P(z^*_{t,t^*}|z^*_{t,t^*-100};\theta^*)$ is an $N^* \times N^*$ diagonal matrix with $(i^*,i^*)^{th}$ entry equal to $f^{*(\cdot,i^*)}(z^*_{t,t^*}|z^*_{t,t^*-100}; \theta^{*(\cdot,i^*)})$.
 %
 Recall that $z^*_t = \left\{z^*_{t,1},z^*_{t,101},z^*_{t,201},\ldots\right\}$ and that $f^{*(\cdot,i^*)}(\cdot|z^*_{t,t^*-100}; \theta^{*(\cdot,i^*)})$ is the probability density function of $\Z_{t,t^*}$ conditioned on $X^*_{t,t^*} = i^*$ and $\Z_{t,t^*-100} = z^*_{t,t^*-100}$.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\iffalse
+
+\subsection{Equivalence of state-switching OU process and CarHMM}
+
+\citet{Michelot:2019} model the movement of an animal as the solution to the following stochastic differential equation:
+%
+\begin{equation}
+    \label{eqn:SDE}
+    dY_t = \beta^{(X_t)}(\gamma^{(X_t)} - Y_t)dt + \omega^{(X_t)} dW_t,
+\end{equation}
+%
+where $X_t$ is some stochastic process which defines the hidden behaviour of the animal at time $t$, $\beta^{(X_t)}$ relates to rate at which the process returns to its mean value, $\gamma^{(X_t)}$ is the long-term mean value of the process in state $X_t$, $\omega^{(X_t)}$ is related to short-term variance, and $W$ is a Wiener process. They refer to this as a state-switching Ornstein-Uhlenbeck process. Unlike an HMM, $t \in \mathbb{R}$ indexes a continuous time process and is therefore not necessarily an integer in this case. If the behavioural state $X_t$ is known and does not change between observations $\Big(X_s = X_t$ for all $s \in [t,t+\Delta t)\Big)$, the solution to Equation (\ref{eqn:SDE}) is known to be the following \citep{Michelot:2019}:
+%
+\begin{align}
+    Y_{t+\Delta t} | X_{t} \sim \mathcal{N}\left((1-e^{-\beta^{(X_t)}\Delta t})\gamma^{(X_t)} + e^{-\beta^{(X_t)}\Delta t} Y_t,\quad \frac{\omega^{(X_t)^2}}{2\beta^{(X_t)}} (1-e^{-2\beta^{(X_t)}\Delta t})\right),
+    \label{eqn:OU_sol}
+\end{align}
+%
+where $\Delta t$ is the time difference between any two observations $Y_t$ and $Y_{t+\Delta t}$. In fact, under certain conditions, the output of a state-switching OU process is identical to that of a CarHMM, as described by Theorem 1 below.
+
+\begin{theorem}{Theorem 1.}{}%
+If the following conditions are met:
+\begin{enumerate}
+    \item The hidden behavioural process $X$ from Equation (\ref{eqn:SDE}) follows a Markov chain with $N$ possible states and transitions occur at equi-spaced time stamps $\left(\Delta t, \ldots, (T-1)\Delta t\right)$,
+    
+    \item Observations of the SDE from Equation (\ref{eqn:OU_sol}) are taken at times $\left(0, \Delta t, \ldots, (T-1)\Delta t\right)$,
+\end{enumerate}
+then the observations $Y$ are equivalent to the output of a conditionally auto-regressive hidden Markov model with normal emission distributions and parameters $\theta = \{\theta^{(1)}, \ldots, \theta^{(N)}\}; \enspace \theta^{(i)} = \{\mu^{(i)},\sigma^{(i)},\phi^{(i)}\}$, where:
+
+\begin{align}
+\mu^{(i)} = \gamma^{(i)}, \qquad \sigma^{(i)} = \sqrt{\frac{\omega^{(i)^2}}{2\beta^{(i)}} (1-e^{-2\beta^{(i)}\Delta t})}, \qquad \phi^{(i)} = e^{-\beta^{(i)}\Delta t} \label{eqn:CarHMM_to_OU}
+\end{align}
+
+\end{theorem}
+
+\begin{proof}{Proof of Theorem 1}{}
+Combining Equation (\ref{eqn:OU_sol}) with Equation (\ref{eqn:CarHMM_to_OU}) gives
+%
+\begin{align*}
+    \left(Y_{(s+1) \Delta t} | X_{s\Delta t} = i \right) \sim \mathcal{N}\left((1-\phi^{(i)}) \mu^{(i)} + \phi^{(i)} Y_{s \Delta t}, \enspace \left(\sigma^{(i)}\right)^2 \right),\\
+    s = 0, \ldots, T-2.
+\end{align*}
+%
+If $X_t$ follows a Markov chain with transitions at the observation times, then the behavioural state $X_t$ does not change between observations and we can re-index $Y_{(s-1) \Delta t} = Y'_s$ and $X_{(s-2)\Delta t} = X'_s$ for $s = 2,\ldots T$, yielding the desired result:
+
+\begin{align*}
+    \left(Y'_s| X'_s = i \right) \sim \mathcal{N}\left((1-\phi^{(i)}) \mu^{(i)} + \phi^{(i)} Y'_{s-1}, \enspace \left(\sigma^{(i)}\right)^2 \right)\\
+    s = 2, \ldots, T.
+\end{align*}
+%
+$X'$ is assumed to follow a (possibly unobserved) Markov chain, and the distribution of $(Y'_s|X'_s,Y'_{s-1})$ is consistent with that of a CarHMM with Normal emission distributions.
+\end{proof}
+
+\fi
