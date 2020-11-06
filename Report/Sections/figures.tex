@@ -4,23 +4,23 @@
 
 \begin{table}[ht]
 \centering
-\caption{Estimates and standard errors of emission parameters for dive duration ($Y_t$), acceleration ($\Zone_{t,t^*}$), and wiggliness ($\Ztwo_{t,t^*}$) of the killer whale case study data under the full CarHHMM-DFT. The $\pm$ refers to the standard deviation of the parameter estimates for all 500 simulations.}
+\caption{Estimates and standard errors of emission parameters for dive duration ($Y_t$), acceleration ($\Zone_{t,\tilde t^*}$), and wiggliness ($\Ztwo_{t,\tilde t^*}$) of the killer whale case study data under the full CarHHMM-DFT. The $\pm$ refers to the standard deviation of the parameter estimates for all 500 simulations.}
 \scalebox{0.75}{
 \begin{tabular}{ccccc}
     \multirow{2}{*}{Feature}                                                       & \multirow{2}{*}{Dive / Subdive Type} & \multicolumn{3}{c}{Parameter Estimate}                      \\
                                                                                    &                                      & $\hat \mu$          & $\hat \sigma$     & $\hat \phi$       \\ \hline
     \multirow{2}{*}{Dive Duration $(s)$ - $Y_t$}                                   & 1                                    & $25.68  \pm 0.60$   & $9.57 \pm 0.51$   & ---               \\
                                                                                    & 2                                    & $104.6  \pm 9.4$    & $64.7 \pm 7.5$    & ---               \\ \hline
-    \multirow{3}{*}{X-Acceleration $(m/s^2)$ - $\left(\Zone_{t,t^*}\right)_x$}     & 1                                    & $0.020  \pm 0.042$  & $0.034 \pm 0.001$ & $0.976 \pm 0.007$ \\
+    \multirow{3}{*}{X-Acceleration $(m/s^2)$ - $\left(\Zone_{t,\tilde t^*}\right)_x$}     & 1                                    & $0.020  \pm 0.042$  & $0.034 \pm 0.001$ & $0.976 \pm 0.007$ \\
                                                                                    & 2                                    & $0.244  \pm 0.013$  & $0.079 \pm 0.001$ & $0.886 \pm 0.005$ \\
                                                                                    & 3                                    & $0.218  \pm 0.028$  & $0.265 \pm 0.007$ & $0.626 \pm 0.029$ \\ \hline
-    \multirow{3}{*}{Y-Acceleration $(m/s^2)$ - $\left(\Zone_{t,t^*}\right)_y$}     & 1                                    & $0.469  \pm 0.052$  & $0.044 \pm 0.001$ & $0.976 \pm 0.009$ \\
+    \multirow{3}{*}{Y-Acceleration $(m/s^2)$ - $\left(\Zone_{t,\tilde t^*}\right)_y$}     & 1                                    & $0.469  \pm 0.052$  & $0.044 \pm 0.001$ & $0.976 \pm 0.009$ \\
                                                                                    & 2                                    & $0.436  \pm 0.014$  & $0.082 \pm 0.001$ & $0.886 \pm 0.012$ \\
                                                                                    & 3                                    & $0.384  \pm 0.033$  & $0.321 \pm 0.009$ & $0.626 \pm 0.034$ \\ \hline
-    \multirow{3}{*}{Z-Acceleration $(m/s^2)$ - $\left(\Zone_{t,t^*}\right)_z$}     & 1                                    & $-0.683 \pm 0.061$  & $0.052 \pm 0.001$ & $0.976 \pm 0.005$ \\
+    \multirow{3}{*}{Z-Acceleration $(m/s^2)$ - $\left(\Zone_{t,\tilde t^*}\right)_z$}     & 1                                    & $-0.683 \pm 0.061$  & $0.052 \pm 0.001$ & $0.976 \pm 0.005$ \\
                                                                                    & 2                                    & $-0.593 \pm 0.016$  & $0.096 \pm 0.001$ & $0.886 \pm 0.009$ \\
                                                                                    & 3                                    & $-0.366 \pm 0.033$  & $0.317 \pm 0.009$ & $0.626 \pm 0.033$ \\ \hline
-    \multirow{3}{*}{Wiggliness - $\Ztwo_{t,t^*}$}                                  & 1                                    & $23.34  \pm 0.29$   & $12.95 \pm 0.27$  & ---               \\
+    \multirow{3}{*}{Wiggliness - $\Ztwo_{t,\tilde t^*}$}                                  & 1                                    & $23.34  \pm 0.29$   & $12.95 \pm 0.27$  & ---               \\
                                                                                    & 2                                    & $301.2  \pm 3.2$    & $330.1 \pm 4.2$   & ---               \\
                                                                                    & 3                                    & $10200  \pm 210$    & $15300 \pm 350$   & ---               \\ \hline
     \end{tabular}
@@ -111,7 +111,7 @@ Model                       & \multicolumn{1}{c}{Train Time (min)} & \multicolum
       \caption{HMM with Discrete Fourier Transform (\textbf{HMM-DFT})}
       \label{fig:HMM-DFT}
     \end{subfigure}
-    \caption{Dependence structures of different HMM-based models. Hidden state sequences are denoted as $X$ on the coarse-scale and $X^*$ at the fine scale. Observations (or emissions) are denoted by $Y$ on the coarse scale and $Y^*$ on the fine scale. Observations transformed using a moving window are denoted as $\Z$.}
+    \caption{Dependence structures of HMM variants. Hidden state sequences are denoted as $X$ on the coarse-scale and $X^*$ at the fine scale. Observations (or emissions) are denoted by $Y$ on the coarse scale and $Y^*$ on the fine scale. Observations transformed using a moving window are denoted as $\Z$.}
     \label{fig:models}
 \end{figure}
 
@@ -120,7 +120,7 @@ Model                       & \multicolumn{1}{c}{Train Time (min)} & \multicolum
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=5in]{../Plots/CarHHMM-DFT.png}
-	\caption{Graphical representation of the model used in the simulation and case study, the \textbf{CarHHMM-DFT}. The dive type of dive $t$ is denoted by $X_t$ and $Y_t$ represents the associated dive duration. The raw acceleration vector associated with dive $t$ and time stamp $t^*$ is denoted by $Y^*_{t,t^*}$. The subdive state of the killer whale during dive $t$ and time stamps $t^*$ through $t^*+99$ is denoted with $X^*_{t,t^*}$, where $t^* = 1,101,\ldots$ and the transformed and down-sampled observations are denoted by $\Z_{t,t^*}$, where again $t^* = 1,101,\ldots$}
+	\caption{Graphical representation of the model used in the simulation and case study, the \textbf{CarHHMM-DFT}. The dive type of dive $t$ is denoted by $X_t$ and $Y_t$ represents the associated dive duration. The raw acceleration vector associated with dive $t$ and time stamp $t^*$ is denoted by $Y^*_{t,t^*}$. The subdive state of the killer whale during dive $t$ and window $\tilde t^*$ is denoted as $\tilde X^*_{t,\tilde t^*}$, and the corresponding transformed observations are denoted by $\Z_{t,\tilde t^*}$.}
 	\label{fig:CarHHMM-DFT}
 \end{figure}
 
@@ -134,7 +134,7 @@ Model                       & \multicolumn{1}{c}{Train Time (min)} & \multicolum
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=5in]{../Plots/CarHHMM2-fine-emissions.png}
-	\caption{Estimated probability density of wiggliness ($\Ztwo_{t,t^*}$) and conditional density of acceleration ($\Zone_{t,t^*}|\Z_{t,t^*-1} = \mu_A^{*(\cdot,i^*)}$) corresponding to subdive states $i^* = 1,2,3$ (see Table \ref{table:emis_dists_CarHHMM-DFT}). The estimated conditional density of acceleration is Normal and plotted on a linear scale while the estimated density of wiggliness is Gamma and plotted on a log-log scale for clarity.}
+	\caption{Estimated probability density of wiggliness ($\Ztwo_{t,\tilde t^*}$) and conditional density of acceleration ($\Zone_{t,\tilde t^*}|\Zone_{t,\tilde t^*-1} = \mu_A^{*(\cdot,i^*)}$) corresponding to subdive states $i^* = 1,2,3$ (see Table \ref{table:emis_dists_CarHHMM-DFT}). The estimated conditional density of acceleration is Normal and plotted on a linear scale while the estimated density of wiggliness is Gamma and plotted on a log-log scale for clarity.}
 	\label{fig:fine_emis}
 \end{figure}
 
@@ -142,7 +142,7 @@ Model                       & \multicolumn{1}{c}{Train Time (min)} & \multicolum
     \begin{subfigure}{0.45\textwidth}
     	\centering
     	\includegraphics[width=2.25in]{../Plots/CarHHMM2_psedoresids_ahat.png}
-    	\caption{Histogram of pseudoresiduals of $W^*_{t,t^*}$}
+    	\caption{Histogram of pseudoresiduals of $W^*_{t,\tilde t^*}$}
     	\label{fig:pseudoresids}
     \end{subfigure}
     \begin{subfigure}{0.45\textwidth}
@@ -151,7 +151,7 @@ Model                       & \multicolumn{1}{c}{Train Time (min)} & \multicolum
     	\caption{Empirical distribution of $Y_t$}
     	\label{fig:empirical_dist}
     \end{subfigure}
-    \caption{Pseudoresiduals of wiggliness ($\Ztwo_{t,t^*}$, left) plotted over a standard normal density as well as a weighted empirical distribution of dive duration ($Y_t$, right) plotted over the corresponding fitted Gamma distributions. Both plots are generated using the fitted CarHHMM-DFT and the killer whale case study data. They are examples of model-checking tools for HMMs.}
+    \caption{Pseudoresiduals of wiggliness ($\Ztwo_{t,\tilde t^*}$, left) plotted over a standard normal density as well as a weighted empirical distribution of dive duration ($Y_t$, right) plotted over the corresponding fitted Gamma distributions. Both plots are generated using the fitted CarHHMM-DFT and the killer whale case study data.}
     \label{fig:model_checking}
 \end{figure}
 
@@ -160,7 +160,7 @@ Model                       & \multicolumn{1}{c}{Train Time (min)} & \multicolum
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=5in]{../Plots/sim_data.png}
-	\caption{Acceleration data for one dive of a selected simulated data set. The raw accelerometer data is denoted as $Y^*_{t,t^*}$ which is recorded at 50 hertz while $A^*_{t,t^*}$ and $W^*_{t,t^*}$ are recorded at 0.5 hertz. The colour of the line corresponds to the true fine-scale state, while the colour of the background corresponds to the true dive type.}
+	\caption{Acceleration data for one dive of a selected simulated data set. The raw accelerometer data is denoted as $Y^*_{t,\tilde t^*}$ which is recorded at 50 hertz while $\Zone_{t,\tilde t^*}$ and $\Ztwo_{t,\tilde t^*}$ are recorded at 0.5 hertz. The colour of the line corresponds to the true fine-scale state, while the colour of the background corresponds to the true dive type.}
 	\label{fig:sim_data}
 \end{figure}
 
