@@ -1,19 +1,23 @@
+% !TeX root = ../main.tex
+
 %\section{Models and parameter estimation}
 
-Consider a sequence of $T$ curves (or dives, in our context). For any particular $t = 1,
-\ldots,T$, dive $t$ is characterized by a possibly high-dimensional curve-level (or coarse-scale) observation $Y_t$ as well as a sequence of $T^*_t$ within-curve (or fine-scale) observations, $Y^*_{t} \equiv \big\{Y^*_{t,1},\ldots,Y^*_{t,T^*_t}\big\}$. The sequence $Y^*_{t}$ is made up of function values from curve $t$. We call the sequence of coarse-scale observations $Y \equiv \big\{Y_1, \ldots, Y_T\big\}$ and the collection of all fine-scale observations $Y^* \equiv \big\{Y^*_1,\ldots,Y^*_T \big\}$.
+Consider a sequence of $T$ curves where for any particular $t = 1,
+\ldots,T$, curve $t$ is characterized by a curve-level (or coarse-scale) observation $Y_t$ as well as a sequence of $T^*_t$ within-curve (or fine-scale) observations $Y^*_{t}$. Namely, $Y^*_{t} \equiv \big\{Y^*_{t,1},\ldots,Y^*_{t,T^*_t}\big\}$ is made up of function values from curve $t$. We call the sequence of coarse-scale observations $Y \equiv \big\{Y_1, \ldots, Y_T\big\}$ and the collection of all fine-scale observations $Y^* \equiv \big\{Y^*_1,\ldots,Y^*_T \big\}$. We first detail the structure of a traditional HMM followed by three variations which generalize its base structure. We then show how each of these generalized models can be synthesized to form a wide variety of more complicated models.
 
-Hidden Markov models describe state-switching Markovian processes in discrete time and will be the core structure of the models we use for $Y$ and $Y^*$. We first detail the structure of a traditional HMM. We then review a variation described by \cite{Lawler:2019} called the conditionally auto-regressive hidden Markov model (CarHMM), which explicitly models auto-correlation between observations. Either the HMM or the CarHMM can be used to model a sequence of observations at one of the two scales: for the coarse scale sequence $Y$ or for each of the fine scale sequences, $Y_1^*,\ldots, Y_T^*$. To simultaneously model $Y$ and $Y^*$, we use the hierarchical hidden Markov model (HHMM) \citep{Barajas:2017,Adam:2019}.
-%which is comprised of two distinct,x but related, HMMs that jointly model these time series. 
-Next, we describe how to reduce fine-scale correlation by transforming raw observations into meaningful summary statistics. In particular, we apply a discrete Fourier transform (DFT) to the components of $Y^*$ using a moving window to summarize its periodic behaviour. Finally, we show how each of these models can be altered and combined to form a wide variety of new models.
+%Hidden Markov models describe state-switching Markovian processes in discrete time and is the core structure we use to model $Y$ and $Y^*$. We first detail the structure of a traditional HMM, followed by the conditionally auto-regressive hidden Markov model (CarHMM) \citep{Lawler:2019}, a variation which explicitly models auto-correlation between observations. 
+%Either the HMM or the CarHMM can model either the coarse scale sequence $Y$ or any of the fine scale sequences, $Y_1^*,\ldots, Y_T^*$. 
+%We then describe a hierarchical hidden Markov model (HHMM) \citep{Barajas:2017,Adam:2019} to simultaneously model $Y$ and $Y^*$. 
+%, which is comprised of two distinct, but related, HMMs that jointly model these time series. 
+%Next, we outline a method to reduce fine-scale correlation by transforming raw observations into meaningful summary statistics. In particular, we apply a discrete Fourier transform (DFT) to the components of $Y^*$ using a moving window to capture its periodic behaviour. Finally, we show how each of these models can be altered and combined to form a wide variety of new models.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{The base structure of HMMs}
 
-An HMM is comprised of a sequence of unobserved states $X \equiv \big\{X_1, \ldots, X_T\big\}$ where $X_t$ is associated with the observation $Y_t$. Here we focus on the coarse scale sequence of observations $Y_1,\ldots, Y_T$, but an HMM can also be used as a sub-model of the fine-scale sequence for a particular dive. The $Y_t$'s are often referred to as ``emissions'' and the index $t$ typically refers to time. 
-The $X_t$'s form a Markov chain and take possible values $1, \ldots, N$. Their distribution is governed by the distribution of the initial state $X_1$ and the $N \times N$ transition probability matrix $\Gamma$, where $\Gamma_{ij} = \Pr(X_{t+1} = j | X_t = i)$. 
+Hidden Markov models describe state-switching Markovian processes in discrete time and are the core structure we use to model both $Y$ and $Y^*$. For simplicity we focus on $Y$ to introduce the model. An HMM is comprised of a sequence of unobserved states $X \equiv \big\{X_1, \ldots, X_T\big\}$ together with an observation sequence $Y \equiv \big\{Y_1, \ldots, Y_T\big\}$, where $X_t$ is associated with the observation $Y_t$. The $Y_t$'s are often referred to as ``emissions'' and the index $t$ typically refers to time. 
+The $X_t$'s form a Markov chain and can take values $1, \ldots, N$. Their distribution is governed by the distribution of the initial state $X_1$ and the $N \times N$ transition probability matrix $\Gamma$, where $\Gamma_{ij} = \Pr(X_{t+1} = j | X_t = i)$. 
 %
-We assume that $X_1$ follows the chain's stationary distribution, which is denoted by $\delta \in \bbR^N$, with $i^{th}$ component
+We assume that $X_1$ follows the chain's stationary distribution, which is denoted by $\delta \in \bbR^N$ with $i^{th}$ component
 $\delta_i = \Pr(X_1 = i).$
 A Markov chain's stationary distribution is determined by its probability transition matrix via $\delta = \delta \Gamma$ and $\sum_{i=1}^N \delta_i = 1$.
 %
@@ -107,25 +111,31 @@ For more information on specific considerations for HHMMs, such as incorporating
 \subsection{Transforming observations to account for fine-scale behaviour}
 \label{subsec:STFT}
 
-In many applications where data are collected at high frequencies, intricate dependency structures may arise within the fine-scale process which cannot be adequately modelled with any of the HMM-based models mentioned thus far. For example, the accelerometer data in Figure \ref{fig:data} sporadically displays clear periodic behaviour. To handle these additional fine-scale structures, we recommend replacing $Y_t^* = \{Y^*_{t,1},\ldots,Y^*_{t,T^*_t}\}$ with relevant statistics that summarize this non-Markovian behaviour. To maintain the temporal structure of the fine-scale process, summary statistics can be calculated from a moving window over the elements $Y_t^*$. Subject-area experts are often required to determine the optimal window size and the specific summary statistics used. For our case study, we use the discrete Fourier transform (DFT) of a moving forward window of width $h$ across $Y^*_t$. For each $t^* = 1,2,\ldots,T^*_t-h+1$:
+In many applications where data are collected at high frequencies, intricate dependency structures may arise within the fine-scale process which cannot be adequately modelled with any of the HMM-based models mentioned thus far. For example, the accelerometer data in Figure \ref{fig:data} sporadically displays clear periodic behaviour. We recommend replacing $Y_t^* = \{Y^*_{t,1},\ldots,Y^*_{t,T^*_t}\}$ with relevant summary statistics to describe any fine-scale non-Markovian behaviour. To maintain the temporal structure of the fine-scale process, summary statistics can be calculated from a moving window over the elements $Y_t^*$. Subject-area experts are often required to determine the optimal window size and the specific summary statistics used. For our case study, we use the discrete Fourier transform (DFT) of a moving forward window of width and stride length $h$ across $Y^*_t$:
 %
 \begin{align*}
-    DFT\{Y^*_{t,t^*},\ldots, Y^*_{t,t^*+h-1}\}(k) = \sum_{n=0}^{h-1} Y^*_{t,t^*+n}\exp\left(-\frac{i 2\pi}{h} kn \right) \qquad 
+    DFT\{Y^*_{t,t^*},\ldots, Y^*_{t,t^*+h-1}\}(k) = \sum_{n=0}^{h-1} Y^*_{t,t^*+n}\exp\left(-\frac{i 2\pi}{h} kn \right)
 \end{align*}
 %
-for $k = 0, 1, \ldots, h-1$. If $Y^*_{t,t^*}$ is a vector then the DFT is taken component-wise. Next, we calculate $\Z_{t,t^*} \equiv \{\Zone_{t,t^*},\Ztwo_{t,t^*}\}$ for each moving window, where
+for each $t^* = 1,h+1,2h+1,\ldots$ and $k = 0,1,\ldots, h-1$. If $Y^*_{t,t^*}$ is a vector then the DFT is taken component-wise. We then index each window with $\tilde t^*$ and calculate $\Z_{t,t^*} \equiv \{\Zone_{t,\tilde t^*},\Ztwo_{t,\tilde t^*}\}$, where
 %
 \begin{equation}
+\begin{split}
     \label{eqn:z}
-    \Zone_{t,t^*} \equiv \frac{1}{h}\sum_{n=0}^{h-1}Y^*_{t,t^*+n}, \quad \Ztwo_{t,t^*} \equiv \sum_{k=1}^{\tilde{\omega}}\Big|\Big|DFT\{Y^*_{t,t^*},\ldots, Y^*_{t,t^*+h-1}\}(k)\Big|\Big|^2.
+    \Zone_{t,\tilde t^*} &\equiv \frac{1}{h}\sum_{n=1}^{h}Y^*_{t,h(\tilde t^*-1)+n} \\
+    %
+    \Ztwo_{t,\tilde t^*} &\equiv \sum_{k=1}^{\tilde{\omega}}\Big|\Big|DFT\{Y^*_{t,h(\tilde t^*-1) + 1},\ldots, Y^*_{t,h\tilde t^*}\}(k)\Big|\Big|^2.
+\end{split}
 \end{equation}
 %
-In words, $\Zone_{t,t^*}$ is the average value over the window and $\Ztwo_{t,t^*}$ is the squared two-norm of the component of the window $\big\{Y^*_{t,t^*}, \ldots, Y^*_{t,t^*+h-1}\big\}$ that can be attributed to frequencies between one and $\tilde{\omega} \leq h-1$ periods per window (by the Plancherel theorem). More intuitively, $\Ztwo_{t,t^*}$ corresponds to the ``wiggliness" of the acceleration data for dive $t$ within the window starting at time stamp $t^*$. The maximum frequency $\tilde{\omega}$ is a problem-specific tuning parameter which should be selected with the help of a subject-matter expert. Other DFT-based choices for window summary statistics are possible, including the dominant frequency and amplitude.
+The collection of $\Z_{t,\tilde t^*}$ for all windows is $\Z_t \equiv \{\Z_{t,1},\ldots,\Z_{t,\tilde T_t^*}\}$, where $\tilde T_t^* = \lfloor T^*_t/h \rfloor$. The hidden states corresponding to $\Z_t$ are distinct from those corresponding to $Y^*_t$ and are defined as $\tilde X^*_t \equiv \{\tilde X^*_{t,1},\ldots,\tilde X^*_{t,\tilde T_t^*}\}$.
 
-To avoid introducing auto-correlation into the transformed observation sequence, we recommend down-sampling $\Z_t$ such that $\Z_t = \big\{\Z_{t,1},\Z_{t,h+1},\Z_{t,2h+1},\ldots\big\}$ and $X^*_t = \big\{X^*_{t,1},X^*_{t,h+1},X^*_{t,2h+1},\ldots\big\}$. When down-sampling, we redefine the fine-scale probability transition matrices such that $\Gamma^{*(i)}_{jk} = \Pr(X^*_{t,t^*+h} = k | X^*_{t,t^*} = j, X_t = i)$ for all $t$ and $t^* = 1,h+1,2h+1,\ldots$. If the fine-scale model is a CarHMM, we also redefine the probability density function $f$ such that $f^{*(i,i^*)}(\cdot|\z_{t,t^*-100}; \theta^{*(i,i^*)})$ describes the density of $\Z_{t,t^*}$ given $X_t = i$, $X^*_{t,t^*} = i^*$, and $\Z_{t,t^*-100} = \z_{t,t^*-100}$.
-This down-sampling both avoids the artificial residual correlation that overlapping windows would introduce and reduces the dimension of the fine-scale process by a factor of $h$, allowing for faster model fitting. By summarizing the data using a relevant transformation, the method overall also reduces correlation in the raw observations due to the complex dependence structure. Figure \ref{fig:models}d represents the process of transforming $Y^*_{t}$ into $\Z_{t}$ within an HMM, including down-sampling.
+In words, $\Zone_{t,\tilde t^*}$ is the average value over window $\tilde t^*$ and $\Ztwo_{t,\tilde t^*}$ is the squared two-norm of the component of window $\tilde t^*$ that can be attributed to frequencies between one and $\tilde{\omega} \leq h-1$ periods per window (by the Plancherel theorem). More intuitively, $\Ztwo_{t,\tilde t^*}$ corresponds to the ``wiggliness" of the acceleration data during dive $t$ and window $\tilde t^*$. The maximum frequency $\tilde{\omega}$ is a problem-specific tuning parameter which should be selected with the help of a subject-matter expert. Other DFT-based choices for window summary statistics are possible, including the dominant frequency and amplitude. Transforming $Y^*_t$ to $\Z_t$ using a non-overlapping window transformation both avoids introducing artificial correlation and reduces the dimension of the fine-scale process by a factor of $h$, allowing for faster model fitting. By summarizing the data using a relevant transformation, the method overall also reduces correlation in the raw observations by summarizing complex dependence structures within each window. Figure \ref{fig:models}d represents the process of transforming $Y^*_{t}$ into $\Z_{t}$ within an HMM, including down-sampling.
 
-Once $\Z_t$ is calculated, it simply replaces the original fine-scale observations $Y^*_t$ in the fine-scale HMM structure. As such, the emission distributions and the likelihood remain identical to the original HMM when transforming $Y^*$ to $\Z$. In order to clearly differentiate models, we refer to an HMM with $\Z$ as observations as an HMM-DFT.
+%When down-sampling, we redefine the fine-scale probability transition matrices such that $\Gamma^{*(i)}_{jk} = \Pr(X^*_{t,t^*+h} = k | X^*_{t,t^*} = j, X_t = i)$ for all $t$ and $t^* = 1,h+1,2h+1,\ldots$. If the fine-scale model is a CarHMM, we also redefine the probability density function $f$ such that $f^{*(i,i^*)}(\cdot|\z_{t,t^*-100}; \theta^{*(i,i^*)})$ describes the density of $\Z_{t,t^*}$ given $X_t = i$, $X^*_{t,t^*} = i^*$, and $\Z_{t,t^*-100} = \z_{t,t^*-100}$.
+%
+%Once $\Z_t$ is calculated, it simply replaces the original fine-scale observations $Y^*_t$ in the fine-scale HMM structure. As such, the emission distributions and the 
+The likelihood of an HMM with transformed fine-scale observations is identical to the original HMM but with $\Z_t$ and $\tilde X^*_t$ replacing $Y^*_t$ and $X^*_t$, respectively. In order to clearly differentiate models, we refer to an HMM with $\Z$ as observations as an HMM-DFT.
 
 \subsection{General structure for building complex models}
 
