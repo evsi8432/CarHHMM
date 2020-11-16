@@ -86,7 +86,7 @@ Given the coarse-scale hidden states $X$, the $T+1$ sets $\{X_1^*, Y_1^*\}, \ldo
 
 Forcing certain parameters to be shared can reduce the complexity of the HHMM. For example, in our killer whale case study (see Section \ref{sec:data}), we take $N^{*(i)} = N^*$ for all $i$. We also share the fine-scale emission parameters across coarse-scale hidden states $\left( \text{i.e., } \theta^{*(1,i^*)} = \cdots = \theta^{*(N,i^*)} = \theta^{*(\cdot,i^*)} \text{ for all } i^* = 1, \ldots, N^* \right)$. Coarse-scale hidden states therefore differ only in coarse-scale emission parameters $\theta^{(i)}$ and fine-scale probability transition matrices $\Gamma^{*(i)}$.
 
-Due to the nested structure of the hierarchical hidden Markov model, the likelihood is easy to calculate via the forward algorithm.
+Due to the nested structure of the hierarchical hidden Markov model, the likelihood is easily calculated using the forward algorithm.
 %
 Let $y$ be the $T$-vector of the observed coarse-scale emissions and
 $y^* \equiv \left\{y^*_1, \ldots,y^*_T\right\}$ be the collection of $T$ observed fine-scale emission vectors.
@@ -129,7 +129,7 @@ More intuitively, $\Ztwo_{t,\tilde{t}^*}$ corresponds to the ``wiggliness" of th
 
 The fine-scale HMM must be redefined since $\Z_t$ exists on a coarser scale than $Y^*_t$ itself. In particular, if the length of $\Z_t$ is denoted as $\tilde{T}_t^*$ then there are only $\tilde{T}_t^*$ hidden states associated with $\Z_t = \big\{\Z_{t,1},\ldots, \Z_{t,\tilde{T}^*_t}\big\}$, which we denote as $\tilde{X}^*_t = \big\{\tilde{X}^*_{t,1},\ldots, \tilde{X}^*_{t,\tilde{T}^*_t}\big\}$. The fine-scale probability transition matrices  $\Gamma^{*(i)}$ and probability density functions $f^{*(i,i^*)}$ are then applied directly to $\tilde{X}^*_t$ and $\Z_t$ instead of $X^*_t$ and $Y^*_t$. The likelihood of this model is therefore identical to that of the original HMM, but $Y^*$ is replaced with $\Z$ and $X^*$ is replaced with $\tilde{X^*}$. In order to clearly differentiate models, we refer to an HMM with $\Z$ as observations and $\tilde{X^*}$ as hidden states as an HMM-DFT.
 
-\subsection{General structure for building complex models}
+\subsection{Generalized hierarchical Markov models}
 
 %By definition, an 
 Traditional HHMMs treat both the coarse-scale and the fine-scale processes as realizations of an HMM or CarHMM. 
@@ -149,4 +149,4 @@ Further, \citep{Langrock:2018} use B-splines to model the emission distribution 
 Another class of fine-scale models is the set of continuous time methods such as a continuous-time HMM (CTHMM) \citep{Liu:2015} or a state-switching Ornstein-Uhlenbeck (OU) process \citep{Michelot:2019}. 
 A continuous-time HMM (CTHMM) may be appropriate if observations are not equi-spaced in time \citep{Liu:2015}. \citet{Xu:2018} explain biologging accelerometer data by incorporating a CTHMM into a hierarchical model similar to ours. However, they take a longitudinal approach whereas we use a coarse-scale HMM in our case study.
 
-These examples include a few of many fine-scale models that can act as initial building blocks in a practitioner's toolbox to construct increasingly complex hierarchical models. For example, one may construct a three-level HHMM, where three scales of observations are recorded (fine-, medium-, and coarse-scale) and traditional HMMs are used to model all three levels. A myriad of possible models can be built using this framework, but these models quickly become complicated and computationally expensive to fit. Therefore, models should be constructed with care to achieve an adequate fit of the data while avoiding over-fitting and high computational costs.
+These examples include a few of many fine-scale models that can act as initial building blocks in a practitioner's toolbox to construct increasingly complex hierarchical models. For example, one may construct a three-level HHMM, where three scales of observations are recorded (fine, medium, and coarse-scale) and dependent traditional HMMs are used to model all three levels. A myriad of possible models can be built using this framework, but these models quickly become complicated and computationally expensive to fit. Therefore, models should be constructed with care to achieve an adequate fit of the data while avoiding over-fitting and high computational costs.
