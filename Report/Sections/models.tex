@@ -99,8 +99,8 @@ In addition, let $\theta^* \equiv \{\theta^{*(1)}, \ldots, \theta^{*(N)}\}$ deno
 \end{equation}
 %
 where $P(y_1,y_1^*;\theta,\theta^*,\Gamma^*)$ is an $N \times N$ diagonal matrix with $(i,i)^{th}$ entry equal to $f^{(i)}(y_1)\calL_{\text{(Car)HMM}}\left(\theta^{*(i)},
-\Gamma^{*(i)};y_1^*\right)$ for an HMM and $\calL_{\text{(Car)HMM}}\left(\theta^{*(i)},
-\Gamma^{*(i)};y_1^*\right)$ for a CarHMM. The fine-scale likelihood $\calL_{\text{(Car)HMM}}$ corresponds to the desired fine-scale model. In addition, $P(y_t,y_t^*|y_{t-1};\theta,\theta^*,\Gamma^*)$ is an $N \times N$ diagonal matrix with $(i,i)^{th}$ entry equal to 
+\Gamma^{*(i)};y_1^*\right)$ if the coarse-scale model is an HMM or $\calL_{\text{(Car)HMM}}\left(\theta^{*(i)},
+\Gamma^{*(i)};y_1^*\right)$ if the coarse-scale model is a CarHMM. The fine-scale likelihood $\calL_{\text{(Car)HMM}}$ corresponds to the likelihood of the fine-scale model, which can be either a CarHMM or an HMM. In addition, $P(y_t,y_t^*|y_{t-1};\theta,\theta^*,\Gamma^*)$ is an $N \times N$ diagonal matrix with $(i,i)^{th}$ entry equal to 
 $f^{(i)}(y_t|y_{t-1})\calL_{\text{HMM}}\left(\theta^{*(i)},
 \Gamma^{*(i)};y_t^*\right)$ for both a CarHMM and an HMM.
 %
