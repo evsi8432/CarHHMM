@@ -51,15 +51,15 @@ class Visualisor:
 
         features = list(self.pars.features[0].keys()) + list(self.pars.features[1].keys())
         xlabs = ['$Y_t$',
-                 r'$\left(A^*_{t,t^*}\right)_x$',
-                 r'$\left(A^*_{t,t^*}\right)_y$',
-                 r'$\left(A^*_{t,t^*}\right)_z$',
-                 r'$W^*_{t,t^*}$']
+                 r'$\left(\tilde A^*_{t,\tilde t^*}\right)_x$',
+                 r'$\left(\tilde A^*_{t,\tilde t^*}\right)_y$',
+                 r'$\left(\tilde A^*_{t,\tilde t^*}\right)_z$',
+                 r'$\tilde W^*_{t,\tilde t^*}$']
         ylabs = ['$Y_{t+1}$',
-                 r'$\left(A^*_{t,t^*+1}\right)_x$',
-                 r'$\left(A^*_{t,t^*+1}\right)_y$',
-                 r'$\left(A^*_{t,t^*+1}\right)_z$',
-                 r'$W^*_{t,t^*+1}$']
+                 r'$\left(\tilde A^*_{t,\tilde t^*+1}\right)_x$',
+                 r'$\left(\tilde A^*_{t,\tilde t^*+1}\right)_y$',
+                 r'$\left(\tilde A^*_{t,\tilde t^*+1}\right)_z$',
+                 r'$\tilde W^*_{t,\tilde t^*+1}$']
 
         # lag plots of dive-level data
         for i,feature in enumerate(features):
@@ -190,10 +190,10 @@ class Visualisor:
                     #ax[row_num,col_num].set_title(title,fontsize=12)
                     plt.legend(['Dive Type 1','Dive Type 2'],fontsize=10)
                 else:
-                    titles = [r'$\left(A^*_{t,t^*}\right)_x$ $(m/s^2)$',
-                              r'$\left(A^*_{t,t^*}\right)_y$ $(m/s^2)$',
-                              r'$\left(A^*_{t,t^*}\right)_z$ $(m/s^2)$',
-                              r'$W^*_{t,t^*}$']
+                    titles = [r'$\left(\tilde A^*_{t,\tilde t^*}\right)_x$ $(m/s^2)$',
+                              r'$\left(\tilde A^*_{t,\tilde t^*}\right)_y$ $(m/s^2)$',
+                              r'$\left(\tilde A^*_{t,\tilde t^*}\right)_z$ $(m/s^2)$',
+                              r'$\tilde W^*_{t,\tilde t^*}$']
                     title = titles[feature_num]
                     ax[row_num,col_num].set_xlabel(title,fontsize=12)
                     if feature == 'Ahat_low':
@@ -303,9 +303,9 @@ class Visualisor:
         if ylabs is None:
             ylabs = [r'$Pr\left(X_t = 1\right)$',
                      r'$Pr\left(X_t = 2\right)$',
-                     r'$Pr\left(X^*_{t,t^*} = 1\right)$',
-                     r'$Pr\left(X^*_{t,t^*} = 2\right)$',
-                     r'$Pr\left(X^*_{t,t^*} = 3\right)$']
+                     r'$Pr\left(\tilde X^*_{t,\tilde t^*} = 1\right)$',
+                     r'$Pr\left(\tilde X^*_{t,\tilde t^*} = 2\right)$',
+                     r'$Pr\left(\tilde X^*_{t,\tilde t^*} = 3\right)$']
             #ylabs = [r'$\left(Z^{*(1)}\right)_x$ $(m/s^2)$',
             #         r'Depth $(m)$']
 
