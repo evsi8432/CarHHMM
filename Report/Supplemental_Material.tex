@@ -233,7 +233,7 @@
         \includegraphics[width=6in]{../Plots/HHMM_decoded_states.png}
         \end{center}
         
-        \noindent Figure \arabic{fignum}: The probability that each dive is a particular type or that the whale is in a particular subdive state, given the fitted model. This is shown for dives $t = 160,161,162,163,164,$ and $165$. The line colour of the first two panels corresponds to the estimated dive type while the line colour of the last three panels corresponds to the estimated subdive state. Both the dive types and subdive states are estimated by fitting the CarHHMM-DFT to the data.
+        \noindent Figure \arabic{fignum}: The probability that each dive is a particular type or that the whale is in a particular subdive state, given the fitted model. This is shown for dives $t = 160,161,162,163,164,$ and $165$. The line colour of the first two panels corresponds to the estimated dive type while the line colour of the last three panels corresponds to the estimated subdive state. Both the dive types and subdive states are estimated by fitting the HHMM-DFT to the data.
         \addtocounter{fignum}{1}
         
         \subsubsection{CarHHMM}
@@ -249,7 +249,7 @@
         \includegraphics[width=6in]{../Plots/CarHHMM1_decoded_states.png}
         \end{center}
         
-        \noindent Figure \arabic{fignum}: The probability that each dive is a particular type or that the whale is in a particular subdive state, given the fitted model. This is shown for dives $t = 160,161,162,163,164,$ and $165$. The line colour of the first two panels corresponds to the estimated dive type while the line colour of the last three panels corresponds to the estimated subdive state. Both the dive types and subdive states are estimated by fitting the CarHHMM-DFT to the data.
+        \noindent Figure \arabic{fignum}: The probability that each dive is a particular type or that the whale is in a particular subdive state, given the fitted model. This is shown for dives $t = 160,161,162,163,164,$ and $165$. The line colour of the first two panels corresponds to the estimated dive type while the line colour of the last three panels corresponds to the estimated subdive state. Both the dive types and subdive states are estimated by fitting the CarHHMM to the data.
         \addtocounter{fignum}{1}
         
         \subsubsection{CarHMM-DFT}
@@ -265,7 +265,7 @@
         \includegraphics[width=6in]{../Plots/CarHMM_decoded_states.png}
         \end{center}
         
-        \noindent Figure \arabic{fignum}: The probability that each dive is a particular type or that the whale is in a particular subdive state, given the fitted model. This is shown for dives $t = 160,161,162,163,164,$ and $165$. The line colour of the first panel corresponds to the estimated dive type while the line colour of the last three panels corresponds to the estimated subdive state. Both the dive types and subdive states are estimated by fitting the CarHHMM-DFT to the data.
+        \noindent Figure \arabic{fignum}: The probability that each dive is a particular type or that the whale is in a particular subdive state, given the fitted model. This is shown for dives $t = 160,161,162,163,164,$ and $165$. The line colour of the first panel corresponds to the estimated dive type while the line colour of the last three panels corresponds to the estimated subdive state. Both the dive types and subdive states are estimated by fitting the CarHMM-DFT to the data.
         \addtocounter{fignum}{1}
         
     \newpage
@@ -494,7 +494,7 @@ Model                       & \multicolumn{1}{c}{Train Time (m)} & \multicolumn{
         }
         \end{center}
         
-        \noindent Table \arabic{tablenum}: Accuracies and run times for all models in the simulation study. All reported values are averages, and $\pm$ refers to the standard deviation across a total of 500 fitted models. Both training and test data sets are made up of 100 simulated dives. Rows labelled Both/Both correspond to overall model accuracy.
+        \noindent Table \arabic{tablenum}: Accuracies and run times for all models in the simulation study. All reported values are averages, and $\pm$ refers to the sample standard deviation across a total of 500 fitted models. Both training and test data sets are made up of 100 simulated dives. Rows labelled Both/Both correspond to overall model accuracy.
         \addtocounter{tablenum}{1}
 
     \newpage
@@ -563,7 +563,7 @@ Model                       & \multicolumn{1}{c}{Parameter} & \multicolumn{1}{c}
         \includegraphics[width=3in]{../Plots/hmm_FV_MLE_density_dive_duration_-1_0.png}
         \end{center}
         
-        \noindent Figure \arabic{fignum}: Kernel density estimate of the distribution of estimates of dive duration parameters ($\hat \mu$ and $\hat \sigma$) for each dive type. The red star represents the true values of $\mu$ and $\sigma$ for both dive types. These estimates are for the CarHMM-DFT. The CarHMM-DFT assumes that there is only one dive type, so we have that $\Gamma = \begin{pmatrix} 1 \end{pmatrix}$, and there is only one version of the fine scale probability transition matrix $\Gamma^*$ (see Table 9).
+        \noindent Figure \arabic{fignum}: Kernel density estimate of the distribution of estimates of dive duration parameters ($\hat \mu$ and $\hat \sigma$). The red star represents the true values of $\mu$ and $\sigma$ for both dive types. These estimates are for the CarHMM-DFT. The CarHMM-DFT assumes that there is only one dive type.
     
     \newpage
     \subsection{Empirical joint distributions - acceleration ($\Zone_{t,\tilde t^*}$)}
