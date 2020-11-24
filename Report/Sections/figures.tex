@@ -4,7 +4,7 @@
 
 \begin{table}[ht]
 \centering
-\caption{Parameters estimates and standard errors for dive duration ($Y_t$), acceleration ($\Zone_{t,\tilde t^*}$), and wiggliness ($\Ztwo_{t,\tilde t^*}$) of the killer whale kinematic data for the full CarHHMM-DFT. The $\pm$ refers to the standard deviation derived from the observed information matrix.}
+\caption{Parameters estimates and predicted standard errors for dive duration ($Y_t$), acceleration ($\Zone_{t,\tilde t^*}$), and wiggliness ($\Ztwo_{t,\tilde t^*}$) of the killer whale kinematic data using the full CarHHMM-DFT. The $\pm$ refers to the standard error estimated using the observed information matrix.}
 \scalebox{0.85}{
 \begin{tabular}{ccccc}
     \multirow{2}{*}{Feature}                                                       & \multirow{2}{*}{Dive / Subdive Type} & \multicolumn{3}{c}{Parameter Estimate}                      \\
@@ -30,7 +30,7 @@
 
 \begin{table}[ht]
 \centering
-\caption{Average decoding accuracies and training times for all models used to categorize dive type and subdive state in the simulation study. All reported values are averages, and $\pm$ refers to the standard deviation across a total of 500 fitted models. Both the training and the test sets are made up of 100 simulated dives. Rows labelled Both/Both correspond to overall average decoding accuracy.}
+\caption{Average decoding accuracies and training times for all models used to categorize dive type and subdive state in the simulation study. 500 models were trained on separate training data sets comprised of 100 simulated dives and tested on test data sets also comprised of 100 simulated dives. Reported values are averages, and $\pm$ refers to the sample standard deviation across the 500 fitted models. Rows labelled Both/Both correspond to overall average decoding accuracy.}
 \scalebox{0.8}{
 \begin{tabular}{ccccccc}
 Model                       & \multicolumn{1}{c}{Train Time (min)} & \multicolumn{1}{c}{True Dive Type} & \multicolumn{1}{c}{True Subdive State} & \multicolumn{1}{c}{Dive Accuracy} & \multicolumn{1}{c}{Subdive Accuracy}  \\ \hline
@@ -105,7 +105,7 @@ Model                       & \multicolumn{1}{c}{Train Time (min)} & \multicolum
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=5.25in]{../Plots/raw_data.png}
-	\caption{Dive depth (top panel) and three-dimensional acceleration (bottom three panels) from a killer whale over approximately 5 hours. There are data gaps occurring from $\approx 1.5-1.8$ hours and from $\approx 3.2-4.5$ hours. Both data gaps were excluded from analyses.}
+	\caption{Dive depth (top panel) and three-dimensional acceleration (bottom three panels) from a killer whale over approximately 5 hours. There are data gaps occurring from $\sim 1.5-1.8$ hours and from $\sim 3.2-4.5$ hours. Both data gaps were excluded from analyses.}
 	\label{fig:data}
 \end{figure}
 
@@ -114,7 +114,7 @@ Model                       & \multicolumn{1}{c}{Train Time (min)} & \multicolum
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=5in]{../Plots/CarHHMM-DFT.png}
-	\caption{Graphical representation of the conditionally auto-regressive hierarchical hidden Markov model with discrete Fourier transform \textbf{CarHHMM-DFT} used in the killer whale simulation and case study. The type of dive $t$ is denoted by $X_t$ and $Y_t$ represents the associated dive duration. The raw acceleration vector associated with dive $t$ and time stamp $t^*$ is denoted by $Y^*_{t,t^*}$. The subdive state of the killer whale during dive $t$ and window $\tilde t^*$ is denoted as $\tilde X^*_{t,\tilde t^*}$, and the corresponding transformed observations are denoted by $\Z_{t,\tilde t^*}$.}
+	\caption{Graphical representation of the conditionally auto-regressive hierarchical hidden Markov model with discrete Fourier transform (\textbf{CarHHMM-DFT}) used in the simulation and case study. The type of dive $t$ is denoted by $X_t$ and $Y_t$ represents the associated dive duration. The raw acceleration vector associated with dive $t$ and time stamp $t^*$ is denoted by $Y^*_{t,t^*}$. The subdive state of the killer whale during dive $t$ and window $\tilde t^*$ is denoted as $\tilde X^*_{t,\tilde t^*}$, and the corresponding transformed observation is denoted by $\Z_{t,\tilde t^*}$.}
 	\label{fig:CarHHMM-DFT}
 \end{figure}
 
@@ -128,7 +128,7 @@ Model                       & \multicolumn{1}{c}{Train Time (min)} & \multicolum
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=5in]{../Plots/CarHHMM2-fine-emissions.png}
-	\caption{Estimated probability density of wiggliness ($\Ztwo_{t,\tilde t^*}$) and estimated conditional density of acceleration ($\Zone_{t,\tilde t^*}|\Zone_{t,\tilde t^*-1} = \mu_A^{*(\cdot,i^*)}$) corresponding to subdive states $i^* = 1,2,3$ of a killer whale (see Table \ref{table:emis_dists_CarHHMM-DFT}). The estimated conditional density of acceleration is Normal and plotted on a linear scale while the estimated density of wiggliness is Gamma and plotted on a log-log scale.}
+	\caption{Estimated probability density of wiggliness ($\Ztwo_{t,\tilde t^*}$) and estimated conditional density of acceleration ($\Zone_{t,\tilde t^*}|\Zone_{t,\tilde t^*-1} = \mu_A^{*(\cdot,i^*)}$) corresponding to subdive states $i^* = 1,2,$ and $3$ for the killer whale case study data (see Table \ref{table:emis_dists_CarHHMM-DFT}). The estimated conditional density of acceleration is Normal and plotted on a linear scale while the estimated density of wiggliness is Gamma and plotted on a log-log scale.}
 	\label{fig:fine_emis}
 \end{figure}
 
@@ -152,7 +152,7 @@ Model                       & \multicolumn{1}{c}{Train Time (min)} & \multicolum
     	\caption{Empirical distribution of $Y_t$}
     	\label{fig:empirical_dist}
     \end{subfigure}
-    \caption{Pseudoresiduals of wiggliness ($\Phi^{-1} \left(Pr(\Ztwo_{t,\tilde t^*} < \ztwo_{t,\tilde t^*}|Y,\tilde Y^* / \{\Ztwo_{t,\tilde t^*}\}) \right)$ , left) plotted over a standard normal density as well as a weighted empirical distribution of dive duration ($Y_t$, right) plotted over the corresponding fitted Gamma distributions. Both plots are generated by fitting the CarHHMM-DFT to the killer whale case study data and performing the forward-backward algorithm.}
+    \caption{Pseudoresiduals of wiggliness $\left(\Phi^{-1} \left(\Pr(\Ztwo_{t,\tilde t^*} < \ztwo_{t,\tilde t^*}|Y,\tilde Y^* / \{\Ztwo_{t,\tilde t^*}\}) \right), \enspace \text{left} \right)$ plotted over a standard normal density as well as a weighted empirical distribution of dive duration ($Y_t$, right) plotted over the corresponding fitted Gamma distributions. Both plots are generated by fitting the CarHHMM-DFT to the killer whale case study data and performing the forward-backward algorithm.}
     \label{fig:model_checking}
 \end{figure}
 
@@ -161,20 +161,20 @@ Model                       & \multicolumn{1}{c}{Train Time (min)} & \multicolum
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=5in]{../Plots/sim_data.png}
-	\caption{Acceleration data for a single dive of a selected simulated data set. The raw accelerometer data is denoted as $Y^*_{t,\tilde t^*}$ which is recorded at 50 hertz while $\Zone_{t,\tilde t^*}$ and $\Ztwo_{t,\tilde t^*}$ are recorded at 0.5 hertz. The colour of the line corresponds to the true fine-scale state, while the colour of the background corresponds to the true dive type. Subdive state 1 can plausibly be interpreted as ``gliding" while subdive state 2 can plausibly be interpreted as active swimming, or ``fluking".}
+	\caption{Acceleration data for a five dives of a selected simulated data set. The raw accelerometer data is denoted as $Y^*_{t,\tilde t^*}$ which is recorded at 50 hertz while $\Zone_{t,\tilde t^*}$ and $\Ztwo_{t,\tilde t^*}$ are recorded at 0.5 hertz. The colour of the line corresponds to the true fine-scale state, while the colour of the background corresponds to the true dive type. Subdive state 1 can plausibly be interpreted as ``gliding" while subdive state 2 can plausibly be interpreted as active swimming, or ``fluking".}
 	\label{fig:sim_data}
 \end{figure}
 
 \begin{figure}[ht]
     \centering
     \includegraphics[width=4.5in]{../Plots/Posterior_Coarse_States.png}
-    \caption{Estimated probabilities that each dive is of type two for five selected dives of one simulated data set. The colour of the line corresponds to the true dive type while the colour of the background corresponds to the true subdive state. The CarHMM-DFT is omitted because it incorporates only one dive type.}
+    \caption{Estimated probabilities that each dive is of type 2 for 5 selected dives of a simulated data set. The colour of the line corresponds to the true dive type while the colour of the background corresponds to the true subdive state. The CarHMM-DFT is omitted because it assumes that there is only one dive type.}
     \label{fig:acc_coarse}
 \end{figure}
 
 \begin{figure}[ht]
     \centering
     \includegraphics[width=4.5in]{../Plots/Posterior_Fine_States.png}
-    \caption{Estimated probabilities that each window corresponds to subdive state two for five selected dives of one simulated data set. The colour of the line corresponds to the true subdive state while the colour of the background corresponds to the true dive type.}
+    \caption{Estimated probabilities that each window corresponds to subdive state 2 for 5 selected dives of a simulated data set. The colour of the line corresponds to the true subdive state while the colour of the background corresponds to the true dive type.}
     \label{fig:acc_fine}
 \end{figure}

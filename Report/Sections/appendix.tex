@@ -2,12 +2,12 @@
 
 \subsection{Detailed description of data simulation}
 
-It is straightforward to simulate realizations of the coarse-scale HMM ($X$ and $Y$) given the parameters $\Gamma$ and $\theta$. Then, given $X_t = i$, $Y_t = y_t$, and $\Gamma^{*(i)}$, it is straightforward to simulate the subdive states $\tilde{X}^*_t$ for a particular dive $t$. Recall that the length of each fine-scale Markov chain is $\tilde T^*_t = \lfloor Y_t/2 \rfloor$ since each window is two seconds long. It is much more difficult to simulate the raw acceleration data $Y_t^*$, and we focus on this task for the remainder of the section. 
+It is straightforward to simulate realizations of the coarse-scale HMM ($X$ and $Y$) given the parameters $\Gamma$ and $\theta$. In addition, given $X_t = i$, $Y_t = y_t$, and $\Gamma^{*(i)}$, it is also straightforward to simulate the subdive states $\tilde{X}^*_t$ for a particular dive $t$. Recall that the length of each fine-scale Markov chain $\tilde{X}^*_t$ is $\tilde T^*_t = \lfloor Y_t/2 \rfloor$ since each window is two seconds long. It is much more difficult to simulate the raw acceleration data $Y_t^*$, and we focus on this task for the remainder of the section. 
 
-Recall that each window is two seconds long and therefore contains $h = 100$ observations taken at 50 observations per second. Let $DFT\{Y^*_{t,100(\tilde t^* - 1) + 1},\ldots,Y^*_{t,100\tilde t^*}\}(k)$ be denoted as $\hat{Y}^{*(k)}_{t,\tilde t^*}$ and $DFT\{Y^*_{t,100(\tilde t^* - 1) + 1},\ldots,Y^*_{t,100\tilde t^*}\}$ be denoted as $\hat{Y}^*_{t,\tilde t^*}$ for convenience. We simulate $Y_t^*$ in three steps: (1) simulate the average acceleration within each window $\left(\hat Y^{*(0)}_{t,\tilde t^*}\right)$, (2) simulate all other Fourier coefficients within each window $\left(\hat Y^{*(k)}_{t,\tilde t^*}, k = 1,\ldots,99\right)$, and (3) take the inverse $DFT$ of $\hat{Y}^*_{t,\tilde t^*}$ to retrieve $\{Y^*_{t,100(\tilde t^* - 1) + 1},\ldots,Y^*_{t,100\tilde t^*}\}$. The details of this procedure are described below:
+Recall that each window contains $h = 100$ observations taken at 50 observations per second. Let $DFT\{Y^*_{t,100(\tilde t^* - 1) + 1},\ldots,Y^*_{t,100\tilde t^*}\}(k)$ be denoted as $\hat{Y}^{*(k)}_{t,\tilde t^*}$ and $DFT\{Y^*_{t,100(\tilde t^* - 1) + 1},\ldots,Y^*_{t,100\tilde t^*}\}$ be denoted as $\hat{Y}^*_{t,\tilde t^*}$ for convenience. We simulate $Y_t^*$ in three steps: (1) simulate the average acceleration within each window $\left(\hat Y^{*(0)}_{t,\tilde t^*}\right)$, (2) simulate all other Fourier coefficients within each window $\left(\hat Y^{*(k)}_{t,\tilde t^*}, k = 1,\ldots,99\right)$, and (3) take the inverse $DFT$ of $\hat{Y}^*_{t,\tilde t^*}$ to retrieve $\{Y^*_{t,100(\tilde t^* - 1) + 1},\ldots,Y^*_{t,100\tilde t^*}\}$. The details of this procedure are described below:
 
 \begin{enumerate}
-\item Simulate the average acceleration $Y^{*(0)}_{t,\tilde t^*}$ for each window $\tilde t^* = 1,2,\ldots,\tilde T^*_t$ using the following procedure:
+\item Simulate the average acceleration $\hat Y^{*(0)}_{t,\tilde t^*}$ for each window $\tilde t^* = 1,2,\ldots,\tilde T^*_t$ using the following procedure:
 \begin{enumerate}
     \item Simulate $\hat{Y}^{*(0)}_{t,1}$:
     $$
@@ -44,13 +44,13 @@ Recall that each window is two seconds long and therefore contains $h = 100$ obs
     \end{align}
     The first argument of ${\rm{Gamma}}\left(\cdot,\cdot\right)$ is the shape parameter and the second is the scale parameter. The squared magnitude of the $k^{th}$ Fourier coefficient is equal to $b^{(k)}_{t,\tilde t^*}$, which decays like $1/k^3$ to ``smooth out" the raw acceleration data.
     %
-    \item Set Fourier coefficients 50 through 99 so the inverse DFT is real-valued:
+    \item Set Fourier coefficients 50 through 99 such that the inverse DFT is real-valued:
     $$
     \hat{Y}^{*(50)}_{t,\tilde t^*} = 0, \qquad
 	\hat{Y}^{*(k)}_{t,\tilde t^*} = -\hat{Y}^{*(100-k)}_{t,\tilde t^*} \enspace \text{for} \enspace k = 51,\ldots,99.
     $$
     \end{enumerate}
-    \item Finally, set the raw acceleration data within each window $\{Y^*_{t,100(\tilde t^* - 1) + 1},\ldots,Y^*_{t,100\tilde t^*}\}$ with the inverse discrete Fourier transform of $\hat{Y}^*_{t,\tilde t^*}$:
+    \item Finally, set the raw acceleration data within each window $\{Y^*_{t,100(\tilde t^* - 1) + 1},\ldots,Y^*_{t,100\tilde t^*}\}$ as the inverse discrete Fourier transform of $\hat{Y}^*_{t,\tilde t^*}$:
     %
     $$\{Y^*_{t,100(\tilde t^* - 1) + 1},\ldots,Y^*_{t,100\tilde t^*}\} \equiv IDFT\left\{\hat{Y}^*_{t,\tilde t^*}\right\}$$
     for $\tilde t^* = 1,\ldots,\tilde T^*_t.$
@@ -82,7 +82,7 @@ To calculate the wiggliness $\Ztwo_{t,\tilde t^*}$, we pick $\tilde{\omega} = 10
     \label{eqn:Wb}
 \end{equation}
 %
-since $a^{(k)}_{t,\tilde t^*} \in \{-1,1\}$ and $b^{(k)}_{t,\tilde t^*} \geq 0$. Since $\Ztwo_{t,\tilde t^*}$ is the sum of Gamma-distributed random variables with identical scale parameters, the distribution of $\Ztwo_{t,\tilde t^*}$ is also Gamma. Combining Equation (\ref{eqn:Wb}) above with Equation (\ref{eqn:bdist}) gives
+since $a^{(k)}_{t,\tilde t^*} \in \{-1,1\}$ and $b^{(k)}_{t,\tilde t^*} \geq 0$. Because $\Ztwo_{t,\tilde t^*}$ is the sum of Gamma-distributed random variables with identical scale parameters, the distribution of $\Ztwo_{t,\tilde t^*}$ is also Gamma. Combining Equation (\ref{eqn:Wb}) above with Equation (\ref{eqn:bdist}) gives
 %
 $$\left(\Ztwo_{t,\tilde t^*}|\tilde X^*_{t,\tilde t^*} = 1\right) \sim {\rm{Gamma}}\left(\sum_{k=1}^{10} 16.38/k^3 = 3.25 , 36.23 \right) \text { and }$$
 %
