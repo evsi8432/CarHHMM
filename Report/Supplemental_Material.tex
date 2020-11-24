@@ -563,7 +563,7 @@ Model                       & \multicolumn{1}{c}{Parameter} & \multicolumn{1}{c}
         \includegraphics[width=3in]{../Plots/hmm_FV_MLE_density_dive_duration_-1_0.png}
         \end{center}
         
-        \noindent Figure \arabic{fignum}: Kernel density estimate of the distribution of estimates of dive duration parameters ($\hat \mu$ and $\hat \sigma$). The red star represents the true values of $\mu$ and $\sigma$ for both dive types. These estimates are for the CarHMM-DFT. The CarHMM-DFT assumes that there is only one dive type.
+        \noindent Figure \arabic{fignum}: Kernel density estimate of the distribution of estimates of dive duration parameters ($\hat \mu$ and $\hat \sigma$). The red star represents the true values of $\mu$ and $\sigma$ for both dive types. These estimates are for the CarHMM-DFT. The CarHMM-DFT assumes that there is only one dive type. There is no red star which represents the true values because this model is misspecified.
     
     \newpage
     \subsection{Empirical joint distributions - acceleration ($\Zone_{t,\tilde t^*}$)}
@@ -792,7 +792,7 @@ Model                        & \multicolumn{1}{c}{Parameter} & \multicolumn{1}{c
         \includegraphics[width=3in]{../Plots/hmm_FV_Gamma_density_0.png}
         \end{center}
         
-        \noindent Figure \arabic{fignum}: Kernel density estimate of the distribution $\hat \Gamma^{*(1)}$ for the CarHMM-DFT. There is only one fine-scale probability transition matrix and no coarse-scale probability transition matrix since we assume that there is only one dive type for the CarHMM-DFT. We only plot the off-diagonal elements of the probability transition matrices since this uniquely defines a stochastic matrix. There is no red star which represents the true values because this model is not well-defined.
+        \noindent Figure \arabic{fignum}: Kernel density estimate of the distribution $\hat \Gamma^{*(1)}$ for the CarHMM-DFT. There is only one fine-scale probability transition matrix and no coarse-scale probability transition matrix since we assume that there is only one dive type for the CarHMM-DFT. We only plot the off-diagonal elements of the probability transition matrices since this uniquely defines a stochastic matrix. There is no red star which represents the true values because this model is misspecified.
         \addtocounter{fignum}{1}
 
 \end{document}
