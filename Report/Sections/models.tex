@@ -9,20 +9,20 @@ Consider a sequence of $T$ curves, where any particular curve $t$ is characteriz
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{HMMs as a base structure}
 
-An HMM is comprised of a sequence of unobserved states $X \equiv \big\{X_1, \ldots, X_T\big\}$ where the hidden state $X_t$ is associated with the observation $Y_t$. Here we focus on the coarse scale sequence of observations, but an HMM can also be used as a sub-model of the fine-scale sequence for a particular dive. The $Y_t$'s are often referred to as ``emissions'' and the index $t$ typically refers to time. 
-The $X_t$'s form a Markov chain and take possible values $1, \ldots, N$. Their distribution is governed by the distribution of the initial state $X_1$ and the $N \times N$ transition probability matrix $\Gamma$, where $\Gamma_{ij} = \Pr(X_{t+1} = j | X_t = i)$. 
+Hidden Markov models describe state-switching Markovian processes in discrete time and are the core structure we use to model both $Y$ and $Y^*$. For simplicity we focus on $Y$ to introduce the model. An HMM is comprised of a sequence of unobserved states $X \equiv \big\{X_1, \ldots, X_T\big\}$ together with an observation sequence $Y \equiv \big\{Y_1, \ldots, Y_T\big\}$, where $X_t$ is associated with the observation $Y_t$. The $Y_t$'s are often referred to as ``emissions'' and the index $t$ typically refers to time. 
+The $X_t$'s form a Markov chain and can take integer values between $1$ and $N$. Their distribution is governed by the distribution of the initial state $X_1$ and the $N \times N$ transition probability matrix $\Gamma$, where $\Gamma_{ij} = \Pr(X_{t+1} = j | X_t = i)$. 
 %
 We assume that $X_1$ follows the chain's stationary distribution, which is denoted by $\delta \in \bbR^N$ with $i^{th}$ component
 $\delta_i = \Pr(X_1 = i).$
 A Markov chain's stationary distribution is determined by its probability transition matrix via $\delta = \delta \Gamma$ and $\sum_{i=1}^N \delta_i = 1$.
 %
-The distribution of an emission $Y_t$ depends only on the corresponding state $X_t$ and no other observations or hidden states: the conditional probability density function has the form $p\left(y_t|\{X_1,\ldots, X_T\},\{Y_1,\ldots, Y_T\}/ \{Y_t\}\right) = p(y_t|X_t)$.
+The distribution of an emission $Y_t$ conditioned on the corresponding hidden state $X_t$ does not depend upon any other observation or hidden state.
 %
-These conditional distributions are governed by state-dependent parameters. Namely, if $X_t = i$ then the state-dependent parameter is $\theta^{(i)}$ and we denote the conditional distribution of $Y_t$ given $X_t=i$ by its conditional density or probability mass function, denoted $f^{(i)}(\cdot ; \theta^{(i)})$, or sometimes simply $f^{(i)}(\cdot)$.
+If $X_t=i$ then we denote the conditional density of $Y_t$ as $f^{(i)}(\cdot ; \theta^{(i)})$ or simply $f^{(i)}(\cdot)$, where $\theta^{(i)}$ is a state-dependent parameter describing the emission distribution.
 %
 Figure \ref{fig:models}a represents the dependence structure of an HMM.
 
-Using observed emissions, here denoted $y = \{y_1,\ldots,y_T\}$, we can find the maximum likelihood estimates of the parameters $\Gamma$ and $\theta \equiv \{\theta^{(1)},\ldots,\theta^{(N)}\}$. We write the likelihood $\calL_{\text{HMM}}$ using the  well-known \textit{forward algorithm} \citep{Zucchini:2016}:
+Using observation emissions, denoted here as $y \equiv \{y_1,\ldots,y_T\}$, we can find the maximum likelihood estimates of the parameters $\Gamma$ and $\theta \equiv \{\theta^{(1)},\ldots,\theta^{(N)}\}$. The likelihood $\calL_{\text{HMM}}$ can be evaluated using well-known \textit{forward algorithm} \citep{Zucchini:2016}:
 %
 $$\calL_{\text{HMM}}(\theta,\Gamma;y) = \delta P(y_1;\theta) \prod_{t=2}^T \Gamma P(y_t;\theta) \mathbf{1}_N$$
 %
@@ -41,8 +41,8 @@ where $i,j = 1,\ldots,N$ and $\eta_{ii}$ is set to zero for identifiability. Thi
 
 \subsection{The CarHMM and relaxing conditional independence}
 
-A conditionally auto-regressive hidden Markov model, or CarHMM  \citep{Lawler:2019}, is a generalization of an HMM which explicitly models auto-correlation in the observation sequence beyond the correlation induced by the hidden state process. Like a traditional HMM, a CarHMM is made up of a Markov chain of unobserved states $X_1,\ldots,X_T$ that can take on integer values between $1$ and $N$. It also has a transition probability matrix $\Gamma$ and initial distribution $\delta$ equal to the stationary distribution of $\Gamma$. Unlike a traditional HMM, the CarHMM assumes that the distribution of $Y_t$ conditioned on $X_1,\ldots, X_T$ and $Y_1,\ldots, Y_{t-1}$ depends on both $X_t$ and $Y_{t-1}$ rather than only $X_t$. The first emission $Y_1$ is treated as fixed as an initial value which does not depend upon $X_1$. We denote the conditional density of $Y_t$ given $Y_{t-1} = y_{t-1}$ and $X_t=i$ as $f^{(i)}(\cdot | y_{t-1}; \theta^{(i)})$ or simply $f^{(i)}(\cdot | y_{t-1})$. This model is highly general, as $f^{(i)}(\cdot | y_{t-1})$ can be any valid density that depends upon the parameters $\theta^{(i)}$ and the previous observation $Y_{t-1}$. 
-As a concrete example, if $Y_t$ is a $K$-dimensional vector with components $Y_t(1),\ldots,Y_t(K)$, consider the component-wise sequences $Y_1(k), \ldots, Y_T(k)$ for $k = 1,\ldots K$. One may assume that these sequences are independent given $X_1,\ldots,X_T$ and that $Y_t(k)$ given $X_t = i$ is Normally distributed with parameters $\theta^{(i)}_k = \{\mu^{(i)}_k,\sigma^{(i)}_k,\phi^{(i)}_k\}$, where:
+A conditionally auto-regressive hidden Markov model, or CarHMM \citep{Lawler:2019}, is a generalization of an HMM which explicitly models auto-correlation in the observation sequence beyond the correlation induced by the hidden state process. Like a traditional HMM, a CarHMM is made up of a Markov chain of unobserved states $X_1,\ldots,X_T$ that can take on integer values between $1$ and $N$. It also has a transition probability matrix $\Gamma$ and initial distribution $\delta$ equal to the stationary distribution of $\Gamma$. Unlike a traditional HMM, the CarHMM assumes that the distribution of $Y_t$ conditioned on $X_1,\ldots, X_T$ and $Y_1,\ldots, Y_{t-1}$ depends on both $X_t$ and $Y_{t-1}$ rather than only $X_t$. The first emission $Y_1$ is treated as fixed as an initial value which does not depend upon $X_1$. We denote the conditional density of $Y_t$ given $Y_{t-1} = y_{t-1}$ and $X_t=i$ as $f^{(i)}(\cdot | y_{t-1}; \theta^{(i)})$ or simply $f^{(i)}(\cdot | y_{t-1})$. This model is highly general, as $f^{(i)}(\cdot | y_{t-1})$ can be any valid density that depends upon the parameters $\theta^{(i)}$ and the previous observation $Y_{t-1}$. 
+As a concrete example, if $Y_t$ is a $K$-dimensional vector with components $Y_t(1),\ldots,Y_t(K)$, consider the component-wise sequences $\{Y_1(k), \ldots, Y_T(k)\}$ for $k = 1,\ldots K$. One may assume that these sequences are independent given $\{X_1,\ldots,X_T\}$ and that $Y_t(k)$ given $X_t = i$ is Normally distributed with parameters $\theta^{(i)}_k = \{\mu^{(i)}_k,\sigma^{(i)}_k,\phi^{(i)}_k\}$, where:
 %
 \begin{align}
 \label{eqn:carhmm}
@@ -52,7 +52,7 @@ As a concrete example, if $Y_t$ is a $K$-dimensional vector with components $Y_t
 \end{split}
 \end{align}
 %
-A CarHMM which follows Equation (\ref{eqn:carhmm}) can be viewed as a discrete time version of a state-switching Ornstein-Uhlenbeck process \citep{Michelot:2019}. This follows in the same way that an AR(1) process is the discrete-time version of a traditional Ornstein-Uhlenbeck process. Figure \ref{fig:models}b shows a graphical representation of the dependence structure of a general CarHMM. As previously, the likelihood corresponding to a general CarHMM can be easily calculated using the forward algorithm. If $y$ is a vector of observed emissions, then
+A CarHMM which follows Equation (\ref{eqn:carhmm}) can be viewed as a discrete time version of a state-switching Ornstein-Uhlenbeck process \citep{Michelot:2019}. This follows in the same way that an AR(1) process is the discrete-time version of a traditional Ornstein-Uhlenbeck process. Figure \ref{fig:models}b shows a graphical representation of the dependence structure of a CarHMM. As previously, the likelihood corresponding to a general CarHMM can be easily calculated using the forward algorithm. If $y$ is a vector of observed emissions, then
 \begin{equation*}
     \calL_{\text{CarHMM}}(\theta,\Gamma;y) = \delta \prod_{t=2}^T \Gamma P(y_t|y_{t-1};\theta) \mathbf{1}_N,
     \label{eqn:CarHMM_likelihood}
