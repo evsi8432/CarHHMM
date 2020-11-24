@@ -2,18 +2,18 @@
 
 \subsection{Detailed description of data simulation}
 
-It is straightforward to simulate realizations of the coarse-scale HMM ($X$ and $Y$) given the parameters $\Gamma$ and $\theta$. Since accelerometer readings are taken at 50 hertz and this model has two-second window lengths, each window contains 100 accelerometer readings. In addition, the length of each fine-scale Markov chain is $\tilde T ^*_t = \lfloor Y_t/2 \rfloor$. Then, given the dive type $X_t = i$, dive duration $Y_t = y_t$, and the fine-scale probability transition matrix $\Gamma^{*(i)}$, it is straightforward to simulate the subdive states $\tilde{X}^*_t$ for a particular dive $t$. It is much more difficult to simulate the raw acceleration data $Y_t^*$, and we focus on this task for the remainder of the section. 
+It is straightforward to simulate realizations of the coarse-scale HMM ($X$ and $Y$) given the parameters $\Gamma$ and $\theta$. Then, given $X_t = i$, $Y_t = y_t$, and $\Gamma^{*(i)}$, it is straightforward to simulate the subdive states $\tilde{X}^*_t$ for a particular dive $t$. Recall that the length of each fine-scale Markov chain is $\tilde T^*_t = \lfloor Y_t/2 \rfloor$ since each window is two seconds long. It is much more difficult to simulate the raw acceleration data $Y_t^*$, and we focus on this task for the remainder of the section. 
 
-Let $DFT\{Y^*_{t,100(\tilde t^* - 1) + 1},\ldots,Y^*_{t,100\tilde t^*}\}(k)$ be denoted as $\hat{Y}^{*(k)}_{t,\tilde t^*}$ and $DFT\{Y^*_{t,100(\tilde t^* - 1) + 1},\ldots,Y^*_{t,100\tilde t^*}\}$ be denoted as $\hat{Y}^*_{t,\tilde t^*}$ for convenience. We simulate $Y_t^*$ in three steps: 1) simulate the average acceleration within each window $\left(Y^{*(0)}_{t,\tilde t^*}\right)$, 2) simulate all other Fourier coefficients within each window $\left(\hat Y^{*(k)}_{t,\tilde t^*}, k = 1,\ldots,99\right)$, and 3) take the inverse $DFT$ of $\hat{Y}^*_{t,\tilde t^*}$ to retrieve $\{Y^*_{t,100(\tilde t^* - 1) + 1},\ldots,Y^*_{t,100\tilde t^*}\}$. The details of this procedure are described below:
+Recall that each window is two seconds long and therefore contains $h = 100$ observations taken at 50 observations per second. Let $DFT\{Y^*_{t,100(\tilde t^* - 1) + 1},\ldots,Y^*_{t,100\tilde t^*}\}(k)$ be denoted as $\hat{Y}^{*(k)}_{t,\tilde t^*}$ and $DFT\{Y^*_{t,100(\tilde t^* - 1) + 1},\ldots,Y^*_{t,100\tilde t^*}\}$ be denoted as $\hat{Y}^*_{t,\tilde t^*}$ for convenience. We simulate $Y_t^*$ in three steps: (1) simulate the average acceleration within each window $\left(\hat Y^{*(0)}_{t,\tilde t^*}\right)$, (2) simulate all other Fourier coefficients within each window $\left(\hat Y^{*(k)}_{t,\tilde t^*}, k = 1,\ldots,99\right)$, and (3) take the inverse $DFT$ of $\hat{Y}^*_{t,\tilde t^*}$ to retrieve $\{Y^*_{t,100(\tilde t^* - 1) + 1},\ldots,Y^*_{t,100\tilde t^*}\}$. The details of this procedure are described below:
 
 \begin{enumerate}
 \item Simulate the average acceleration $Y^{*(0)}_{t,\tilde t^*}$ for each window $\tilde t^* = 1,2,\ldots,\tilde T^*_t$ using the following procedure:
 \begin{enumerate}
     \item Simulate $\hat{Y}^{*(0)}_{t,1}$:
     $$
-    	(\hat{Y}^{*(0)}_{t,1}|X^*_{t,1} = i^*) \sim \mathcal{N} \left(0, \left(100\sigma_A^{*(\cdot,i^*)}\right)^2 \right)
+    	(\hat{Y}^{*(0)}_{t,1}|\tilde X^*_{t,1} = i^*) \sim \mathcal{N} \left(0, \left(100\sigma_A^{*(\cdot,i^*)}\right)^2 \right)
     $$
-    where $\sigma_A^{*(\cdot,1)} = 0.05s$ and $\sigma_A^{*(\cdot,2)} = 0.1s$. 
+    where $\sigma_A^{*(\cdot,1)} = 0.034s$ and $\sigma_A^{*(\cdot,2)} = 0.079s$. 
     %
     \item Simulate $\hat{Y}^{*(0)}_{t,2}, \ldots,\enspace \hat{Y}^{*(0)}_{t,\tilde T^*_t}$ using Equation (\ref{eqn:yhat_0}) below:
     \begin{align}	
@@ -22,7 +22,7 @@ Let $DFT\{Y^*_{t,100(\tilde t^* - 1) + 1},\ldots,Y^*_{t,100\tilde t^*}\}(k)$ be 
         &t^* = 2,\ldots, \tilde T^*_t
     	\label{eqn:yhat_0}
     \end{align}
-    where $\phi_A^{*(\cdot,1)} = 0.99$ and $\phi_A^{*(\cdot,2)} = 0.95$. 
+    where $\phi_A^{*(\cdot,1)} = 0.98$ and $\phi_A^{*(\cdot,2)} = 0.87$. 
     \end{enumerate}
     After this step we have simulated the average acceleration within each two-second window for all dives (see Equation (\ref{eqn:avg_val}) below).
     \item Simulate the other Fourier coefficients $\left(Y^{*(k)}_{t,\tilde t^*}\right)$ for each window $\tilde t^* = 1,2,\ldots,\tilde T^*_t$ and $k = 1,\ldots,99$ using the following procedure:
@@ -36,17 +36,13 @@ Let $DFT\{Y^*_{t,100(\tilde t^* - 1) + 1},\ldots,Y^*_{t,100\tilde t^*}\}(k)$ be 
     where $a^{(k)}_{t,\tilde t^*}$ is equal to either 1 or -1 each with probability 1/2, and $b^{(k)}_{t,\tilde t^*}$ has the following distribution:
     \begin{align}
     \begin{split}
-    	(b^{(k)}_{t,\tilde t^*}|\tilde X^*_{t,\tilde t^*} = 1) &\sim {\rm{Gamma}}(5/k^2, 1) \\
+    	(b^{(k)}_{t,\tilde t^*}|\tilde X^*_{t,\tilde t^*} = 1) &\sim {\rm{Gamma}}(16.38/k^3, 36.23) \\
     	%
-    	(b^{(k)}_{t,\tilde t^*}|\tilde X^*_{t,\tilde t^*} = 2) &\sim \left\{\begin{array}{lr}
-    	{\rm{Gamma}}(250,1), & k = 1 \\
-    	{\rm{Gamma}}(50,1), & k = 2 \\
-    	{\rm{Gamma}}(5/k^2, 1), \quad & k \notin \{1,2\}.
-    	\end{array}\right. 
+    	(b^{(k)}_{t,\tilde t^*}|\tilde X^*_{t,\tilde t^*} = 2) &\sim {\rm{Gamma}}(4.20/k^3, 1825.53). \\ 
     \end{split}
     \label{eqn:bdist}
     \end{align}
-    The first argument of ${\rm{Gamma}}\left(\cdot,\cdot\right)$ is the scale parameter and the second is the shape parameter. The magnitude of the $k^{th}$ Fourier coefficient is equal to $b^{(k)}_{t,\tilde t^*}$, which decays like $1/k^2$ to ``smooth out" the raw acceleration data.
+    The first argument of ${\rm{Gamma}}\left(\cdot,\cdot\right)$ is the shape parameter and the second is the scale parameter. The squared magnitude of the $k^{th}$ Fourier coefficient is equal to $b^{(k)}_{t,\tilde t^*}$, which decays like $1/k^3$ to ``smooth out" the raw acceleration data.
     %
     \item Set Fourier coefficients 50 through 99 so the inverse DFT is real-valued:
     $$
@@ -77,7 +73,7 @@ $$\left(100\Zone_{t,\tilde t^*} | \tilde X^*_{t,\tilde t^*} = i^*, \Zone_{t,\til
 %
 $$\implies \left(\Zone_{t,\tilde t^*} | \tilde X^*_{t,\tilde t^*} = i^*, \Zone_{t,\tilde t^*-1} \right) \sim \mathcal{N} \left(\phi_A^{*(\cdot,i^*)} \Zone_{t,\tilde t^*-1}, \left(\sigma_A^{*(\cdot,i^*)}\right)^2 \right).$$
 %
-This distribution is consistent with a CarHMM with Normal emission distributions and $\mu_A^{*(\cdot,1)} = \mu_A^{*(\cdot,2)} = \mu_A^{*(\cdot,i^*)} = 0$. We also have that $\sigma_A^{*(\cdot,1)} = 0.05s$, $\phi_A^{*(\cdot,1)} = 0.99$, $\sigma_A^{*(\cdot,2)} = 0.1s$, and $\phi_A^{*(\cdot,2)} = 0.95$.
+This distribution is consistent with a CarHMM with Normal emission distributions and $\mu_A^{*(\cdot,1)} = \mu_A^{*(\cdot,2)} = \mu_A^{*(\cdot,i^*)} = 0$. We also have that $\sigma_A^{*(\cdot,1)} = 0.034s$, $\phi_A^{*(\cdot,1)} = 0.98$, $\sigma_A^{*(\cdot,2)} = 0.079s$, and $\phi_A^{*(\cdot,2)} = 0.87$.
 
 To calculate the wiggliness $\Ztwo_{t,\tilde t^*}$, we pick $\tilde{\omega} = 10$ periods per window (or 5 Hz). From Equation (\ref{eqn:abYhat}):
 %
@@ -88,15 +84,15 @@ To calculate the wiggliness $\Ztwo_{t,\tilde t^*}$, we pick $\tilde{\omega} = 10
 %
 since $a^{(k)}_{t,\tilde t^*} \in \{-1,1\}$ and $b^{(k)}_{t,\tilde t^*} \geq 0$. Since $\Ztwo_{t,\tilde t^*}$ is the sum of Gamma-distributed random variables with identical scale parameters, the distribution of $\Ztwo_{t,\tilde t^*}$ is also Gamma. Combining Equation (\ref{eqn:Wb}) above with Equation (\ref{eqn:bdist}) gives
 %
-$$\left(\Ztwo_{t,\tilde t^*}|X^*_{t,\tilde t^*} = 1\right) \sim {\rm{Gamma}}\left(\sum_{k=1}^{10} 5/k^2 = 10.10, 1.00 \right) \text { and }$$
+$$\left(\Ztwo_{t,\tilde t^*}|\tilde X^*_{t,\tilde t^*} = 1\right) \sim {\rm{Gamma}}\left(\sum_{k=1}^{10} 16.38/k^3 = 3.25 , 36.23 \right) \text { and }$$
 %
-$$\left(\Ztwo_{t,\tilde t^*}|X^*_{t,\tilde t^*} = 2\right) \sim {\rm{Gamma}}\left(300 + \sum_{k=3}^{10} 5/k^2 = 305.94 , 1.00 \right),$$
+$$\left(\Ztwo_{t,\tilde t^*}|\tilde X^*_{t,\tilde t^*} = 2\right) \sim {\rm{Gamma}}\left(\sum_{k=1}^{10} 4.20/k^3 = 0.83 , 1825.53 \right),$$
 %
-where the first argument of ${\rm{Gamma}}\left(\cdot,\cdot\right)$ is the scale parameter and the second is the shape parameter. Simple calculation of the mean and variance of a Gamma distribution reveals $\mu_W^{*(\cdot,1)} = 10.10$, $\sigma_W^{*(\cdot,1)} = 3.18$, $\mu_W^{*(\cdot,2)} = 305.94$, and $\sigma_W^{*(\cdot,2)} = 17.49$.
+where the first argument of ${\rm{Gamma}}\left(\cdot,\cdot\right)$ is the shape parameter and the second is the scale parameter. Simple calculation of the mean and variance of a Gamma distribution reveals $\mu_W^{*(\cdot,1)} = 23.3$, $\sigma_W^{*(\cdot,1)} = 13.0$, $\mu_W^{*(\cdot,2)} = 301.2$, and $\sigma_W^{*(\cdot,2)} = 330.1$.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\subsection{Likelihood of simulation study model}
+\subsection{Likelihood of CarHHMM-DFT}
 
 The overall likelihood of the CarHHMM-DFT model is as follows:
 %
@@ -111,7 +107,7 @@ P(y_t,\z_t;\theta,\theta^*,\Gamma^*)  = \text{diag}\Big[&f^{(1)}(y_t;\theta^{(1)
 %
 where $f^{(i)}(y_t;\theta^{(i)})$ is the emission distribution of dive duration given that $X_t = i$. The likelihood $\calL_{\text{CarHMM-DFT}}$ corresponds to the fine-scale model and is equal to the following:
 %
-$$\calL_{\text{CarHMM-DFT}}\left(\theta^{*},\Gamma^{*(i)};\z_t\right) = \delta^{*(i)} \prod_{\tilde t^* = 2}^{\tilde T^*_t} \Gamma^{*(i)} P(\z_{t,\tilde t^*}|\z_{t,\tilde t^*-1};\theta^*) \mathbf{1}_N,$$
+$$\calL_{\text{CarHMM-DFT}}\left(\theta^{*},\Gamma^{*(i)};\z_t\right) = \delta^{*(i)} \prod_{\tilde t^* = 2}^{\tilde T^*_t} \Gamma^{*(i)} P(\z_{t,\tilde t^*}|\z_{t,\tilde t^*-1};\theta^*) \mathbf{1}_{N^*},$$
 %
 where $P(\z_{t,\tilde t^*}|\z_{t,\tilde t^*-1};\theta^*)$ is an $N^* \times N^*$ diagonal matrix with $(i^*,i^*)^{th}$ entry equal to $f^{*(\cdot,i^*)}(\z_{t,\tilde t^*}|\z_{t,\tilde t^*-1}; \theta^{*(\cdot,i^*)})$.
 %

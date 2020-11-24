@@ -109,13 +109,6 @@ Model                       & \multicolumn{1}{c}{Train Time (min)} & \multicolum
 	\label{fig:data}
 \end{figure}
 
-\begin{figure}[ht]
-	\centering
-	\includegraphics[width=5in]{../Plots/CarHHMM2_decoded_dives.png}
-	\caption{The $x$-component of acceleration $\left(y^*_{t,t^*}\right)_x$ (top two panels) and dive depth (bottom two panels) of a northern resident killer whale for a sequence of six selected dives. The line colours in the first and third panels correspond to the estimated dive types while the line colours of the second and fourth panels correspond the estimated subdive states. Both the dive types and subdive states are estimated by fitting the CarHHMM-DFT to the data and performing the forward-backward algorithm to determine the hidden state with the highest probability.}
-	\label{fig:labeled_dives}
-\end{figure}
-
 %%% Case Study %%%
 
 \begin{figure}[ht]
@@ -137,6 +130,13 @@ Model                       & \multicolumn{1}{c}{Train Time (min)} & \multicolum
 	\includegraphics[width=5in]{../Plots/CarHHMM2-fine-emissions.png}
 	\caption{Estimated probability density of wiggliness ($\Ztwo_{t,\tilde t^*}$) and estimated conditional density of acceleration ($\Zone_{t,\tilde t^*}|\Zone_{t,\tilde t^*-1} = \mu_A^{*(\cdot,i^*)}$) corresponding to subdive states $i^* = 1,2,3$ of a killer whale (see Table \ref{table:emis_dists_CarHHMM-DFT}). The estimated conditional density of acceleration is Normal and plotted on a linear scale while the estimated density of wiggliness is Gamma and plotted on a log-log scale.}
 	\label{fig:fine_emis}
+\end{figure}
+
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=5in]{../Plots/CarHHMM2_decoded_dives.png}
+	\caption{The $x$-component of acceleration $\left(y^*_{t,t^*}\right)_x$ (top two panels) and dive depth (bottom two panels) of a northern resident killer whale for a sequence of six selected dives. The line colours in the first and third panels correspond to the estimated dive types while the line colours of the second and fourth panels correspond the estimated subdive states. Both the dive types and subdive states are estimated by fitting the CarHHMM-DFT to the data and performing the forward-backward algorithm to determine the hidden state with the highest probability.}
+	\label{fig:labeled_dives}
 \end{figure}
 
 \begin{figure}[ht]
