@@ -311,7 +311,6 @@ class Visualisor:
 
         #title = 'Hidden State Probability Estimates'
         title = 'Decoded Dive Profile / Accelerometer Data'
-        print(df_cols)
         for i,col in enumerate(df_cols):
 
             # dive-level coloring
@@ -339,6 +338,12 @@ class Visualisor:
                     pass
                 if col == 'depth':
                     plt.gca().invert_yaxis()
+
+                # plot vlines
+                for dive_num in range(sdive+1,edive+1):
+                    vline = min(dive[dive['dive_num'] == dive_num]['sec_from_start']/60)
+                    plt.axvline(vline,color='k',linewidth=2)
+
                 fignum += 1#2
 
             # subdive-level coloring
@@ -368,6 +373,12 @@ class Visualisor:
                 #plt.title(col + ', dives %d-%d'%(sdive,edive),fontsize=24)
                 if col == 'depth':
                     plt.gca().invert_yaxis()
+
+                # plot vlines
+                for dive_num in range(sdive+1,edive+1):
+                    vline = min(dive[dive['dive_num'] == dive_num]['sec_from_start']/60)
+                    plt.axvline(vline,color='k',linewidth=2)
+
                 fignum += 1#-1
 
         t_start = dive['time'].min()
@@ -397,7 +408,7 @@ class Visualisor:
                         time.append(avg_time)
                         features[ML_state].append(dive[col])
                         feature.append(dive[col])
-                    plt.axvline(max(time))
+                    plt.axvline(max(time),color='k',linewidth=2)
                 for state in range(self.pars.K[0]):
                     plt.plot(times[state],features[state],
                              '.',color=colors[state],markersize=4)
@@ -440,7 +451,7 @@ class Visualisor:
                 plt.xlabel('Time (s)',fontsize=10)
                 plt.legend(legend,prop={'size': 10})
                 for vline in vlines:
-                    plt.axvline(vline)
+                    plt.axvline(vline,color='k',linewidth=2)
                 fignum += 1
 
 
@@ -474,7 +485,7 @@ class Visualisor:
                 plt.legend(legend,prop={'size': 10})
                 plt.title('Depth Data',fontsize=10)
                 for vline in vlines:
-                    plt.axvline(vline)
+                    plt.axvline(vline,color='k',linewidth=2)
                 fignum += 1
 
         legend_elements = [Line2D([0], [0], marker='o', color='w', label='Subdive 1',
