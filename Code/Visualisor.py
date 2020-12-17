@@ -142,7 +142,10 @@ class Visualisor:
             nrows = 2 #self.pars.K[0]
             ncols = int((len(features)+1)/2)
 
-        fig, ax = plt.subplots(nrows,ncols,figsize=(max(5,2.5*ncols),max(5,2.5*nrows)))
+        if level == 0:
+            fig, ax = plt.subplots(nrows,ncols,figsize=(max(5,2.5*ncols),2.5*nrows))
+        else:
+            fig, ax = plt.subplots(nrows,ncols,figsize=(max(5,2.5*ncols),max(5,2.5*nrows)))
         ax = np.reshape(ax,(nrows,ncols))
 
         for feature_num,feature in enumerate(features):
