@@ -144,8 +144,10 @@ class Visualisor:
 
         if level == 0:
             fig, ax = plt.subplots(nrows,ncols,figsize=(max(5,2.5*ncols),2.5*nrows))
+            bbox = Bbox([[0,0],[max(5,2.5*ncols),2.5*nrows]])
         else:
             fig, ax = plt.subplots(nrows,ncols,figsize=(max(5,2.5*ncols),max(5,2.5*nrows)))
+            bbox = Bbox([[0,0],[max(5,2.5*ncols),2.5*nrows + 0.5]])
         ax = np.reshape(ax,(nrows,ncols))
 
         for feature_num,feature in enumerate(features):
@@ -226,7 +228,6 @@ class Visualisor:
             return (fig, ax)
         else:
             plt.tight_layout()
-            bbox = Bbox([[0,0],[5,5.5]])
             plt.savefig(file,bbox_inches=bbox,dpi=500)
 
         return
