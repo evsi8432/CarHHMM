@@ -461,6 +461,16 @@
 \newpage
 \section{Simulation Study Results}
 
+    \subsection{Simulated Data}
+    
+        \begin{center}
+    	\includegraphics[width=5in]{../Plots/sim_data.png}
+    	\end{center}
+    	
+    	\noindent Figure \arabic{fignum}: Acceleration data for a five dives of a selected simulated data set. The raw accelerometer data is denoted as $Y^*_{t,\tilde t^*}$ which is recorded at 50 hertz while $\Zone_{t,\tilde t^*}$ and $\Ztwo_{t,\tilde t^*}$ are recorded at 0.5 hertz. The colour of the line corresponds to the true fine-scale state, while the colour of the background corresponds to the true dive type. Subdive state 1 can plausibly be interpreted as ``gliding" while subdive state 2 can plausibly be interpreted as active swimming, or ``fluking".
+    	\addtocounter{fignum}{1}
+
+    \newpage
     \subsection{Accuracy comparisons}
         
         \begin{center}
@@ -564,6 +574,7 @@ Model                       & \multicolumn{1}{c}{Parameter} & \multicolumn{1}{c}
         \end{center}
         
         \noindent Figure \arabic{fignum}: Kernel density estimate of the distribution of estimates of dive duration parameters ($\hat \mu$ and $\hat \sigma$). The red star represents the true values of $\mu$ and $\sigma$ for both dive types. These estimates are for the CarHMM-DFT. The CarHMM-DFT assumes that there is only one dive type. There is no red star which represents the true values because this model is misspecified.
+        \addtocounter{fignum}{1}
     
     \newpage
     \subsection{Empirical joint distributions - acceleration ($\Zone_{t,\tilde t^*}$)}
@@ -622,7 +633,7 @@ Model                       & \multicolumn{1}{c}{Parameter} & \multicolumn{1}{c}
         \includegraphics[width=3in]{../Plots/hhmm_FV_uncorr_MLE_density_A_0_1.png}
         \end{center}
         
-        \noindent Figure \arabic{fignum}: Kernel density estimate of the distribution of estimates of acceleration parameters ($\hat \mu^*_A$ and $\hat \sigma^*_A$) for each subdive state. The red star represents the true values of $\mu^*_A$ and $\sigma^*_A$ for both subdive states. These estimates are for the HHMM-DFT. Note that the HHMM-DFT assumes no auto-correlation in $\Zone_{t,\tilde t^*}$, so $\hat \phi_A^{*(\cdots,i^*)}$ is absent from these plots.
+        \noindent Figure \arabic{fignum}: Kernel density estimate of the distribution of estimates of acceleration parameters ($\hat \mu^*_A$ and $\hat \sigma^*_A$) for each subdive state. The red star represents the true values of $\mu^*_A$ and $\sigma^*_A$ for both subdive states. These estimates are for the HHMM-DFT. Note that the HHMM-DFT assumes no auto-correlation in $\Zone_{t,\tilde t^*}$, so $\hat \phi_A^{*(\cdot,i^*)}$ is absent from these plots.
         \addtocounter{fignum}{1}
         
         \subsubsection{CarHHMM}

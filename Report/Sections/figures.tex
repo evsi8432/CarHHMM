@@ -159,13 +159,6 @@ Model                       & \multicolumn{1}{c}{Train Time (min)} & \multicolum
 %%% simulation study %%%
 
 \begin{figure}[ht]
-	\centering
-	\includegraphics[width=5in]{../Plots/sim_data.png}
-	\caption{Acceleration data for a five dives of a selected simulated data set. The raw accelerometer data is denoted as $Y^*_{t,\tilde t^*}$ which is recorded at 50 hertz while $\Zone_{t,\tilde t^*}$ and $\Ztwo_{t,\tilde t^*}$ are recorded at 0.5 hertz. The colour of the line corresponds to the true fine-scale state, while the colour of the background corresponds to the true dive type. Subdive state 1 can plausibly be interpreted as ``gliding" while subdive state 2 can plausibly be interpreted as active swimming, or ``fluking".}
-	\label{fig:sim_data}
-\end{figure}
-
-\begin{figure}[ht]
     \centering
     \includegraphics[width=4.5in]{../Plots/Posterior_Coarse_States.png}
     \caption{Estimated probabilities that each dive is of type 2 for 5 selected dives of a simulated data set. The colour of the line corresponds to the true dive type while the colour of the background corresponds to the true subdive state. The CarHMM-DFT is omitted because it assumes that there is only one dive type.}
