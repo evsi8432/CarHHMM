@@ -6,6 +6,7 @@ from matplotlib.patches import Patch
 from matplotlib.transforms import Bbox
 from matplotlib.lines import Line2D
 from matplotlib.ticker import FormatStrFormatter
+from matplotlib.gridspec import GridSpec
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 from scipy.stats import gamma
@@ -141,7 +142,6 @@ class Visualisor:
             nrows = 2 #self.pars.K[0]
             ncols = int((len(features)+1)/2)
 
-        print(nrows,ncols)
         fig, ax = plt.subplots(nrows,ncols,figsize=(max(5,2.5*ncols),max(5,2.5*nrows)))
         ax = np.reshape(ax,(nrows,ncols))
 
@@ -219,6 +219,8 @@ class Visualisor:
 
         if file is None:
             plt.show()
+        elif file == 'noshow':
+            return (fig, ax)
         else:
             plt.tight_layout()
             bbox = Bbox([[0,0],[5,5.5]])
