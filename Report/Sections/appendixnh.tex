@@ -6,7 +6,7 @@
 
 %{\bf{I didn't like the equation numbering restarting at (1), so I used ``setcounter".}}
 
-We easily simulate realizations of the coarse-scale HMM ($X$ and $Y$) given the parameters $\Gamma$ and $\theta$. To simulate data at the fine scale for dive $t$, recall that the fine scale model is based on a sequence of $\tilde T_t^*$ two-second windows, each containing 100 values of raw acceleration. We easily generate the fine-scale hidden Markov process, $\tilde X ^* _{t,\tilde t^*}$, for $\tilde t^*=1,\ldots,\tilde T_t^*$, that determines the sequence of underlying states corresponding to each window according to the specified parameters in $\Gamma^{*(1)}$ and $\Gamma^{*(2)}$. However, generating the raw acceleration data is not straightforward, since our model is formulated in terms of quantities derived from the raw data in each window, namely the average acceleration, $\Zone_{t,\tilde t^*}$, and the wiggliness, $\Ztwo_{ t,\tilde t^*}$. In our simulation study, we generate raw acceleration data so that we can visualize our results in terms of the underlying data curves for each dive. Here, we explain how we generate the acceleration curves so that the derived quantities, $\Zone_{t,\tilde t^*}$ and $\Ztwo_{ t,\tilde t^*}$, follow the specified model. A key component is the discrete Fourier transformation of the 100 raw acceleration values in window $\tilde{t}^*$ of dive $t$:
+We easily simulate realizations of the coarse-scale HMM ($X$ and $Y$) given the parameters $\Gamma$ and $\theta$. For each dive $t$, we also easily generate the fine-scale hidden Markov chain $\tilde X^*_t \equiv \left\{\tilde X^*_{t,1},\ldots,\tilde X^*_{t,\tilde T_t^*}\right\}$ according to one of the probability transition matrices $\Gamma^{*(1)}$ or $\Gamma^{*(2)}$, depending upon the value of $X_t$. This determines the sequence of fine-scale hidden states corresponding to each window. Recall that the fine-scale model is based on a sequence of $\tilde T_t^*$ two-second windows, each containing 100 observations, and our model is formulated in terms of quantities derived from the raw data within each window (namely, the average acceleration, $\Zone_{t,\tilde t^*}$, and wiggliness, $\Ztwo_{ t,\tilde t^*}$). Generating the raw acceleration data from $\Zone_{t,\tilde t^*}$ and $\Ztwo_{ t,\tilde t^*}$ is not straightforward. In our simulation study, we generate raw acceleration data so that we can visualize our results in terms of the underlying data curves for each dive. Here, we explain how we generate the acceleration curves so that $\Zone_{t,\tilde t^*}$ and $\Ztwo_{ t,\tilde t^*}$ both follow the specified model. A key component is the discrete Fourier transformation of the 100 raw acceleration values in window $\tilde{t}^*$ of dive $t$:
 \[
     \hat{Y}^{*(k)}_{t,\tilde{t}^*}  \equiv DFT\left\{Y^*_{t,100 (\tilde{t}^*-1) + 1 },\ldots, Y^*_{t,100 \tilde{t}^*}\right\}(k)
 \]
@@ -15,7 +15,7 @@ for $k \geq 0$, as defined in Equation (\ref{eq:DFTdef}).
 We simulate the raw acceleration data for dive $t$ in three steps: (1) simulate the average acceleration within each window $\left(\hat Y^{*(0)}_{t,\tilde t^*}\right)$, (2) simulate all other Fourier coefficients within each window $\left(\hat Y^{*(k)}_{t,\tilde t^*}, k = 1,\ldots,99\right)$, and (3) take the inverse discrete Fourier transform of $\hat{Y}^*_{t,\tilde t^*}$:
 \[
     \{Y^*_{t,100(\tilde t^* - 1) + 1},\ldots,Y^*_{t,100\tilde t^*}\} \equiv IDFT\left\{\hat{Y}^{*(0)}_{t,\tilde t^*},
-    \ldots \hat{Y}^{*(99)}_{t,\tilde t^*}\right\}
+    \ldots, \hat{Y}^{*(99)}_{t,\tilde t^*}\right\}
     {\rm{~for~}} \tilde t^* = 1,\ldots,\tilde T^*_t.
 \]
 The details of steps (1) and (2) are described below.
@@ -41,8 +41,8 @@ For step (1), we generate $\hat Y^{*(0)}_{t,1}, \ldots, \hat Y^{*(0)}_{t,\tilde 
         \hat{Y}^{*(k)}_{t,\tilde t^*} = a_{t,\tilde t^*}^{(k)} i\sqrt{b^{(k)}_{t,\tilde t^*}}
         \label{eqn:abYhat}
     \end{equation}
-    where the $a^{(k)}_{t,\tilde t^*}$s are independent and equal to either 1 or -1 each with probability 1/2 and $i$ is the imaginary number. We include $i$ in Equation (\ref{eqn:abYhat}) to force all variation within a window to take the form of a sine wave, which reduces the variation between the endpoints of windows compared to a cosine wave.
-    Given the fine scale states, the $b^{(k)}_{t,\tilde t^*}$s are independent  and independent of the  $a^{(k)}_{t,\tilde t^*}$s.  
+    where the $a^{(k)}_{t,\tilde t^*}$'s are independent and equal to either 1 or -1 each with probability 1/2 and $i$ is the imaginary number. We include $i$ in Equation (\ref{eqn:abYhat}) to force all variation within a window to take the form of a sine wave, which reduces the variation between the endpoints of windows compared to a cosine wave.
+    Given the fine scale states, the $b^{(k)}_{t,\tilde t^*}$'s are independent and independent of the  $a^{(k)}_{t,\tilde t^*}$'s.  
    The distribution of $b^{(k)}_{t,\tilde t^*}$ is
     \begin{align}
     \begin{split}
@@ -59,18 +59,18 @@ For step (1), we generate $\hat Y^{*(0)}_{t,1}, \ldots, \hat Y^{*(0)}_{t,\tilde 
     \hat{Y}^{*(50)}_{t,\tilde t^*} = 0 {\rm{~~and ~~}}
 	\hat{Y}^{*(k)}_{t,\tilde t^*} = -\hat{Y}^{*(100-k)}_{t,\tilde t^*} , k = 51,\ldots,99.
 \]
-   This construction guarantees that the inverse discrete Fourier transform is real-valued. 
+   This guarantees that the inverse discrete Fourier transform is real-valued. 
   
 
-We now show that this setup of the raw acceleration data results in the distributions listed in Section \ref{subsec:data_simulation}. It suffices to show that the construction of the discrete Fourier transformations, the $\hat{Y}^{(k)}_{t,\tilde t^*}$s, yields the desired distributions.
+We now show that this construction of the raw acceleration data results in the distributions listed in Section \ref{subsec:data_simulation}. It suffices to show that the construction of the discrete Fourier transformations, the $\hat{Y}^{(k)}_{t,\tilde t^*}$'s, yields the desired distributions.
 
-First, since $\hat{Y}^{(0)}_{t,\tilde t^*} = \sum_{n=1}^{100} Y^*_{t,100(\tilde t^* - 1) + n} $ $=\Zone_{t,\tilde{t}^*}$, Equation (\ref{eqn:yhat_0}) implies that 
+First, since $\hat{Y}^{(0)}_{t,\tilde t^*} = \sum_{n=1}^{100} Y^*_{t,100(\tilde t^* - 1) + n} $ $=100\Zone_{t,\tilde{t}^*}$, Equation (\ref{eqn:yhat_0}) implies that 
 $\Zone_{t,1}, \ldots, \Zone_{t,\tilde{T}^*}$ 
 follows a CarHMM with Normal emissions distributions and parameters 
  $\mu_A^{*(\cdot,1)} = \mu_A^{*(\cdot,2)} = \mu_A^{*(\cdot,i^*)} = 0$,  $\sigma_A^{*(\cdot,1)} = 0.034s$, $\phi_A^{*(\cdot,1)} = 0.98$, $\sigma_A^{*(\cdot,2)} = 0.079s$, and $\phi_A^{*(\cdot,2)} = 0.87$.
 
  From Equations (\ref{eqn:z}) and (\ref{eqn:abYhat}), 
- the  wiggliness in window $\tilde t^*$  of dive $t$ is 
+ the wiggliness within window $\tilde t^*$ of dive $t$ is 
 \[
     \Ztwo_{t,\tilde t^*} = \sum_{k=1}^{\tilde \omega} \big|\big|\hat{Y}^{(k)}_{t,\tilde t^*}\big|\big|^2 =  \sum_{k=1}^{\tilde \omega} b^{(k)}_{t,\tilde t^*}.
 %    \label{eqn:Wb}
@@ -98,13 +98,13 @@ $$\calL_{\text{CarHHMM-DFT}}(\theta,\theta^*,\Gamma,\Gamma^*;y,\z) = \delta P(y_
 In particular,
 %
 \begin{align*}
-P(y_t,\z_t;\theta,\theta^*,\Gamma^*)  = \text{diag}\Big[&f^{(1)}(y_t;\theta^{(1)})\calL_{\text{CarHMM-DFT}}\left(\theta^*,\Gamma^{*(1)};\z_t\right), \ldots , \\
-&f^{(N)}(y_t;\theta^{(N)})\calL_{\text{CarHMM-DFT}}\left(\theta^*,\Gamma^{*(N)};\z_t\right) \Big],
+P(y_t,\z_t;\theta,\theta^*,\Gamma^*)  = \text{diag}\Big[&f^{(1)}(y_t;\theta^{(1)})\calL_{\text{fine}}\left(\theta^*,\Gamma^{*(1)};\z_t\right), \ldots , \\
+&f^{(N)}(y_t;\theta^{(N)})\calL_{\text{fine}}\left(\theta^*,\Gamma^{*(N)};\z_t\right) \Big],
 \end{align*}
 %
-where $f^{(i)}(y_t;\theta^{(i)})$ is the emission distribution of dive duration given that $X_t = i$. The likelihood $\calL_{\text{CarHMM-DFT}}$ corresponds to the fine-scale model and is equal to the following:
+where $f^{(i)}(y_t;\theta^{(i)})$ is the emission distribution of dive duration given that $X_t = i$. The likelihood $\calL_{\text{fine}}$ corresponds to the fine-scale model and is equal to the following:
 %
-$$\calL_{\text{CarHMM-DFT}}\left(\theta^{*},\Gamma^{*(i)};\z_t\right) = \delta^{*(i)} \prod_{\tilde t^* = 2}^{\tilde T^*_t} \Gamma^{*(i)} P(\z_{t,\tilde t^*}|\z_{t,\tilde t^*-1};\theta^*) \mathbf{1}_{N^*},$$
+$$\calL_{\text{fine}}\left(\theta^{*},\Gamma^{*(i)};\z_t\right) = \delta^{*(i)} \prod_{\tilde t^* = 2}^{\tilde T^*_t} \Gamma^{*(i)} P(\z_{t,\tilde t^*}|\z_{t,\tilde t^*-1};\theta^*) \mathbf{1}_{N^*},$$
 %
 where $P(\z_{t,\tilde t^*}|\z_{t,\tilde t^*-1};\theta^*)$ is an $N^* \times N^*$ diagonal matrix with $(i^*,i^*)^{th}$ entry equal to $f^{*(\cdot,i^*)}(\z_{t,\tilde t^*}|\z_{t,\tilde t^*-1}; \theta^{*(\cdot,i^*)})$.
 %
