@@ -122,17 +122,17 @@ Model                       & \multicolumn{1}{c}{Train Time (min)} & \multicolum
     \begin{subfigure}{\textwidth}
     	\centering
     	\includegraphics[width=4in]{../Plots/CarHHMM2-coarse-emissions.png}
-    	\caption{Estimated Gamma probability density functions of dive duration ($Y_t$) corresponding to dive types 1 and 2.}
+    	\caption{Estimated Gamma probability density functions of killer whale dive duration ($Y_t$) for dive types 1 and 2.}
     	\label{fig:coarse_emis}
     \end{subfigure}
     \newline
     \begin{subfigure}{\textwidth}
     	\centering
     	\includegraphics[width=4in]{../Plots/CarHHMM2-fine-emissions.png}
-    	\caption{Estimated Normal conditional densities of the three components of acceleration $\left(\Zone_{t,\tilde t^*}|\Zone_{t,\tilde t^*-1} = \mu_A^{*(\cdot,i^*)}\right)$ plotted on a linear scale and estimated Gamma probability density of wiggliness $\left(\Ztwo_{t,\tilde t^*}\right)$ plotted on a log-log scale. Density functions correspond to subdive states $i^* = 1,2,$ and $3$. Density functions corresponding to acceleration are conditioned on $\Zone_{t,\tilde t^*-1} = \mu_A^{*(\cdot,i^*)}$ because the density function of $\Zone_{t,\tilde t^*}$ itself depends on $\Zone_{t,\tilde t^*-1}$.}
+    	\caption{Estimated Normal conditional densities of the three components of killer whale acceleration $\big(\Zone_{t,\tilde t^*}|\Zone_{t,\tilde t^*-1} = \mu_A^{*(\cdot,i^*)}\big)$ plotted on a linear scale and estimated Gamma probability density of wiggliness $\big(\Ztwo_{t,\tilde t^*}\big)$ plotted on a log-log scale. Density functions correspond to subdive states $i^* = 1,2,$ and $3$. Density functions corresponding to acceleration are conditioned on $\Zone_{t,\tilde t^*-1} = \mu_A^{*(\cdot,i^*)}$ because the density function of $\Zone_{t,\tilde t^*}$ itself depends on $\Zone_{t,\tilde t^*-1}$.}
     	\label{fig:fine_emis}
     \end{subfigure}
-    \caption{Estimated probability density functions for coarse-scale and fine-scale emissions. Densities are estimated by fitting the CarHHMM-DFT to the case study data (see Table \ref{table:emis_dists_CarHHMM-DFT}).}
+    \caption{Estimated probability density functions for coarse-scale and fine-scale emissions corresponding to observations of killer whale behaviour. Densities are estimated by fitting the CarHHMM-DFT to the case study data (see Table \ref{table:emis_dists_CarHHMM-DFT}).}
     \label{fig:emis}
 \end{figure}
 
@@ -165,13 +165,13 @@ Model                       & \multicolumn{1}{c}{Train Time (min)} & \multicolum
 \begin{figure}[ht]
     \centering
     \includegraphics[width=4.5in]{../Plots/Posterior_Coarse_States.png}
-    \caption{Estimated probabilities that each dive is of type 2 for 5 selected dives of a simulated data set. Each panel is partitioned into dives by vertical black lines. The colour of the curve corresponds to the true dive type while the colour of the background corresponds to the true subdive state. The CarHMM-DFT is omitted because it assumes that there is only one dive type.}
+    \caption{Estimated probabilities that each dive is of type 2 for five selected dives of a simulated data set of killer whale dive behaviour. Each panel is partitioned into dives by vertical black lines. The colour of the curve corresponds to the true dive type while the colour of the background corresponds to the true subdive state. The CarHMM-DFT is omitted because it assumes that there is only one dive type.}
     \label{fig:acc_coarse}
 \end{figure}
 
 \begin{figure}[ht]
     \centering
     \includegraphics[width=4.5in]{../Plots/Posterior_Fine_States.png}
-    \caption{Estimated probabilities that each window corresponds to subdive state 2 for 5 selected dives of a simulated data set. Each panel is partitioned into dives by vertical black lines. The colour of the curve corresponds to the true subdive state while the colour of the background corresponds to the true dive type.}
+    \caption{Estimated probabilities that each window corresponds to subdive state 2 for five selected dives of a simulated data set of killer whale dive behaviour. Each panel is partitioned into dives by vertical black lines. The colour of the curve corresponds to the true subdive state while the colour of the background corresponds to the true dive type.}
     \label{fig:acc_fine}
 \end{figure}
