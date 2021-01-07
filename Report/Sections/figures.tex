@@ -5,7 +5,7 @@
 \begin{table}[ht]
 \centering
 \caption{Estimates with standard errors for the parameters of the distributions of dive duration $\left(Y_t\right)$, acceleration $\left(\Zone_{t,\tilde t^*}\right)$, and wiggliness $\left(\Ztwo_{t,\tilde t^*}\right)$ of the killer whale kinematic data using the full CarHHMM-DFT. The parentheses refer to standard errors estimated using the observed information matrix.}
-\scalebox{0.85}{
+\scalebox{0.75}{
 \begin{tabular}{ccccc}
     \multirow{2}{*}{Feature}                                                       & \multirow{2}{*}{Dive / Subdive Type} & \multicolumn{3}{c}{Parameter Estimate (Standard Error)}                      \\
                                                                                    &                                      & $\hat \mu$        & $\hat \sigma$   & $\hat \phi$       \\ \hline
@@ -31,7 +31,7 @@
 \begin{table}[ht]
 \centering
 \caption{Average decoding accuracies and training times for all models used to categorize dive type and subdive state in the simulation study. Each of the four models was fit to 500 training data sets comprised of 100 simulated dives and tested on test data sets also comprised of 100 simulated dives. Reported values are averages, and $\pm$ refers to the sample standard deviation across the 500 data sets. Rows labelled Both/Both correspond to overall average decoding accuracy.}
-\scalebox{0.8}{
+\scalebox{0.7}{
 \begin{tabular}{ccccccc}
 Model                       & \multicolumn{1}{c}{Train Time (min)} & \multicolumn{1}{c}{True Dive Type} & \multicolumn{1}{c}{True Subdive State} & \multicolumn{1}{c}{Dive Accuracy} & \multicolumn{1}{c}{Subdive Accuracy}  \\ \hline
 \multirow{5}{*}{CarHMM-DFT} & \multirow{5}{*}{$70 \pm 11$}   & Both                          & Both                             & -------------                     & $0.93 \pm 0.01$                       \\
@@ -65,7 +65,7 @@ Model                       & \multicolumn{1}{c}{Train Time (min)} & \multicolum
 \begin{figure}[ht]
     \begin{subfigure}{\textwidth}
       \centering
-      \includegraphics[width=4in]{../Plots/HMM.png}  
+      \includegraphics[width=2.75in]{../Plots/HMM.png}  
       \caption{Hidden Markov Model (\textbf{HMM})}
       \label{fig:HMM}
     \end{subfigure}
@@ -74,7 +74,7 @@ Model                       & \multicolumn{1}{c}{Train Time (min)} & \multicolum
     %
     \begin{subfigure}{\textwidth}
       \centering
-      \includegraphics[width=4in]{../Plots/CarHMM.png}  
+      \includegraphics[width=2.75in]{../Plots/CarHMM.png}  
       \caption{Conditionally Autoregressive HMM (\textbf{CarHMM})}
       \label{fig:CarHMM}
     \end{subfigure}
@@ -83,7 +83,7 @@ Model                       & \multicolumn{1}{c}{Train Time (min)} & \multicolum
     %
     \begin{subfigure}{\textwidth}
       \centering
-      \includegraphics[width=4in]{../Plots/HHMM.png}  
+      \includegraphics[width=3.2in]{../Plots/HHMM.png}  
       \caption{Hierarchical HMM (\textbf{HHMM})}
       \label{fig:HHMM}
     \end{subfigure}
@@ -92,11 +92,11 @@ Model                       & \multicolumn{1}{c}{Train Time (min)} & \multicolum
     %
     \begin{subfigure}{\textwidth}
       \centering
-      \includegraphics[width=4in]{../Plots/HMM-DFT.png}  
+      \includegraphics[width=3in]{../Plots/HMM-DFT.png}  
       \caption{HMM with Discrete Fourier Transform (\textbf{HMM-DFT})}
       \label{fig:HMM-DFT}
     \end{subfigure}
-    \caption{Dependence structures of a standard HMM (a) and three HMM variants (b,c, and d). Hidden state sequences are denoted as $X$ on the coarse-scale and $X^*$ at the fine scale. The HHMM shown here has a traditional HMM as both the coarse- and fine-scale model. Observations (or emissions) are denoted by $Y$ on the coarse scale and $Y^*$ on the fine scale. In (d), observations are transformed using a moving window and denoted as $\Z$ with corresponding hidden states $\tilde X^*$.}
+    \caption{Dependence structures of a standard HMM (a) and three HMM variants (b, c, and d). Hidden state sequences are denoted as $X$ on the coarse-scale and $X^*$ at the fine scale. The HHMM shown here has a traditional HMM as both the coarse- and fine-scale model. Observations (or emissions) are denoted by $Y$ on the coarse scale and $Y^*$ on the fine scale. In (d), observations are transformed using a moving window and denoted as $\Z$ with corresponding hidden states $\tilde X^*$.}
     \label{fig:models}
 \end{figure}
 
@@ -121,24 +121,24 @@ Model                       & \multicolumn{1}{c}{Train Time (min)} & \multicolum
 \begin{figure}[ht]
     \begin{subfigure}{\textwidth}
     	\centering
-    	\includegraphics[width=4in]{../Plots/CarHHMM2-coarse-emissions.png}
+    	\includegraphics[width=3in]{../Plots/CarHHMM2-coarse-emissions.png}
     	\caption{Estimated Gamma probability density functions of killer whale dive duration ($Y_t$) for dive types 1 and 2.}
     	\label{fig:coarse_emis}
     \end{subfigure}
     \newline
     \begin{subfigure}{\textwidth}
     	\centering
-    	\includegraphics[width=4in]{../Plots/CarHHMM2-fine-emissions.png}
+    	\includegraphics[width=3in]{../Plots/CarHHMM2-fine-emissions.png}
     	\caption{Estimated Normal conditional densities of the three components of killer whale acceleration $\big(\Zone_{t,\tilde t^*}|\Zone_{t,\tilde t^*-1} = \mu_A^{*(\cdot,i^*)}\big)$ plotted on a linear scale and estimated Gamma probability density of wiggliness $\big(\Ztwo_{t,\tilde t^*}\big)$ plotted on a log-log scale. Density functions correspond to subdive states $i^* = 1,2,$ and $3$. Density functions corresponding to acceleration are conditioned on $\Zone_{t,\tilde t^*-1} = \mu_A^{*(\cdot,i^*)}$ because the density function of $\Zone_{t,\tilde t^*}$ itself depends on $\Zone_{t,\tilde t^*-1}$.}
     	\label{fig:fine_emis}
     \end{subfigure}
-    \caption{Estimated probability density functions for coarse-scale and fine-scale emissions corresponding to observations of killer whale behaviour. Densities are estimated by fitting the CarHHMM-DFT to the case study data (see Table \ref{table:emis_dists_CarHHMM-DFT}).}
+    \caption{Estimated probability density functions of coarse- and fine-scale emissions corresponding to observations of killer whale behaviour. Densities are estimated by fitting the CarHHMM-DFT to the case study data (see Table \ref{table:emis_dists_CarHHMM-DFT}).}
     \label{fig:emis}
 \end{figure}
 
 \begin{figure}[ht]
 	\centering
-	\includegraphics[width=5in]{../Plots/CarHHMM2_decoded_dives.png}
+	\includegraphics[width=4.75in]{../Plots/CarHHMM2_decoded_dives.png}
 	\caption{The $x$--component of acceleration $\left(y^*_{t,t^*}\right)_x$ (top two panels) and dive depth (bottom two panels) of a northern resident killer whale for a sequence of six selected dives. Each panel is partitioned into dives by vertical black lines. The curve colours in the first and third panels correspond to the estimated dive types while the curve colours of the second and fourth panels correspond the estimated subdive states. Both the dive types and subdive states are estimated by fitting the CarHHMM-DFT to the data and performing the forward-backward algorithm to determine the hidden state with the highest probability.}
 	\label{fig:labeled_dives}
 \end{figure}
