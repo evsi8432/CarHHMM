@@ -26,7 +26,7 @@ or with random regression \citep{Rice:2001}.
 %For example, \citet{Rice:2001} use random regression to construct non-parametric mixed effects models for unequally sampled noisy curves. However, the combination of apparent behavioural changes combined with periodic behaviour makes accelerometer data such as ours difficult to model with these classic FDA techniques.
 However, time-series data exhibiting both sharp behavioural changes and periodic fine-scale structure are difficult to model with these classic FDA techniques.
 
-To accommodate temporal dependence and changes in curve type, we turn to the field of
+To accommodate both temporal dependence and changes in curve type, we turn to the field of
 %methodology for the analysis of animal movement 
 %statistical ecology
 animal movement modelling \citep{Hooten:2017}, where one of the most prevalent techniques of late is the hidden Markov model, or HMM \citep{Patterson:2017,McClintock:2020}. HMMs interpret animal movement data as arising from a sequence of unobserved behavioural states, allowing biologists to infer the underlying behaviour of an animal from sequential observations of its position. While ubiquitous in ecology literature, HMMs have seen little use in non-parametric functional modelling with a few notable exceptions. In particular, \citet{Langrock:2018} take a non-parametric approach to model the distributions of HMM observations with B-splines, 
