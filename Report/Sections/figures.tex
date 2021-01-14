@@ -5,7 +5,7 @@
 \begin{table}[ht]
 \centering
 \caption{Estimates with standard errors for the parameters of the distributions of dive duration $\left(Y_t\right)$, acceleration $\left(\Zone_{t,\tilde t^*}\right)$, and wiggliness $\left(\Ztwo_{t,\tilde t^*}\right)$ of the killer whale kinematic data using the full CarHHMM-DFT. The parentheses refer to standard errors estimated using the observed information matrix.}
-\scalebox{0.75}{
+\scalebox{0.85}{
 \begin{tabular}{ccccc}
     \multirow{2}{*}{Feature}                                                       & \multirow{2}{*}{Dive / Subdive Type} & \multicolumn{3}{c}{Parameter Estimate (Standard Error)}                      \\
                                                                                    &                                      & $\hat \mu$        & $\hat \sigma$   & $\hat \phi$       \\ \hline
@@ -83,7 +83,7 @@ Model                       & \multicolumn{1}{c}{Train Time (min)} & \multicolum
     %
     \begin{subfigure}{\textwidth}
       \centering
-      \includegraphics[width=3.2in]{../Plots/HHMM.png}  
+      \includegraphics[width=3in]{../Plots/HHMM.png}  
       \caption{Hierarchical HMM (\textbf{HHMM})}
       \label{fig:HHMM}
     \end{subfigure}
@@ -92,11 +92,11 @@ Model                       & \multicolumn{1}{c}{Train Time (min)} & \multicolum
     %
     \begin{subfigure}{\textwidth}
       \centering
-      \includegraphics[width=3in]{../Plots/HMM-DFT.png}  
+      \includegraphics[width=2.75in]{../Plots/HMM-DFT.png}  
       \caption{HMM with Discrete Fourier Transform (\textbf{HMM-DFT})}
       \label{fig:HMM-DFT}
     \end{subfigure}
-    \caption{Dependence structures of a standard HMM (a) and three HMM variants (b, c, and d). Hidden state sequences are denoted as $X$ on the coarse-scale and $X^*$ on the fine scale. Likewise, observations (or emissions) are denoted by $Y$ on the coarse scale and $Y^*$ on the fine scale. The HHMM shown here has a traditional HMM as both the coarse- and fine-scale model. In (d), observations are transformed using a moving window and denoted as $\Z$ with corresponding hidden states $\tilde X^*$.}
+    \caption{Dependence structures of a standard HMM (a) and three HMM variants (b, c, and d). Hidden state sequences are denoted as $X$ on the coarse-scale and $X^*$ on the fine scale. Observations are denoted as $Y$ on the coarse scale and $Y^*$ on the fine scale. The HHMM shown has a traditional HMM as both the coarse- and fine-scale model. In (d), observations are transformed using a moving window and denoted as $\Z$ with corresponding hidden states $\tilde X^*$.}
     \label{fig:models}
 \end{figure}
 

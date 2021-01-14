@@ -33,7 +33,7 @@ animal movement modelling \citep{Hooten:2017}, where one of the most prevalent t
 %This is useful for both incorporating covariates and flexibly describing complex data, since these functions are non-parametric and take covariates as arguments. 
 but this approach does not account for certain types of temporal correlation.
 
-While useful, HMMs alone are also not sufficient to model intricate fine-scale time-series data for three primary reasons.
+While useful, HMMs alone are also not sufficient to model high-frequency time-series data for three primary reasons.
 %
 Firstly, HMMs assume that subsequent observations are independent given an underlying hidden state process, but this is often not the case when observations are taken at extremely high frequencies. 
 Several solutions have been proposed in the ecology literature such as the hidden movement Markov model \citep{Whoriskey:2016} and the conditionally auto-regressive hidden Markov model, or CarHMM \citep{Lawler:2019}. 
@@ -42,7 +42,7 @@ Several solutions have been proposed in the ecology literature such as the hidde
 Secondly, classic HMMs fail to model simultaneous behavioural processes that occur at different time scales (i.e., both between and within curves). 
 To address this issue, statistical ecologists have employed hierarchical hidden Markov models (HHMMs) \citep{Barajas:2017,Adam:2019}, which model both scales with conditionally dependent HMMs.
 %
-Thirdly, traditional HMMs, CarHMMs, and HHMMs cannot easily capture complicated dependence structures at short time scales. For example, \citet{Adam:2019} fail to capture fine-scale periodic swimming pattern of horn sharks (\textit{Heterodontus francisci}) using a traditional HHMM. \citet{Heerah:2017} successfully use Fourier analysis within an HMM to account for %periodic behaviour in the context of describing 
+Thirdly, traditional HMMs, CarHMMs, and HHMMs cannot easily capture complicated dependence structures on short time scales. For example, \citet{Adam:2019} fail to capture fine-scale periodic swimming pattern of horn sharks (\textit{Heterodontus francisci}) using a traditional HHMM. \citet{Heerah:2017} successfully use Fourier analysis within an HMM to account for %periodic behaviour in the context of describing 
 daily behavioural cycles in marine mammals, and Fourier analysis has previously been used with accelerometer data to explain animal behaviour \citep{Fehlmann:2017,Shorter:2017}. Thus, incorporating Fourier analysis within the structure of an HMM appears to be a promising approach to account for fine-scale periodic structures.
 
 %While animal movement modellers have taken steps to solve each of these issues independently, to our knowledge there is no unifying framework combining the three together. 
