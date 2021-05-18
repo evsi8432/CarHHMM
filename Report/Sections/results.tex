@@ -22,8 +22,8 @@ We do not use information criteria to select the number of dive types $N$ since 
 Prior to fitting the model, lag plots reveal no significant auto-correlation between dive duration observations (see Figure 1 of the supplementary material), and visual inspection shows no obvious complicated dependence. Therefore, we select a simple HMM to model the coarse-scale process since neither a CarHMM nor a moving-window transformation is called for.
 %
 Given that dive $t$ is of type $i$, we assume that the dive duration $Y_t$ follows a Gamma distribution with unknown parameters $\mu^{(i)}$ and $\sigma^{(i)}$:
-%
-$$\mathbb{E}(Y_t|X_t = i) = \mu^{(i)}, \qquad \mathbb{V}(Y_t|X_t = i) = \left(\sigma^{(i)}\right)^2.$$
+
+\[\mathbb{E}(Y_t|X_t = i) = \mu^{(i)}, \qquad \mathbb{V}(Y_t|X_t = i) = \left(\sigma^{(i)}\right)^2.\]
 %
 This is consistent with previous studies, including that of \citet{Barajas:2017}. 
 %
@@ -41,7 +41,7 @@ To specify the emission distribution of $\Ztwo_{t,\tilde t^*}$, we assume that g
 %We assume $\Zone_{t,\tilde t^*}$ is Normally distributed with auto-correlation while $\Ztwo_{t,\tilde t^*}$ is Gamma distributed without auto-correlation. We also assume that $\Ztwo_{t,\tilde t^*}$ and all components of $\Zone_{t,\tilde t^*}$ are each independent of one another when conditioned on the subdive state. The emission distribution of each subdive state does not depend upon the dive type. 
 
 In total, the parameters to estimate are
-%
+
 \begin{gather*}
     \Gamma, \qquad \Gamma^{*} = \{\Gamma^{*(1)},\Gamma^{*(2)}\} \qquad \text{(probability transition matrices)}, \\
     %
@@ -72,7 +72,7 @@ To illustrate an application of this method and compare the candidate models, we
 
 The coarse-scale parameter estimates suggest that the killer whale has at least two distinct dive behaviours (see Table \ref{table:emis_dists_CarHHMM-DFT} and Figure \ref{fig:coarse_emis}). 
 Dive type 1 corresponds to shorter, shallower dives which likely reflect resting, travelling, and to a lesser extent searching for prey.
-Dive type 2 is longer, deeper, and may be associated with behaviours such as hunting  \citep{Tennessen:2019b}, but it is unclear whether any of the dives in this study are successful foraging dives. No dive in this data set has a maximum depth deeper than 30 meters and a study by \citet{Wright:2017} of killer whales in Johnstone Strait found that most prey captures occur at depths deeper than 100 meters. However, the killer whale studied here was tagged north of Johnstone Strait in Queen Charlotte Sound, and significant numbers of fish have been observed to be caught near the surface (Fortune and Trites, unpublished data). Dive type 2 could also be associated with behaviours such as socializing that can take place several meters below the surface \citep{Tennessen:2019b}.
+Dive type 2 is longer, deeper, and may be associated with behaviours such as hunting  \citep{Tennessen:2019b}, but it is unclear whether any of the dives in this study are successful foraging dives. No dive in this data set has a maximum depth deeper than 30 meters and a study by \citet{Wright:2017} of killer whales in Johnstone Strait found that most prey captures occur at depths deeper than 100 meters. However, the killer whale studied here was tagged north of Johnstone Strait in Queen Charlotte Sound, and significant numbers of fish have been observed to be caught near the surface \citep{Fortune:2020}. Dive type 2 could also be associated with behaviours such as socializing that can take place several meters below the surface \citep{Tennessen:2019b}.
 
 The means of ``wiggliness" $\big(\Ztwo_{t,\tilde t^*}\big)$ associated with each subdive state are separated by an order of magnitude (see Table \ref{table:emis_dists_CarHHMM-DFT} and Figure \ref{fig:fine_emis}). 
 Subdive state 1 has the smallest mean corresponding to $\Ztwo_{t,\tilde t^*}$ and the smallest variance corresponding to $\Zone_{t,\tilde t^*}$. It also has the highest auto-correlation in $\Zone_{t,\tilde t^*}$. This implies less overall activity and more consistent acceleration compared to the other subdive states. 
@@ -80,15 +80,17 @@ Subdive state 2 has a mean ``wiggliness" $\big(\Ztwo_{t,\tilde t^*}\big)$ one or
 Finally, the mean of $\Ztwo_{t,\tilde t^*}$ and variance of $\Zone_{t,\tilde t^*}$ in subdive state 3 are both much higher than in the other two states, and the auto-correlation of $\Zone_{t,\tilde t^*}$ is also much lower. This corresponds to vigorous swimming activity, especially as the killer whale begins or ends a dive (see Figure \ref{fig:labeled_dives}). 
 
 The estimated probability transition matrices and associated stationary distributions on the coarse scale are
-%
-$$\hat \Gamma = \begin{pmatrix} 
+
+\[\hat \Gamma = \begin{pmatrix} 
 0.788 & 0.212 \\
 0.809 & 0.191
-\end{pmatrix} \text{ and }$$
-$$\hat \delta = \begin{pmatrix} 0.792 & 0.208 \end{pmatrix}$$
+\end{pmatrix} \text{ and }\]
+
+\[\hat \delta = \begin{pmatrix} 0.792 & 0.208 \end{pmatrix}\]
 %
 for the transitions between dives. The estimated probability transition matrices and stationary distributions on the fine scale are 
-$$\hat \Gamma^{*(1)} = \begin{pmatrix} 
+
+\[\hat \Gamma^{*(1)} = \begin{pmatrix} 
 0.679 & 0.321 & 0.000 \\
 0.038 & 0.904 & 0.058 \\
 0.000 & 0.232 & 0.768
@@ -97,8 +99,9 @@ $$\hat \Gamma^{*(1)} = \begin{pmatrix}
 0.859 & 0.141 & 0.000 \\
 0.114 & 0.841 & 0.045 \\
 0.000 & 0.216 & 0.784
-\end{pmatrix},$$
-$$\hat \delta^{*(1)} = \begin{pmatrix} 0.087 & 0.731 & 0.182 \end{pmatrix}, \enspace \text{and} \enspace \hat \delta^{*(2)} = \begin{pmatrix} 0.401 & 0.496 & 0.103 \end{pmatrix}$$
+\end{pmatrix},\]
+
+\[\hat \delta^{*(1)} = \begin{pmatrix} 0.087 & 0.731 & 0.182 \end{pmatrix}, \enspace \text{and} \enspace \hat \delta^{*(2)} = \begin{pmatrix} 0.401 & 0.496 & 0.103 \end{pmatrix}\]
 %
 for dive types 1 and 2.
 %The estimated coarse-scale stationary distribution, $\hat{\delta}$, indicates that 
