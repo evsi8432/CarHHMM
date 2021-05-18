@@ -23,8 +23,8 @@ If $X_t=i$ then we denote the conditional density or probability mass function o
 %
 
 Using observation emissions, denoted here as $y \equiv \{y_1,\ldots,y_T\}$, we can find the maximum likelihood estimates of the parameters $\Gamma$ and $\theta \equiv \{\theta^{(1)},\ldots,\theta^{(N)}\}$. The likelihood $\calL_{\text{HMM}}$ can be evaluated using the well-known \textit{forward algorithm} \citep{Zucchini:2016}:
-%
-$$\calL_{\text{HMM}}(\theta,\Gamma;y) = \delta P(y_1;\theta) \prod_{t=2}^T \Gamma P(y_t;\theta) \mathbf{1}_N,$$
+
+\[\calL_{\text{HMM}}(\theta,\Gamma;y) = \delta P(y_1;\theta) \prod_{t=2}^T \Gamma P(y_t;\theta) \mathbf{1}_N,\]
 %
 where $\mathbf{1}_N$ is an $N$-dimensional column vector of ones and
 %
@@ -32,7 +32,7 @@ $P(y_t;\theta)$ is an $N \times N$ diagonal matrix with $(i,i)^{th}$ entry $f^{(
 %
 
 Following \citet{Barajas:2017}, we reparameterize the $N \times N$ transition probability matrix $\Gamma$ such that the entries of the matrix are forced to be non-negative and the rows sum to 1:
-%
+
 \[
 \Gamma_{ij} = \frac{\exp(\eta_{ij})}{\sum_{k=1}^N \exp(\eta_{ik})}, 
 \]
@@ -44,18 +44,19 @@ where $i,j = 1,\ldots,N$ and $\eta_{ii}$ is set to zero for identifiability. Thi
 
 A conditionally auto-regressive hidden Markov model, or CarHMM \citep{Lawler:2019}, is a generalization of an HMM which explicitly models auto-correlation in the observation sequence beyond the correlation induced by the hidden state process. Like a traditional HMM, a CarHMM is made up of a Markov chain of unobserved states $\{X_1,\ldots,X_T\}$ each taking integer values between $1$ and $N$. A CarHMM also has a transition probability matrix $\Gamma$ and initial distribution $\delta$ equal to the stationary distribution of $\Gamma$. Unlike a traditional HMM, the CarHMM assumes that the distribution of $Y_t$ conditioned on $X_1,\ldots, X_T$ and $Y_1,\ldots, Y_{t-1}$ depends on both $X_t$ and $Y_{t-1}$ rather than only $X_t$. The first emission $Y_1$ is treated as a fixed initial value which does not depend upon $X_1$. We denote the conditional density or probability mass function of $Y_t$ given $Y_{t-1} = y_{t-1}$ and $X_t=i$ as $f^{(i)}(\cdot | y_{t-1}; \theta^{(i)})$ or simply $f^{(i)}(\cdot | y_{t-1})$. This model is highly general, as $f^{(i)}(\cdot | y_{t-1})$ can be any valid density or probability mass function that depends upon the parameters $\theta^{(i)}$ and the previous observation $Y_{t-1}$. 
 As a concrete example, if $Y_t$ is a scalar, then one may assume that $Y_t$ given $X_t = i$ is Normally distributed with parameters $\theta^{(i)} = \{\mu^{(i)},\sigma^{(i)},\phi^{(i)}\}$, where:
-%
+
 \begin{align}
 \label{eqn:carhmm}
-\begin{split}
-\mathbb{E}(Y_{t}|Y_{t-1} = y_{t-1},X_t=i) &= \phi^{(i)} ~ y_{t-1} ~+ ~(1-\phi^{(i)})  ~\mu^{(i)}, \\
-\mathbb{V}(Y_t| Y_{t-1} = y_{t-1},X_t=i) &= (\sigma^{(i)})^2.
-\end{split}
+    \begin{split}
+    \mathbb{E}(Y_{t}|Y_{t-1} = y_{t-1},X_t=i) &= \phi^{(i)} ~ y_{t-1} ~+ ~(1-\phi^{(i)})  ~\mu^{(i)}, \\
+    \mathbb{V}(Y_t| Y_{t-1} = y_{t-1},X_t=i) &= (\sigma^{(i)})^2.
+    \end{split}
 \end{align}
 %
 A CarHMM which follows Equation (\ref{eqn:carhmm}) can be viewed as a discrete time version of a state-switching Ornstein-Uhlenbeck process \citep{Michelot:2019}. This follows in the same way that an AR(1) process is the discrete-time version of a traditional Ornstein-Uhlenbeck process. 
 
 As previously, the likelihood corresponding to a general CarHMM can be easily calculated using the forward algorithm. If $y$ is the sequence of observed emissions, then
+
 \begin{equation*}
     \calL_{\text{CarHMM}}(\theta,\Gamma;y) = \delta \prod_{t=2}^T \Gamma P(y_t|y_{t-1};\theta) \mathbf{1}_N,
     \label{eqn:CarHMM_likelihood}
@@ -70,6 +71,7 @@ $P(y_t|y_{t-1};\theta)$ is an $N \times N$ diagonal matrix with $(i,i)^{th}$ ent
 A hierarchical hidden Markov model, or HHMM, accounts for processes occurring simultaneously at different scales by modelling both the coarse-scale process and fine-scale process with either HMMs \citep{Barajas:2017,Adam:2019} or CarHMMs. The coarse-scale model is either an HMM and CarHMM as defined in Sections \ref{subsec:HMM} and \ref{subsec:CarHMM}, where $\{X_1, \ldots, X_T\}$ is an unobserved Markov chain with $N$ possible states and $\{Y_1, \ldots, Y_T\}$ is the set of corresponding observations with state-dependent parameters $\theta^{(i)}$ for $i = 1,\ldots,N$.   
 %
 In the hierarchical setting, however, each state $X_t$ also emits another sequence of fine-scale unobserved states, $X_t^* \equiv \{X_{t,1}^*,\ldots, X_{t,T_t^*}\}$, which in turn emits a sequence of fine-scale observations $Y_t^* \equiv \{Y_{t,1}^*,\ldots, Y_{t,T_t^*}\}$. For each curve $t$, the fine-scale process $\{X_t^*, Y_t^*\}$ follows another HMM (or CarHMM) whose parameters depend on the value of $X_t$. If $X_t = i$, then the components of $X_t^*$ make up a Markov chain that has $N^{*(i)}$ possible states, an $N^{*(i)} \times N^{*(i)}$ transition probability matrix $\Gamma^{*(i)}$, and an initial distribution $\delta^{*(i)}$ which we assume is equal to the stationary distribution of the chain. The distribution of $Y^*_{t,t^*}$ given $Y^*_{t,t^*-1} = y^*_{t,t^*-1}$, $X^*_{t,t^*}=i^*$, and $X_t=i$ is governed by the parameter $\theta^{*(i,i^*)}$ and has density or probability mass function denoted $f^{*(i,i^*)}\left(\cdot|y^*_{t,t^*-1}; \theta^{*(i,i^*)}\right)$ or simply $f^{*(i,i^*)}(\cdot|y^*_{t,t^*-1})$. We denote the set of fine-scale emission parameters corresponding to $X_t=i$ as $\theta^{*(i)}=\big\{\theta^{*(i,1)}, \ldots, \theta^{*\left(i,N^{*(i)}\right)}\big\}$. In summary:
+
 %
 % this is new
 %
@@ -95,7 +97,7 @@ Let $y$ be the sequence of observed coarse-scale emissions and
 $y^* \equiv \{y^*_1, \ldots,y^*_T\}$ be the collection of $T$ observed fine-scale emission vectors.
 %
 In addition, let $\theta^* \equiv \{\theta^{*(1)}, \ldots, \theta^{*(N)}\}$ denote the collection of all fine-scale emission parameters and $\Gamma^* \equiv \{\Gamma^{*(1)}, \ldots, \Gamma^{*(N)}\}$ denote the collection of all fine-scale transition probability matrices. The likelihood of the observed data is then
-%
+
 \begin{equation}
     \calL_{\text{HHMM}}(\theta,\theta^*,\Gamma,\Gamma^*;y,y^*) = \delta P_m(y_1,y_1^*;\theta,\theta^*,\Gamma^*) \prod_{t=2}^T \Gamma P_m(y_t,y_t^*|y_{t-1};\theta,\theta^*,\Gamma^*) \mathbf{1}_N,
     \label{eqn:HHMM_likelihood}
@@ -117,14 +119,14 @@ The fine-scale likelihood $\calL_{\text{fine}}$ corresponds to the likelihood of
 In many applications where data are collected at high frequencies, intricate dependency structures arise within the fine-scale process that cannot be adequately modelled with the HMM-based models described thus far. 
 %For example, the accelerometer data in Figure \ref{fig:data} sporadically displays clear periodic behaviour. 
 To handle these additional fine-scale structures, we recommend replacing $Y_t^* = \{Y^*_{t,1},\ldots,Y^*_{t,T^*_t}\}$ with relevant statistics that summarize any non-Markovian behaviour. To maintain the temporal structure of the fine-scale process, local summary statistics can be calculated from a moving window over the elements of $Y_t^*$. Subject matter experts are often required to determine the specific summary statistics employed as well as the optimal window size and stride length of the moving window. Stride length refers to the distance between the first element of consecutive windows, so a stride length of $h$ implies that the first window starts at $Y^*_{t,1}$, the second at $Y^*_{t,h+1}$, and so on. Larger stride lengths result in a loss of information but also reduce the dimension of the fine-scale process, which allows for faster model fitting. In addition, setting the stride length equal to the window size avoids artificial residual correlation arising from overlapping windows. For our case study, we use the discrete Fourier transform (DFT) of a moving forward window of width $h$ and stride $h$ across $Y^*_t$. Namely:
-%
+
 \begin{align}
     DFT\{Y^*_{t,t^*},\ldots, Y^*_{t,t^*+h-1}\}(k) = \sum_{n=0}^{h-1} Y^*_{t,t^*+n}\exp\left(-\frac{i 2\pi}{h} kn \right)
     \label{eq:DFTdef}
 \end{align}
 %
 for $t^* = 1,h+1,2h+1,\ldots$ and $k = 0, 1, \ldots, h-1$ with $i = \sqrt{-1}$. If $Y^*_{t,t^*}$ is a vector then the DFT is taken component-wise. We omit the final window if $t^*+h-1$ exceeds $T^*_t$, denote the total number of windows as $\tilde T^*_t$, and index each window with $\tilde{t}^* = 1,\ldots,\tilde T^*_t$. Next, we calculate transformed observations $\Z_{t,\tilde{t}^*} \equiv \{\Zone_{t,\tilde{t}^*},\Ztwo_{t,\tilde{t}^*}\}$:
-%
+
 \begin{equation}
     \label{eqn:z}
     \Zone_{t,\tilde{t}^*} \equiv \frac{1}{h}\sum_{n=1}^{h}Y^*_{t,h(\tilde{t}^*-1)+n}, \quad \Ztwo_{t,\tilde{t}^*} \equiv \sum_{k=1}^{\tilde{\omega}}\Big|\Big|DFT\{Y^*_{t,h(\tilde{t}^*-1)+1},\ldots, Y^*_{t,h\tilde{t}^*}\}(k)\Big|\Big|_2^2,
@@ -146,9 +148,9 @@ Traditional HHMMs treat both the coarse-scale and the fine-scale processes as re
 %where $P(y_t,y^*_t|y_{t-1};\theta,\theta^*) $ is an $N \times N$ diagonal matrix with $(i,i)^{th}$ entry corresponding to $X_t=i$ and equal to $f^{(i)}\left(y_t|y_{t-1};\theta^{(i)}\right)\calL_{\text{HMM}}\left(\theta^{*(i)};y^*_t\right)$. 
 However, the fine-scale observations of a particular dive $Y^*_t$ can be modelled using a large variety of parametric models which admit easy-to-compute likelihoods or penalized likelihoods. As such, the fine-scale HMM likelihood term $\calL_{\text{fine}}$ in Equation (\ref{eqn:HHMM_likelihood}) can be replaced by the likelihood of a general fine-scale model whose parameters depend upon the coarse-scale hidden state.
 %$\calL_{\text{fine}}(\theta^{*(i)};y^*_t)$:
-%$$
+%\[
 %\calL_{\text{coarse}}(\theta,\theta^*,\Gamma;y,y^*) = \delta P(y_1,y^*_1;\theta,\theta^*) \prod_{t=2}^T \Gamma P(y_t,y^*_t;\theta,\theta^*) \mathbf{1}_N,
-%$$
+%\]
 %where $P(y_t,y^*_t;\theta,\theta^*) $ is an $N \times N$ diagonal matrix with $(i,i)^{th}$ entry corresponding to $X_t=i$ and equal to $f^{(i)}\left(y_t;\theta^{(i)}\right)\calL_{\text{fine}}\left(\theta^{*(i)};y^*_t\right)$. 
 %
 Possible candidates for the fine-scale model include any of the models described in the previous subsections in addition to many others not described here. 

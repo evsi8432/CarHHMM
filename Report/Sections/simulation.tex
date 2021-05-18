@@ -7,21 +7,21 @@ We perform a simulation study based on data generated from the full CarHHMM-DFT 
 \label{subsec:data_simulation}
 
 We generate 500 independent training data sets using the CarHHMM-DFT as a generative model. Each training data set consists of a sequence of 100 curves which we call a sequence of killer whale dives. Each dive can be one of $N=2$ dive types based on a Markov chain with probability transition matrix
-%
-$$\Gamma = \begin{pmatrix} 0.79 & 0.21 \\ 0.81 & 0.19 \end{pmatrix}.$$
+
+\[\Gamma = \begin{pmatrix} 0.79 & 0.21 \\ 0.81 & 0.19 \end{pmatrix}.\]
 %
 Dive duration is Gamma distributed and the coarse-scale emission parameters are 
-%
+
 \[\mu^{(1)} = 25.7s, \enspace \sigma^{(1)} = 9.6s, \enspace \mu^{(2)} = 104.6s, \enspace \sigma^{(2)} = 64.7s.\]
 %
 After generating the dive durations for all 100 dives in a data set, dive $t$ is broken into a sequence of $\tilde T^*_t = \lfloor Y_t/2 \rfloor$ two-second windows, where the last $Y_t - 2 \tilde T^*_t$ seconds of each simulated dive are ignored. Each two-second segment is assigned one of $N^*=2$ behaviours according to a fine-scale Markov chain $\tilde X^*_t \equiv \big\{\tilde X^*_{t,1}, \ldots, \tilde X^*_{t,\tilde T^*_t} \big\}$ with probability transition matrices
-%
+
 \[\Gamma^{*(1)} = \begin{pmatrix} 0.68 & 0.32 \\ 0.05 & 0.95 \end{pmatrix} \quad \text{ and } \quad \Gamma^{*(2)} = \begin{pmatrix} 0.86 & 0.14 \\ 0.15 & 0.85 \end{pmatrix}\]
 %
 for dive types 1 and 2, respectively.
 Instead of generating the raw observations $Y^*_{t,t^*}$, we directly simulate the fine-scale transformed observations $\Z_{t,\tilde t^*} = \big\{\Zone_{t,\tilde t^*}, \Ztwo_{t,\tilde t^*}\big\}$. Recall from Section \ref{subsec:model_selection} that we must specify the mean, standard deviation, and auto-correlation parameters corresponding to $\big\{\Zone_{t,1},\ldots,\Zone_{t,\tilde T_t^*}\big\}$ as well as the mean and standard deviation parameters corresponding to $\big\{\Ztwo_{t,1},\ldots,\Ztwo_{t,\tilde T_t^*}\big\}$. We select the following parameters in line with the results from the case study:
 %$\Zone_{t,\tilde t^*}$ and $\Ztwo_{t,\tilde t^*}$ are independent when conditioned on all dive types and subdive states. Each observation of acceleration $\Zone_{t,\tilde t^*}$ is Normally-distributed with explicit auto-correlation while each observation of wiggliness $\Ztwo_{t,\tilde t^*}$ is Gamma-distributed without explicit auto-correlation. In particular, we set the distributions of $\Zone_{t,\tilde t^*}$ and $\Ztwo_{t,\tilde t^*}$ with the following parameters:
-%
+
 \begin{gather*}
     \mu_A^{*(\cdot,1)} = 0.0 s, \enspace \sigma_A^{*(\cdot,1)} = 0.034s, \enspace \phi_A^{*(\cdot,1)} = 0.98, \\
     %
