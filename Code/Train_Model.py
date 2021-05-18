@@ -27,12 +27,17 @@ import Parameters
 import HHMM
 import Visualisor
 
-np.random.seed(0)
+rand_seed = int(sys.argv[1])
+model = str(sys.argv[2])
 
-model = str(sys.argv[1])
+np.random.seed(rand_seed)
 
 # set parameters
 pars = Parameters.Parameters()
+
+pars.cvc_file = '../Data/2019/20190902-182840-CATs_OB_1.cvc'
+pars.csv_file = '../Data/2019/20190902-182840-CATs_OB_1_001.csv'
+
 pars.features = [{'dive_duration':{'corr':False,'f':'gamma'}},
                  {'Ahat_low':{'thresh':5,'corr':False,'f':'gamma'},
                   'Ax':{'corr':True,'f':'normal'},
@@ -53,8 +58,8 @@ elif model == 'CarHHMM1':
                         'Az':{'corr':True,'f':'normal'}}
 
 # define files
-HHMM_file = '../Params/%s_k_%s_%s_dives_same_fine_states_long' % (model,pars.K[0],pars.K[1])
-data_outfile = '../Params/Data_%s_k_%s_%s_dives_same_fine_states_long' % (model,pars.K[0],pars.K[1])
+HHMM_file = '../Params/%s_k_%s_%s_%s' % (model,pars.K[0],pars.K[1],rand_seed)
+data_outfile = '../Params/data_%s_k_%s_%s_%s' % (model,pars.K[0],pars.K[1],rand_seed)
 
 # preprocess data
 prep = Preprocessor.Preprocessor(pars)
@@ -78,7 +83,7 @@ data = prep.get_all_features(df,dive_df)
 # train_model
 print('training model')
 hhmm = HHMM.HHMM(pars,data)
-hhmm.train_DM(data,max_iters=10,max_steps=5)
+hhmm.train_DM(data,max_iters=10,max_steps=10)
 
 # get SEs
 h = 0.01

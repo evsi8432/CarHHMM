@@ -67,7 +67,9 @@ class Parameters:
                           'bottom_variance':{'corr':False,'f':'gamma'},
                           'dive_duration':{'corr':False,'f':'gamma'}},
 
-                         {'A':{'corr':True,'f':'multivariate_normal'},
+                         {'Ax':{'corr':True,'f':'normal'},
+                          'Ay':{'corr':True,'f':'normal'},
+                          'Az':{'corr':True,'f':'normal'},
                           'FoVeDBA_low':{'thresh':5,'corr':True,'f':'gamma'},
                           'FoVeDBA_high': {'thresh':5,'corr':True,'f':'gamma'},
                           'Vz': {'corr':True,'f':'normal'},

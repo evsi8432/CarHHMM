@@ -65,7 +65,7 @@ class HHMM:
         self.train_time = None
         self.CM = None
 
-        eta_crude = -1.0 + 0.1*np.random.normal(size=(self.pars.K[0],self.pars.K[0]))
+        eta_crude = -2.0 + np.random.normal(size=(self.pars.K[0],self.pars.K[0]))
         ptm_crude = np.exp(eta_crude)
         ptm_crude = (ptm_crude.T/np.sum(ptm_crude,1)).T
 
@@ -75,7 +75,7 @@ class HHMM:
         eta_fine = []
         ptm_fine = []
         for _ in range(self.pars.K[0]):
-            eta_fine_k = -1.0 + 0.1*np.random.normal(size=(self.pars.K[1],self.pars.K[1]))
+            eta_fine_k = -2.0 + np.random.normal(size=(self.pars.K[1],self.pars.K[1]))
             ptm_fine_k = np.exp(eta_fine_k)
             ptm_fine_k = (ptm_fine_k.T/np.sum(ptm_fine_k,1)).T
             eta_fine.append(eta_fine_k)
@@ -137,10 +137,20 @@ class HHMM:
                     else:
                         theta[0][feature]['sig'][k0] = 1.0
 
-                # finally update correlations randomly
-                theta[0][feature]['corr'] = np.random.random(size=K) - 2.0
+                # initialize correlations
+                theta[0][feature]['corr'] = -1.0 * np.ones(K)
 
-
+                # add randomness in initialization
+                if settings['f'] == 'normal':
+                    theta[0][feature]['mu'] += norm.rvs(np.zeros(K),np.abs(theta[0][feature]['mu']))
+                    theta[0][feature]['sig'] *= np.exp(norm.rvs(0.0,1.0,size=K))
+                    theta[0][feature]['corr'] += norm.rvs(0.0,1.0,size=K)
+                elif settings['f'] == 'gamma':
+                    theta[0][feature]['mu'] *= np.exp(norm.rvs(0.0,1.0,size=K))
+                    theta[0][feature]['sig'] *= np.exp(norm.rvs(0.0,1.0,size=K))
+                    theta[0][feature]['corr'] += norm.rvs(0.0,1.0,size=K)
+                else:
+                    pass
 
         # then fill in the subdive level values
         theta.append([{} for _ in range(K)])
@@ -166,7 +176,6 @@ class HHMM:
                         theta[1][k0][feature]['mu'] = np.mean(feature_data)*np.ones(K)
                     else:
                         theta[1][k0][feature]['mu'] = np.quantile(feature_data,quantiles)
-                    theta[1][k0][feature]['mu'] *= norm.rvs(1,0.01)
 
                     # then get varaince of each quantile set of data
                     data_sorted = np.sort(feature_data)
@@ -177,10 +186,21 @@ class HHMM:
                             theta[1][k0][feature]['sig'][k1] = max(0.1,std)
                         else:
                             theta[1][k0][feature]['sig'][k1] = 1.0
-                        theta[1][k0][feature]['sig'][k1]*= norm.rvs(1,0.01)
 
                     # finally update correlations randomly
-                    theta[1][k0][feature]['corr'] = 0.1*np.random.random(size=K) - 1.0
+                    theta[1][k0][feature]['corr'] = -1.0 * np.ones(K)
+
+                    # add randomness in initialization
+                    if settings['f'] == 'normal':
+                        theta[1][k0][feature]['mu'] += norm.rvs(np.zeros(K),np.abs(theta[1][k0][feature]['mu']))
+                        theta[1][k0][feature]['sig'] *= np.exp(norm.rvs(0.0,1.0,size=K))
+                        theta[1][k0][feature]['corr'] += norm.rvs(0.0,1.0,size=K)
+                    elif settings['f'] == 'gamma':
+                        theta[1][k0][feature]['mu'] *= np.exp(norm.rvs(0.0,1.0,size=K))
+                        theta[1][k0][feature]['sig'] *= np.exp(norm.rvs(0.0,1.0,size=K))
+                        theta[1][k0][feature]['corr'] += norm.rvs(0.0,1.0,size=K)
+                    else:
+                        pass
 
         self.theta = theta
 
@@ -477,6 +497,7 @@ class HHMM:
             for i in range(self.pars.K[0]):
                 backup = deepcopy(self.eta[0][i,:])
                 backup_l = deepcopy(self.likelihood(data))
+
                 def loss_fn(x):
 
                     # update crude eta
@@ -627,21 +648,23 @@ class HHMM:
                     for k0 in range(K0):
                         for param in ['mu','sig','corr']:
 
-                            backup = deepcopy(self.theta[1][k0][feature][param][k1])
-                            backup_l = deepcopy(self.likelihood(data))
-
                             # find when not to do the optimization
                             if param == 'corr' and not self.pars.features[1][feature]['corr']:
                                 continue
                             if feature in ['Ay','Az'] and param in ['corr']:
                                 continue
 
+                            backup = deepcopy(self.theta[1][k0][feature][param][k1])
+                            backup_l = deepcopy(self.likelihood(data))
+
                             def loss_fn(x):
 
                                 for k00 in range(self.pars.K[0]):
+
                                     # continue if we not sharing the states
                                     if not self.pars.share_fine_states and (k00 != k0):
                                         continue
+
                                     # set theta
                                     if feature == 'Ax' and param in ['corr']:
                                         self.theta[1][k00]['Ax'][param][k1] = x
@@ -827,8 +850,7 @@ class HHMM:
                         h0 = h*min(theta,1.0-theta)
 
                     # get middle value
-                    th_t = self.likelihood(data)
-                    print(th_t)
+                    th_t = np.copy(self.likelihood(data))
 
                     # get plus value
                     if param == 'corr':
@@ -839,8 +861,7 @@ class HHMM:
                         self.theta[1][0][feature][param][state_num] += h
                         for i in range(1,self.pars.K[0]):
                             self.theta[1][i][feature][param][state_num] = self.theta[1][0][feature][param][state_num]
-                    th_tp1 = self.likelihood(data)
-                    print(th_tp1)
+                    th_tp1 = np.copy(self.likelihood(data))
 
                     # get minus value
                     if param == 'corr':
@@ -851,8 +872,12 @@ class HHMM:
                         self.theta[1][0][feature][param][state_num] += -2*h
                         for i in range(1,self.pars.K[0]):
                             self.theta[1][i][feature][param][state_num] = self.theta[1][0][feature][param][state_num]
-                    th_tm1 = self.likelihood(data)
+                    th_tm1 = np.copy(self.likelihood(data))
+
+                    # print results
                     print(th_tm1)
+                    print(th_t)
+                    print(th_tp1)
 
                     # return theta
                     if param == 'corr':
