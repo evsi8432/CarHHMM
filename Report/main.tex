@@ -1,9 +1,9 @@
 % Initial and revised submissions should be 12 point; this will be removed in the final version.
-%\documentclass[12pt]{TD-CJS}
-\documentclass{TD-CJS}
+\documentclass[12pt]{TD-CJS}
+%\documentclass{TD-CJS}
 
 % Initial and revised submissions should also be double spaced. This command will be removed in the final version.
-%\renewcommand{\baselinestretch}{2}
+\renewcommand{\baselinestretch}{2}
 
 \usepackage{latexsym}
 \usepackage{amsmath}
@@ -25,7 +25,7 @@
 \jid{CJS}
 \aid{???}
 % The running head contains the author names
-\rhauthor{BlindedA and BlindedB}
+\rhauthor{Blinded}
 \copyrightline{Statistical Society of Canada}
 \Frenchcopyrightline{Soci\'et\'e statistique du Canada}
 % History: received and accepted dates
@@ -43,18 +43,27 @@
 
 % Title, authors, affiliations
 %\title[]{Modelling temporal dependence and multilevel structure using hidden Markov models}%\query{Q1}
-\title[]{Modelling state-switching functional data with hidden Markov models}
-\author{BlindedA\authorref{1}\thanksref{*}}
-\author{BlindedB\authorref{2}}
-\affiliation[1]{Author affiliations will go here in the accepted manuscript, 
-but do NOT include them in your initial submission because it must be anonymous.}
-\affiliation[2]{Second Affiliation}
+\title[]{Modelling multi-scale state-switching functional data with hidden Markov models}
+%\author{Evan Sidrow\authorref{1}}
+%\author{Nancy Heckman\authorref{1}}
+%\author{Sarah Fortune\authorref{2}}
+%\author{Andrew W. Trites\authorref{3,4}}
+%\author{Ian Murphy\authorref{1}}
+%\author{Marie Auger-M\'eth\'e\authorref{1,4}}
+%\affiliation[1]{Department of Statistics, University of British Columbia, Vancouver, Canada}
+%\affiliation[2]{Marine Mammal Research Unit, University of British Columbia, Vancouver, Canada}
+%\affiliation[3]{Department of Zoology, University of British Columbia, Vancouver, Canada}
+%\affiliation[4]{Institute for the Oceans and Fisheries, University of British Columbia, Vancouver, Canada}
+\author{Blinded}%A}%\authorref{1}\thanksref{*}}
+%\author{BlindedB}\authorref{2}}
+%\affiliation[1]{Author affiliations will go here in the accepted manuscript, but do NOT include them in your initial submission because it must be anonymous.}
+%\affiliation[2]{Second Affiliation}
 
 % Abstract, keywords, and classification codes
 \startabstract{%
 \keywords{
 \KWDtitle{Key words and phrases}
-Biologging\sep statistical ecology\sep animal movement\sep accelerometer data\sep diving behaviour\sep killer whales \sep multi-state modelling\sep hierarchical modelling\sep time series.
+Accelerometer data\sep animal movement\sep biologging\sep diving behaviour\sep hierarchical modelling\sep killer whales\sep state-switching\sep statistical ecology\sep time series.
 % MSC 2010 subject classification codes
 \KWDtitle{MSC 2010}Primary 62M05 \sep secondary 62P12}
 \begin{abstract}
@@ -71,7 +80,7 @@ Biologging\sep statistical ecology\sep animal movement\sep accelerometer data\se
 Advances in biologging technology have made a vast amount of high-frequency time series data available in a variety of fields. These data often exhibit complicated temporal dependence structures that cannot be modelled using common methods of Functional Data Analysis (FDA). Animal movement modellers often employ a hierarchical approach using hidden Markov models (HMMs) instead, but many intricate fine-scale processes violate basic assumptions of HMMs. We detail a general hierarchical approach based on HMMs which incorporates a wider class of models at fine scales. As a case study, we build a hierarchical model that combines an HMM with a moving-window auto-regressive process to describe the movement of a killer whale off the western coast of Canada. Our model produces more interpretable results as well as more accurate parameter and standard error estimates compared to existing baselines.
 \fi
 
-Data sets comprised of sequences of curves sampled at high frequencies in time are increasingly common in practice, but they can exhibit complicated dependence structures that cannot be modelled using common methods of Functional Data Analysis (FDA). We detail a hierarchical approach which treats the curves as observations from a hidden Markov model (HMM). The distribution of each curve is then defined by another fine-scale model which may involve auto-regression and require data transformations using moving-window summary statistics or Fourier analysis. This approach is broadly applicable to sequences of curves exhibiting intricate dependence structures. As a case study, we use this framework to model the fine-scale kinematic movement of a northern resident killer whale off the western coast of Canada. Through simulations, we show that our model produces more interpretable state estimation and more accurate parameter estimates compared to existing methods.
+Data sets comprised of sequences of curves sampled at high frequencies in time are increasingly common in practice, but they can exhibit complicated dependence structures that cannot be modelled using common methods of Functional Data Analysis (FDA). We detail a hierarchical approach which treats the curves as observations from a hidden Markov model (HMM). The distribution of each curve is then defined by another fine-scale model which may involve auto-regression and require data transformations using moving-window summary statistics or Fourier analysis. This approach is broadly applicable to sequences of curves exhibiting intricate dependence structures. As a case study, we use this framework to model the fine-scale kinematic movement of a northern resident killer whale ({\em{Orcinus orca}}) off the western coast of Canada. Through simulations, we show that our model produces more interpretable state estimation and more accurate parameter estimates compared to existing methods.
 
 \abscopyright
 \fabstractsection{}
@@ -103,16 +112,22 @@ can't prepare it themselves.\Frenchabscopyright
 \section{DISCUSSION}
 \input Sections/discussion.tex
 %
-\begin{ack}{ACKNOWLEDGEMENTS}
+%\begin{ack}{ACKNOWLEDGEMENTS}
+%The killer whale data was collected under University of British Columbia Animal Care Permit no. A19-0053 and Fisheries and Oceans Canada Marine Mammal Scientific License for Whale Research no. XMMS 6 2019.
 %This research was enabled in part by support provided by WestGrid (www.westgrid.ca) and Compute Canada (www.computecanada.ca).
-\end{ack}
+%We acknowledge the support of the Natural Sciences and Engineering Research Council of Canada (NSERC) as well as the support of Fisheries and Oceans Canada (DFO). 
+%Marie Auger-M\'eth\'e and Nancy Heckman thank the NSERC Discovery program, and Marie Auger-M\'eth\'e additionally thanks the Canadian Research Chair program.
+%Evan Sidrow thanks the University of British Columbia and the Four-Year Doctoral Fellowship program.
+% We are grateful to Dr. Joe Watson for his constructive suggestions.
+%\end{ack}
 %
 \newpage
 \bibliography{references}
 %
 \newpage
 \begin{appendix}
-\input Sections/appendix.tex
+%\input Sections/appendix.tex
+\input Sections/appendixnh.tex
 \end{appendix}
 %
 \newpage

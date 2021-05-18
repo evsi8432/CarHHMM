@@ -1,6 +1,6 @@
 % !TeX root = ../main.tex
 
-\subsection{Detailed description of data simulation}
+\subsection{Detailed description of data simulation from Section \ref{}}
 
 It is straightforward to simulate realizations of the coarse-scale HMM ($X$ and $Y$) given the parameters $\Gamma$ and $\theta$. In addition, given $X_t = i$, $Y_t = y_t$, and $\Gamma^{*(i)}$, it is also straightforward to simulate the subdive states $\tilde{X}^*_t$ for a particular dive $t$. Recall that the length of each fine-scale Markov chain $\tilde{X}^*_t$ is $\tilde T^*_t = \lfloor Y_t/2 \rfloor$ since each window is two seconds long. It is much more difficult to simulate the raw acceleration data $Y_t^*$, and we focus on this task for the remainder of the section. 
 
