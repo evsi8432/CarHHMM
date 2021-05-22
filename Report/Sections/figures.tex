@@ -84,7 +84,7 @@ Model                       & \multicolumn{1}{c}{Train Time (min)} & \multicolum
     \begin{subfigure}{\textwidth}
       \centering
       \includegraphics[width=3in]{../Plots/HHMM.png}  
-      \caption{Hierarchical HMM (\textbf{HHMM})}
+      \caption{Hierarchical HMM (\textbf{HHMM}) with traditional HMMs as the coarse- and fine-scale model}
       \label{fig:HHMM}
     \end{subfigure}
     %
@@ -93,10 +93,10 @@ Model                       & \multicolumn{1}{c}{Train Time (min)} & \multicolum
     \begin{subfigure}{\textwidth}
       \centering
       \includegraphics[width=2.75in]{../Plots/HMM-DFT.png}  
-      \caption{HMM with Discrete Fourier Transform (\textbf{HMM-DFT})}
+      \caption{Fine-scale HMM with Discrete Fourier Transform (\textbf{HMM-DFT}) for curve $t$ (coarse-scale process omitted)}
       \label{fig:HMM-DFT}
     \end{subfigure}
-    \caption{Dependence structures of a standard HMM (a) and three HMM variants (b, c, and d). Hidden state sequences are denoted as $X$ on the coarse-scale and $X^*$ on the fine scale. Observations are denoted as $Y$ on the coarse scale and $Y^*$ on the fine scale. The HHMM shown has a traditional HMM as both the coarse- and fine-scale model. In (d), observations are transformed using a moving window and denoted as $\Z$ with corresponding hidden states $\tilde X^*$.}
+    \caption{Dependence structures of a standard HMM (a) and three HMM variants (b, c, and d). Hidden state sequences are denoted as $X$ on the coarse-scale and $X^*$ on the fine scale. Observations are denoted as $Y$ on the coarse scale and $Y^*$ on the fine scale. The fine-scale observations of the HMM-DFT are transformed using a moving window and denoted as $\Z$ with corresponding hidden states $\tilde X^*$.}
     \label{fig:models}
 \end{figure}
 
@@ -122,14 +122,15 @@ Model                       & \multicolumn{1}{c}{Train Time (min)} & \multicolum
     \begin{subfigure}{\textwidth}
     	\centering
     	\includegraphics[width=3in]{../Plots/CarHHMM2-coarse-emissions.png}
-    	\caption{Estimated Gamma probability density functions of killer whale dive duration ($Y_t$) for dive types 1 and 2.}
+    	\caption{Estimated Gamma densities of killer whale dive duration ($Y_t$) corresponding to dive types $X_t = 1$ and $X_t = 2$.}
     	\label{fig:coarse_emis}
     \end{subfigure}
     \newline
     \begin{subfigure}{\textwidth}
     	\centering
     	\includegraphics[width=3in]{../Plots/CarHHMM2-fine-emissions.png}
-    	\caption{Estimated Normal conditional densities of the three components of killer whale acceleration $\big(\Zone_{t,\tilde t^*}|\Zone_{t,\tilde t^*-1} = \mu_A^{*(\cdot,i^*)}\big)$ plotted on a linear scale and estimated Gamma probability density of wiggliness $\big(\Ztwo_{t,\tilde t^*}\big)$ plotted on a log-log scale. Density functions correspond to subdive states $i^* = 1,2,$ and $3$. Density functions corresponding to acceleration are conditioned on $\Zone_{t,\tilde t^*-1} = \mu_A^{*(\cdot,i^*)}$ because the density function of $\Zone_{t,\tilde t^*}$ itself depends on $\Zone_{t,\tilde t^*-1}$.}
+    	\caption{Estimated Normal conditional densities %of the three components 
+    	of killer whale acceleration $\big(\Zone_{t,\tilde t^*}|\Zone_{t,\tilde t^*-1} = \mu_A^{*(\cdot,i^*)}\big)$ plotted on a linear scale and estimated Gamma probability density of wiggliness $\big(\Ztwo_{t,\tilde t^*}\big)$ plotted on a log-log scale. These density functions correspond to subdive behaviours $\tilde{X}^*_{t,t^*} = 1,2,3$, and are identical across dive types $X_t = 1$ and $X_t = 2$. Acceleration density functions are conditioned on $\Zone_{t,\tilde t^*-1} = \mu_A^{*(\cdot,i^*)}$ since the mean of $\Zone_{t,\tilde t^*}$ depends on $\Zone_{t,\tilde t^*-1}$.}
     	\label{fig:fine_emis}
     \end{subfigure}
     \caption{Estimated probability density functions of coarse- and fine-scale emissions corresponding to observations of killer whale behaviour. Densities are estimated by fitting the CarHHMM-DFT to the case study data (see Table \ref{table:emis_dists_CarHHMM-DFT}).}
