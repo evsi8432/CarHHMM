@@ -18,6 +18,8 @@ from scipy.optimize import LinearConstraint
 from scipy.signal import convolve
 from scipy.interpolate import interp1d
 
+from skopt import gp_minimize
+
 from copy import deepcopy
 
 import divebomb
@@ -119,13 +121,9 @@ class HHMM:
             if data is not None:
 
                 feature_data = [datum[feature] for datum in data]
-                quantiles = np.linspace(1/(2*K),1-(1/(2*K)),K)
 
                 # first find mu
-                if feature in ['Ax','Ay','Az']:
-                    theta[0][feature]['mu'] = np.mean(feature_data)*np.ones(K)
-                else:
-                    theta[0][feature]['mu'] = np.quantile(feature_data,quantiles)
+                theta[0][feature]['mu'] = np.mean(feature_data)*np.ones(K)
 
                 # then get varaince of each quantile set of data
                 data_sorted = np.sort(feature_data)
@@ -142,7 +140,7 @@ class HHMM:
 
                 # add randomness in initialization
                 if settings['f'] == 'normal':
-                    theta[0][feature]['mu'] += norm.rvs(np.zeros(K),np.abs(theta[0][feature]['mu']))
+                    theta[0][feature]['mu'] += norm.rvs(np.zeros(K),theta[0][feature]['sig'])
                     theta[0][feature]['sig'] *= np.exp(norm.rvs(0.0,1.0,size=K))
                     theta[0][feature]['corr'] += norm.rvs(0.0,1.0,size=K)
                 elif settings['f'] == 'gamma':
@@ -169,30 +167,21 @@ class HHMM:
                     feature_data = []
                     for dive in data:
                         feature_data.extend([seg[feature] for seg in dive['subdive_features']])
-                    quantiles = np.linspace(1/(2*K),1-(1/(2*K)),K)
 
                     # first find mu
-                    if feature in ['Ax','Ay','Az']:
-                        theta[1][k0][feature]['mu'] = np.mean(feature_data)*np.ones(K)
-                    else:
-                        theta[1][k0][feature]['mu'] = np.quantile(feature_data,quantiles)
+                    theta[1][k0][feature]['mu'] = np.mean(feature_data)*np.ones(K)
 
                     # then get varaince of each quantile set of data
                     data_sorted = np.sort(feature_data)
                     n = len(data_sorted)
-                    for k1 in range(K):
-                        if settings['f'] != 'vonmises':
-                            std = np.std(data_sorted[int(k1*n/K):int((k1+1)*n/K)])
-                            theta[1][k0][feature]['sig'][k1] = max(0.1,std)
-                        else:
-                            theta[1][k0][feature]['sig'][k1] = 1.0
+                    theta[1][k0][feature]['sig'] = np.std(feature_data)*np.ones(K)
 
                     # finally update correlations randomly
                     theta[1][k0][feature]['corr'] = -1.0 * np.ones(K)
 
                     # add randomness in initialization
                     if settings['f'] == 'normal':
-                        theta[1][k0][feature]['mu'] += norm.rvs(np.zeros(K),np.abs(theta[1][k0][feature]['mu']))
+                        theta[1][k0][feature]['mu'] += norm.rvs(np.zeros(K),theta[1][k0][feature]['sig'])
                         theta[1][k0][feature]['sig'] *= np.exp(norm.rvs(0.0,1.0,size=K))
                         theta[1][k0][feature]['corr'] += norm.rvs(0.0,1.0,size=K)
                     elif settings['f'] == 'gamma':
@@ -480,6 +469,134 @@ class HHMM:
 
         return log_alpha, log_beta, gamma, xi
 
+
+    def train_GP(self,data,n_initial=10,n_calls=10,eps=10e-6):
+
+        stime = time.time()
+        prev_l = self.likelihood(data)
+
+        def loss_fn(x,get_lims=False):
+
+            ind = 0
+
+            if get_lims:
+                lims = []
+
+            # update crude eta
+            for i in range(self.pars.K[0]):
+                for j in range(self.pars.K[0]-1):
+                    if j < i:
+                        self.eta[0][i,j] = x[ind]
+                    else:
+                        self.eta[0][i,j+1] = x[ind]
+
+                    if get_lims:
+                        lims.append((-10.0,10.0))
+
+                    ind += 1
+
+            # update fine eta
+            for k0 in range(self.pars.K[0]):
+                for i in range(self.pars.K[1]):
+                    for j in range(self.pars.K[1]-1):
+                        if j < i:
+                            self.eta[1][k0][i,j] = x[ind]
+                        else:
+                            self.eta[1][k0][i,j+1] = x[ind]
+
+                        if get_lims:
+                            lims.append((-10.0,10.0))
+
+                        ind += 1
+
+            # update crude theta
+            for k0 in range(self.pars.K[0]):
+                for feature in self.pars.features[0]:
+                    for param in ['mu','sig','corr']:
+                        if feature == 'Ax' and param in ['corr']:
+                            self.theta[0]['Ax'][param][k0] = x[ind]
+                            self.theta[0]['Ay'][param][k0] = x[ind]
+                            self.theta[0]['Az'][param][k0] = x[ind]
+                        else:
+                            if param == 'sig':
+                                self.theta[0][feature][param][k0] = max(x[ind],eps)
+                            else:
+                                self.theta[0][feature][param][k0] = x[ind]
+
+                        if get_lims:
+                            feature_data = [datum[feature] for datum in data]
+                            if param == 'mu':
+                                lims.append((min(feature_data),max(feature_data)))
+                            elif param == 'sig':
+                                lims.append((eps,max(feature_data)-min(feature_data)))
+                            else:
+                                lims.append((-10.0,10.0))
+
+                        ind += 1
+
+            # update fine theta
+            for k1 in range(self.pars.K[1]):
+
+                if self.pars.share_fine_states:
+                    K0 = 1
+                else:
+                    K0 = self.pars.K[0]
+
+                for feature in self.pars.features[1]:
+                    for k0 in range(K0):
+                        for param in ['mu','sig','corr']:
+                            for k00 in range(self.pars.K[0]):
+
+                                # continue if we not sharing the states
+                                if not self.pars.share_fine_states and (k00 != k0):
+                                    continue
+
+                                # set theta
+                                if feature == 'Ax' and param in ['corr']:
+                                    self.theta[1][k00]['Ax'][param][k1] = x[ind]
+                                    self.theta[1][k00]['Ay'][param][k1] = x[ind]
+                                    self.theta[1][k00]['Az'][param][k1] = x[ind]
+                                else:
+                                    if param == 'sig':
+                                        self.theta[1][k00][feature][param][k1] = max(x[ind],eps)
+                                    else:
+                                        self.theta[1][k00][feature][param][k1] = x[ind]
+
+                            if get_lims:
+                                feature_data = []
+                                for datum in data:
+                                    for seg in datum['subdive_features']:
+                                        feature_data.append(seg[feature])
+                                if param == 'mu':
+                                    lims.append((min(feature_data),max(feature_data)))
+                                elif param == 'sig':
+                                    lims.append((eps,max(feature_data)-min(feature_data)))
+                                else:
+                                    lims.append((-10.0,10.0))
+
+                            ind += 1
+
+            if get_lims:
+                return lims
+            else:
+                return -self.likelihood(data)
+
+        # get limits
+        lims = loss_fn(np.ones(1000),get_lims=True)
+
+        # optimize
+        res = gp_minimize(loss_fn,lims,n_calls=n_calls)
+
+        # set values
+        loss_fn(res['x'])
+
+        print(res['x'])
+        print('')
+        print(self.eta)
+        print('')
+        print(self.theta)
+
+        return (self.theta,self.eta)
 
     def train_DM(self,data,max_iters=10,max_steps=10,tol=0.01,eps=10e-6):
 

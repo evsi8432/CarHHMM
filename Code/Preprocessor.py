@@ -291,10 +291,16 @@ class Preprocessor:
             # find average Acceleration
             if 'Ax' in self.pars.features[1]:
                 dive_seg_features['Ax'] = np.mean(dive_seg['Ax'])
+                dive_seg_features['Ax_all'] = dive_seg['Ax'].to_numpy()
             if 'Ay' in self.pars.features[1]:
                 dive_seg_features['Ay'] = np.mean(dive_seg['Ay'])
+                dive_seg_features['Ay_all'] = dive_seg['Ay'].to_numpy()
             if 'Az' in self.pars.features[1]:
                 dive_seg_features['Az'] = np.mean(dive_seg['Az'])
+                dive_seg_features['Az_all'] = dive_seg['Az'].to_numpy()
+
+            # find depth
+            dive_seg_features['depth_all'] = dive_seg['depth'].to_numpy()
 
             # find FoVeDBA
             if ('Ahat_low' in self.pars.features[1]) or ('Ahat_high' in self.pars.features[1]):
