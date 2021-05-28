@@ -43,39 +43,64 @@ np.random.seed(rand_seed)
 ndives = 100
 ndatasets = 1
 
+# number of states for each substate
+K0 = 2
+K1 = 3
+
 # dive duration parameters
-dd_mu = np.array([20.0,80.0])
-dd_sig = np.array([5.0,50.0])
+dd_mu = np.array([27.27,127.07])
+dd_sig = np.array([10.91,64.06])
 
 dd_shape = np.square(dd_mu)/np.square(dd_sig)
 dd_scale = np.square(dd_sig)/np.array(dd_mu)
 
 # FoVeDBA parameters (this is for the SQUARE of the FoVeDBA)
-FoVeDBA_sin_shape = np.array([[(5.0/n) for n in range(1,52)],[(5.0/n) for n in range(1,52)]])
-FoVeDBA_sin_scale = np.ones((2,51))
-FoVeDBA_sin_shape[1,1] = 250
-FoVeDBA_sin_shape[1,2] = 50
+
+# make shape decay like 1/n
+FoVeDBA_sin_shape = np.array([[(1.0/n**3) for n in range(1,52)] for _ in range(K1)])
+for i in range(K1):
+    FoVeDBA_sin_shape[i,:] = FoVeDBA_sin_shape[i,:]/sum(FoVeDBA_sin_shape[i,1:11])
+
+# scale needs to be constant
+FoVeDBA_sin_scale = np.ones((K1,51))
+
+# set mean and variance
+FoVeDBA_mu = np.array([[34.98],[505.79],[9769.98]])
+FoVeDBA_sig = np.array([[23.85],[516.68],[14462.55]])
+
+# adjust shape and scale accordingly
+FoVeDBA_sin_shape *= np.square(FoVeDBA_mu)/np.square(FoVeDBA_sig)
+FoVeDBA_sin_scale *= np.square(FoVeDBA_sig)/FoVeDBA_mu
 
 # average acceleration parameters
-acc_mu = np.array([0.0,0.0])
-acc_sig = np.array([0.05,0.1])
+acc_mu = np.array([0.0,0.1,0.2])
+acc_sig = np.array([0.05,0.1,0.3])
 
-# number of states for each substate
-K0 = 2
-K1 = 2
+# intialize correlation within states
+corr_crude = [0.0,0.0,0.0]
+corr_fine = [0.97,0.83,0.61]
 
 # randomly initialize a probablity transition matrix
-ptm_crude = np.array([[0.5,0.5],
-                      [0.5,0.5]])
 
-ptm_fine = [np.array([[0.5,0.5],
-                      [0.1,0.9]]),
-            np.array([[0.8,0.2],
-                      [0.3,0.7]])]
+ptm_crude = np.array([[0.85,0.15],
+                      [0.91,0.09]])
 
-# randomly intialize a correlation within states
-corr_crude = [0.0,0.0]
-corr_fine = [0.99,0.95]
+eta_crude = np.array([[ 0.    , -1.6984],
+                      [ 2.3471,  0.    ]])
+
+ptm_fine = [np.array([[0.75,0.25,0.00],
+                      [0.08,0.87,0.05],
+                      [0.00,0.23,0.77]]),
+            np.array([[0.89,0.11,0.00],
+                      [0.15,0.81,0.04],
+                      [0.00,0.23,0.77]])]
+
+eta_fine =  [np.array([[  0.    ,  -1.0873, -22.6511],
+                    [ -2.3615,   0.    ,  -2.823 ],
+                    [-17.1832,  -1.1937,   0.    ]]),
+              np.array([[  0.    ,  -2.0691, -13.2605],
+                     [ -1.6902,   0.    ,  -3.1311],
+                     [-16.9396,  -1.2303,   0.    ]])]
 
 # train new models?
 train_new = True
@@ -210,24 +235,24 @@ def create_data():
 hmm_FV_theta = [{'dive_duration': {'mu': np.array([np.mean(dd_mu)]),
                                    'sig': np.array([np.sqrt(np.mean(dd_sig**2) + np.var(dd_mu))]),
                                    'corr': np.array([-10.])}},
-                 [{'FoVeDBA': {'mu': np.sum(FoVeDBA_sin_shape,1),
-                               'sig': np.sqrt(np.sum(FoVeDBA_sin_shape,1)),
-                               'corr': np.array([ -10., -10.])},
+                 [{'FoVeDBA': {'mu': FoVeDBA_mu.flatten(),
+                               'sig': FoVeDBA_sig.flatten(),
+                               'corr': np.array([ -10. for _ in range(K1)])},
                    'A': {'mu': acc_mu,
                          'sig': acc_sig,
                          'corr': logit(corr_fine)}}]]
 
 ptm_fine_temp = ptm_fine[0]/2 + ptm_fine[1]/2
+eta_fine_temp = HHMM.ptm_2_eta(ptm_fine_temp)
 
 hmm_FV_eta = [np.array([[0]]),
-             [np.array([[0,np.log(1.0/ptm_fine_temp[0,0]-1)],
-                        [np.log(1.0/ptm_fine_temp[1,1]-1),0]])]]
+             [eta_fine_temp]]
 
 
 ### CarHHMM, no Z2 ###
 hhmm_V_theta = [{'dive_duration': {'mu': dd_mu,
                                    'sig': dd_sig,
-                                   'corr': np.array([-10.,-10.])}},
+                                   'corr': np.array([ -10. for _ in range(K0)])}},
                  [{'A': {'mu': acc_mu,
                          'sig': acc_sig,
                          'corr': logit(corr_fine)}},
@@ -235,67 +260,46 @@ hhmm_V_theta = [{'dive_duration': {'mu': dd_mu,
                          'sig': acc_sig,
                          'corr': logit(corr_fine)}}]]
 
-hhmm_V_eta = [np.array([[0,np.log(1.0/ptm_crude[0,0]-1)],
-                        [np.log(1.0/ptm_crude[1,1]-1),0]]),
-
-             [np.array([[0,np.log(1.0/ptm_fine[0][0,0]-1)],
-                        [np.log(1.0/ptm_fine[0][1,1]-1),0]]),
-
-              np.array([[0,np.log(1.0/ptm_fine[1][0,0]-1)],
-                        [np.log(1.0/ptm_fine[1][1,1]-1),0]])]]
+hhmm_V_eta = [eta_crude,eta_fine]
 
 
 ### HHMM ###
 hhmm_FV_uncorr_theta = [{'dive_duration': {'mu': dd_mu,
                                            'sig': dd_sig,
-                                           'corr': np.array([-10.,-10.])}},
-                         [{'FoVeDBA': {'mu': np.sum(FoVeDBA_sin_shape,1),
-                                       'sig': np.sqrt(np.sum(FoVeDBA_sin_shape,1)),
-                                       'corr': np.array([ -10., -10.])},
+                                           'corr': np.array([ -10. for _ in range(K0)])}},
+                         [{'FoVeDBA': {'mu': FoVeDBA_mu.flatten(),
+                                       'sig': FoVeDBA_sig.flatten(),
+                                       'corr': np.array([ -10. for _ in range(K1)])},
                            'A': {'mu': acc_mu,
                                  'sig': acc_sig,
-                                 'corr': np.array([-10.,-10.])}},
-                          {'FoVeDBA': {'mu': np.sum(FoVeDBA_sin_shape,1),
-                                       'sig': np.sqrt(np.sum(FoVeDBA_sin_shape,1)),
-                                       'corr': np.array([ -10., -10.])},
+                                 'corr': np.array([ -10. for _ in range(K1)])}},
+                          {'FoVeDBA': {'mu': FoVeDBA_mu.flatten(),
+                                       'sig': FoVeDBA_sig.flatten(),
+                                       'corr': np.array([ -10. for _ in range(K1)])},
                            'A': {'mu': acc_mu,
                                  'sig': acc_sig,
-                                 'corr': np.array([-10.,-10.])}}]]
+                                 'corr': np.array([ -10. for _ in range(K1)])}}]]
 
-hhmm_FV_uncorr_eta = [np.array([[0,np.log(1.0/ptm_crude[0,0]-1)],
-                                [np.log(1.0/ptm_crude[1,1]-1),0]]),
-
-                      [np.array([[0,np.log(1.0/ptm_fine[0][0,0]-1)],
-                                 [np.log(1.0/ptm_fine[0][1,1]-1),0]]),
-
-                       np.array([[0,np.log(1.0/ptm_fine[1][0,0]-1)],
-                                 [np.log(1.0/ptm_fine[1][1,1]-1),0]])]]
+hhmm_FV_uncorr_eta = [eta_crude,eta_fine]
 
 ### CarHHMM ###
 hhmm_FV_theta = [{'dive_duration': {'mu': dd_mu,
                                     'sig': dd_sig,
-                                    'corr': np.array([-10.,-10.])}},
-                 [{'FoVeDBA': {'mu': np.sum(FoVeDBA_sin_shape,1),
-                               'sig': np.sqrt(np.sum(FoVeDBA_sin_shape,1)),
-                               'corr': np.array([ -10., -10.])},
+                                    'corr': np.array([ -10. for _ in range(K0)])}},
+                 [{'FoVeDBA': {'mu': FoVeDBA_mu.flatten(),
+                               'sig': FoVeDBA_sig.flatten(),
+                               'corr': np.array([ -10. for _ in range(K1)])},
                    'A': {'mu': acc_mu,
                          'sig': acc_sig,
                          'corr': logit(corr_fine)}},
-                 {'FoVeDBA': {'mu': np.sum(FoVeDBA_sin_shape,1),
-                               'sig': np.sqrt(np.sum(FoVeDBA_sin_shape,1)),
-                               'corr': np.array([ -10., -10.])},
+                 {'FoVeDBA': {'mu': FoVeDBA_mu.flatten(),
+                               'sig': FoVeDBA_sig.flatten(),
+                               'corr': np.array([ -10. for _ in range(K1)])},
                    'A': {'mu': acc_mu,
                          'sig': acc_sig,
                          'corr': logit(corr_fine)}}]]
 
-hhmm_FV_eta = [np.array([[0,np.log(1.0/ptm_crude[0,0]-1)],
-                         [np.log(1.0/ptm_crude[1,1]-1),0]]),
-
-               [np.array([[0,np.log(1.0/ptm_fine[0][0,0]-1)],
-                          [np.log(1.0/ptm_fine[0][1,1]-1),0]]),
-
-                np.array([[0,np.log(1.0/ptm_fine[1][0,0]-1)],
-                          [np.log(1.0/ptm_fine[1][1,1]-1),0]])]]
+hhmm_FV_eta = [eta_crude,eta_fine]
 
 
 ### Train Model ###
@@ -320,6 +324,12 @@ for dataset_num in range(ndatasets):
     print('')
     data,data_V,data_FV = create_data()
 
+    for dive in data_FV:
+        print(dive['dive_type'])
+        print(dive['dive_duration'])
+        for seg in dive['subdive_features']:
+            print(seg)
+
 
     ### CarHMM ###
     if model == 'CarHMM':
@@ -327,7 +337,7 @@ for dataset_num in range(ndatasets):
         print('STARTING CarHMM')
         print('')
         pars = Parameters.Parameters()
-        pars.K = [1,2]
+        pars.K = [1,K1]
         pars.features = [{'dive_duration':{'corr':False,'f':'gamma'}},
                          {'FoVeDBA':{'corr':False,'f':'gamma'},
                           'A':{'corr':True,'f':'normal'}}]
@@ -348,19 +358,19 @@ for dataset_num in range(ndatasets):
             _,_,posts,_ = hmm_FV.fwd_bwd(datum['subdive_features'],[1,0])
             for i,post in enumerate(posts.T):
                 data[dive_num]['subdive_features'][i]['hmm_FV_dive'] = 0.0
-                data[dive_num]['subdive_features'][i]['hmm_FV_subdive'] = post[1]
+                data[dive_num]['subdive_features'][i]['hmm_FV_subdive'] = post
 
         # get confusion matrix
-        CM_coarse = np.zeros((2,2))
-        CM_fine = [np.zeros((2,2)),np.zeros((2,2))]
+        CM_coarse = np.zeros((K0,K0))
+        CM_fine = [np.zeros((K1,K1)) for _ in range(K0)]
         for dive in data:
             dive_type = dive['dive_type']
             CM_coarse[dive_type,1] += dive['subdive_features'][0]['hmm_FV_dive']
             CM_coarse[dive_type,0] += max(0,1.0-dive['subdive_features'][0]['hmm_FV_dive'])
             for seg in dive['subdive_features']:
                 subdive_type = seg['subdive_type']
-                CM_fine[dive_type][subdive_type,1] += seg['hmm_FV_subdive']
-                CM_fine[dive_type][subdive_type,0] += max(0,1.0-seg['hmm_FV_subdive'])
+                for k in range(K1):
+                    CM_fine[dive_type][subdive_type,k] += seg['hmm_FV_subdive'][k]
 
         hmm_FV.CM = [CM_coarse,CM_fine]
 
@@ -374,7 +384,7 @@ for dataset_num in range(ndatasets):
         print('STARTING HHMM')
         print('')
         pars = Parameters.Parameters()
-        pars.K = [2,2]
+        pars.K = [K0,K1]
         pars.features = [{'dive_duration':{'corr':False,'f':'gamma'}},
                          {'FoVeDBA':{'corr':False,'f':'gamma'},
                           'A':{'corr':False,'f':'normal'}}]
@@ -398,22 +408,22 @@ for dataset_num in range(ndatasets):
             _,_,posts_fine_0,_ = hhmm_FV_uncorr.fwd_bwd(datum['subdive_features'],[1,0])
             _,_,posts_fine_1,_ = hhmm_FV_uncorr.fwd_bwd(datum['subdive_features'],[1,1])
             for i,(post_fine_0,post_fine_1) in enumerate(zip(posts_fine_0.T,posts_fine_1.T)):
-                p = posts_crude.T[dive_num,0]*post_fine_0[1] + \
-                    posts_crude.T[dive_num,1]*post_fine_1[1]
+                p = np.array([posts_crude.T[dive_num,0]*post_fine_0[k] + \
+                              posts_crude.T[dive_num,1]*post_fine_1[k] for k in range(K1)])
                 data[dive_num]['subdive_features'][i]['hhmm_FV_uncorr_subdive'] = p
                 data[dive_num]['subdive_features'][i]['hhmm_FV_uncorr_dive'] = posts_crude.T[dive_num,1]
 
         # get confusion matrix
-        CM_coarse = np.zeros((2,2))
-        CM_fine = [np.zeros((2,2)),np.zeros((2,2))]
+        CM_coarse = np.zeros((K0,K0))
+        CM_fine = [np.zeros((K1,K1)) for _ in range(K0)]
         for dive in data:
             dive_type = dive['dive_type']
             CM_coarse[dive_type,1] += dive['subdive_features'][0]['hhmm_FV_uncorr_dive']
             CM_coarse[dive_type,0] += max(0,1.0-dive['subdive_features'][0]['hhmm_FV_uncorr_dive'])
             for seg in dive['subdive_features']:
                 subdive_type = seg['subdive_type']
-                CM_fine[dive_type][subdive_type,1] += seg['hhmm_FV_uncorr_subdive']
-                CM_fine[dive_type][subdive_type,0] += max(0,1.0-seg['hhmm_FV_uncorr_subdive'])
+                for k in range(K1):
+                    CM_fine[dive_type][subdive_type,k] += seg['hhmm_FV_uncorr_subdive'][k]
 
         hhmm_FV_uncorr.CM = [CM_coarse,CM_fine]
 
@@ -426,7 +436,7 @@ for dataset_num in range(ndatasets):
         print('STARTING CarHHMM minux Z2')
         print('')
         pars = Parameters.Parameters()
-        pars.K = [2,2]
+        pars.K = [K0,K1]
         pars.features = [{'dive_duration':{'corr':False,'f':'gamma'}},
                          {'A':{'corr':True,'f':'normal'}}]
 
@@ -449,8 +459,8 @@ for dataset_num in range(ndatasets):
             _,_,posts_fine_0,_ = hhmm_V.fwd_bwd(datum['subdive_features'],[1,0])
             _,_,posts_fine_1,_ = hhmm_V.fwd_bwd(datum['subdive_features'],[1,1])
             for i,(post_fine_0,post_fine_1) in enumerate(zip(posts_fine_0.T,posts_fine_1.T)):
-                p = posts_crude.T[dive_num,0]*post_fine_0[1] + \
-                    posts_crude.T[dive_num,1]*post_fine_1[1]
+                p = np.array([posts_crude.T[dive_num,0]*post_fine_0[k] + \
+                              posts_crude.T[dive_num,1]*post_fine_1[k] for k in range(K1)])
                 if i%2 == 0:
                     p0 = p
                 else:
@@ -458,16 +468,16 @@ for dataset_num in range(ndatasets):
                     data[dive_num]['subdive_features'][int((i-1)/2)]['hhmm_V_dive'] = posts_crude.T[dive_num,1]
 
         # get confustion matrix
-        CM_coarse = np.zeros((2,2))
-        CM_fine = [np.zeros((2,2)),np.zeros((2,2))]
+        CM_coarse = np.zeros((K0,K0))
+        CM_fine = [np.zeros((K1,K1)) for _ in range(K0)]
         for dive in data:
             dive_type = dive['dive_type']
             CM_coarse[dive_type,1] += dive['subdive_features'][0]['hhmm_V_dive']
             CM_coarse[dive_type,0] += max(0,1.0-dive['subdive_features'][0]['hhmm_V_dive'])
             for seg in dive['subdive_features']:
                 subdive_type = seg['subdive_type']
-                CM_fine[dive_type][subdive_type,1] += seg['hhmm_V_subdive']
-                CM_fine[dive_type][subdive_type,0] += max(0,1.0-seg['hhmm_V_subdive'])
+                for k in range(K1):
+                    CM_fine[dive_type][subdive_type,k] += seg['hhmm_V_subdive'][k]
 
         hhmm_V.CM = [CM_coarse,CM_fine]
         hhmm_V.save('../Params/hhmm_V_%d_%d'%(dataset_num,rand_seed))
@@ -479,7 +489,7 @@ for dataset_num in range(ndatasets):
         print('STARTING CarHHMM')
         print('')
         pars = Parameters.Parameters()
-        pars.K = [2,2]
+        pars.K = [K0,K1]
         pars.features = [{'dive_duration':{'corr':False,'f':'gamma'}},
                          {'FoVeDBA':{'corr':False,'f':'gamma'},
                           'A':{'corr':True,'f':'normal'}}]
@@ -490,7 +500,7 @@ for dataset_num in range(ndatasets):
         hhmm_FV.true_theta = deepcopy(hhmm_FV_theta)
         hhmm_FV.true_eta = deepcopy(hhmm_FV_eta)
 
-        hhmm_FV.train_DM(data_FV,max_iters=5)
+        hhmm_FV.train_DM(data_FV)
         hhmm_FV.get_SEs(data_FV,h)
         data,data_V,data_FV = create_data()
 
@@ -502,22 +512,22 @@ for dataset_num in range(ndatasets):
             _,_,posts_fine_0,_ = hhmm_FV.fwd_bwd(datum['subdive_features'],[1,0])
             _,_,posts_fine_1,_ = hhmm_FV.fwd_bwd(datum['subdive_features'],[1,1])
             for i,(post_fine_0,post_fine_1) in enumerate(zip(posts_fine_0.T,posts_fine_1.T)):
-                p = posts_crude.T[dive_num,0]*post_fine_0[1] + \
-                    posts_crude.T[dive_num,1]*post_fine_1[1]
+                p = [posts_crude.T[dive_num,0]*post_fine_0[k] + \
+                     posts_crude.T[dive_num,1]*post_fine_1[k] for k in range(K1)]
                 data[dive_num]['subdive_features'][i]['hhmm_FV_subdive'] = p
                 data[dive_num]['subdive_features'][i]['hhmm_FV_dive'] = posts_crude.T[dive_num,1]
 
         # get confusion matrix
-        CM_coarse = np.zeros((2,2))
-        CM_fine = [np.zeros((2,2)),np.zeros((2,2))]
+        CM_coarse = np.zeros((K0,K0))
+        CM_fine = [np.zeros((K1,K1)) for _ in range(K0)]
         for dive in data:
             dive_type = dive['dive_type']
             CM_coarse[dive_type,1] += dive['subdive_features'][0]['hhmm_FV_dive']
             CM_coarse[dive_type,0] += max(0,1.0-dive['subdive_features'][0]['hhmm_FV_dive'])
             for seg in dive['subdive_features']:
                 subdive_type = seg['subdive_type']
-                CM_fine[dive_type][subdive_type,1] += seg['hhmm_FV_subdive']
-                CM_fine[dive_type][subdive_type,0] += max(0,1.0-seg['hhmm_FV_subdive'])
+                for k in range(K1):
+                    CM_fine[dive_type][subdive_type,k] += seg['hhmm_FV_subdive'][k]
 
         hhmm_FV.CM = [CM_coarse,CM_fine]
 
