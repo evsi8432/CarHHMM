@@ -1,12 +1,12 @@
 %\section{Models and parameter estimation}
 
-Consider a sequence of $T$ curves, where curve $t$ is characterized by a curve-level (or coarse-scale) observation $Y_t$ as well as a sequence of $T^*_t$ within-curve (or fine-scale) observations $Y^*_{t}$. Namely, $Y^*_{t} \equiv \big\{Y^*_{t,1},\ldots,Y^*_{t,T^*_t}\big\}$ is made up of fine-scale quantities derived from curve $t$ indexed by $t^*$. Both $Y_t$ and $Y^*_{t,t^*}$ can be either vectors or scalars. We call the sequence of coarse-scale observations $Y \equiv \big\{Y_1, \ldots, Y_T\big\}$ and the collection of all fine-scale observations $Y^* \equiv \big\{Y^*_1,\ldots,Y^*_T \big\}$. To develop our model for this data, we detail the structure of a traditional HMM followed by three variations which generalize its base structure. We then show how each of these generalized HMMs can be synthesized to form a wide variety of more complicated models.
+Consider a sequence of $T$ curves, where curve $t$ is characterized by a curve-level (or coarse-scale) observation $Y_t$ as well as a sequence of $T^*_t$ within-curve (or fine-scale) observations $Y^*_{t}$. Namely, $Y^*_{t} \equiv \big\{Y^*_{t,1},\ldots,Y^*_{t,T^*_t}\big\}$ is made up of fine-scale quantities derived from curve $t$ indexed by $t^*$. Both $Y_t$ and $Y^*_{t,t^*}$ can be either vectors or scalars. We call the sequence of coarse-scale observations $Y \equiv \big\{Y_1, \ldots, Y_T\big\}$ and the collection of all fine-scale observations $Y^* \equiv \big\{Y^*_1,\ldots,Y^*_T \big\}$. We assume that $\{Y_1,\ldots,Y_T\}$ is ordered sequentially but the curves need not be equi-spaced in time. To develop our model for this data, we detail the structure of a traditional HMM followed by three variations which generalize its base structure. We then show how each of these generalized HMMs can be synthesized to form a wide variety of more complicated models.
 
 \subsection{HMMs as a base structure}
 \label{subsec:HMM}
 
 Hidden Markov models describe state-switching Markovian processes in discrete time and are the core structure we use to model both $Y$ and $Y^*$. For simplicity we focus on $Y$ to introduce the model. An HMM is comprised of a sequence of unobserved states $X \equiv \big\{X_1, \ldots, X_T\big\}$ together with an observation sequence $Y \equiv \big\{Y_1, \ldots, Y_T\big\}$, where $X_t$ is associated with the observation $Y_t$. The $Y_t$'s are often referred to as ``emissions'' and the index $t$ typically refers to time. 
-The $X_t$'s form a Markov chain and can take integer values between $1$ and $N$. Their distribution is governed by the distribution of the initial state $X_1$ and an $N \times N$ transition probability matrix $\Gamma$, where $\Gamma_{ij} = \Pr(X_{t+1} = j | X_t = i)$. 
+The $X_t$'s form a Markov chain and can take integer values between $1$ and $N$. Their distribution is governed by the distribution of the initial state $X_1$ and an $N \times N$ transition probability matrix $\Gamma$, where $\Gamma_{ij} = \Pr(X_{t+1} = j | X_t = i)$. We consider only time-homogeneous Markov chains, meaning that $\Gamma$ does not depend on time.
 %
 We assume that $X_1$ follows the chain's stationary distribution, which is denoted by an $N$-dimensional row vector $\delta$, where
 $\delta_i = \Pr(X_1 = i).$
@@ -17,13 +17,17 @@ The distribution of an emission $Y_t$ conditioned on the corresponding hidden st
 If $X_t=i$ then we denote the conditional density or probability mass function of $Y_t$ as $f^{(i)}(\cdot ; \theta^{(i)})$ or simply $f^{(i)}(\cdot)$, where $\theta^{(i)}$ is a state-dependent parameter describing the emission distribution.
 %
 
-Using observation emissions, denoted here as $y \equiv \{y_1,\ldots,y_T\}$, we can find the maximum likelihood estimates of the parameters $\Gamma$ and $\theta \equiv \{\theta^{(1)},\ldots,\theta^{(N)}\}$. The likelihood $\calL_{\text{HMM}}$ can be evaluated using the well-known \textit{forward algorithm} \citep{Zucchini:2016}:
+%Using observation emissions, denoted here as $y \equiv \{y_1,\ldots,y_T\}$, we can find the maximum likelihood estimates of the parameters $\Gamma$ and $\theta \equiv \{\theta^{(1)},\ldots,\theta^{(N)}\}$. 
+The joint likelihood of both the parameters and the hidden states is given by the following:
+
+\[\calL_{\text{HMM}}(x,\theta,\Gamma;y) = \delta_{x_1} f^{(x_1)}(y_1; \theta^{(x_1)}) \prod_{t=2}^T \Gamma_{x_{t-1} x_t} f^{(x_t)}(y_t; \theta^{(x_t)}),\]
+%
+which can be used to obtain estimates for both the hidden states $\hat X$ and the parameters $\hat \theta$ and $\hat \Gamma$. Using a Bayesian approach, $\calL_{\text{HMM}}$ can be combined with a prior distribution to obtain a posterior distribution over $\hat X$, $\hat \theta$, and $\hat \Gamma$ which can be sampled from using methods such as Sequential Monte Carlo \citep{Douc:2011b}, Markov-Chain Monte Carlo \citep{Scott:2002}, or variational inference \citep{Foti:2014}. For the purposes of this paper, however, we focus on the frequentest approach, where it is common to marginalize out $x$ to obtain
 
 \[\calL_{\text{HMM}}(\theta,\Gamma;y) = \delta P(y_1;\theta) \prod_{t=2}^T \Gamma P(y_t;\theta) \mathbf{1}_N,\]
 %
-where $\mathbf{1}_N$ is an $N$-dimensional column vector of ones and
-%
-$P(y_t;\theta)$ is an $N \times N$ diagonal matrix with $(i,i)^{th}$ entry $f^{(i)}(y_t; \theta^{(i)})$.
+where $\mathbf{1}_N$ is an $N$-dimensional column vector of ones and $P(y_t;\theta)$ is an $N \times N$ diagonal matrix with $(i,i)^{th}$ entry $f^{(i)}(y_t; \theta^{(i)})$. This equation can be evaluated in $\mathcal{O}(T)$ time using the well-known \textit{forward algorithm} \citep{Zucchini:2016}. 
+After obtaining maximum likelihood estimates $\{\hat \theta, \hat \Gamma\}$, estimated probabilities of each hidden state $\big(\hat{\Pr}(X_t = i|Y = y)\big)$ can be calculated from $\{\hat \theta,\hat \Gamma\}$ using the \textit{forward-backward algorithm} \citep{Zucchini:2016}.
 %
 
 Following \citet{Barajas:2017}, we reparameterize the $N \times N$ transition probability matrix $\Gamma$ such that the entries of the matrix are forced to be non-negative and the rows sum to 1:
@@ -32,7 +36,7 @@ Following \citet{Barajas:2017}, we reparameterize the $N \times N$ transition pr
 \Gamma_{ij} = \frac{\exp(\eta_{ij})}{\sum_{k=1}^N \exp(\eta_{ik})}, 
 \]
 %
-where $i,j = 1,\ldots,N$ and $\eta_{ii}$ is set to zero for identifiability. This simplifies likelihood maximization by removing constraints in the optimization problem. For simplicity, we will continue to use $\Gamma$ in our notation, suppressing the reparameterization in terms of $\eta$. Figure \ref{fig:models}a represents the dependence structure of an HMM.
+where $i,j = 1,\ldots,N$ and $\eta_{ii}$ is set to zero for identifiability. This formulation simplifies likelihood maximization by removing constraints in the optimization problem. We assume there are no covariate effects in this paper, \cite{DeSouza:2017} and \citet{Adam:2019} both incorporate covariates into $\Gamma$ by setting $\eta_{ij}(z_t) = \beta_{ij}^T z_t$ for $i \neq j$, where $z_t$ is a column vector of known covariates at time $t$ and $\beta_{ij}$ is a column vector of unknown regression coefficients. For simplicity, we will continue to use $\Gamma$ in our notation, suppressing the reparameterization in terms of $\eta$. Figure \ref{fig:models}a represents the dependence structure of an HMM.
 
 \subsection{Relaxing conditional independence with the CarHMM}
 \label{subsec:CarHMM}
@@ -50,7 +54,7 @@ As a concrete example, if $Y_t$ is a scalar, then one may assume that $Y_t$ give
 %
 A CarHMM which follows Equation (\ref{eqn:carhmm}) can be viewed as a discrete time version of a state-switching Ornstein-Uhlenbeck process \citep{Michelot:2019}. This follows in the same way that an AR(1) process is the discrete-time version of a traditional Ornstein-Uhlenbeck process. 
 
-As previously, the likelihood corresponding to a general CarHMM can be easily calculated using the forward algorithm. If $y$ is the sequence of observed emissions, then
+As previously, the likelihood of $\theta$ and $\Gamma$ corresponding to a CarHMM can be calculated using the forward algorithm. If $y$ is the sequence of observations, then
 
 \begin{equation*}
     \calL_{\text{CarHMM}}(\theta,\Gamma;y) = \delta \prod_{t=2}^T \Gamma P(y_t|y_{t-1};\theta) \mathbf{1}_N,
@@ -78,9 +82,11 @@ In the hierarchical setting, however, each state $X_t$ also emits another sequen
 \end{gather*}
 Given the coarse-scale hidden state sequence $X$, the $T+1$ sets $\{X_1^*, Y_1^*\}, \ldots, \{X^*_T, Y^*_T\}$, and $\{Y_1,\ldots,Y_T\}$ are assumed to be independent of one another.
 
-Forcing certain parameters to be shared can reduce the complexity and increase the interpretability of an HHMM. For example, in our killer whale case study (see Section \ref{sec:data}), we take $N^{*(i)} = N^*$ for all $i$. We also share the fine-scale emission parameters across the $N$ coarse-scale hidden states $\left( \text{i.e., } \theta^{*(1,i^*)} = \cdots = \theta^{*(N,i^*)} = \theta^{*(\cdot,i^*)} \text{ for all } i^* = 1, \ldots, N^* \right)$. Coarse-scale hidden states therefore differ only in their coarse-scale emission parameters $\theta^{(i)}$ and fine-scale probability transition matrices $\Gamma^{*(i)}$, \textit{not} their fine-scale emission distributions.
+Forcing certain parameters to be shared can reduce the complexity and increase the interpretability of an HHMM. For example, since $f^{*(i,i^*)}$ depends on both $X_t = i$ and $X^*_{t,t^*} = i^*$, a within-curve behaviour is defined by the pair $(X_t,X^*_{t,t^*})$. However, in our killer whale case study (see Section \ref{sec:data}), we take $N^{*(i)} = N^*$ for all $i$ and share the fine-scale emission parameters across the $N$ coarse-scale hidden states $\left( \text{i.e., } \theta^{*(1,i^*)} = \cdots = \theta^{*(N,i^*)} = \theta^{*(\cdot,i^*)} \text{ for all } i^* = 1, \ldots, N^* \right)$. As a result, within-curve behaviours are shared between curve types and are defined exclusively by $X^*_{t,t^*}$ (or $(\cdot,X^*_{t,t^*})$ for notational consistency). Coarse-scale hidden states therefore differ only in their coarse-scale emission parameters $\theta^{(i)}$ and fine-scale probability transition matrices $\Gamma^{*(i)}$, not their fine-scale emission parameters $\theta^{*(\cdot,i)}$. 
 
-While at first it seems difficult to jointly infer the paramtersDue to the nested structure of the HHMM, its likelihood is easily calculated using the forward algorithm.
+
+Due to the nested structure of the HHMM, %its likelihood is easily calculated using the forward algorithm.
+it is straightforward to extend the forward algorithm and marginalize out both the coarse-scale hidden states $X$ and the fine-scale hidden states $X^*$ from the likelihood.
 %
 Let $y$ be the sequence of observed coarse-scale emissions and
 $y^* \equiv \{y^*_1, \ldots,y^*_T\}$ be the collection of $T$ observed fine-scale emission vectors.
@@ -121,7 +127,8 @@ for $t^* = 1,h+1,2h+1,\ldots$ and $k = 0, 1, \ldots, h-1$ with $i = \sqrt{-1}$. 
 %
 where $\tilde{\omega} \leq h-1$ is a problem-specific tuning parameter corresponding to the maximum recorded frequency within each window. In words, $\Zone_{t,\tilde{t}^*}$ is the average value of $Y^*_t$ within window $\tilde{t}^*$ and $\Ztwo_{t,\tilde{t}^*}$ is the squared two-norm of the component of the window that can be attributed to frequencies between one and $\tilde{\omega}$ periods per window. More intuitively, $\Ztwo_{t,\tilde{t}^*}$ corresponds to the ``wiggliness" of the fine-scale data within curve $t$ and window $\tilde{t}^*$.
 
-When performing this transformation, the fine-scale HMM (or CarHMM) must be redefined since $\Z_t$ exists on a coarser scale than $Y^*_t$ itself. As a result, there are only $\tilde{T}_t^*$ unobserved states associated with $\Z_t = \big\{\Z_{t,1},\ldots, \Z_{t,\tilde{T}^*_t}\big\}$, which we denote as $\tilde{X}^*_t = \big\{\tilde{X}^*_{t,1},\ldots, \tilde{X}^*_{t,\tilde{T}^*_t}\big\}$. The fine-scale probability transition matrices  $\Gamma^{*(i)}$ and probability density functions $f^{*(i,i^*)}$ are then applied directly to $\tilde{X}^*_t$ and $\Z_t$ instead of $X^*_t$ and $Y^*_t$. The likelihood of this model is therefore identical to that of the original HMM or CarHMM as defined in Sections \ref{subsec:HMM} and \ref{subsec:CarHMM}, but $Y^*$ is replaced with $\Z$ and $X^*$ is replaced with $\tilde{X^*}$. To clearly differentiate models, we refer to an HMM with $\Z$ as observations and $\tilde{X^*}$ as hidden states as an HMM-DFT. Figure \ref{fig:models}d displays the dependence structure of a fine-scale HMM-DFT.
+After performing this transformation, the entire model must be redefined since the fine-scale HMM (or CarHMM) directly models the distribution of the summary statistics $\Z_t$ rather than the discretized curve $Y^*_t$. Because $\Z_t$ likely exists on a coarser scale than $Y^*_t$, there are only $\tilde{T}_t^*$ unobserved states associated with $\Z_t = \big\{\Z_{t,1},\ldots, \Z_{t,\tilde{T}^*_t}\big\}$. We denote these unobserved states as $\tilde{X}^*_t = \big\{\tilde{X}^*_{t,1},\ldots, \tilde{X}^*_{t,\tilde{T}^*_t}\big\}$. The fine-scale probability transition matrices $\Gamma^{*(i)}$ and probability density functions $f^{*(i,i^*)}$ correspond to $\tilde{X}^*_t$ and $\Z_t$ rather than $X^*_t$ and $Y^*_t$, as do all fine-scale model assumptions (e.g. conditional independence, auto-regressive structure between observations, etc.). Fine-scale model selection should be done accordingly. %instead of $X^*_t$ and $Y^*_t$. 
+The likelihood of this model is therefore identical to that of the original HMM or CarHMM as defined in Sections \ref{subsec:HMM} and \ref{subsec:CarHMM}, but $Y^*$ is replaced with $\Z$ and $X^*$ is replaced with $\tilde{X^*}$. To clearly differentiate models, we refer to an HMM with $\Z$ as observations and $\tilde{X^*}$ as hidden states as an HMM-DFT. Figure \ref{fig:models}d displays the dependence structure of a fine-scale HMM-DFT.
 
 \subsection{Generalized hierarchical Markov models}
 
