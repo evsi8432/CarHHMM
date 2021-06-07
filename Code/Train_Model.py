@@ -83,7 +83,7 @@ data = prep.get_all_features(df,dive_df)
 # train_model
 print('training model')
 hhmm = HHMM.HHMM(pars,data)
-hhmm.train_DM(data,max_iters=10,max_steps=10)
+hhmm.train_DM(data,max_iters=10,max_steps=50)
 
 # get SEs
 h = 0.01

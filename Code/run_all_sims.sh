@@ -9,7 +9,7 @@
 #SBATCH --mail-type=ALL
 
 #SBATCH --time=96:00:00
-#SBATCH --mem-per-cpu=4G
+#SBATCH --mem-per-cpu=8G
 #SBATCH --array=1-2000
 
 if [ $SLURM_ARRAY_TASK_ID -lt 501 ]

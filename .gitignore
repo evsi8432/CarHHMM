@@ -23,8 +23,8 @@ Data/*
 Params.nosync/*
 Data.nosync/*
 
-## Plots
-Plots/*
+## 2020 Plots
+Plots/2020/*
 
 ## ipython checkpoints
 Code/.ipynb_checkpoints/*

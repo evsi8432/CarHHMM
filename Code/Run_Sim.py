@@ -88,19 +88,19 @@ ptm_crude = np.array([[0.85,0.15],
 eta_crude = np.array([[ 0.    , -1.6984],
                       [ 2.3471,  0.    ]])
 
-ptm_fine = [np.array([[0.75,0.25,0.00],
+ptm_fine = [np.array([[0.74,0.25,0.01],
                       [0.08,0.87,0.05],
-                      [0.00,0.23,0.77]]),
-            np.array([[0.89,0.11,0.00],
+                      [0.01,0.23,0.76]]),
+            np.array([[0.88,0.11,0.01],
                       [0.15,0.81,0.04],
-                      [0.00,0.23,0.77]])]
+                      [0.01,0.23,0.76]])]
 
-eta_fine =  [np.array([[  0.    ,  -1.0873, -22.6511],
-                    [ -2.3615,   0.    ,  -2.823 ],
-                    [-17.1832,  -1.1937,   0.    ]]),
-              np.array([[  0.    ,  -2.0691, -13.2605],
-                     [ -1.6902,   0.    ,  -3.1311],
-                     [-16.9396,  -1.2303,   0.    ]])]
+eta_fine =  [np.array([[  0.    ,  -1.0873, -10.00 ],
+                       [ -2.3615,   0.    , -2.823 ],
+                       [ -10.000,  -1.1937,  0.    ]]),
+              np.array([[  0.    ,  -2.0691,  -10.000],
+                        [ -1.6902,   0.    ,  -3.1311],
+                        [ -10.000,  -1.2303,   0.    ]])]
 
 # train new models?
 train_new = True
@@ -242,8 +242,7 @@ hmm_FV_theta = [{'dive_duration': {'mu': np.array([np.mean(dd_mu)]),
                          'sig': acc_sig,
                          'corr': logit(corr_fine)}}]]
 
-ptm_fine_temp = ptm_fine[0]/2 + ptm_fine[1]/2
-eta_fine_temp = HHMM.ptm_2_eta(ptm_fine_temp)
+eta_fine_temp = eta_fine[0]/2 + eta_fine[1]/2
 
 hmm_FV_eta = [np.array([[0]]),
              [eta_fine_temp]]

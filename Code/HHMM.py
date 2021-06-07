@@ -14,11 +14,12 @@ from scipy.special import expit
 from scipy.special import logit
 from scipy.special import logsumexp
 from scipy.optimize import minimize
+from scipy.optimize import minimize_scalar
 from scipy.optimize import LinearConstraint
 from scipy.signal import convolve
 from scipy.interpolate import interp1d
 
-from skopt import gp_minimize
+#from skopt import gp_minimize
 
 from copy import deepcopy
 
@@ -194,6 +195,26 @@ class HHMM:
         self.theta = theta
 
         return
+
+
+    def reorder_params(self):
+
+        state_order = np.argsort(self.theta[1][0]['Ax']['sig'])
+
+        # first reorder eta
+        for k0 in range(self.pars.K[0]):
+            eta_fine = deepcopy(self.eta[1][k0])
+            for i in range(k0):
+                for j in range(k0):
+                    eta_fine[i,j] = eta_fine[state_order[i],state_order[j]]
+            self.eta[1][k0] = eta_fine
+
+        # then reorder theta
+        for feature,settings in self.pars.features[1].items():
+            for k0 in range(self.pars.K[0]):
+                for param in ['mu','sig','corr']:
+                    self.theta[1][k0][feature][param] = np.array([self.theta[1][k0][feature][param][state_order[i]] for i in range(3)])
+
 
 
     def find_log_p_yt_given_xt(self,level,feature,data,data_tm1,mu,sig,corr,sample=0):
@@ -598,7 +619,7 @@ class HHMM:
 
         return (self.theta,self.eta)
 
-    def train_DM(self,data,max_iters=10,max_steps=10,tol=0.01,eps=10e-6):
+    def train_DM(self,data,max_iters=10,max_steps=50,tol=0.01,eps=10e-6):
 
         stime = time.time()
         options = {'maxiter':max_iters,'disp':False}
@@ -632,7 +653,9 @@ class HHMM:
 
                 # optimize
                 if len(x0) > 0:
-                    res = minimize(loss_fn, x0, method='BFGS',options=options)
+                    stime = time.time()
+                    res = minimize(loss_fn, x0, method='Nelder-Mead',options=options)
+                    etime = time.time()
 
                     # update final values
                     x = np.copy(res['x'])
@@ -648,8 +671,9 @@ class HHMM:
 
                     print('updated coarse eta, row %d' % i)
                     print('original: ', backup)
-                    print('new: ', x)
-                    print(self.likelihood(data))
+                    print(res)
+                    print('time taken: ', etime-stime, ' seconds')
+                    print('')
                 else:
                     print('N = 1, no Coarse Gamma')
 
@@ -685,7 +709,9 @@ class HHMM:
                         x0 = self.theta[0][feature][param][k0]
 
                         # optimize
+                        stime = time.time()
                         res = minimize(loss_fn, x0, method='Nelder-Mead', options=options)
+                        etime = time.time()
 
                         # update final values
                         x = np.copy(res['x'])
@@ -705,8 +731,9 @@ class HHMM:
 
                         print('updated coarse theta %s, state %d, param %s' % (feature,k0,param))
                         print('original: ', backup)
-                        print('new: ', x)
-                        print(self.likelihood(data))
+                        print(res)
+                        print('time taken: ', etime-stime, ' seconds')
+                        print('')
 
 
             ### then do fine eta ###
@@ -732,7 +759,9 @@ class HHMM:
                     x0 = np.delete(x0,i)
 
                     # optimize
-                    res = minimize(loss_fn, x0, method='BFGS',options=options)
+                    stime = time.time()
+                    res = minimize(loss_fn, x0, method='Nelder-Mead',options=options)
+                    etime = time.time()
 
                     # update final values
                     x = np.copy(res['x'])
@@ -749,8 +778,9 @@ class HHMM:
 
                     print('updated fine eta, dive %d, row %d' % (k0,i))
                     print('original: ', backup)
-                    print('new: ', x)
-                    print(self.likelihood(data))
+                    print(res)
+                    print('time taken: ', etime-stime, ' seconds')
+                    print('')
 
 
             ### finally do fine theta ###
@@ -799,7 +829,9 @@ class HHMM:
                             x0 = self.theta[1][k0][feature][param][k1]
 
                             # optimize
+                            stime = time.time()
                             res = minimize(loss_fn, x0, method='Nelder-Mead', options=options)
+                            etime = time.time()
 
                             # update final values
                             if self.likelihood(data) >= backup_l:
@@ -827,8 +859,9 @@ class HHMM:
                             print('updated fine theta %s, dive_state %d subdive state %d, param %s'\
                                   % (feature,k0,k1,param))
                             print('original: ', backup)
-                            print('new: ', x)
-                            print(self.likelihood(data))
+                            print(res)
+                            print('time taken: ', etime-stime, ' seconds')
+                            print('')
 
             curr_l = self.likelihood(data)
             if abs(curr_l - prev_l) < tol:
