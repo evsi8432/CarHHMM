@@ -65,13 +65,24 @@
     \subsection{Lag plots}
         
         \begin{center}
-        \includegraphics[height=5in]{../Plots/CarHHMM2_lagplot.png}
+        \includegraphics[height=5in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_lagplot.png}
         \end{center}
         
         \noindent Figure \arabic{fignum}: Collection of 5 lag plots where a given observation is on the $x$-axis and the subsequent observation is on the $y$-axis. Each plot corresponds to a feature in the killer whale dive data. Lag plots are used to decide whether to include auto-correlation in the HMMs used to model the killer whale's kinematic data. They can also be used to determine the number of hidden states if multiple distinct patterns are visible. 
         \addtocounter{fignum}{1}
         
         \newpage
+        
+    \subsection{Likelihood Surfaces}
+    
+        \begin{center}
+        \includegraphics[height=5in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_lagplot.png}
+        \end{center}
+        
+        \noindent Figure \arabic{fignum}: Collection of 5 lag plots where a given observation is on the $x$-axis and the subsequent observation is on the $y$-axis. Each plot corresponds to a feature in the killer whale dive data. Lag plots are used to decide whether to include auto-correlation in the HMMs used to model the killer whale's kinematic data. They can also be used to determine the number of hidden states if multiple distinct patterns are visible. 
+        \addtocounter{fignum}{1}
+        
+        \newpage    
     
     \subsection{Parameter Estimates}
 
@@ -86,29 +97,29 @@
             \centering
             \def\arraystretch{1.5}
             \begin{tabular}{ccccc}
-                \multirow{2}{*}{Feature}                                                       & \multirow{2}{*}{Dive / Subdive Type} & \multicolumn{3}{c}{Parameter Estimate (Standard Error)}                     \\
-                                                                                               &                                      & $\hat \mu$         & $\hat \sigma$     & $\hat \phi$       \\ \hline
-                \multirow{2}{*}{Dive Duration $(s)$ - $Y_t$}                                   & 1                                    & $25.69 \ (0.60)$   & $9.57 \ (0.51)$   & ---               \\
-                                                                                               & 2                                    & $104.6 \ (9.4)$    & $64.7 \ (7.5)$    & ---               \\ \hline
-                \multirow{3}{*}{$x$-Acceleration $(m/s^2)$ - $\left(\Zone_{t,\tilde t^*}\right)_x$}     & 1                                    & $0.020 \ (0.042)$  & $0.034 \ (0.001)$ & $0.976 \ (0.007)$ \\
-                                                                                               & 2                                    & $0.244 \ (0.013)$  & $0.079 \ (0.001)$ & $0.886 \ (0.005)$ \\
-                                                                                               & 3                                    & $0.218 \ (0.028)$  & $0.265 \ (0.007)$ & $0.626 \ (0.029)$ \\ \hline
-                \multirow{3}{*}{$y$-Acceleration $(m/s^2)$ - $\left(\Zone_{t,\tilde t^*}\right)_y$}     & 1                                    & $0.469 \ (0.052)$  & $0.044 \ (0.001)$ & $0.976 \ (0.009)$ \\
-                                                                                               & 2                                    & $0.436 \ (0.014)$  & $0.082 \ (0.001)$ & $0.886 \ (0.012)$ \\
-                                                                                               & 3                                    & $0.384 \ (0.033)$  & $0.321 \ (0.009)$ & $0.626 \ (0.034)$ \\ \hline
-                \multirow{3}{*}{$z$-Acceleration $(m/s^2)$ - $\left(\Zone_{t,\tilde t^*}\right)_z$}     & 1                                    & $-0.683 \ (0.061)$ & $0.052 \ (0.001)$ & $0.976 \ (0.005)$ \\
-                                                                                               & 2                                    & $-0.593 \ (0.016)$ & $0.096 \ (0.001)$ & $0.886 \ (0.009)$ \\
-                                                                                               & 3                                    & $-0.366 \ (0.033)$ & $0.317 \ (0.009)$ & $0.626 \ (0.033)$ \\ \hline
-                \multirow{3}{*}{Wiggliness - $\Ztwo_{t,\tilde t^*}$}                                  & 1                                    & $23.34 \ (0.28)$   & $12.95 \ (0.27)$  & ---               \\
-                                                                                               & 2                                    & $301.2 \ (3.2)$    & $330.1 \ (4.2)$   & ---               \\
-                                                                                               & 3                                    & $10200 \ (210)$    & $15300 \ (350)$   & ---               \\ \hline
-                \end{tabular}
-                \egroup
-                }
-                \end{center}
-                
-                \noindent Table \arabic{tablenum}: Estimates and predicted standard errors of emission parameters for dive duration ($Y_t$), acceleration ($\Zone_{t,\tilde t^*}$), and wiggliness ($\Ztwo_{t,\tilde t^*}$) of the killer whale case study data under the full CarHHMM-DFT. The parentheses refer to the estimated standard error of the parameter estimates derived from the inverse of the observed information matrix.
-                \addtocounter{tablenum}{1}
+            \multirow{2}{*}{Feature}                                                       & \multirow{2}{*}{Dive / Subdive Type} & \multicolumn{3}{c}{Parameter Estimate}        \\
+                                                                                           &                                      & $\hat \mu$    & $\hat \sigma$ & $\hat \phi$   \\ \hline
+            \multirow{2}{*}{Dive Duration $(s)$ -- $Y_t$}                                  & 1                                    & $27.27 (0.63)$ & $10.91 (0.56)$ & ---           \\
+                                                                                           & 2                                    & $127.1 (11.3)$ & $64.1 (9.0)$ & ---           \\ \hline
+            \multirow{3}{*}{$x$-Acc. $(m/s^2)$ -- $\left(\Zone_{t,\tilde t^*}\right)_x$}   & 1                                    & $0.423 (0.028)$ & $0.040 (0.001)$ & $0.966 (0.002)$ \\
+                                                                                           & 2                                    & $0.210 (0.012)$ & $0.097 (0.002)$ & $0.827 (0.010)$ \\
+                                                                                           & 3                                    & $0.232 (0.035)$ & $0.298 (0.010)$ & $0.605 (0.043)$ \\ \hline
+            \multirow{3}{*}{$y$-Acc. $(m/s^2)$ -- $\left(\Zone_{t,\tilde t^*}\right)_y$}   & 1                                    & $0.445 (0.036)$ & $0.051 (0.001)$ & $0.966 (0.009)$ \\
+                                                                                           & 2                                    & $0.438 (0.012)$ & $0.095 (0.002)$ & $0.827 (0.016)$ \\
+                                                                                           & 3                                    & $0.364 (0.043)$ & $0.368 (0.012)$ & $0.605 (0.041)$ \\ \hline
+            \multirow{3}{*}{$z$-Acc. $(m/s^2)$ -- $\left(\Zone_{t,\tilde t^*}\right)_z$}   & 1                                    & $-0.680 (0.041)$ & $0.058 (0.001)$ & $0.966 (0.005)$ \\
+                                                                                           & 2                                    & $-0.573 (0.014)$ & $0.112 (0.002)$ & $0.827 (0.012)$ \\
+                                                                                           & 3                                    & $-0.296 (0.042)$ & $0.357 (0.012)$ & $0.605 (0.039)$ \\ \hline
+            \multirow{3}{*}{Wiggliness - $\Ztwo_{t,\tilde t^*}$}                           & 1                                    & $34.98 (0.38)$ & $23.85 (0.39)$ & ---           \\
+                                                                                           & 2                                    & $505.8 (5.8)$ & $516.7 (7.0)$ & ---           \\
+                                                                                           & 3                                    & $9770 (240)$ & $14460 (380)$ & ---           \\ \hline
+            \end{tabular}
+            \egroup
+            }
+            \end{center}
+            
+            \noindent Table \arabic{tablenum}: Estimates and predicted standard errors of emission parameters for dive duration ($Y_t$), acceleration ($\Zone_{t,\tilde t^*}$), and wiggliness ($\Ztwo_{t,\tilde t^*}$) of the killer whale case study data under the full CarHHMM-DFT. The parentheses refer to the estimated standard error of the parameter estimates derived from the inverse of the observed information matrix.
+            \addtocounter{tablenum}{1}
     
         \subsubsection{HHMM-DFT}
             \begin{center}
@@ -117,22 +128,22 @@
                 \centering
                 \def\arraystretch{1.5}
                 \begin{tabular}{ccccc}
-                \multirow{2}{*}{Feature}                                                       & \multirow{2}{*}{Dive / Subdive Type} & \multicolumn{3}{c}{Parameter Estimate (Standard Error)}                   \\
-                                                                                               &                                      & $\hat \mu$         & $\hat \sigma$     & $\hat \phi$     \\ \hline
-                \multirow{2}{*}{Dive Duration $(s)$ - $Y_t$}                                   & 1                                    & $25.34 \ (0.60)$   & $8.82 \ (0.51)$   & ---             \\
-                                                                                               & 2                                    & $92.7 \ (7.7)$     & $63.7 \ (6.5)$    & ---             \\ \hline
-                \multirow{3}{*}{$x$-Acceleration $(m/s^2)$ - $\left(\Zone_{t,\tilde t^*}\right)_x$}     & 1                                    & $-0.023 \ (0.002)$ & $0.053 \ (0.001)$ & ---             \\
-                                                                                               & 2                                    & $0.074 \ (0.003)$  & $0.149 \ (0.002)$ & ---             \\
-                                                                                               & 3                                    & $0.214 \ (0.014)$  & $0.422 \ (0.010)$ & ---             \\ \hline
-                \multirow{3}{*}{$y$-Acceleration $(m/s^2)$ - $\left(\Zone_{t,\tilde t^*}\right)_y$}     & 1                                    & $0.342 \ (0.002)$  & $0.064 \ (0.002)$ & ---             \\
-                                                                                               & 2                                    & $0.408 \ (0.002)$  & $0.091 \ (0.001)$ & ---             \\
-                                                                                               & 3                                    & $0.320 \ (0.011)$  & $0.341 \ (0.008)$ & ---             \\ \hline
-                \multirow{3}{*}{$z$-Acceleration $(m/s^2)$ - $\left(\Zone_{t,\tilde t^*}\right)_z$}     & 1                                    & $-0.418 \ (0.003)$ & $0.104 \ (0.002)$ & ---             \\
-                                                                                               & 2                                    & $-0.478 \ (0.003)$ & $0.136 \ (0.002)$ & ---             \\
-                                                                                               & 3                                    & $-0.346 \ (0.012)$ & $0.359 \ (0.008)$ & ---             \\ \hline
-                \multirow{3}{*}{Wiggliness - $\Ztwo_{t,\tilde t^*}$}                                  & 1                                    & $25.32 \ (0.38)$   & $15.94 \ (0.38)$  & ---             \\
-                                                                                               & 2                                    & $252.4 \ (2.8)$    & $296.9 \ (3.9)$   & ---             \\
-                                                                                               & 3                                    & $8800 \ (150)$     & $15580 \ (290)$   & ---             \\ \hline
+                \multirow{2}{*}{Feature}                                                       & \multirow{2}{*}{Dive / Subdive Type} & \multicolumn{3}{c}{Parameter Estimate}          \\
+                                                                                               &                                      & $\hat \mu$    & $\hat \sigma$ & $\hat \phi$     \\ \hline
+                \multirow{2}{*}{Dive Duration $(s)$ -- $Y_t$}                                  & 1                                    & $26.565 (0.607)$ & $10.118 (0.518)$ & ---             \\
+                                                                                               & 2                                    & $116.134 (10.584)$ & $64.778 (8.543)$ & ---             \\ \hline
+                \multirow{3}{*}{$x$-Acc. $(m/s^2)$ -- $\left(\Zone_{t,\tilde t^*}\right)_x$}   & 1                                    & $-0.001 (0.002)$ & $0.064 (0.001)$ & ---             \\
+                                                                                               & 2                                    & $0.084 (0.004)$ & $0.173 (0.003)$ & ---             \\
+                                                                                               & 3                                    & $0.287 (0.020)$ & $0.481 (0.014)$ & ---             \\ \hline
+                \multirow{3}{*}{$y$-Acc. $(m/s^2)$ -- $\left(\Zone_{t,\tilde t^*}\right)_y$}   & 1                                    & $0.365 (0.002)$ & $0.067 (0.001)$ & ---             \\
+                                                                                               & 2                                    & $0.408 (0.002)$ & $0.107 (0.002)$ & ---             \\
+                                                                                               & 3                                    & $0.278 (0.016)$ & $0.403 (0.012)$ & ---             \\ \hline
+                \multirow{3}{*}{$z$-Acc. $(m/s^2)$ -- $\left(\Zone_{t,\tilde t^*}\right)_z$}   & 1                                    & $-0.441 (0.003)$ & $0.101 (0.002)$ & ---             \\
+                                                                                               & 2                                    & $-0.471 (0.003)$ & $0.157 (0.002)$ & ---             \\
+                                                                                               & 3                                    & $-0.300 (0.017)$ & $0.412 (0.012)$ & ---             \\ \hline
+                \multirow{3}{*}{Wiggliness - $\Ztwo_{t,\tilde t^*}$}                           & 1                                    & $42.149 (0.507)$ & $32.091 (0.554)$ & ---             \\
+                                                                                               & 2                                    & $584.178 (6.491)$ & $687.082 (8.805)$ & ---             \\
+                                                                                               & 3                                    & $6841.607 (148.113)$ & $13060.895 (293.086)$ & ---             \\ \hline
                 \end{tabular}
                 \egroup
             }
@@ -149,19 +160,19 @@
                 \centering
                 \def\arraystretch{1.5}
                 \begin{tabular}{ccccc}
-                \multirow{2}{*}{Feature}                                                       & \multirow{2}{*}{Dive / Subdive Type} & \multicolumn{3}{c}{Parameter Estimate (Standard Error)}                     \\
-                                                                                               &                                      & $\hat \mu$         & $\hat \sigma$     & $\hat \phi$       \\ \hline
-                \multirow{2}{*}{Dive Duration $(s)$ - $Y_t$}                                   & 1                                    & $27.21 \ (0.67)$   & $11.64 \ (0.70)$  & ---               \\
-                                                                                               & 2                                    & $136 \ (11)$       & $63.8 \ (9.4)$    & ---               \\ \hline
-                \multirow{3}{*}{$x$-Acceleration $(m/s^2)$ - $\left(\Zone_{t,\tilde t^*}\right)_x$}     & 1                                    & $-0.061 \ (0.088)$ & $0.392 \ (0.019)$ & $0.725 \ (0.045)$ \\
-                                                                                               & 2                                    & $0.228 \ (0.017)$  & $0.043 \ (0.001)$ & $0.945 \ (0.004)$ \\
-                                                                                               & 3                                    & $0.172 \ (0.012)$  & $0.129 \ (0.003)$ & $0.721 \ (0.017)$ \\ \hline
-                \multirow{3}{*}{$y$-Acceleration $(m/s^2)$ - $\left(\Zone_{t,\tilde t^*}\right)_y$}     & 1                                    & $0.38 \ (0.12)$    & $0.552 \ (0.033)$ & $0.725 \ (0.064)$ \\
-                                                                                               & 2                                    & $0.387 \ (0.020)$  & $0.052 \ (0.001)$ & $0.945 \ (0.011)$ \\
-                                                                                               & 3                                    & $0.441 \ (0.011)$  & $0.118 \ (0.002)$ & $0.721 \ (0.023)$ \\ \hline
-                \multirow{3}{*}{$z$-Acceleration $(m/s^2)$ - $\left(\Zone_{t,\tilde t^*}\right)_z$}     & 1                                    & $-0.44 \ (0.11)$   & $0.506 \ (0.028)$ & $0.725 \ (0.055)$ \\
-                                                                                               & 2                                    & $-0.537 \ (0.023)$ & $0.059 \ (0.001)$ & $0.945 \ (0.008)$ \\
-                                                                                               & 3                                    & $-0.561 \ (0.012)$ & $0.135 \ (0.003)$ & $0.721 \ (0.018)$ \\ \hline
+                \multirow{2}{*}{Feature}                                                       & \multirow{2}{*}{Dive / Subdive Type} & \multicolumn{3}{c}{Parameter Estimate}        \\
+                                                                                               &                                      & $\hat \mu$    & $\hat \sigma$ & $\hat \phi$   \\ \hline
+                \multirow{2}{*}{Dive Duration $(s)$ -- $Y_t$}                                  & 1                                    & $27.170 (0.629)$ & $10.821 (0.552)$ & ---           \\
+                                                                                               & 2                                    & $125.090 (11.003)$ & $64.488 (8.842)$ & ---           \\ \hline
+                \multirow{3}{*}{$x$-Acc. $(m/s^2)$ -- $\left(\Zone_{t,\tilde t^*}\right)_x$}   & 1                                    & $0.066 (0.017)$ & $0.035 (0.002)$ & $0.876 (0.006)$ \\
+                                                                                               & 2                                    & $0.339 (0.037)$ & $0.095 (0.011)$ & $0.878 (0.037)$ \\
+                                                                                               & 3                                    & $0.258 (0.007)$ & $0.305 (0.001)$ & $0.605 (0.010)$ \\ \hline
+                \multirow{3}{*}{$y$-Acc. $(m/s^2)$ -- $\left(\Zone_{t,\tilde t^*}\right)_y$}   & 1                                    & $0.377 (0.017)$ & $0.044 (0.002)$ & $0.876 (0.014)$ \\
+                                                                                               & 2                                    & $0.469 (0.045)$ & $0.097 (0.013)$ & $0.878 (0.042)$ \\
+                                                                                               & 3                                    & $0.349 (0.009)$ & $0.378 (0.001)$ & $0.605 (0.013)$ \\ \hline
+                \multirow{3}{*}{$z$-Acc. $(m/s^2)$ -- $\left(\Zone_{t,\tilde t^*}\right)_z$}   & 1                                    & $-0.464 (0.020)$ & $0.052 (0.002)$ & $0.876 (0.010)$ \\
+                                                                                               & 2                                    & $-0.658 (0.045)$ & $0.113 (0.013)$ & $0.878 (0.040)$ \\
+                                                                                               & 3                                    & $-0.305 (0.011)$ & $0.370 (0.001)$ & $0.605 (0.012)$ \\ \hline
                 \end{tabular}
                 \egroup
             }
@@ -178,21 +189,21 @@
                 \centering
                 \def\arraystretch{1.5}
                 \begin{tabular}{ccccc}
-                \multirow{2}{*}{Feature}                                                       & \multirow{2}{*}{Dive / Subdive Type} & \multicolumn{3}{c}{Parameter Estimate (Standard Error)}                     \\
-                                                                                               &                                      & $\hat \mu$         & $\hat \sigma$     & $\hat \phi$       \\ \hline
-                \multirow{1}{*}{Dive Duration $(s)$ - $Y_t$}                                   & 1                                    & $42.9 \ (1.3)$     & $31.4 \ (1.3)$    & ---               \\ \hline
-                \multirow{3}{*}{$x$-Acceleration $(m/s^2)$ - $\left(\Zone_{t,\tilde t^*}\right)_x$}     & 1                                    & Undefined          & $0.035 \ (0.001)$ & $1.000 \ (0.000)$ \\
-                                                                                               & 2                                    & $0.241 \ (0.012)$  & $0.084 \ (0.001)$ & $0.861 \ (0.006)$ \\
-                                                                                               & 3                                    & $0.208 \ (0.028)$  & $0.266 \ (0.008)$ & $0.619 \ (0.031)$ \\ \hline
-                \multirow{3}{*}{$y$-Acceleration $(m/s^2)$ - $\left(\Zone_{t,\tilde t^*}\right)_y$}     & 1                                    & Undefined          & $0.046 \ (0.001)$ & $1.000 \ (0.000)$ \\
-                                                                                               & 2                                    & $0.440 \ (0.012)$  & $0.086 \ (0.001)$ & $0.861 \ (0.014)$ \\
-                                                                                               & 3                                    & $0.383 \ (0.033)$  & $0.322 \ (0.009)$ & $0.619 \ (0.034)$ \\ \hline
-                \multirow{3}{*}{$z$-Acceleration $(m/s^2)$ - $\left(\Zone_{t,\tilde t^*}\right)_z$}     & 1                                    & Undefined          & $0.053 \ (0.001)$ & $1.000 \ (0.000)$ \\
-                                                                                               & 2                                    & $-0.593 \ (0.015)$ & $0.101 \ (0.002)$ & $0.861 \ (0.010)$ \\
-                                                                                               & 3                                    & $-0.355 \ (0.033)$ & $0.318 \ (0.009)$ & $0.619 \ (0.033)$ \\ \hline
-                \multirow{3}{*}{Wiggliness  - $\Ztwo_{t,\tilde t^*}$}                                 & 1                                    & $24.07 \ (0.29)$   & $13.61 \ (0.28)$  & ---               \\
-                                                                                               & 2                                    & $291.6 \ (3.2)$    & $308.2 \ (4.1)$   & ---               \\
-                                                                                               & 3                                    & $10210 \ (200)$    & $15010 \ (340)$   & ---               \\ \hline
+                \multirow{2}{*}{Feature}                                                       & \multirow{2}{*}{Dive / Subdive Type} & \multicolumn{3}{c}{Parameter Estimate}        \\
+                                                                                               &                                      & $\hat \mu$    & $\hat \sigma$ & $\hat \phi$   \\ \hline
+                \multirow{1}{*}{Dive Duration $(s)$ -- $Y_t$}                                  & 1                                    & $41.875 (1.249)$ & $30.633 (1.230)$ & ---           \\ \hline
+                \multirow{3}{*}{$x$-Acc. $(m/s^2)$ -- $\left(\Zone_{t,\tilde t^*}\right)_x$}   & 1                                    & $0.455 (0.030)$ & $0.039 (0.001)$ & $0.968 (0.002)$ \\
+                                                                                               & 2                                    & $0.214 (0.012)$ & $0.096 (0.002)$ & $0.832 (0.009)$ \\
+                                                                                               & 3                                    & $0.222 (0.034)$ & $0.295 (0.010)$ & $0.604 (0.039)$ \\ \hline
+                \multirow{3}{*}{$y$-Acc. $(m/s^2)$ -- $\left(\Zone_{t,\tilde t^*}\right)_y$}   & 1                                    & $0.456 (0.039)$ & $0.051 (0.001)$ & $0.968 (0.009)$ \\
+                                                                                               & 2                                    & $0.437 (0.012)$ & $0.094 (0.002)$ & $0.832 (0.016)$ \\
+                                                                                               & 3                                    & $0.366 (0.042)$ & $0.364 (0.012)$ & $0.604 (0.040)$ \\ \hline
+                \multirow{3}{*}{$z$-Acc. $(m/s^2)$ -- $\left(\Zone_{t,\tilde t^*}\right)_z$}   & 1                                    & $-0.700 (0.044)$ & $0.058 (0.001)$ & $0.968 (0.005)$ \\
+                                                                                               & 2                                    & $-0.574 (0.014)$ & $0.111 (0.002)$ & $0.832 (0.012)$ \\
+                                                                                               & 3                                    & $-0.302 (0.041)$ & $0.354 (0.012)$ & $0.604 (0.039)$ \\ \hline
+                \multirow{3}{*}{Wiggliness - $\Ztwo_{t,\tilde t^*}$}                           & 1                                    & $33.883 (0.367)$ & $22.847 (0.376)$ & ---           \\
+                                                                                               & 2                                    & $480.622 (5.479)$ & $492.201 (6.598)$ & ---           \\
+                                                                                               & 3                                    & $9987.824 (239.804)$ & $14754.912 (375.450)$ & ---           \\ \hline
                 \end{tabular}
                 \egroup
             }
@@ -207,14 +218,14 @@
         \subsubsection{CarHHMM-DFT}
         
         \begin{center}
-        \includegraphics[width=6in]{../Plots/CarHHMM2_decoded_dives.png}
+        \includegraphics[width=6in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_decoded_dives.png}
         \end{center}
         
         \noindent Figure \arabic{fignum}: The $x$--component of acceleration $\left(y^*_{t,t^*}\right)_x$ (top two panels) and dive depth (bottom two panels) of a northern resident killer whale for a sequence of six selected dives. Each panel is partitioned into dives by vertical black lines. The curve colours in the first and third panels correspond to the estimated dive types while the curve colours of the second and fourth panels correspond the estimated subdive states. Both the dive types and subdive states are estimated by fitting the CarHHMM-DFT to the data and performing the forward-backward algorithm to determine the hidden state with the highest probability.
         \addtocounter{fignum}{1}
         
         \begin{center}
-        \includegraphics[width=6in]{../Plots/CarHHMM2_decoded_states.png}
+        \includegraphics[width=6in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_decoded_states.png}
         \end{center}
         
         \noindent Figure \arabic{fignum}: The probability that each dive is a particular type or that the whale is in a particular subdive state, given the fitted model. Each panel is partitioned into dives by vertical black lines. The curve colours in the first and third panels correspond to the estimated dive types while the curve colours of the second and fourth panels correspond the estimated subdive states. Both the dive types and subdive states are estimated by fitting the CarHHMM-DFT to the data and performing the forward-backward algorithm.
@@ -223,14 +234,14 @@
         \subsubsection{HHMM-DFT}
         
         \begin{center}
-        \includegraphics[width=6in]{../Plots/HHMM_decoded_dives.png}
+        \includegraphics[width=6in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_HHMM_decoded_dives.png}
         \end{center}
         
         \noindent Figure \arabic{fignum}: The $x$--component of acceleration $\left(y^*_{t,t^*}\right)_x$ (top two panels) and dive depth (bottom two panels) of a northern resident killer whale for a sequence of six selected dives. Each panel is partitioned into dives by vertical black lines. The curve colours in the first and third panels correspond to the estimated dive types while the curve colours of the second and fourth panels correspond the estimated subdive states. Both the dive types and subdive states are estimated by fitting the HHMM-DFT to the data and performing the forward-backward algorithm to determine the hidden state with the highest probability.
         \addtocounter{fignum}{1}
         
         \begin{center}
-        \includegraphics[width=6in]{../Plots/HHMM_decoded_states.png}
+        \includegraphics[width=6in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_HHMM_decoded_states.png}
         \end{center}
         
         \noindent Figure \arabic{fignum}: The probability that each dive is a particular type or that the whale is in a particular subdive state, given the fitted model. Each panel is partitioned into dives by vertical black lines. The curve colours in the first and third panels correspond to the estimated dive types while the curve colours of the second and fourth panels correspond the estimated subdive states. Both the dive types and subdive states are estimated by fitting the HHMM-DFT to the data and performing the forward-backward algorithm.
@@ -239,14 +250,14 @@
         \subsubsection{CarHHMM}
         
         \begin{center}
-        \includegraphics[width=6in]{../Plots/CarHHMM1_decoded_dives.png}
+        \includegraphics[width=6in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM1_decoded_dives.png}
         \end{center}
         
         \noindent Figure \arabic{fignum}: The $x$--component of acceleration $\left(y^*_{t,t^*}\right)_x$ (top two panels) and dive depth (bottom two panels) of a northern resident killer whale for a sequence of six selected dives. Each panel is partitioned into dives by vertical black lines. The curve colours in the first and third panels correspond to the estimated dive types while the curve colours of the second and fourth panels correspond the estimated subdive states. Both the dive types and subdive states are estimated by fitting the CarHHMM to the data and performing the forward-backward algorithm to determine the hidden state with the highest probability.
         \addtocounter{fignum}{1}
         
         \begin{center}
-        \includegraphics[width=6in]{../Plots/CarHHMM1_decoded_states.png}
+        \includegraphics[width=6in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM1_decoded_states.png}
         \end{center}
         
         \noindent Figure \arabic{fignum}: The probability that each dive is a particular type or that the whale is in a particular subdive state, given the fitted model. Each panel is partitioned into dives by vertical black lines. The curve colours in the first and third panels correspond to the estimated dive types while the curve colours of the second and fourth panels correspond the estimated subdive states. Both the dive types and subdive states are estimated by fitting the CarHHMM to the data and performing the forward-backward algorithm.
@@ -255,14 +266,14 @@
         \subsubsection{CarHMM-DFT}
         
         \begin{center}
-        \includegraphics[width=6in]{../Plots/CarHMM_decoded_dives.png}
+        \includegraphics[width=6in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHMM_decoded_dives.png}
         \end{center}
         
         \noindent Figure \arabic{fignum}: The $x$--component of acceleration $\left(y^*_{t,t^*}\right)_x$ (top two panels) and dive depth (bottom two panels) of a northern resident killer whale for a sequence of six selected dives. Each panel is partitioned into dives by vertical black lines. The curve colours in the first and third panels correspond to the estimated dive types while the curve colours of the second and fourth panels correspond the estimated subdive states. Both the dive types and subdive states are estimated by fitting the CarHMM-DFT to the data and performing the forward-backward algorithm to determine the hidden state with the highest probability.
         \addtocounter{fignum}{1}
         
         \begin{center}
-        \includegraphics[width=6in]{../Plots/CarHMM_decoded_states.png}
+        \includegraphics[width=6in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHMM_decoded_states.png}
         \end{center}
         
         \noindent Figure \arabic{fignum}: The probability that each dive is a particular type or that the whale is in a particular subdive state, given the fitted model. Each panel is partitioned into dives by vertical black lines. The curve colours in the first and third panels correspond to the estimated dive types while the curve colours of the second and fourth panels correspond the estimated subdive states. Both the dive types and subdive states are estimated by fitting the CarHMM-DFT to the data and performing the forward-backward algorithm.
@@ -274,8 +285,8 @@
         \subsubsection{CarHHMM-DFT}
         
         \begin{center}
-        \includegraphics[width=2.25in]{../Plots/CarHHMM2_empirical_hist_dive_duration.png}
-        \includegraphics[width=2.25in]{../Plots/CarHHMM2_psedoresids_Dive_Duration.png}
+        \includegraphics[width=2.25in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_empirical_hist_dive_duration.png}
+        \includegraphics[width=2.25in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_psedoresids_Dive_Duration.png}
         \end{center}
         
         \noindent Figure \arabic{fignum}: Empirical histogram (left) and psuedoresiduals (right) of dive duration ($Y_{t}$) plotted over the estimated emission distributions and a standard normal density, respectively. Both plots are generated using the fitted CarHHMM-DFT and the killer whale case study data.
@@ -284,8 +295,8 @@
         \subsubsection{HHMM-DFT}
         
         \begin{center}
-        \includegraphics[width=2.25in]{../Plots/HHMM_empirical_hist_dive_duration.png}
-        \includegraphics[width=2.25in]{../Plots/HHMM_psedoresids_Dive_Duration.png}
+        \includegraphics[width=2.25in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_HHMM_empirical_hist_dive_duration.png}
+        \includegraphics[width=2.25in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_HHMM_psedoresids_Dive_Duration.png}
         \end{center}
         
         \noindent Figure \arabic{fignum}: Empirical histogram (left) and psuedoresiduals (right) of dive duration ($Y_{t}$) plotted over the estimated emission distributions and a standard normal density, respectively. Both plots are generated using the fitted HHMM-DFT and the killer whale case study data.
@@ -294,8 +305,8 @@
         \subsubsection{CarHHMM}
         
         \begin{center}
-        \includegraphics[width=2.25in]{../Plots/CarHHMM1_empirical_hist_dive_duration.png}
-        \includegraphics[width=2.25in]{../Plots/CarHHMM1_psedoresids_Dive_Duration.png}
+        \includegraphics[width=2.25in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM1_empirical_hist_dive_duration.png}
+        \includegraphics[width=2.25in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM1_psedoresids_Dive_Duration.png}
         \end{center}
         
         \noindent Figure \arabic{fignum}: Empirical histogram (left) and psuedoresiduals (right) of dive duration ($Y_{t}$) plotted over the estimated emission distributions and a standard normal density, respectively. Both plots are generated using the fitted CarHHMM-DFT and the killer whale case study data.
@@ -304,8 +315,8 @@
         \subsubsection{CarHMM-DFT}
         
         \begin{center}
-        \includegraphics[width=2.25in]{../Plots/CarHMM_empirical_hist_dive_duration.png}
-        \includegraphics[width=2.25in]{../Plots/CarHMM_psedoresids_Dive_Duration.png}
+        \includegraphics[width=2.25in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHMM_empirical_hist_dive_duration.png}
+        \includegraphics[width=2.25in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHMM_psedoresids_Dive_Duration.png}
         \end{center}
         
         \noindent Figure \arabic{fignum}: Empirical histogram (left) and psuedoresiduals (right) of dive duration ($Y_{t}$) plotted over the estimated emission distribution (left) and a standard normal density (right), respectively. Both plots are generated using the fitted CarHMM-DFT and the killer whale case study data.
@@ -317,21 +328,21 @@
         \subsubsection{CarHHMM-DFT}
         
         \begin{center}
-        \includegraphics[width=1.75in]{../Plots/CarHHMM2_empirical_hist_Ax_0.png}
-        \includegraphics[width=1.75in]{../Plots/CarHHMM2_empirical_hist_Ay_0.png}
-        \includegraphics[width=1.75in]{../Plots/CarHHMM2_empirical_hist_Az_0.png}
+        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_empirical_hist_Ax_0.png}
+        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_empirical_hist_Ay_0.png}
+        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_empirical_hist_Az_0.png}
         
-        \includegraphics[width=1.75in]{../Plots/CarHHMM2_empirical_hist_Ax_1.png}
-        \includegraphics[width=1.75in]{../Plots/CarHHMM2_empirical_hist_Ay_1.png}
-        \includegraphics[width=1.75in]{../Plots/CarHHMM2_empirical_hist_Az_1.png}
+        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_empirical_hist_Ax_1.png}
+        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_empirical_hist_Ay_1.png}
+        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_empirical_hist_Az_1.png}
         
-        \includegraphics[width=1.75in]{../Plots/CarHHMM2_empirical_hist_Ax_2.png}
-        \includegraphics[width=1.75in]{../Plots/CarHHMM2_empirical_hist_Ay_2.png}
-        \includegraphics[width=1.75in]{../Plots/CarHHMM2_empirical_hist_Az_2.png}
+        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_empirical_hist_Ax_2.png}
+        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_empirical_hist_Ay_2.png}
+        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_empirical_hist_Az_2.png}
         
-        \includegraphics[width=1.75in]{../Plots/CarHHMM2_psedoresids_Ax.png}
-        \includegraphics[width=1.75in]{../Plots/CarHHMM2_psedoresids_Ay.png}
-        \includegraphics[width=1.75in]{../Plots/CarHHMM2_psedoresids_Az.png}
+        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_psedoresids_Ax.png}
+        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_psedoresids_Ay.png}
+        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_psedoresids_Az.png}
         \end{center}
         
         \noindent Figure \arabic{fignum}: Empirical histograms (top three rows) and psuedoresiduals (bottom row) of acceleration ($\Zone_{t,\tilde t^*}$) plotted over the estimated emission distributions and a standard normal density, respectively. Note that the mean of acceleration at time $\tilde t^*$ depends upon acceleration at time $\tilde t^*-1$, so only the deviation from the conditional mean at each particular time step is plotted. All plots are generated using the fitted CarHHMM-DFT and the killer whale case study data.
@@ -342,21 +353,21 @@
         \subsubsection{HHMM-DFT}
         
         \begin{center}
-        \includegraphics[width=1.75in]{../Plots/HHMM_empirical_hist_Ax_0.png}
-        \includegraphics[width=1.75in]{../Plots/HHMM_empirical_hist_Ay_0.png}
-        \includegraphics[width=1.75in]{../Plots/HHMM_empirical_hist_Az_0.png}
+        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_HHMM_empirical_hist_Ax_0.png}
+        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_HHMM_empirical_hist_Ay_0.png}
+        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_HHMM_empirical_hist_Az_0.png}
         
-        \includegraphics[width=1.75in]{../Plots/HHMM_empirical_hist_Ax_1.png}
-        \includegraphics[width=1.75in]{../Plots/HHMM_empirical_hist_Ay_1.png}
-        \includegraphics[width=1.75in]{../Plots/HHMM_empirical_hist_Az_1.png}
+        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_HHMM_empirical_hist_Ax_1.png}
+        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_HHMM_empirical_hist_Ay_1.png}
+        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_HHMM_empirical_hist_Az_1.png}
         
-        \includegraphics[width=1.75in]{../Plots/HHMM_empirical_hist_Ax_2.png}
-        \includegraphics[width=1.75in]{../Plots/HHMM_empirical_hist_Ay_2.png}
-        \includegraphics[width=1.75in]{../Plots/HHMM_empirical_hist_Az_2.png}
+        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_HHMM_empirical_hist_Ax_2.png}
+        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_HHMM_empirical_hist_Ay_2.png}
+        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_HHMM_empirical_hist_Az_2.png}
         
-        \includegraphics[width=1.75in]{../Plots/HHMM_psedoresids_Ax.png}
-        \includegraphics[width=1.75in]{../Plots/HHMM_psedoresids_Ay.png}
-        \includegraphics[width=1.75in]{../Plots/HHMM_psedoresids_Az.png}
+        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_HHMM_psedoresids_Ax.png}
+        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_HHMM_psedoresids_Ay.png}
+        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_HHMM_psedoresids_Az.png}
         \end{center}
         
         \noindent Figure \arabic{fignum}: Empirical histograms (top three rows) and psuedoresiduals (bottom row) of acceleration ($\Zone_{t,\tilde t^*}$) plotted over the estimated emission distributions and a standard normal density, respectively. All plots are generated using the fitted HHMM-DFT and the killer whale case study data.
@@ -367,21 +378,21 @@
         \subsubsection{CarHHMM}
         
         \begin{center}
-        \includegraphics[width=1.75in]{../Plots/CarHHMM1_empirical_hist_Ax_0.png}
-        \includegraphics[width=1.75in]{../Plots/CarHHMM1_empirical_hist_Ay_0.png}
-        \includegraphics[width=1.75in]{../Plots/CarHHMM1_empirical_hist_Az_0.png}
+        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_2019/20190902-182840-CATs_OB_1_0_267_CarHHMM1_empirical_hist_Ax_0.png}
+        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM1_empirical_hist_Ay_0.png}
+        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM1_empirical_hist_Az_0.png}
         
-        \includegraphics[width=1.75in]{../Plots/CarHHMM1_empirical_hist_Ax_1.png}
-        \includegraphics[width=1.75in]{../Plots/CarHHMM1_empirical_hist_Ay_1.png}
-        \includegraphics[width=1.75in]{../Plots/CarHHMM1_empirical_hist_Az_1.png}
+        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM1_empirical_hist_Ax_1.png}
+        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM1_empirical_hist_Ay_1.png}
+        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM1_empirical_hist_Az_1.png}
         
-        \includegraphics[width=1.75in]{../Plots/CarHHMM1_empirical_hist_Ax_2.png}
-        \includegraphics[width=1.75in]{../Plots/CarHHMM1_empirical_hist_Ay_2.png}
-        \includegraphics[width=1.75in]{../Plots/CarHHMM1_empirical_hist_Az_2.png}
+        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM1_empirical_hist_Ax_2.png}
+        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM1_empirical_hist_Ay_2.png}
+        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM1_empirical_hist_Az_2.png}
         
-        \includegraphics[width=1.75in]{../Plots/CarHHMM1_psedoresids_Ax.png}
-        \includegraphics[width=1.75in]{../Plots/CarHHMM1_psedoresids_Ay.png}
-        \includegraphics[width=1.75in]{../Plots/CarHHMM1_psedoresids_Az.png}
+        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM1_psedoresids_Ax.png}
+        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM1_psedoresids_Ay.png}
+        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM1_psedoresids_Az.png}
         \end{center}
         
         \noindent Figure \arabic{fignum}: Empirical histograms (top three rows) and psuedoresiduals (bottom row) of acceleration ($\Zone_{t,\tilde t^*}$) plotted over the estimated emission distributions and a standard normal density, respectively. Note that the mean of acceleration at time $\tilde t^*$ depends upon acceleration at time $\tilde t^*-1$, so only the deviation from the conditional mean at each particular time step is plotted. All plots are generated using the fitted CarHHMM and the killer whale case study data.
@@ -392,21 +403,21 @@
         \subsubsection{CarHMM-DFT}
         
         \begin{center}
-        \includegraphics[width=1.75in]{../Plots/CarHMM_empirical_hist_Ax_0.png}
-        \includegraphics[width=1.75in]{../Plots/CarHMM_empirical_hist_Ay_0.png}
-        \includegraphics[width=1.75in]{../Plots/CarHMM_empirical_hist_Az_0.png}
+        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHMM_empirical_hist_Ax_0.png}
+        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHMM_empirical_hist_Ay_0.png}
+        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHMM_empirical_hist_Az_0.png}
         
-        \includegraphics[width=1.75in]{../Plots/CarHMM_empirical_hist_Ax_1.png}
-        \includegraphics[width=1.75in]{../Plots/CarHMM_empirical_hist_Ay_1.png}
-        \includegraphics[width=1.75in]{../Plots/CarHMM_empirical_hist_Az_1.png}
+        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHMM_empirical_hist_Ax_1.png}
+        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHMM_empirical_hist_Ay_1.png}
+        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHMM_empirical_hist_Az_1.png}
         
-        \includegraphics[width=1.75in]{../Plots/CarHMM_empirical_hist_Ax_2.png}
-        \includegraphics[width=1.75in]{../Plots/CarHMM_empirical_hist_Ay_2.png}
-        \includegraphics[width=1.75in]{../Plots/CarHMM_empirical_hist_Az_2.png}
+        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHMM_empirical_hist_Ax_2.png}
+        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHMM_empirical_hist_Ay_2.png}
+        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHMM_empirical_hist_Az_2.png}
         
-        \includegraphics[width=1.75in]{../Plots/CarHMM_psedoresids_Ax.png}
-        \includegraphics[width=1.75in]{../Plots/CarHMM_psedoresids_Ay.png}
-        \includegraphics[width=1.75in]{../Plots/CarHMM_psedoresids_Az.png}
+        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHMM_psedoresids_Ax.png}
+        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHMM_psedoresids_Ay.png}
+        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHMM_psedoresids_Az.png}
         \end{center}
         
         \noindent Figure \arabic{fignum}: Empirical histograms (top three rows) and psuedoresiduals (bottom row) of acceleration ($\Zone_{t,\tilde t^*}$) plotted over the estimated emission distributions and a standard normal density, respectively. Note that the mean of acceleration at time $\tilde t^*$ depends upon acceleration at time $\tilde t^*-1$, so only the deviation from the conditional mean at each particular time step is plotted. All plots are generated using the fitted CarHMM-DFT and the killer whale case study data.
@@ -417,11 +428,11 @@
         \subsubsection{CarHHMM-DFT}
         
         \begin{center}
-        \includegraphics[width=1.75in]{../Plots/CarHHMM2_empirical_hist_ahat_0.png}
-        \includegraphics[width=1.75in]{../Plots/CarHHMM2_empirical_hist_ahat_1.png}
-        \includegraphics[width=1.75in]{../Plots/CarHHMM2_empirical_hist_ahat_2.png}
+        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_empirical_hist_ahat_0.png}
+        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_empirical_hist_ahat_1.png}
+        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_empirical_hist_ahat_2.png}
         
-        \includegraphics[width=1.75in]{../Plots/CarHHMM2_psedoresids_ahat.png}
+        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_psedoresids_ahat.png}
         \end{center}
         
         \noindent Figure \arabic{fignum}: Empirical histograms (top row) and psuedoresiduals (bottom row) of wiggliness ($\Ztwo_{t,\tilde t^*}$) plotted over the estimated emission distributions and a standard normal density, respectively. All plots are generated using the fitted CarHHMM-DFT and the killer whale case study data.
@@ -430,11 +441,11 @@
         \subsubsection{HHMM-DFT}
         
         \begin{center}
-        \includegraphics[width=1.75in]{../Plots/HHMM_empirical_hist_ahat_0.png}
-        \includegraphics[width=1.75in]{../Plots/HHMM_empirical_hist_ahat_1.png}
-        \includegraphics[width=1.75in]{../Plots/HHMM_empirical_hist_ahat_2.png}
+        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_HHMM_empirical_hist_ahat_0.png}
+        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_HHMM_empirical_hist_ahat_1.png}
+        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_HHMM_empirical_hist_ahat_2.png}
         
-        \includegraphics[width=1.75in]{../Plots/HHMM_psedoresids_ahat.png}
+        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_HHMM_psedoresids_ahat.png}
         \end{center}
         
         \noindent Figure \arabic{fignum}: Empirical histograms (top row) and psuedoresiduals (bottom row) of wiggliness ($\Ztwo_{t,\tilde t^*}$) plotted over the estimated emission distributions and a standard normal density, respectively. All plots are generated using the fitted HHMM-DFT and the killer whale case study data.
@@ -447,11 +458,11 @@
         \subsubsection{CarHMM-DFT}
         
         \begin{center}
-        \includegraphics[width=1.75in]{../Plots/CarHMM_empirical_hist_ahat_0.png}
-        \includegraphics[width=1.75in]{../Plots/CarHMM_empirical_hist_ahat_1.png}
-        \includegraphics[width=1.75in]{../Plots/CarHMM_empirical_hist_ahat_2.png}
+        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHMM_empirical_hist_ahat_0.png}
+        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHMM_empirical_hist_ahat_1.png}
+        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHMM_empirical_hist_ahat_2.png}
         
-        \includegraphics[width=1.75in]{../Plots/CarHMM_psedoresids_ahat.png}
+        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHMM_psedoresids_ahat.png}
         \end{center}
         
         \noindent Figure \arabic{fignum}: Empirical histograms (top row) and psuedoresiduals (bottom row) of wiggliness ($\Ztwo_{t,\tilde t^*}$) plotted over the estimated emission distributions and a standard normal density, respectively. All plots are generated using the fitted CarHMM-DFT and the killer whale case study data.
