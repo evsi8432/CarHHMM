@@ -80,20 +80,13 @@ acc_sig = np.array([0.05,0.1,0.3])
 corr_crude = [0.0,0.0,0.0]
 corr_fine = [0.97,0.83,0.61]
 
-# randomly initialize a probablity transition matrix
-
-ptm_crude = np.array([[0.85,0.15],
-                      [0.91,0.09]])
+# initialize a probablity transition matrix
 
 eta_crude = np.array([[ 0.    , -1.6984],
                       [ 2.3471,  0.    ]])
 
-ptm_fine = [np.array([[0.74,0.25,0.01],
-                      [0.08,0.87,0.05],
-                      [0.01,0.23,0.76]]),
-            np.array([[0.88,0.11,0.01],
-                      [0.15,0.81,0.04],
-                      [0.01,0.23,0.76]])]
+ptm_crude = HHMM.eta_2_ptm(ptm_crude)
+print(ptm_crude)
 
 eta_fine =  [np.array([[  0.    ,  -1.0873, -10.00 ],
                        [ -2.3615,   0.    , -2.823 ],
@@ -101,6 +94,11 @@ eta_fine =  [np.array([[  0.    ,  -1.0873, -10.00 ],
               np.array([[  0.    ,  -2.0691,  -10.000],
                         [ -1.6902,   0.    ,  -3.1311],
                         [ -10.000,  -1.2303,   0.    ]])]
+
+ptm_fine = [HHMM.eta_2_ptm(eta_fine[0]),
+            HHMM.eta_2_ptm(eta_fine[1])]
+
+print(ptm_fine)
 
 # train new models?
 train_new = True
