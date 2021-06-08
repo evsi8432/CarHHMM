@@ -44,7 +44,7 @@
 \bibliographystyle{abbrvnat}
 
 % Title, authors, affiliations
-\title{Modelling state-switching functional and biologging data with hidden Markov models: supplementary material}%\query{Q1}
+\title{Modelling state-switching functional data with hidden Markov models: supplementary material (simulation study)}%\query{Q1}
 \date{}
 \author{BlindedA, BlindedB}%\authorref{1}\thanksref{*}}
 %\author{BlindedB}%\authorref{2}}
@@ -60,9 +60,8 @@
 \newcounter{fignum}
 \addtocounter{fignum}{1}
 
-\section{Case Study Results}
-
-    \subsection{Lag plots}
+\iffalse
+    \section{Lag plots}
         
         \begin{center}
         \includegraphics[height=5in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_lagplot.png}
@@ -73,11 +72,80 @@
         
         \newpage
         
-    \subsection{Likelihood Surface - CarHHMM-DFT}
+    \section{Likelihood Surface - CarHHMM-DFT}
     
         \begin{center}
-        \includegraphics[height=2.5in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2-coarse-theta-likelihood-dive_duration-0.png}
-        \includegraphics[height=2.5in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2-coarse-theta-likelihood-dive_duration-1.png}
+        \includegraphics[width=2.25in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_coarse-theta-likelihood-dive_duration-1.png}
+        \includegraphics[width=2.25in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_coarse-theta-likelihood-dive_duration-2.png}
+        \end{center}
+        
+        \noindent Figure \arabic{fignum}: Collection of 5 lag plots where a given observation is on the $x$-axis and the subsequent observation is on the $y$-axis. Each plot corresponds to a feature in the killer whale dive data. Lag plots are used to decide whether to include auto-correlation in the HMMs used to model the killer whale's kinematic data. They can also be used to determine the number of hidden states if multiple distinct patterns are visible. 
+        \addtocounter{fignum}{1}
+        
+        
+        \begin{center}
+        \includegraphics[width=2.1in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_coarse-eta-likelihood.png}
+        \end{center}
+        
+        \noindent Figure \arabic{fignum}: Collection of 5 lag plots where a given observation is on the $x$-axis and the subsequent observation is on the $y$-axis. Each plot corresponds to a feature in the killer whale dive data. Lag plots are used to decide whether to include auto-correlation in the HMMs used to model the killer whale's kinematic data. They can also be used to determine the number of hidden states if multiple distinct patterns are visible. 
+        \addtocounter{fignum}{1}
+        
+        % Ahat_low
+        \begin{center}
+        \includegraphics[width=2.1in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_fine-theta-likelihood-Ahat_low-0.png}
+        \includegraphics[width=2.1in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_fine-theta-likelihood-Ahat_low-1.png}
+        \includegraphics[width=2.1in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_fine-theta-likelihood-Ahat_low-2.png}
+        \end{center}
+        
+        \noindent Figure \arabic{fignum}: Collection of 5 lag plots where a given observation is on the $x$-axis and the subsequent observation is on the $y$-axis. Each plot corresponds to a feature in the killer whale dive data. Lag plots are used to decide whether to include auto-correlation in the HMMs used to model the killer whale's kinematic data. They can also be used to determine the number of hidden states if multiple distinct patterns are visible. 
+        \addtocounter{fignum}{1}
+        
+        % Ax
+        \begin{center}
+        \includegraphics[width=2.1in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_fine-theta-likelihood-Ax-0.png}
+        \includegraphics[width=2.1in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_fine-theta-likelihood-Ax-1.png}
+        \includegraphics[width=2.1in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_fine-theta-likelihood-Ax-2.png}
+        \end{center}
+        
+        \noindent Figure \arabic{fignum}: Collection of 5 lag plots where a given observation is on the $x$-axis and the subsequent observation is on the $y$-axis. Each plot corresponds to a feature in the killer whale dive data. Lag plots are used to decide whether to include auto-correlation in the HMMs used to model the killer whale's kinematic data. They can also be used to determine the number of hidden states if multiple distinct patterns are visible. 
+        \addtocounter{fignum}{1}
+        
+        
+        % Ay
+        \begin{center}
+        \includegraphics[width=2.1in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_fine-theta-likelihood-Ay-0.png}
+        \includegraphics[width=2.1in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_fine-theta-likelihood-Ay-1.png}
+        \includegraphics[width=2.1in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_fine-theta-likelihood-Ay-2.png}
+        \end{center}
+        
+        \noindent Figure \arabic{fignum}: Collection of 5 lag plots where a given observation is on the $x$-axis and the subsequent observation is on the $y$-axis. Each plot corresponds to a feature in the killer whale dive data. Lag plots are used to decide whether to include auto-correlation in the HMMs used to model the killer whale's kinematic data. They can also be used to determine the number of hidden states if multiple distinct patterns are visible. 
+        \addtocounter{fignum}{1}
+        
+        % Az
+        \begin{center}
+        \includegraphics[width=2.1in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_fine-theta-likelihood-Az-0.png}
+        \includegraphics[width=2.1in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_fine-theta-likelihood-Az-1.png}
+        \includegraphics[width=2.1in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_fine-theta-likelihood-Az-2.png}
+        \end{center}
+        
+        \noindent Figure \arabic{fignum}: Collection of 5 lag plots where a given observation is on the $x$-axis and the subsequent observation is on the $y$-axis. Each plot corresponds to a feature in the killer whale dive data. Lag plots are used to decide whether to include auto-correlation in the HMMs used to model the killer whale's kinematic data. They can also be used to determine the number of hidden states if multiple distinct patterns are visible. 
+        \addtocounter{fignum}{1}
+        
+        % eta1
+        \begin{center}
+        \includegraphics[width=2.1in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_fine-eta-likelihood-0-row_0.png}
+        \includegraphics[width=2.1in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_fine-eta-likelihood-0-row_1.png}
+        \includegraphics[width=2.1in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_fine-eta-likelihood-0-row_2.png}
+        \end{center}
+        
+        \noindent Figure \arabic{fignum}: Collection of 5 lag plots where a given observation is on the $x$-axis and the subsequent observation is on the $y$-axis. Each plot corresponds to a feature in the killer whale dive data. Lag plots are used to decide whether to include auto-correlation in the HMMs used to model the killer whale's kinematic data. They can also be used to determine the number of hidden states if multiple distinct patterns are visible. 
+        \addtocounter{fignum}{1}
+        
+        % eta1
+        \begin{center}
+        \includegraphics[width=2.1in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_fine-eta-likelihood-1-row_0.png}
+        \includegraphics[width=2.1in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_fine-eta-likelihood-1-row_1.png}
+        \includegraphics[width=2.1in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_fine-eta-likelihood-1-row_2.png}
         \end{center}
         
         \noindent Figure \arabic{fignum}: Collection of 5 lag plots where a given observation is on the $x$-axis and the subsequent observation is on the $y$-axis. Each plot corresponds to a feature in the killer whale dive data. Lag plots are used to decide whether to include auto-correlation in the HMMs used to model the killer whale's kinematic data. They can also be used to determine the number of hidden states if multiple distinct patterns are visible. 
@@ -85,9 +153,9 @@
         
         \newpage    
     
-    \subsection{Parameter Estimates}
+    \section{Parameter Estimates}
 
-        \subsubsection{CarHHMM-DFT}
+        \subsection{CarHHMM-DFT}
         
             %\begin{table}[ht]
             %
@@ -122,7 +190,7 @@
             \noindent Table \arabic{tablenum}: Estimates and predicted standard errors of emission parameters for dive duration ($Y_t$), acceleration ($\Zone_{t,\tilde t^*}$), and wiggliness ($\Ztwo_{t,\tilde t^*}$) of the killer whale case study data under the full CarHHMM-DFT. The parentheses refer to the estimated standard error of the parameter estimates derived from the inverse of the observed information matrix.
             \addtocounter{tablenum}{1}
     
-        \subsubsection{HHMM-DFT}
+        \subsection{HHMM-DFT}
             \begin{center}
             \scalebox{0.75}{
                 \bgroup
@@ -153,7 +221,7 @@
             \noindent Table \arabic{tablenum}: Estimates and predicted standard errors of emission parameters for dive duration ($Y_t$), acceleration ($\Zone_{t,\tilde t^*}$), and wiggliness ($\Ztwo_{t,\tilde t^*}$) of the killer whale case study data under the HHMM-DFT. The parentheses refer to the estimated standard error of the parameter estimates derived from the inverse of the observed information matrix.
             \addtocounter{tablenum}{1}
             
-        \subsubsection{CarHHMM}
+        \subsection{CarHHMM}
             
             \begin{center}
             \scalebox{0.75}{
@@ -182,7 +250,7 @@
                 \noindent Table \arabic{tablenum}: Estimates and predicted standard errors of emission parameters for dive duration ($Y_t$) and acceleration ($\Zone_{t,\tilde t^*}$) of the killer whale case study data under the CarHHMM. The parentheses refer to the estimated standard error of the parameter estimates derived from the inverse of the observed information matrix.
                 \addtocounter{tablenum}{1}
             
-        \subsubsection{CarHMM-DFT}
+        \subsection{CarHMM-DFT}
             
             \begin{center}
             \scalebox{0.75}{
@@ -214,9 +282,9 @@
                 \addtocounter{tablenum}{1}
     
     \newpage
-    \subsection{Decoded dive states}
+    \section{Decoded dive states}
     
-        \subsubsection{CarHHMM-DFT}
+        \subsection{CarHHMM-DFT}
         
         \begin{center}
         \includegraphics[width=6in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_decoded_dives.png}
@@ -232,7 +300,7 @@
         \noindent Figure \arabic{fignum}: The probability that each dive is a particular type or that the whale is in a particular subdive state, given the fitted model. Each panel is partitioned into dives by vertical black lines. The curve colours in the first and third panels correspond to the estimated dive types while the curve colours of the second and fourth panels correspond the estimated subdive states. Both the dive types and subdive states are estimated by fitting the CarHHMM-DFT to the data and performing the forward-backward algorithm.
         \addtocounter{fignum}{1}
         
-        \subsubsection{HHMM-DFT}
+        \subsection{HHMM-DFT}
         
         \begin{center}
         \includegraphics[width=6in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_HHMM_decoded_dives.png}
@@ -248,7 +316,7 @@
         \noindent Figure \arabic{fignum}: The probability that each dive is a particular type or that the whale is in a particular subdive state, given the fitted model. Each panel is partitioned into dives by vertical black lines. The curve colours in the first and third panels correspond to the estimated dive types while the curve colours of the second and fourth panels correspond the estimated subdive states. Both the dive types and subdive states are estimated by fitting the HHMM-DFT to the data and performing the forward-backward algorithm.
         \addtocounter{fignum}{1}
         
-        \subsubsection{CarHHMM}
+        \subsection{CarHHMM}
         
         \begin{center}
         \includegraphics[width=6in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM1_decoded_dives.png}
@@ -264,7 +332,7 @@
         \noindent Figure \arabic{fignum}: The probability that each dive is a particular type or that the whale is in a particular subdive state, given the fitted model. Each panel is partitioned into dives by vertical black lines. The curve colours in the first and third panels correspond to the estimated dive types while the curve colours of the second and fourth panels correspond the estimated subdive states. Both the dive types and subdive states are estimated by fitting the CarHHMM to the data and performing the forward-backward algorithm.
         \addtocounter{fignum}{1}
         
-        \subsubsection{CarHMM-DFT}
+        \subsection{CarHMM-DFT}
         
         \begin{center}
         \includegraphics[width=6in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHMM_decoded_dives.png}
@@ -281,9 +349,9 @@
         \addtocounter{fignum}{1}
         
     \newpage
-    \subsection{Model checking - dive duration ($Y_t$)}
+    \section{Model checking - dive duration ($Y_t$)}
     
-        \subsubsection{CarHHMM-DFT}
+        \subsection{CarHHMM-DFT}
         
         \begin{center}
         \includegraphics[width=2.25in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_empirical_hist_dive_duration.png}
@@ -293,7 +361,7 @@
         \noindent Figure \arabic{fignum}: Empirical histogram (left) and psuedoresiduals (right) of dive duration ($Y_{t}$) plotted over the estimated emission distributions and a standard normal density, respectively. Both plots are generated using the fitted CarHHMM-DFT and the killer whale case study data.
         \addtocounter{fignum}{1}
         
-        \subsubsection{HHMM-DFT}
+        \subsection{HHMM-DFT}
         
         \begin{center}
         \includegraphics[width=2.25in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_HHMM_empirical_hist_dive_duration.png}
@@ -303,7 +371,7 @@
         \noindent Figure \arabic{fignum}: Empirical histogram (left) and psuedoresiduals (right) of dive duration ($Y_{t}$) plotted over the estimated emission distributions and a standard normal density, respectively. Both plots are generated using the fitted HHMM-DFT and the killer whale case study data.
         \addtocounter{fignum}{1}
         
-        \subsubsection{CarHHMM}
+        \subsection{CarHHMM}
         
         \begin{center}
         \includegraphics[width=2.25in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM1_empirical_hist_dive_duration.png}
@@ -313,7 +381,7 @@
         \noindent Figure \arabic{fignum}: Empirical histogram (left) and psuedoresiduals (right) of dive duration ($Y_{t}$) plotted over the estimated emission distributions and a standard normal density, respectively. Both plots are generated using the fitted CarHHMM-DFT and the killer whale case study data.
         \addtocounter{fignum}{1}
         
-        \subsubsection{CarHMM-DFT}
+        \subsection{CarHMM-DFT}
         
         \begin{center}
         \includegraphics[width=2.25in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHMM_empirical_hist_dive_duration.png}
@@ -324,9 +392,9 @@
         \addtocounter{fignum}{1}
         
     \newpage
-    \subsection{Model checking - acceleration ($\Zone_{t,\tilde t^*}$)}
+    \section{Model checking - acceleration ($\Zone_{t,\tilde t^*}$)}
         
-        \subsubsection{CarHHMM-DFT}
+        \subsection{CarHHMM-DFT}
         
         \begin{center}
         \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_empirical_hist_Ax_0.png}
@@ -351,7 +419,7 @@
         
         \newpage
         
-        \subsubsection{HHMM-DFT}
+        \subsection{HHMM-DFT}
         
         \begin{center}
         \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_HHMM_empirical_hist_Ax_0.png}
@@ -376,7 +444,7 @@
         
         \newpage
         
-        \subsubsection{CarHHMM}
+        \subsection{CarHHMM}
         
         \begin{center}
         \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM1_empirical_hist_Ax_0.png}
@@ -401,7 +469,7 @@
         
         \newpage
         
-        \subsubsection{CarHMM-DFT}
+        \subsection{CarHMM-DFT}
         
         \begin{center}
         \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHMM_empirical_hist_Ax_0.png}
@@ -424,9 +492,9 @@
         \noindent Figure \arabic{fignum}: Empirical histograms (top three rows) and psuedoresiduals (bottom row) of acceleration ($\Zone_{t,\tilde t^*}$) plotted over the estimated emission distributions and a standard normal density, respectively. Note that the mean of acceleration at time $\tilde t^*$ depends upon acceleration at time $\tilde t^*-1$, so only the deviation from the conditional mean at each particular time step is plotted. All plots are generated using the fitted CarHMM-DFT and the killer whale case study data.
         \addtocounter{fignum}{1}
         
-    \subsection{Model checking - wiggliness ($\Ztwo_{t,\tilde t^*}$)}
+    \section{Model checking - wiggliness ($\Ztwo_{t,\tilde t^*}$)}
         
-        \subsubsection{CarHHMM-DFT}
+        \subsection{CarHHMM-DFT}
         
         \begin{center}
         \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_empirical_hist_ahat_0.png}
@@ -439,7 +507,7 @@
         \noindent Figure \arabic{fignum}: Empirical histograms (top row) and psuedoresiduals (bottom row) of wiggliness ($\Ztwo_{t,\tilde t^*}$) plotted over the estimated emission distributions and a standard normal density, respectively. All plots are generated using the fitted CarHHMM-DFT and the killer whale case study data.
         \addtocounter{fignum}{1}
         
-        \subsubsection{HHMM-DFT}
+        \subsection{HHMM-DFT}
         
         \begin{center}
         \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_HHMM_empirical_hist_ahat_0.png}
@@ -452,11 +520,11 @@
         \noindent Figure \arabic{fignum}: Empirical histograms (top row) and psuedoresiduals (bottom row) of wiggliness ($\Ztwo_{t,\tilde t^*}$) plotted over the estimated emission distributions and a standard normal density, respectively. All plots are generated using the fitted HHMM-DFT and the killer whale case study data.
         \addtocounter{fignum}{1}
         
-        \subsubsection{CarHHMM}
+        \subsection{CarHHMM}
         
         The CarHHMM does not model wiggliness.
         
-        \subsubsection{CarHMM-DFT}
+        \subsection{CarHMM-DFT}
         
         \begin{center}
         \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHMM_empirical_hist_ahat_0.png}
@@ -469,11 +537,11 @@
         \noindent Figure \arabic{fignum}: Empirical histograms (top row) and psuedoresiduals (bottom row) of wiggliness ($\Ztwo_{t,\tilde t^*}$) plotted over the estimated emission distributions and a standard normal density, respectively. All plots are generated using the fitted CarHMM-DFT and the killer whale case study data.
         \addtocounter{fignum}{1}
 
-
 \newpage
-\section{Simulation Study Results}
+\fi
+%\section{Simulation Study Results}
 
-    \subsection{Simulated Data}
+    \section{Simulated Data}
     
         \begin{center}
     	\includegraphics[width=5in]{../Plots/sim_data.png}
@@ -483,7 +551,7 @@
     	\addtocounter{fignum}{1}
 
     \newpage
-    \subsection{Accuracy comparisons}
+    \section{Accuracy comparisons}
         
         \begin{center}
         \scalebox{0.75}{
@@ -520,7 +588,7 @@ Model                       & \multicolumn{1}{c}{Train Time (m)} & \multicolumn{
         \addtocounter{tablenum}{1}
 
     \newpage
-    \subsection{Empirical joint distributions - dive duration ($Y_t$)}
+    \section{Empirical joint distributions - dive duration ($Y_t$)}
 
         \begin{center}
         \scalebox{0.75}{
@@ -553,7 +621,7 @@ Model                       & \multicolumn{1}{c}{Parameter} & \multicolumn{1}{c}
         \noindent Table \arabic{tablenum}: Estimates and standard errors for the parameters of the distribution of dive duration across all four models in the simulation study. The ``Estimate" column is the average across 500 simulations, and the ``Observed Fisher SE" column is the median across 500 simulations. The $\pm$ refers to the inter-quartile range. SE stands for standard error. Reported $p$-values test if the observed bias is statistically significant using a one-sample $t$-test.
         \addtocounter{tablenum}{1}
         
-        \subsubsection{CarHHMM-DFT}
+        \subsection{CarHHMM-DFT}
         \begin{center}
         \includegraphics[width=3in]{../Plots/hhmm_FV_MLE_density_dive_duration_-1_0.png}
         \includegraphics[width=3in]{../Plots/hhmm_FV_MLE_density_dive_duration_-1_1.png}
@@ -562,7 +630,7 @@ Model                       & \multicolumn{1}{c}{Parameter} & \multicolumn{1}{c}
         \noindent Figure \arabic{fignum}: Kernel density estimate of the distribution of estimates of dive duration parameters ($\hat \mu$ and $\hat \sigma$) for each dive type. The red star represents the true values of $\mu$ and $\sigma$ for both dive types. These estimates are for the CarHHMM-DFT.
         \addtocounter{fignum}{1}
         
-        \subsubsection{HHMM-DFT}
+        \subsection{HHMM-DFT}
         \begin{center}
         \includegraphics[width=3in]{../Plots/hhmm_FV_uncorr_MLE_density_dive_duration_-1_0.png}
         \includegraphics[width=3in]{../Plots/hhmm_FV_uncorr_MLE_density_dive_duration_-1_1.png}
@@ -571,7 +639,7 @@ Model                       & \multicolumn{1}{c}{Parameter} & \multicolumn{1}{c}
         \noindent Figure \arabic{fignum}: Kernel density estimate of the distribution of estimates of dive duration parameters ($\hat \mu$ and $\hat \sigma$) for each dive type. The red star represents the true values of $\mu$ and $\sigma$ for both dive types. These estimates are for the HHMM-DFT.
         \addtocounter{fignum}{1}
         
-        \subsubsection{CarHHMM}
+        \subsection{CarHHMM}
         \begin{center}
         \includegraphics[width=3in]{../Plots/hhmm_V_MLE_density_dive_duration_-1_0.png}
         \includegraphics[width=3in]{../Plots/hhmm_V_MLE_density_dive_duration_-1_1.png}
@@ -580,7 +648,7 @@ Model                       & \multicolumn{1}{c}{Parameter} & \multicolumn{1}{c}
         \noindent Figure \arabic{fignum}: Kernel density estimate of the distribution of estimates of dive duration parameters ($\hat \mu$ and $\hat \sigma$) for each dive type. The red star represents the true values of $\mu$ and $\sigma$ for both dive types. These estimates are for the CarHHMM.
         \addtocounter{fignum}{1}
         
-        \subsubsection{CarHMM-DFT}
+        \subsection{CarHMM-DFT}
         \begin{center}
         \includegraphics[width=3in]{../Plots/hmm_FV_MLE_density_dive_duration_-1_0.png}
         \end{center}
@@ -589,7 +657,7 @@ Model                       & \multicolumn{1}{c}{Parameter} & \multicolumn{1}{c}
         \addtocounter{fignum}{1}
     
     \newpage
-    \subsection{Empirical joint distributions - acceleration ($\Zone_{t,\tilde t^*}$)}
+    \section{Empirical joint distributions - acceleration ($\Zone_{t,\tilde t^*}$)}
 
         \begin{center}
         \scalebox{0.75}{
@@ -630,7 +698,7 @@ Model                       & \multicolumn{1}{c}{Parameter} & \multicolumn{1}{c}
         \noindent Table \arabic{tablenum}: Estimates and standard errors for the parameters of the distribution of acceleration across all four models in the simulation study. The ``Estimate" column is the average across 500 simulations, and the ``Observed Fisher SE" column is the median across 500 simulations. The $\pm$ refers to the inter-quartile range. SE stands for standard error. Reported $p$-values test if the observed bias is statistically significant using a one-sample $t$-test.
         \addtocounter{tablenum}{1}
     
-        \subsubsection{CarHHMM-DFT}
+        \subsection{CarHHMM-DFT}
         \begin{center}
         \includegraphics[width=3in]{../Plots/hhmm_FV_MLE_density_A_0_0.png}
         \includegraphics[width=3in]{../Plots/hhmm_FV_MLE_density_A_0_1.png}
@@ -639,7 +707,7 @@ Model                       & \multicolumn{1}{c}{Parameter} & \multicolumn{1}{c}
         \noindent Figure \arabic{fignum}: Kernel density estimate of the distribution of estimates of acceleration parameters ($\hat \mu^*_A$, $\hat \sigma^*_A$, and $\hat \phi^*_A$) for each subdive state. The red star represents the true values of $\mu^*_A$, $\sigma^*_A$, and $\phi^*_A$ for both subdive states. These estimates are for the CarHHMM-DFT.
         \addtocounter{fignum}{1}
         
-        \subsubsection{HHMM-DFT}
+        \subsection{HHMM-DFT}
         \begin{center}
         \includegraphics[width=3in]{../Plots/hhmm_FV_uncorr_MLE_density_A_0_0.png}
         \includegraphics[width=3in]{../Plots/hhmm_FV_uncorr_MLE_density_A_0_1.png}
@@ -648,7 +716,7 @@ Model                       & \multicolumn{1}{c}{Parameter} & \multicolumn{1}{c}
         \noindent Figure \arabic{fignum}: Kernel density estimate of the distribution of estimates of acceleration parameters ($\hat \mu^*_A$ and $\hat \sigma^*_A$) for each subdive state. The red star represents the true values of $\mu^*_A$ and $\sigma^*_A$ for both subdive states. These estimates are for the HHMM-DFT. Note that the HHMM-DFT assumes no auto-correlation in $\Zone_{t,\tilde t^*}$, so $\hat \phi_A^{*(\cdot,i^*)}$ is absent from these plots.
         \addtocounter{fignum}{1}
         
-        \subsubsection{CarHHMM}
+        \subsection{CarHHMM}
         \begin{center}
         \includegraphics[width=3in]{../Plots/hhmm_V_MLE_density_A_0_0.png}
         \includegraphics[width=3in]{../Plots/hhmm_V_MLE_density_A_0_1.png}
@@ -657,7 +725,7 @@ Model                       & \multicolumn{1}{c}{Parameter} & \multicolumn{1}{c}
         \noindent Figure \arabic{fignum}: Kernel density estimate of the distribution of estimates of acceleration parameters ($\hat \mu^*_A$, $\hat \sigma^*_A$, and $\hat \phi^*_A$) for each subdive state. The red star represents the true values of $\mu^*_A$, $\sigma^*_A$, and $\phi^*_A$ for both subdive states. These estimates are for the CarHHMM. 
         \addtocounter{fignum}{1}
         
-        \subsubsection{CarHMM-DFT}
+        \subsection{CarHMM-DFT}
         \begin{center}
         \includegraphics[width=3in]{../Plots/hmm_FV_MLE_density_A_0_0.png}
         \includegraphics[width=3in]{../Plots/hmm_FV_MLE_density_A_0_1.png}
@@ -700,7 +768,7 @@ Model                       & \multicolumn{1}{c}{Parameter} & \multicolumn{1}{c}
         \noindent Table \arabic{tablenum}: Estimates and standard errors for the parameters of the distribution of wiggliness across all four models in the simulation study. The ``Estimate" column is the average across 500 simulations, and the ``Observed Fisher SE" column is the median across 500 simulations. The $\pm$ refers to the inter-quartile range. SE stands for standard error. Reported $p$-values test if the observed bias is statistically significant using a one-sample $t$-test.
         \addtocounter{tablenum}{1}
     
-        \subsubsection{CarHHMM-DFT}
+        \subsection{CarHHMM-DFT}
         \begin{center}
         \includegraphics[width=3in]{../Plots/hhmm_FV_MLE_density_FoVeDBA_0_0.png}
         \includegraphics[width=3in]{../Plots/hhmm_FV_MLE_density_FoVeDBA_0_1.png}
@@ -709,7 +777,7 @@ Model                       & \multicolumn{1}{c}{Parameter} & \multicolumn{1}{c}
         \noindent Figure \arabic{fignum}: Kernel density estimate of the distribution of estimates of wiggliness parameters ($\hat \mu^*_W$ and $\hat \sigma^*_W$) for each subdive state. The red star represents the true values of $\mu^*_W$ and $\sigma^*_W$ for both subdive states. These estimates are for the CarHHMM-DFT.
         \addtocounter{fignum}{1}
         
-        \subsubsection{HHMM-DFT}
+        \subsection{HHMM-DFT}
         \begin{center}
         \includegraphics[width=3in]{../Plots/hhmm_FV_uncorr_MLE_density_FoVeDBA_0_0.png}
         \includegraphics[width=3in]{../Plots/hhmm_FV_uncorr_MLE_density_FoVeDBA_0_1.png}
@@ -718,10 +786,10 @@ Model                       & \multicolumn{1}{c}{Parameter} & \multicolumn{1}{c}
         \noindent Figure \arabic{fignum}: Kernel density estimate of the distribution of estimates of wiggliness parameters ($\hat \mu^*_W$ and $\hat \sigma^*_W$) for each subdive state. The red star represents the true values of $\mu^*_W$ and $\sigma^*_W$ for both subdive states. These estimates are for the HHMM-DFT.
         \addtocounter{fignum}{1}
         
-        \subsubsection{CarHHMM}
+        \subsection{CarHHMM}
         The CarHHMM did not use wiggliness to model the whale's behaviour.
         
-        \subsubsection{CarHMM-DFT}
+        \subsection{CarHMM-DFT}
         \begin{center}
         \includegraphics[width=3in]{../Plots/hmm_FV_MLE_density_FoVeDBA_0_0.png}
         \includegraphics[width=3in]{../Plots/hmm_FV_MLE_density_FoVeDBA_0_1.png}
@@ -731,7 +799,7 @@ Model                       & \multicolumn{1}{c}{Parameter} & \multicolumn{1}{c}
         \addtocounter{fignum}{1}
         
     \newpage
-    \subsection{Empirical joint distributions - probability transition matrices ($\Gamma, \Gamma^*$)}
+    \section{Empirical joint distributions - probability transition matrices ($\Gamma, \Gamma^*$)}
         
         \begin{center}
         \scalebox{0.75}{
@@ -774,7 +842,7 @@ Model                        & \multicolumn{1}{c}{Parameter} & \multicolumn{1}{c
         \addtocounter{tablenum}{1}
         
         \newpage
-        \subsubsection{CarHHMM-DFT}
+        \subsection{CarHHMM-DFT}
         \begin{center}
         \includegraphics[width=3in]{../Plots/hhmm_FV_Gamma_density_-1.png}
         
@@ -786,7 +854,7 @@ Model                        & \multicolumn{1}{c}{Parameter} & \multicolumn{1}{c
         \addtocounter{fignum}{1}
         
         \newpage
-        \subsubsection{HHMM-DFT}
+        \subsection{HHMM-DFT}
         \begin{center}
         \includegraphics[width=3in]{../Plots/hhmm_FV_uncorr_Gamma_density_-1.png}
         
@@ -798,7 +866,7 @@ Model                        & \multicolumn{1}{c}{Parameter} & \multicolumn{1}{c
         \addtocounter{fignum}{1}
         
         \newpage
-        \subsubsection{CarHHMM}
+        \subsection{CarHHMM}
         \begin{center}
         \includegraphics[width=3in]{../Plots/hhmm_V_Gamma_density_-1.png}
         
@@ -810,12 +878,11 @@ Model                        & \multicolumn{1}{c}{Parameter} & \multicolumn{1}{c
         \addtocounter{fignum}{1}
         
         \newpage
-        \subsubsection{CarHMM-DFT}
+        \subsection{CarHMM-DFT}
         \begin{center}
         \includegraphics[width=3in]{../Plots/hmm_FV_Gamma_density_0.png}
         \end{center}
         
         \noindent Figure \arabic{fignum}: Kernel density estimate of the distribution $\hat \Gamma^{*(1)}$ for the CarHMM-DFT. There is only one fine-scale probability transition matrix and no coarse-scale probability transition matrix since we assume that there is only one dive type for the CarHMM-DFT. We only plot the off-diagonal elements of the probability transition matrices since this uniquely defines a stochastic matrix. There is no red star which represents the true values because the CarHMM-DFT assumes that there is only one dive type.
         \addtocounter{fignum}{1}
-
 \end{document}
