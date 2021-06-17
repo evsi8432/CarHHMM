@@ -60,485 +60,6 @@
 \newcounter{fignum}
 \addtocounter{fignum}{1}
 
-\iffalse
-    \section{Lag plots}
-        
-        \begin{center}
-        \includegraphics[height=5in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_lagplot.png}
-        \end{center}
-        
-        \noindent Figure \arabic{fignum}: Collection of 5 lag plots where a given observation is on the $x$-axis and the subsequent observation is on the $y$-axis. Each plot corresponds to a feature in the killer whale dive data. Lag plots are used to decide whether to include auto-correlation in the HMMs used to model the killer whale's kinematic data. They can also be used to determine the number of hidden states if multiple distinct patterns are visible. 
-        \addtocounter{fignum}{1}
-        
-        \newpage
-        
-    \section{Likelihood Surface - CarHHMM-DFT}
-    
-        \begin{center}
-        \includegraphics[width=2.25in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_coarse-theta-likelihood-dive_duration-1.png}
-        \includegraphics[width=2.25in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_coarse-theta-likelihood-dive_duration-2.png}
-        \end{center}
-        
-        \noindent Figure \arabic{fignum}: Collection of 5 lag plots where a given observation is on the $x$-axis and the subsequent observation is on the $y$-axis. Each plot corresponds to a feature in the killer whale dive data. Lag plots are used to decide whether to include auto-correlation in the HMMs used to model the killer whale's kinematic data. They can also be used to determine the number of hidden states if multiple distinct patterns are visible. 
-        \addtocounter{fignum}{1}
-        
-        
-        \begin{center}
-        \includegraphics[width=2.1in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_coarse-eta-likelihood.png}
-        \end{center}
-        
-        \noindent Figure \arabic{fignum}: Collection of 5 lag plots where a given observation is on the $x$-axis and the subsequent observation is on the $y$-axis. Each plot corresponds to a feature in the killer whale dive data. Lag plots are used to decide whether to include auto-correlation in the HMMs used to model the killer whale's kinematic data. They can also be used to determine the number of hidden states if multiple distinct patterns are visible. 
-        \addtocounter{fignum}{1}
-        
-        % Ahat_low
-        \begin{center}
-        \includegraphics[width=2.1in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_fine-theta-likelihood-Ahat_low-0.png}
-        \includegraphics[width=2.1in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_fine-theta-likelihood-Ahat_low-1.png}
-        \includegraphics[width=2.1in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_fine-theta-likelihood-Ahat_low-2.png}
-        \end{center}
-        
-        \noindent Figure \arabic{fignum}: Collection of 5 lag plots where a given observation is on the $x$-axis and the subsequent observation is on the $y$-axis. Each plot corresponds to a feature in the killer whale dive data. Lag plots are used to decide whether to include auto-correlation in the HMMs used to model the killer whale's kinematic data. They can also be used to determine the number of hidden states if multiple distinct patterns are visible. 
-        \addtocounter{fignum}{1}
-        
-        % Ax
-        \begin{center}
-        \includegraphics[width=2.1in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_fine-theta-likelihood-Ax-0.png}
-        \includegraphics[width=2.1in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_fine-theta-likelihood-Ax-1.png}
-        \includegraphics[width=2.1in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_fine-theta-likelihood-Ax-2.png}
-        \end{center}
-        
-        \noindent Figure \arabic{fignum}: Collection of 5 lag plots where a given observation is on the $x$-axis and the subsequent observation is on the $y$-axis. Each plot corresponds to a feature in the killer whale dive data. Lag plots are used to decide whether to include auto-correlation in the HMMs used to model the killer whale's kinematic data. They can also be used to determine the number of hidden states if multiple distinct patterns are visible. 
-        \addtocounter{fignum}{1}
-        
-        
-        % Ay
-        \begin{center}
-        \includegraphics[width=2.1in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_fine-theta-likelihood-Ay-0.png}
-        \includegraphics[width=2.1in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_fine-theta-likelihood-Ay-1.png}
-        \includegraphics[width=2.1in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_fine-theta-likelihood-Ay-2.png}
-        \end{center}
-        
-        \noindent Figure \arabic{fignum}: Collection of 5 lag plots where a given observation is on the $x$-axis and the subsequent observation is on the $y$-axis. Each plot corresponds to a feature in the killer whale dive data. Lag plots are used to decide whether to include auto-correlation in the HMMs used to model the killer whale's kinematic data. They can also be used to determine the number of hidden states if multiple distinct patterns are visible. 
-        \addtocounter{fignum}{1}
-        
-        % Az
-        \begin{center}
-        \includegraphics[width=2.1in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_fine-theta-likelihood-Az-0.png}
-        \includegraphics[width=2.1in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_fine-theta-likelihood-Az-1.png}
-        \includegraphics[width=2.1in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_fine-theta-likelihood-Az-2.png}
-        \end{center}
-        
-        \noindent Figure \arabic{fignum}: Collection of 5 lag plots where a given observation is on the $x$-axis and the subsequent observation is on the $y$-axis. Each plot corresponds to a feature in the killer whale dive data. Lag plots are used to decide whether to include auto-correlation in the HMMs used to model the killer whale's kinematic data. They can also be used to determine the number of hidden states if multiple distinct patterns are visible. 
-        \addtocounter{fignum}{1}
-        
-        % eta1
-        \begin{center}
-        \includegraphics[width=2.1in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_fine-eta-likelihood-0-row_0.png}
-        \includegraphics[width=2.1in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_fine-eta-likelihood-0-row_1.png}
-        \includegraphics[width=2.1in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_fine-eta-likelihood-0-row_2.png}
-        \end{center}
-        
-        \noindent Figure \arabic{fignum}: Collection of 5 lag plots where a given observation is on the $x$-axis and the subsequent observation is on the $y$-axis. Each plot corresponds to a feature in the killer whale dive data. Lag plots are used to decide whether to include auto-correlation in the HMMs used to model the killer whale's kinematic data. They can also be used to determine the number of hidden states if multiple distinct patterns are visible. 
-        \addtocounter{fignum}{1}
-        
-        % eta1
-        \begin{center}
-        \includegraphics[width=2.1in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_fine-eta-likelihood-1-row_0.png}
-        \includegraphics[width=2.1in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_fine-eta-likelihood-1-row_1.png}
-        \includegraphics[width=2.1in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_fine-eta-likelihood-1-row_2.png}
-        \end{center}
-        
-        \noindent Figure \arabic{fignum}: Collection of 5 lag plots where a given observation is on the $x$-axis and the subsequent observation is on the $y$-axis. Each plot corresponds to a feature in the killer whale dive data. Lag plots are used to decide whether to include auto-correlation in the HMMs used to model the killer whale's kinematic data. They can also be used to determine the number of hidden states if multiple distinct patterns are visible. 
-        \addtocounter{fignum}{1}
-        
-        \newpage    
-    
-    \section{Parameter Estimates}
-
-        \subsection{CarHHMM-DFT}
-        
-            %\begin{table}[ht]
-            %
-            %\caption{Estimates and empirical standard errors of emission parameters for dive duration ($Y_t$), acceleration ($\Zone_{t,\tilde t^*}$), and wiggliness ($\Ztwo_{t,\tilde t^*}$) of the killer whale case study data under the full CarHHMM-DFT.}
-            \begin{center}
-            \scalebox{0.75}{
-            \bgroup
-            \centering
-            \def\arraystretch{1.5}
-            \begin{tabular}{ccccc}
-            \multirow{2}{*}{Feature}                                                       & \multirow{2}{*}{Dive / Subdive Type} & \multicolumn{3}{c}{Parameter Estimate}        \\
-                                                                                           &                                      & $\hat \mu$    & $\hat \sigma$ & $\hat \phi$   \\ \hline
-            \multirow{2}{*}{Dive Duration $(s)$ -- $Y_t$}                                  & 1                                    & $27.27 (0.63)$ & $10.91 (0.56)$ & ---           \\
-                                                                                           & 2                                    & $127.1 (11.3)$ & $64.1 (9.0)$ & ---           \\ \hline
-            \multirow{3}{*}{$x$-Acc. $(m/s^2)$ -- $\left(\Zone_{t,\tilde t^*}\right)_x$}   & 1                                    & $0.423 (0.028)$ & $0.040 (0.001)$ & $0.966 (0.002)$ \\
-                                                                                           & 2                                    & $0.210 (0.012)$ & $0.097 (0.002)$ & $0.827 (0.010)$ \\
-                                                                                           & 3                                    & $0.232 (0.035)$ & $0.298 (0.010)$ & $0.605 (0.043)$ \\ \hline
-            \multirow{3}{*}{$y$-Acc. $(m/s^2)$ -- $\left(\Zone_{t,\tilde t^*}\right)_y$}   & 1                                    & $0.445 (0.036)$ & $0.051 (0.001)$ & $0.966 (0.009)$ \\
-                                                                                           & 2                                    & $0.438 (0.012)$ & $0.095 (0.002)$ & $0.827 (0.016)$ \\
-                                                                                           & 3                                    & $0.364 (0.043)$ & $0.368 (0.012)$ & $0.605 (0.041)$ \\ \hline
-            \multirow{3}{*}{$z$-Acc. $(m/s^2)$ -- $\left(\Zone_{t,\tilde t^*}\right)_z$}   & 1                                    & $-0.680 (0.041)$ & $0.058 (0.001)$ & $0.966 (0.005)$ \\
-                                                                                           & 2                                    & $-0.573 (0.014)$ & $0.112 (0.002)$ & $0.827 (0.012)$ \\
-                                                                                           & 3                                    & $-0.296 (0.042)$ & $0.357 (0.012)$ & $0.605 (0.039)$ \\ \hline
-            \multirow{3}{*}{Wiggliness - $\Ztwo_{t,\tilde t^*}$}                           & 1                                    & $34.98 (0.38)$ & $23.85 (0.39)$ & ---           \\
-                                                                                           & 2                                    & $505.8 (5.8)$ & $516.7 (7.0)$ & ---           \\
-                                                                                           & 3                                    & $9770 (240)$ & $14460 (380)$ & ---           \\ \hline
-            \end{tabular}
-            \egroup
-            }
-            \end{center}
-            
-            \noindent Table \arabic{tablenum}: Estimates and predicted standard errors of emission parameters for dive duration ($Y_t$), acceleration ($\Zone_{t,\tilde t^*}$), and wiggliness ($\Ztwo_{t,\tilde t^*}$) of the killer whale case study data under the full CarHHMM-DFT. The parentheses refer to the estimated standard error of the parameter estimates derived from the inverse of the observed information matrix.
-            \addtocounter{tablenum}{1}
-    
-        \subsection{HHMM-DFT}
-            \begin{center}
-            \scalebox{0.75}{
-                \bgroup
-                \centering
-                \def\arraystretch{1.5}
-                \begin{tabular}{ccccc}
-                \multirow{2}{*}{Feature}                                                       & \multirow{2}{*}{Dive / Subdive Type} & \multicolumn{3}{c}{Parameter Estimate}          \\
-                                                                                               &                                      & $\hat \mu$    & $\hat \sigma$ & $\hat \phi$     \\ \hline
-                \multirow{2}{*}{Dive Duration $(s)$ -- $Y_t$}                                  & 1                                    & $26.565 (0.607)$ & $10.118 (0.518)$ & ---             \\
-                                                                                               & 2                                    & $116.134 (10.584)$ & $64.778 (8.543)$ & ---             \\ \hline
-                \multirow{3}{*}{$x$-Acc. $(m/s^2)$ -- $\left(\Zone_{t,\tilde t^*}\right)_x$}   & 1                                    & $-0.001 (0.002)$ & $0.064 (0.001)$ & ---             \\
-                                                                                               & 2                                    & $0.084 (0.004)$ & $0.173 (0.003)$ & ---             \\
-                                                                                               & 3                                    & $0.287 (0.020)$ & $0.481 (0.014)$ & ---             \\ \hline
-                \multirow{3}{*}{$y$-Acc. $(m/s^2)$ -- $\left(\Zone_{t,\tilde t^*}\right)_y$}   & 1                                    & $0.365 (0.002)$ & $0.067 (0.001)$ & ---             \\
-                                                                                               & 2                                    & $0.408 (0.002)$ & $0.107 (0.002)$ & ---             \\
-                                                                                               & 3                                    & $0.278 (0.016)$ & $0.403 (0.012)$ & ---             \\ \hline
-                \multirow{3}{*}{$z$-Acc. $(m/s^2)$ -- $\left(\Zone_{t,\tilde t^*}\right)_z$}   & 1                                    & $-0.441 (0.003)$ & $0.101 (0.002)$ & ---             \\
-                                                                                               & 2                                    & $-0.471 (0.003)$ & $0.157 (0.002)$ & ---             \\
-                                                                                               & 3                                    & $-0.300 (0.017)$ & $0.412 (0.012)$ & ---             \\ \hline
-                \multirow{3}{*}{Wiggliness - $\Ztwo_{t,\tilde t^*}$}                           & 1                                    & $42.149 (0.507)$ & $32.091 (0.554)$ & ---             \\
-                                                                                               & 2                                    & $584.178 (6.491)$ & $687.082 (8.805)$ & ---             \\
-                                                                                               & 3                                    & $6841.607 (148.113)$ & $13060.895 (293.086)$ & ---             \\ \hline
-                \end{tabular}
-                \egroup
-            }
-            \end{center}
-            
-            \noindent Table \arabic{tablenum}: Estimates and predicted standard errors of emission parameters for dive duration ($Y_t$), acceleration ($\Zone_{t,\tilde t^*}$), and wiggliness ($\Ztwo_{t,\tilde t^*}$) of the killer whale case study data under the HHMM-DFT. The parentheses refer to the estimated standard error of the parameter estimates derived from the inverse of the observed information matrix.
-            \addtocounter{tablenum}{1}
-            
-        \subsection{CarHHMM}
-            
-            \begin{center}
-            \scalebox{0.75}{
-                \bgroup
-                \centering
-                \def\arraystretch{1.5}
-                \begin{tabular}{ccccc}
-                \multirow{2}{*}{Feature}                                                       & \multirow{2}{*}{Dive / Subdive Type} & \multicolumn{3}{c}{Parameter Estimate}        \\
-                                                                                               &                                      & $\hat \mu$    & $\hat \sigma$ & $\hat \phi$   \\ \hline
-                \multirow{2}{*}{Dive Duration $(s)$ -- $Y_t$}                                  & 1                                    & $27.170 (0.629)$ & $10.821 (0.552)$ & ---           \\
-                                                                                               & 2                                    & $125.090 (11.003)$ & $64.488 (8.842)$ & ---           \\ \hline
-                \multirow{3}{*}{$x$-Acc. $(m/s^2)$ -- $\left(\Zone_{t,\tilde t^*}\right)_x$}   & 1                                    & $0.066 (0.017)$ & $0.035 (0.002)$ & $0.876 (0.006)$ \\
-                                                                                               & 2                                    & $0.339 (0.037)$ & $0.095 (0.011)$ & $0.878 (0.037)$ \\
-                                                                                               & 3                                    & $0.258 (0.007)$ & $0.305 (0.001)$ & $0.605 (0.010)$ \\ \hline
-                \multirow{3}{*}{$y$-Acc. $(m/s^2)$ -- $\left(\Zone_{t,\tilde t^*}\right)_y$}   & 1                                    & $0.377 (0.017)$ & $0.044 (0.002)$ & $0.876 (0.014)$ \\
-                                                                                               & 2                                    & $0.469 (0.045)$ & $0.097 (0.013)$ & $0.878 (0.042)$ \\
-                                                                                               & 3                                    & $0.349 (0.009)$ & $0.378 (0.001)$ & $0.605 (0.013)$ \\ \hline
-                \multirow{3}{*}{$z$-Acc. $(m/s^2)$ -- $\left(\Zone_{t,\tilde t^*}\right)_z$}   & 1                                    & $-0.464 (0.020)$ & $0.052 (0.002)$ & $0.876 (0.010)$ \\
-                                                                                               & 2                                    & $-0.658 (0.045)$ & $0.113 (0.013)$ & $0.878 (0.040)$ \\
-                                                                                               & 3                                    & $-0.305 (0.011)$ & $0.370 (0.001)$ & $0.605 (0.012)$ \\ \hline
-                \end{tabular}
-                \egroup
-            }
-            \end{center}
-            
-                \noindent Table \arabic{tablenum}: Estimates and predicted standard errors of emission parameters for dive duration ($Y_t$) and acceleration ($\Zone_{t,\tilde t^*}$) of the killer whale case study data under the CarHHMM. The parentheses refer to the estimated standard error of the parameter estimates derived from the inverse of the observed information matrix.
-                \addtocounter{tablenum}{1}
-            
-        \subsection{CarHMM-DFT}
-            
-            \begin{center}
-            \scalebox{0.75}{
-                \bgroup
-                \centering
-                \def\arraystretch{1.5}
-                \begin{tabular}{ccccc}
-                \multirow{2}{*}{Feature}                                                       & \multirow{2}{*}{Dive / Subdive Type} & \multicolumn{3}{c}{Parameter Estimate}        \\
-                                                                                               &                                      & $\hat \mu$    & $\hat \sigma$ & $\hat \phi$   \\ \hline
-                \multirow{1}{*}{Dive Duration $(s)$ -- $Y_t$}                                  & 1                                    & $41.875 (1.249)$ & $30.633 (1.230)$ & ---           \\ \hline
-                \multirow{3}{*}{$x$-Acc. $(m/s^2)$ -- $\left(\Zone_{t,\tilde t^*}\right)_x$}   & 1                                    & $0.455 (0.030)$ & $0.039 (0.001)$ & $0.968 (0.002)$ \\
-                                                                                               & 2                                    & $0.214 (0.012)$ & $0.096 (0.002)$ & $0.832 (0.009)$ \\
-                                                                                               & 3                                    & $0.222 (0.034)$ & $0.295 (0.010)$ & $0.604 (0.039)$ \\ \hline
-                \multirow{3}{*}{$y$-Acc. $(m/s^2)$ -- $\left(\Zone_{t,\tilde t^*}\right)_y$}   & 1                                    & $0.456 (0.039)$ & $0.051 (0.001)$ & $0.968 (0.009)$ \\
-                                                                                               & 2                                    & $0.437 (0.012)$ & $0.094 (0.002)$ & $0.832 (0.016)$ \\
-                                                                                               & 3                                    & $0.366 (0.042)$ & $0.364 (0.012)$ & $0.604 (0.040)$ \\ \hline
-                \multirow{3}{*}{$z$-Acc. $(m/s^2)$ -- $\left(\Zone_{t,\tilde t^*}\right)_z$}   & 1                                    & $-0.700 (0.044)$ & $0.058 (0.001)$ & $0.968 (0.005)$ \\
-                                                                                               & 2                                    & $-0.574 (0.014)$ & $0.111 (0.002)$ & $0.832 (0.012)$ \\
-                                                                                               & 3                                    & $-0.302 (0.041)$ & $0.354 (0.012)$ & $0.604 (0.039)$ \\ \hline
-                \multirow{3}{*}{Wiggliness - $\Ztwo_{t,\tilde t^*}$}                           & 1                                    & $33.883 (0.367)$ & $22.847 (0.376)$ & ---           \\
-                                                                                               & 2                                    & $480.622 (5.479)$ & $492.201 (6.598)$ & ---           \\
-                                                                                               & 3                                    & $9987.824 (239.804)$ & $14754.912 (375.450)$ & ---           \\ \hline
-                \end{tabular}
-                \egroup
-            }
-            \end{center}
-            
-                \noindent Table \arabic{tablenum}: Estimates and predicted standard errors of emission parameters for dive duration ($Y_t$), acceleration ($\Zone_{t,\tilde t^*}$), and wiggliness ($\Ztwo_{t,\tilde t^*}$) of the killer whale case study data under the CarHMM-DFT. The parentheses refer to the estimated standard error of the parameter estimates derived from the inverse of the observed information matrix. Note that $\hat \mu_A^{*(\cdot,1)}$ is undefined because $\hat \phi_A^{*(\cdot,1)} = 1$, indicating that the mean of $\Zone_{t,\tilde t^*}$ is equal to $\Zone_{t,\tilde t^*-1}$ when in subdive state 1.
-                \addtocounter{tablenum}{1}
-    
-    \newpage
-    \section{Decoded dive states}
-    
-        \subsection{CarHHMM-DFT}
-        
-        \begin{center}
-        \includegraphics[width=6in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_decoded_dives.png}
-        \end{center}
-        
-        \noindent Figure \arabic{fignum}: The $x$--component of acceleration $\left(y^*_{t,t^*}\right)_x$ (top two panels) and dive depth (bottom two panels) of a northern resident killer whale for a sequence of six selected dives. Each panel is partitioned into dives by vertical black lines. The curve colours in the first and third panels correspond to the estimated dive types while the curve colours of the second and fourth panels correspond the estimated subdive states. Both the dive types and subdive states are estimated by fitting the CarHHMM-DFT to the data and performing the forward-backward algorithm to determine the hidden state with the highest probability.
-        \addtocounter{fignum}{1}
-        
-        \begin{center}
-        \includegraphics[width=6in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_decoded_states.png}
-        \end{center}
-        
-        \noindent Figure \arabic{fignum}: The probability that each dive is a particular type or that the whale is in a particular subdive state, given the fitted model. Each panel is partitioned into dives by vertical black lines. The curve colours in the first and third panels correspond to the estimated dive types while the curve colours of the second and fourth panels correspond the estimated subdive states. Both the dive types and subdive states are estimated by fitting the CarHHMM-DFT to the data and performing the forward-backward algorithm.
-        \addtocounter{fignum}{1}
-        
-        \subsection{HHMM-DFT}
-        
-        \begin{center}
-        \includegraphics[width=6in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_HHMM_decoded_dives.png}
-        \end{center}
-        
-        \noindent Figure \arabic{fignum}: The $x$--component of acceleration $\left(y^*_{t,t^*}\right)_x$ (top two panels) and dive depth (bottom two panels) of a northern resident killer whale for a sequence of six selected dives. Each panel is partitioned into dives by vertical black lines. The curve colours in the first and third panels correspond to the estimated dive types while the curve colours of the second and fourth panels correspond the estimated subdive states. Both the dive types and subdive states are estimated by fitting the HHMM-DFT to the data and performing the forward-backward algorithm to determine the hidden state with the highest probability.
-        \addtocounter{fignum}{1}
-        
-        \begin{center}
-        \includegraphics[width=6in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_HHMM_decoded_states.png}
-        \end{center}
-        
-        \noindent Figure \arabic{fignum}: The probability that each dive is a particular type or that the whale is in a particular subdive state, given the fitted model. Each panel is partitioned into dives by vertical black lines. The curve colours in the first and third panels correspond to the estimated dive types while the curve colours of the second and fourth panels correspond the estimated subdive states. Both the dive types and subdive states are estimated by fitting the HHMM-DFT to the data and performing the forward-backward algorithm.
-        \addtocounter{fignum}{1}
-        
-        \subsection{CarHHMM}
-        
-        \begin{center}
-        \includegraphics[width=6in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM1_decoded_dives.png}
-        \end{center}
-        
-        \noindent Figure \arabic{fignum}: The $x$--component of acceleration $\left(y^*_{t,t^*}\right)_x$ (top two panels) and dive depth (bottom two panels) of a northern resident killer whale for a sequence of six selected dives. Each panel is partitioned into dives by vertical black lines. The curve colours in the first and third panels correspond to the estimated dive types while the curve colours of the second and fourth panels correspond the estimated subdive states. Both the dive types and subdive states are estimated by fitting the CarHHMM to the data and performing the forward-backward algorithm to determine the hidden state with the highest probability.
-        \addtocounter{fignum}{1}
-        
-        \begin{center}
-        \includegraphics[width=6in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM1_decoded_states.png}
-        \end{center}
-        
-        \noindent Figure \arabic{fignum}: The probability that each dive is a particular type or that the whale is in a particular subdive state, given the fitted model. Each panel is partitioned into dives by vertical black lines. The curve colours in the first and third panels correspond to the estimated dive types while the curve colours of the second and fourth panels correspond the estimated subdive states. Both the dive types and subdive states are estimated by fitting the CarHHMM to the data and performing the forward-backward algorithm.
-        \addtocounter{fignum}{1}
-        
-        \subsection{CarHMM-DFT}
-        
-        \begin{center}
-        \includegraphics[width=6in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHMM_decoded_dives.png}
-        \end{center}
-        
-        \noindent Figure \arabic{fignum}: The $x$--component of acceleration $\left(y^*_{t,t^*}\right)_x$ (top two panels) and dive depth (bottom two panels) of a northern resident killer whale for a sequence of six selected dives. Each panel is partitioned into dives by vertical black lines. The curve colours in the first and third panels correspond to the estimated dive types while the curve colours of the second and fourth panels correspond the estimated subdive states. Both the dive types and subdive states are estimated by fitting the CarHMM-DFT to the data and performing the forward-backward algorithm to determine the hidden state with the highest probability.
-        \addtocounter{fignum}{1}
-        
-        \begin{center}
-        \includegraphics[width=6in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHMM_decoded_states.png}
-        \end{center}
-        
-        \noindent Figure \arabic{fignum}: The probability that each dive is a particular type or that the whale is in a particular subdive state, given the fitted model. Each panel is partitioned into dives by vertical black lines. The curve colours in the first and third panels correspond to the estimated dive types while the curve colours of the second and fourth panels correspond the estimated subdive states. Both the dive types and subdive states are estimated by fitting the CarHMM-DFT to the data and performing the forward-backward algorithm.
-        \addtocounter{fignum}{1}
-        
-    \newpage
-    \section{Model checking - dive duration ($Y_t$)}
-    
-        \subsection{CarHHMM-DFT}
-        
-        \begin{center}
-        \includegraphics[width=2.25in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_empirical_hist_dive_duration.png}
-        \includegraphics[width=2.25in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_pseudresids_Dive_Duration.png}
-        \end{center}
-        
-        \noindent Figure \arabic{fignum}: Empirical histogram (left) and psuedoresiduals (right) of dive duration ($Y_{t}$) plotted over the estimated emission distributions and a standard normal density, respectively. Both plots are generated using the fitted CarHHMM-DFT and the killer whale case study data.
-        \addtocounter{fignum}{1}
-        
-        \subsection{HHMM-DFT}
-        
-        \begin{center}
-        \includegraphics[width=2.25in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_HHMM_empirical_hist_dive_duration.png}
-        \includegraphics[width=2.25in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_HHMM_pseudresids_Dive_Duration.png}
-        \end{center}
-        
-        \noindent Figure \arabic{fignum}: Empirical histogram (left) and psuedoresiduals (right) of dive duration ($Y_{t}$) plotted over the estimated emission distributions and a standard normal density, respectively. Both plots are generated using the fitted HHMM-DFT and the killer whale case study data.
-        \addtocounter{fignum}{1}
-        
-        \subsection{CarHHMM}
-        
-        \begin{center}
-        \includegraphics[width=2.25in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM1_empirical_hist_dive_duration.png}
-        \includegraphics[width=2.25in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM1_pseudresids_Dive_Duration.png}
-        \end{center}
-        
-        \noindent Figure \arabic{fignum}: Empirical histogram (left) and psuedoresiduals (right) of dive duration ($Y_{t}$) plotted over the estimated emission distributions and a standard normal density, respectively. Both plots are generated using the fitted CarHHMM-DFT and the killer whale case study data.
-        \addtocounter{fignum}{1}
-        
-        \subsection{CarHMM-DFT}
-        
-        \begin{center}
-        \includegraphics[width=2.25in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHMM_empirical_hist_dive_duration.png}
-        \includegraphics[width=2.25in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHMM_pseudresids_Dive_Duration.png}
-        \end{center}
-        
-        \noindent Figure \arabic{fignum}: Empirical histogram (left) and psuedoresiduals (right) of dive duration ($Y_{t}$) plotted over the estimated emission distribution (left) and a standard normal density (right), respectively. Both plots are generated using the fitted CarHMM-DFT and the killer whale case study data.
-        \addtocounter{fignum}{1}
-        
-    \newpage
-    \section{Model checking - acceleration ($\Zone_{t,\tilde t^*}$)}
-        
-        \subsection{CarHHMM-DFT}
-        
-        \begin{center}
-        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_empirical_hist_Ax_0.png}
-        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_empirical_hist_Ay_0.png}
-        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_empirical_hist_Az_0.png}
-        
-        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_empirical_hist_Ax_1.png}
-        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_empirical_hist_Ay_1.png}
-        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_empirical_hist_Az_1.png}
-        
-        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_empirical_hist_Ax_2.png}
-        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_empirical_hist_Ay_2.png}
-        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_empirical_hist_Az_2.png}
-        
-        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_pseudresids_Ax.png}
-        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_pseudresids_Ay.png}
-        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_pseudresids_Az.png}
-        \end{center}
-        
-        \noindent Figure \arabic{fignum}: Empirical histograms (top three rows) and psuedoresiduals (bottom row) of acceleration ($\Zone_{t,\tilde t^*}$) plotted over the estimated emission distributions and a standard normal density, respectively. Note that the mean of acceleration at time $\tilde t^*$ depends upon acceleration at time $\tilde t^*-1$, so only the deviation from the conditional mean at each particular time step is plotted. All plots are generated using the fitted CarHHMM-DFT and the killer whale case study data.
-        \addtocounter{fignum}{1}
-        
-        \newpage
-        
-        \subsection{HHMM-DFT}
-        
-        \begin{center}
-        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_HHMM_empirical_hist_Ax_0.png}
-        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_HHMM_empirical_hist_Ay_0.png}
-        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_HHMM_empirical_hist_Az_0.png}
-        
-        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_HHMM_empirical_hist_Ax_1.png}
-        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_HHMM_empirical_hist_Ay_1.png}
-        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_HHMM_empirical_hist_Az_1.png}
-        
-        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_HHMM_empirical_hist_Ax_2.png}
-        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_HHMM_empirical_hist_Ay_2.png}
-        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_HHMM_empirical_hist_Az_2.png}
-        
-        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_HHMM_pseudresids_Ax.png}
-        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_HHMM_pseudresids_Ay.png}
-        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_HHMM_pseudresids_Az.png}
-        \end{center}
-        
-        \noindent Figure \arabic{fignum}: Empirical histograms (top three rows) and psuedoresiduals (bottom row) of acceleration ($\Zone_{t,\tilde t^*}$) plotted over the estimated emission distributions and a standard normal density, respectively. All plots are generated using the fitted HHMM-DFT and the killer whale case study data.
-        \addtocounter{fignum}{1}
-        
-        \newpage
-        
-        \subsection{CarHHMM}
-        
-        \begin{center}
-        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM1_empirical_hist_Ax_0.png}
-        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM1_empirical_hist_Ay_0.png}
-        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM1_empirical_hist_Az_0.png}
-        
-        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM1_empirical_hist_Ax_1.png}
-        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM1_empirical_hist_Ay_1.png}
-        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM1_empirical_hist_Az_1.png}
-        
-        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM1_empirical_hist_Ax_2.png}
-        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM1_empirical_hist_Ay_2.png}
-        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM1_empirical_hist_Az_2.png}
-        
-        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM1_pseudresids_Ax.png}
-        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM1_pseudresids_Ay.png}
-        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM1_pseudresids_Az.png}
-        \end{center}
-        
-        \noindent Figure \arabic{fignum}: Empirical histograms (top three rows) and psuedoresiduals (bottom row) of acceleration ($\Zone_{t,\tilde t^*}$) plotted over the estimated emission distributions and a standard normal density, respectively. Note that the mean of acceleration at time $\tilde t^*$ depends upon acceleration at time $\tilde t^*-1$, so only the deviation from the conditional mean at each particular time step is plotted. All plots are generated using the fitted CarHHMM and the killer whale case study data.
-        \addtocounter{fignum}{1}
-        
-        \newpage
-        
-        \subsection{CarHMM-DFT}
-        
-        \begin{center}
-        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHMM_empirical_hist_Ax_0.png}
-        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHMM_empirical_hist_Ay_0.png}
-        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHMM_empirical_hist_Az_0.png}
-        
-        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHMM_empirical_hist_Ax_1.png}
-        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHMM_empirical_hist_Ay_1.png}
-        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHMM_empirical_hist_Az_1.png}
-        
-        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHMM_empirical_hist_Ax_2.png}
-        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHMM_empirical_hist_Ay_2.png}
-        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHMM_empirical_hist_Az_2.png}
-        
-        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHMM_pseudresids_Ax.png}
-        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHMM_pseudresids_Ay.png}
-        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHMM_pseudresids_Az.png}
-        \end{center}
-        
-        \noindent Figure \arabic{fignum}: Empirical histograms (top three rows) and psuedoresiduals (bottom row) of acceleration ($\Zone_{t,\tilde t^*}$) plotted over the estimated emission distributions and a standard normal density, respectively. Note that the mean of acceleration at time $\tilde t^*$ depends upon acceleration at time $\tilde t^*-1$, so only the deviation from the conditional mean at each particular time step is plotted. All plots are generated using the fitted CarHMM-DFT and the killer whale case study data.
-        \addtocounter{fignum}{1}
-        
-    \section{Model checking - wiggliness ($\Ztwo_{t,\tilde t^*}$)}
-        
-        \subsection{CarHHMM-DFT}
-        
-        \begin{center}
-        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_empirical_hist_ahat_0.png}
-        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_empirical_hist_ahat_1.png}
-        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_empirical_hist_ahat_2.png}
-        
-        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_pseudresids_ahat.png}
-        \end{center}
-        
-        \noindent Figure \arabic{fignum}: Empirical histograms (top row) and psuedoresiduals (bottom row) of wiggliness ($\Ztwo_{t,\tilde t^*}$) plotted over the estimated emission distributions and a standard normal density, respectively. All plots are generated using the fitted CarHHMM-DFT and the killer whale case study data.
-        \addtocounter{fignum}{1}
-        
-        \subsection{HHMM-DFT}
-        
-        \begin{center}
-        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_HHMM_empirical_hist_ahat_0.png}
-        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_HHMM_empirical_hist_ahat_1.png}
-        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_HHMM_empirical_hist_ahat_2.png}
-        
-        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_HHMM_pseudresids_ahat.png}
-        \end{center}
-        
-        \noindent Figure \arabic{fignum}: Empirical histograms (top row) and psuedoresiduals (bottom row) of wiggliness ($\Ztwo_{t,\tilde t^*}$) plotted over the estimated emission distributions and a standard normal density, respectively. All plots are generated using the fitted HHMM-DFT and the killer whale case study data.
-        \addtocounter{fignum}{1}
-        
-        \subsection{CarHHMM}
-        
-        The CarHHMM does not model wiggliness.
-        
-        \subsection{CarHMM-DFT}
-        
-        \begin{center}
-        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHMM_empirical_hist_ahat_0.png}
-        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHMM_empirical_hist_ahat_1.png}
-        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHMM_empirical_hist_ahat_2.png}
-        
-        \includegraphics[width=1.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHMM_pseudresids_ahat.png}
-        \end{center}
-        
-        \noindent Figure \arabic{fignum}: Empirical histograms (top row) and psuedoresiduals (bottom row) of wiggliness ($\Ztwo_{t,\tilde t^*}$) plotted over the estimated emission distributions and a standard normal density, respectively. All plots are generated using the fitted CarHMM-DFT and the killer whale case study data.
-        \addtocounter{fignum}{1}
-
-\newpage
-\fi
 %\section{Simulation Study Results}
 
     \section{Simulated Data}
@@ -557,28 +78,36 @@
         \scalebox{0.75}{
         \bgroup
         \def\arraystretch{1.5}
-        \begin{tabular}{ccccccc}
+\begin{tabular}{ccccccc}
 Model                       & \multicolumn{1}{c}{Train Time (m)} & \multicolumn{1}{c}{Dive Type} & \multicolumn{1}{c}{Subdive Type} & \multicolumn{1}{c}{Dive Accuracy} & \multicolumn{1}{c}{Subdive Accuracy}  \\ \hline
-\multirow{5}{*}{CarHMM-DFT} & \multirow{5}{*}{$70 \pm 11$}   & Both                          & Both                             & -------------                     & $0.934 \pm 0.005$                       \\
-                            &                                    & 1                             & 1                                & \multirow{2}{*}{-------------}    & $0.794 \pm 0.037$                       \\ 
-                            &                                    & 1                             & 2                                &                                   & $0.958 \pm 0.008$                       \\ 
-                            &                                    & 2                             & 1                                & \multirow{2}{*}{-------------}    & $0.924 \pm 0.012$                       \\ 
-                            &                                    & 2                             & 2                                &                                   & $0.941 \pm 0.011$                       \\ \hline 
-\multirow{5}{*}{HHMM-DFT}   & \multirow{5}{*}{$209 \pm 51$}   & Both                          & Both                             & $0.942 \pm 0.036$                   & $0.881 \pm 0.041$                       \\
-                            &                                    & 1                             & 1                                & \multirow{2}{*}{$0.966\pm0.030$}    & $0.628 \pm 0.120$                       \\ 
-                            &                                    & 1                             & 2                                &                                   & $0.956 \pm 0.014$                       \\ 
-                            &                                    & 2                             & 1                                & \multirow{2}{*}{$0.852\pm0.095$}    & $0.789 \pm 0.158$                       \\ 
-                            &                                    & 2                             & 2                                &                                   & $0.918 \pm 0.028$                       \\ \hline
-\multirow{5}{*}{CarHHMM}    & \multirow{5}{*}{$236 \pm 52$}   & Both                          & Both                             & $0.873 \pm 0.165$                   & $0.740 \pm 0.051$                       \\
-                            &                                    & 1                             & 1                                & \multirow{2}{*}{$0.886\pm0.214$}    & $0.765 \pm 0.205$                       \\ 
-                            &                                    & 1                             & 2                                &                                   & $0.707 \pm 0.090$                       \\ 
-                            &                                    & 2                             & 1                                & \multirow{2}{*}{$0.823\pm0.136$}    & $0.873 \pm 0.225$                       \\ 
-                            &                                    & 2                             & 2                                &                                   & $0.657 \pm 0.099$                       \\ \hline
-\multirow{5}{*}{CarHHMM-DFT}& \multirow{5}{*}{$132 \pm 40$}   & Both                          & Both                             & $0.944 \pm 0.036$                   & $0.934 \pm 0.005$                       \\
-                            &                                    & 1                             & 1                                & \multirow{2}{*}{$0.963\pm0.031$}    & $0.759 \pm 0.042$                       \\ 
-                            &                                    & 1                             & 2                                &                                   & $0.962 \pm 0.008$                       \\ 
-                            &                                    & 2                             & 1                                & \multirow{2}{*}{$0.872\pm0.086$}    & $0.934 \pm 0.010$                       \\ 
-                            &                                    & 2                             & 2                                &                                   & $0.932 \pm 0.011$                       \\ \hline
+\multirow{7}{*}{CarHHMM-DFT}& \multirow{7}{*}{$156 \pm 67$}   & All                           & All                              & $0.956 \pm 0.028$                   & $0.911 \pm 0.006$                       \\
+                            &                                    & 1                             & 1                                & \multirow{3}{*}{$0.973\pm0.032$}    & $0.846 \pm 0.027$                       \\
+                            &                                    & 1                             & 2                                &                                   & $0.918 \pm 0.011$                       \\ 
+                            &                                    & 1                             & 3                                &                                   & $0.860 \pm 0.030$                       \\ 
+                            &                                    & 2                             & 1                                & \multirow{3}{*}{$0.856\pm0.097$}    & $0.949 \pm 0.010$                       \\ 
+                            &                                    & 2                             & 2                                &                                   & $0.915 \pm 0.015$                       \\
+                            &                                    & 2                             & 3                                &                                   & $0.871 \pm 0.057$                       \\ \hline
+\multirow{7}{*}{HHMM-DFT}   & \multirow{7}{*}{$162 \pm 64$}   & All                           & All                              & $0.959 \pm 0.025$                   & $0.844 \pm 0.024$                       \\
+                            &                                    & 1                             & 1                                & \multirow{3}{*}{$0.977\pm0.028$}    & $0.761 \pm 0.063$                       \\ 
+                            &                                    & 1                             & 2                                &                                   & $0.845 \pm 0.029$                       \\ 
+                            &                                    & 1                             & 3                                &                                   & $0.858 \pm 0.034$                       \\
+                            &                                    & 2                             & 1                                & \multirow{3}{*}{$0.851\pm0.097$}    & $0.883 \pm 0.066$                       \\ 
+                            &                                    & 2                             & 2                                &                                   & $0.829 \pm 0.041$                       \\
+                            &                                    & 2                             & 3                                &                                   & $0.876 \pm 0.061$                       \\ \hline
+\multirow{7}{*}{CarHHMM}    & \multirow{7}{*}{$258 \pm 106$}   & All                           & All                              & $0.924 \pm 0.127$                   & $0.845 \pm 0.018$                       \\
+                            &                                    & 1                             & 1                                & \multirow{3}{*}{$0.933\pm0.153$}    & $0.689 \pm 0.050$                       \\ 
+                            &                                    & 1                             & 2                                &                                   & $0.900 \pm 0.031$                       \\ 
+                            &                                    & 1                             & 3                                &                                   & $0.673 \pm 0.059$                       \\
+                            &                                    & 2                             & 1                                & \multirow{3}{*}{$0.864\pm0.134$}    & $0.906 \pm 0.022$                       \\ 
+                            &                                    & 2                             & 2                                &                                   & $0.848 \pm 0.033$                       \\
+                            &                                    & 2                             & 3                                &                                   & $0.687 \pm 0.105$                       \\ \hline
+\multirow{7}{*}{CarHMM-DFT} & \multirow{7}{*}{$45 \pm 22$}   & All                           & All                              & ---                                   & $0.912 \pm 0.006$                       \\
+                            &                                    & 1                             & 1                                & \multirow{3}{*}{---          }    & $0.854 \pm 0.026$                       \\
+                            &                                    & 1                             & 2                                &                                   & $0.921 \pm 0.011$                       \\                            
+                            &                                    & 1                             & 3                                &                                   & $0.860 \pm 0.032$                       \\ 
+                            &                                    & 2                             & 1                                & \multirow{3}{*}{---          }    & $0.943 \pm 0.011$                       \\ 
+                            &                                    & 2                             & 2                                &                                   & $0.919 \pm 0.014$                       \\ 
+                            &                                    & 2                             & 3                                &                                   & $0.878 \pm 0.053$                       \\ \hline
 \end{tabular}
         \egroup
         }
@@ -597,22 +126,22 @@ Model                       & \multicolumn{1}{c}{Train Time (m)} & \multicolumn{
         \def\arraystretch{1.5}
 \begin{tabular}{ccccccc}
 Model                       & \multicolumn{1}{c}{Parameter} & \multicolumn{1}{c}{Dive Type} & \multicolumn{1}{c}{Estimate}   & \multicolumn{1}{c}{Bias}   & \multicolumn{1}{c}{Empirical SE}   & \multicolumn{1}{c}{Observed Fischer SE}     \\ \hline
-\multirow{4}{*}{CarHMM-DFT} & \multirow{2}{*}{$\mu$}        & 1                             & $42.161$                         & ---          & $4.255$                             & $2.036 \pm 0.369$                             \\
+\multirow{4}{*}{CarHHMM-DFT}& \multirow{2}{*}{$\mu_Y$}      & 1                             & $27.337$                         & $0.067$ $(p=0.287)$          & $1.393$                             & $1.025 \pm 0.124$                             \\
+                            &                               & 2                             & $127.140$                         & $0.070$ $(p=0.945)$          & $22.562$                             & $15.710 \pm 6.726$                             \\
+                            & \multirow{2}{*}{$\sigma_Y$}   & 1                             & $10.801$                         & $-0.109$ $(p=0.035)$          & $1.154$                             & $0.838 \pm 0.110$                             \\
+                            &                               & 2                             & $59.520$                         & $-4.540$ $(p=0.000)$          & $17.678$                             & $13.040 \pm 5.530$                             \\ \hline
+\multirow{4}{*}{HHMM-DFT}   & \multirow{2}{*}{$\mu_Y$}      & 1                             & $27.373$                         & $0.103$ $(p=0.084)$          & $1.327$                             & $1.030 \pm 0.113$                             \\
+                            &                               & 2                             & $126.843$                         & $-0.227$ $(p=0.818)$          & $22.004$                             & $15.367 \pm 6.105$                             \\
+                            & \multirow{2}{*}{$\sigma_Y$}   & 1                             & $10.860$                         & $-0.050$ $(p=0.351)$          & $1.187$                             & $0.845 \pm 0.110$                             \\
+                            &                               & 2                             & $57.136$                         & $-6.924$ $(p=0.000)$          & $16.118$                             & $12.624 \pm 5.165$                             \\ \hline
+\multirow{4}{*}{CarHHMM}    & \multirow{2}{*}{$\mu_Y$}      & 1                             & $27.248$                         & $-0.022$ $(p=0.826)$          & $2.196$                             & $1.042 \pm 0.138$                             \\
+                            &                               & 2                             & $117.624$                         & $-9.446$ $(p=0.000)$          & $34.336$                             & $15.251 \pm 7.111$                             \\
+                            & \multirow{2}{*}{$\sigma_Y$}   & 1                             & $10.523$                         & $-0.387$ $(p=0.001)$          & $2.594$                             & $0.858 \pm 0.148$                             \\
+                            &                               & 2                             & $56.981$                         & $-7.079$ $(p=0.000)$          & $16.325$                             & $12.530 \pm 6.095$                             \\ \hline
+\multirow{4}{*}{CarHMM-DFT} & \multirow{2}{*}{$\mu_Y$}      & 1                             & $41.685$                         & ---                        & $4.268$                             & $2.001 \pm 0.347$                             \\
                             &                               & ---                           & ---                            & ---                        & ---                                & ---                                         \\
-                            & \multirow{2}{*}{$\sigma$}     & 1                             & $31.119$                         & ---          & $5.393$                             & $2.014 \pm 0.452$                             \\
-                            &                               & ---                           & ---                            & ---                        & ---                                & ---                                         \\ \hline
-\multirow{4}{*}{HHMM-DFT}   & \multirow{2}{*}{$\mu$}        & 1                             & $25.776$                         & $0.096$ $(p=0.071)$          & $1.181$                             & $0.959 \pm 0.111$                             \\
-                            &                               & 2                             & $108.589$                         & $3.989$ $(p=0.000)$          & $18.726$                             & $13.083 \pm 4.546$                             \\
-                            & \multirow{2}{*}{$\sigma$}     & 1                             & $9.489$                         & $-0.081$ $(p=0.058)$          & $0.952$                             & $0.779 \pm 0.102$                             \\
-                            &                               & 2                             & $59.514$                         & $-5.186$ $(p=0.000)$          & $14.388$                             & $11.080 \pm 3.737$                             \\ \hline
-\multirow{4}{*}{CarHHMM}    & \multirow{2}{*}{$\mu$}        & 1                             & $27.877$                         & $2.197$ $(p=0.000)$          & $11.693$                             & $0.966 \pm 0.150$                             \\
-                            &                               & 2                             & $96.423$                         & $-8.177$ $(p=0.000)$          & $33.095$                             & $12.341 \pm 6.893$                             \\
-                            & \multirow{2}{*}{$\sigma$}     & 1                             & $9.954$                         & $0.384$ $(p=0.347)$          & $8.950$                             & $0.793 \pm 0.142$                             \\
-                            &                               & 2                             & $54.291$                         & $-10.409$ $(p=0.000)$          & $18.432$                             & $10.142 \pm 5.496$                             \\ \hline
-\multirow{4}{*}{CarHHMM-DFT}& \multirow{2}{*}{$\mu$}        & 1                             & $25.719$                         & $0.039$ $(p=0.455)$          & $1.170$                             & $0.958 \pm 0.108$                             \\
-                            &                               & 2                             & $107.404$                         & $2.804$ $(p=0.001)$          & $18.535$                             & $12.830 \pm 4.471$                             \\
-                            & \multirow{2}{*}{$\sigma$}     & 1                             & $9.436$                         & $-0.134$ $(p=0.001)$          & $0.930$                             & $0.777 \pm 0.097$                             \\
-                            &                               & 2                             & $59.635$                         & $-5.065$ $(p=0.000)$          & $14.225$                             & $10.945 \pm 3.548$                             
+                            & \multirow{2}{*}{$\sigma_Y$}   & 1                             & $30.299$                         & ---                        & $5.439$                             & $1.948 \pm 0.443$                             \\
+                            &                               & ---                           & ---                            & ---                        & ---                                & ---                                         \\
 \end{tabular}
         \egroup
         }
@@ -665,31 +194,43 @@ Model                       & \multicolumn{1}{c}{Parameter} & \multicolumn{1}{c}
         \centering
         \def\arraystretch{1.5}
 \begin{tabular}{ccccccc}
-Model                       & \multicolumn{1}{c}{Parameter} & \multicolumn{1}{c}{Subdive Type} & \multicolumn{1}{c}{Estimate}   & \multicolumn{1}{c}{Bias}   & \multicolumn{1}{c}{Empirical SE}   & \multicolumn{1}{c}{Observed Fischer SE}        \\ \hline
-\multirow{6}{*}{CarHMM-DFT} & \multirow{2}{*}{$\mu_A^*$}    & 1                                & $-0.001$                         & $-0.001$ $(p=0.934)$          & $0.142$                             & $0.066 \pm 0.045$                             \\
-                            &                               & 2                                & $-0.000$                         & $-0.000$ $(p=0.612)$          & $0.018$                             & $0.017 \pm 0.003$                             \\
-                            & \multirow{2}{*}{$\sigma_A^*$} & 1                                & $0.034$                         & $-0.016$ $(p=0.000)$          & $0.001$                             & $0.001 \pm 0.000$                             \\
-                            &                               & 2                                & $0.079$                         & $-0.021$ $(p=0.000)$          & $0.002$                             & $0.002 \pm 0.000$                             \\ 
-                            & \multirow{2}{*}{$\phi_A^*$}   & 1                                & $0.978$                         & $-0.012$ $(p=0.000)$          & $0.010$                             & $0.009 \pm 0.003$                             \\
-                            &                               & 2                                & $0.868$                         & $-0.082$ $(p=0.000)$          & $0.016$                             & $0.016 \pm 0.002$                             \\ \hline
-\multirow{6}{*}{HHMM-DFT}   & \multirow{2}{*}{$\mu_A^*$}    & 1                                & $-0.001$                         & $-0.001$ $(p=0.302)$          & $0.027$                             & $0.006 \pm 0.001$                             \\
-                            &                               & 2                                & $0.000$                         & $0.000$ $(p=0.921)$          & $0.012$                             & $0.004 \pm 0.000$                             \\
-                            & \multirow{2}{*}{$\sigma_A^*$} & 1                                & $0.136$                         & $0.086$ $(p=0.000)$          & $0.022$                             & $0.004 \pm 0.001$                             \\
-                            &                               & 2                                & $0.144$                         & $0.044$ $(p=0.000)$          & $0.007$                             & $0.003 \pm 0.000$                             \\ 
-                            & \multirow{2}{*}{$\phi_A^*$}   & 1                                & ------                         & ------                     & ------                             & ------                                      \\
-                            &                               & 2                                & ------                         & ------                     & ------                             & ------                                      \\ \hline
-\multirow{6}{*}{CarHHMM}    & \multirow{2}{*}{$\mu_A^*$}    & 1                                & $0.021$                         & $0.021$ $(p=0.436)$          & $0.591$                             & $0.016 \pm 0.004$                             \\
-                            &                               & 2                                & $0.000$                         & $0.000$ $(p=0.669)$          & $0.013$                             & $0.006 \pm 0.001$                             \\
-                            & \multirow{2}{*}{$\sigma_A^*$} & 1                                & $0.065$                         & $0.015$ $(p=0.000)$          & $0.022$                             & $0.001 \pm 0.000$                             \\
-                            &                               & 2                                & $0.187$                         & $0.087$ $(p=0.000)$          & $0.018$                             & $0.004 \pm 0.000$                             \\ 
-                            & \multirow{2}{*}{$\phi_A^*$}   & 1                                & $0.891$                         & $-0.099$ $(p=0.000)$          & $0.155$                             & $0.010 \pm 0.002$                             \\
-                            &                               & 2                                & $0.182$                         & $-0.768$ $(p=0.000)$          & $0.137$                             & $0.027 \pm 0.002$                             \\ \hline
-\multirow{6}{*}{CarHHMM-DFT}& \multirow{2}{*}{$\mu_A^*$}    & 1                                & $-0.001$                         & $-0.001$ $(p=0.875)$          & $0.111$                             & $0.066 \pm 0.045$                             \\
-                            &                               & 2                                & $-0.000$                         & $-0.000$ $(p=0.564)$          & $0.018$                             & $0.017 \pm 0.003$                             \\
-                            & \multirow{2}{*}{$\sigma_A^*$} & 1                                & $0.034$                         & $-0.016$ $(p=0.000)$          & $0.001$                             & $0.001 \pm 0.000$                             \\
-                            &                               & 2                                & $0.079$                         & $-0.021$ $(p=0.000)$          & $0.002$                             & $0.002 \pm 0.000$                             \\ 
-                            & \multirow{2}{*}{$\phi_A^*$}   & 1                                & $0.978$                         & $-0.012$ $(p=0.000)$          & $0.010$                             & $0.009 \pm 0.003$                             \\
-                            &                               & 2                                & $0.867$                         & $-0.083$ $(p=0.000)$          & $0.016$                             & $0.016 \pm 0.002$                             \\ \hline
+Model                       & \multicolumn{1}{c}{Parameter} & \multicolumn{1}{c}{Subdive Type} & \multicolumn{1}{c}{Estimate}   & \multicolumn{1}{c}{Bias}   & \multicolumn{1}{c}{Empirical SE}   & \multicolumn{1}{c}{Observed Fischer SE}     \\ \hline
+\multirow{9}{*}{CarHHMM-DFT}& \multirow{3}{*}{$\mu_A^*$}    & 1                                & $-0.012$                         & $-0.012$ $(p=0.004)$          & $0.093$                             & $0.066 \pm 0.038$                             \\
+                            &                               & 2                                & $0.099$                         & $-0.001$ $(p=0.436)$          & $0.019$                             & $0.019 \pm 0.003$                             \\
+                            &                               & 3                                & $0.200$                         & $0.000$ $(p=0.965)$          & $0.060$                             & $0.053 \pm 0.013$                             \\
+                            & \multirow{3}{*}{$\sigma_A^*$} & 1                                & $0.050$                         & $0.000$ $(p=0.376)$          & $0.002$                             & $0.002 \pm 0.000$                             \\
+                            &                               & 2                                & $0.100$                         & $-0.000$ $(p=0.672)$          & $0.002$                             & $0.002 \pm 0.000$                             \\ 
+                            &                               & 3                                & $0.298$                         & $-0.002$ $(p=0.024)$          & $0.016$                             & $0.015 \pm 0.002$                             \\
+                            & \multirow{3}{*}{$\phi_A^*$}   & 1                                & $0.968$                         & $-0.002$ $(p=0.001)$          & $0.012$                             & $0.010 \pm 0.002$                             \\
+                            &                               & 2                                & $0.828$                         & $-0.002$ $(p=0.007)$          & $0.017$                             & $0.017 \pm 0.002$                             \\
+                            &                               & 3                                & $0.600$                         & $-0.010$ $(p=0.001)$          & $0.064$                             & $0.065 \pm 0.011$                             \\ \hline
+\multirow{9}{*}{HHMM-DFT}   & \multirow{3}{*}{$\mu_A^*$}    & 1                                & $0.048$                         & $0.048$ $(p=0.000)$          & $0.033$                             & $0.007 \pm 0.001$                             \\
+                            &                               & 2                                & $0.087$                         & $-0.013$ $(p=0.000)$          & $0.018$                             & $0.006 \pm 0.001$                             \\
+                            &                               & 3                                & $0.215$                         & $0.015$ $(p=0.000)$          & $0.065$                             & $0.022 \pm 0.004$                             \\
+                            & \multirow{3}{*}{$\sigma_A^*$} & 1                                & $0.160$                         & $0.110$ $(p=0.000)$          & $0.023$                             & $0.005 \pm 0.001$                             \\
+                            &                               & 2                                & $0.158$                         & $0.058$ $(p=0.000)$          & $0.010$                             & $0.004 \pm 0.000$                             \\ 
+                            &                               & 3                                & $0.356$                         & $0.056$ $(p=0.000)$          & $0.035$                             & $0.015 \pm 0.002$                             \\
+                            & \multirow{3}{*}{$\phi_A^*$}   & 1                                & ------                         & ------                     & ------                             & ------                                      \\
+                            &                               & 2                                & ------                         & ------                     & ------                             & ------                                      \\
+                            &                               & 3                                & ------                         & ------                     & ------                             & ------                                      \\ \hline
+\multirow{9}{*}{CarHHMM}    & \multirow{3}{*}{$\mu_A^*$}    & 1                                & $0.060$                         & $0.060$ $(p=0.000)$          & $0.034$                             & $0.024 \pm 0.054$                             \\
+                            &                               & 2                                & $0.097$                         & $-0.003$ $(p=0.000)$          & $0.016$                             & $0.052 \pm 0.055$                             \\
+                            &                               & 3                                & $0.201$                         & $0.001$ $(p=0.634)$          & $0.058$                             & $0.018 \pm 0.007$                             \\
+                            & \multirow{3}{*}{$\sigma_A^*$} & 1                                & $0.111$                         & $0.061$ $(p=0.000)$          & $0.004$                             & $0.006 \pm 0.042$                             \\
+                            &                               & 2                                & $0.285$                         & $0.185$ $(p=0.000)$          & $0.009$                             & $0.040 \pm 0.043$                             \\ 
+                            &                               & 3                                & $1.150$                         & $0.850$ $(p=0.000)$          & $0.080$                             & $0.003 \pm 0.001$                             \\
+                            & \multirow{3}{*}{$\phi_A^*$}   & 1                                & $0.830$                         & $-0.140$ $(p=0.000)$          & $0.048$                             & $0.016  $                             \\
+                            &                               & 2                                & $0.004$                         & $-0.826$ $(p=0.000)$          & $0.012$                             & $0.023  $                             \\
+                            &                               & 3                                & $0.000$                         & $-0.610$ $(p=0.000)$          & $0.000$                             & $0.016 \pm 0.004$                             \\ \hline
+\multirow{9}{*}{CarHMM-DFT} & \multirow{3}{*}{$\mu_A^*$}    & 1                                & $-0.008$                         & $-0.008$ $(p=0.142)$          & $0.114$                             & $0.064 \pm 0.037$                             \\
+                            &                               & 2                                & $0.101$                         & $0.001$ $(p=0.438)$          & $0.019$                             & $0.019 \pm 0.003$                             \\
+                            &                               & 3                                & $0.200$                         & $0.000$ $(p=0.926)$          & $0.057$                             & $0.054 \pm 0.014$                             \\
+                            & \multirow{3}{*}{$\sigma_A^*$} & 1                                & $0.050$                         & $-0.000$ $(p=0.005)$          & $0.001$                             & $0.002 \pm 0.000$                             \\
+                            &                               & 2                                & $0.100$                         & $-0.000$ $(p=0.000)$          & $0.002$                             & $0.002 \pm 0.000$                             \\ 
+                            &                               & 3                                & $0.299$                         & $-0.001$ $(p=0.117)$          & $0.015$                             & $0.015 \pm 0.002$                             \\
+                            & \multirow{3}{*}{$\phi_A^*$}   & 1                                & $0.968$                         & $-0.002$ $(p=0.001)$          & $0.012$                             & $0.010 \pm 0.002$                             \\
+                            &                               & 2                                & $0.830$                         & $-0.000$ $(p=0.552)$          & $0.016$                             & $0.017 \pm 0.002$                             \\
+                            &                               & 3                                & $0.595$                         & $-0.015$ $(p=0.000)$          & $0.071$                             & $0.065 \pm 0.010$                             \\ \hline
 \end{tabular}
         \egroup
         }
@@ -700,8 +241,9 @@ Model                       & \multicolumn{1}{c}{Parameter} & \multicolumn{1}{c}
     
         \subsection{CarHHMM-DFT}
         \begin{center}
-        \includegraphics[width=3in]{../Plots/hhmm_FV_MLE_density_A_0_0.png}
-        \includegraphics[width=3in]{../Plots/hhmm_FV_MLE_density_A_0_1.png}
+        \includegraphics[width=2.1in]{../Plots/hhmm_FV_MLE_density_A_0_0.png}
+        \includegraphics[width=2.1in]{../Plots/hhmm_FV_MLE_density_A_0_1.png}
+        \includegraphics[width=2.1in]{../Plots/hhmm_FV_MLE_density_A_0_2.png}
         \end{center}
         
         \noindent Figure \arabic{fignum}: Kernel density estimate of the distribution of estimates of acceleration parameters ($\hat \mu^*_A$, $\hat \sigma^*_A$, and $\hat \phi^*_A$) for each subdive state. The red star represents the true values of $\mu^*_A$, $\sigma^*_A$, and $\phi^*_A$ for both subdive states. These estimates are for the CarHHMM-DFT.
@@ -709,8 +251,9 @@ Model                       & \multicolumn{1}{c}{Parameter} & \multicolumn{1}{c}
         
         \subsection{HHMM-DFT}
         \begin{center}
-        \includegraphics[width=3in]{../Plots/hhmm_FV_uncorr_MLE_density_A_0_0.png}
-        \includegraphics[width=3in]{../Plots/hhmm_FV_uncorr_MLE_density_A_0_1.png}
+        \includegraphics[width=2.1in]{../Plots/hhmm_FV_uncorr_MLE_density_A_0_0.png}
+        \includegraphics[width=2.1in]{../Plots/hhmm_FV_uncorr_MLE_density_A_0_1.png}
+        \includegraphics[width=2.1in]{../Plots/hhmm_FV_uncorr_MLE_density_A_0_2.png}
         \end{center}
         
         \noindent Figure \arabic{fignum}: Kernel density estimate of the distribution of estimates of acceleration parameters ($\hat \mu^*_A$ and $\hat \sigma^*_A$) for each subdive state. The red star represents the true values of $\mu^*_A$ and $\sigma^*_A$ for both subdive states. These estimates are for the HHMM-DFT. Note that the HHMM-DFT assumes no auto-correlation in $\Zone_{t,\tilde t^*}$, so $\hat \phi_A^{*(\cdot,i^*)}$ is absent from these plots.
@@ -718,8 +261,9 @@ Model                       & \multicolumn{1}{c}{Parameter} & \multicolumn{1}{c}
         
         \subsection{CarHHMM}
         \begin{center}
-        \includegraphics[width=3in]{../Plots/hhmm_V_MLE_density_A_0_0.png}
-        \includegraphics[width=3in]{../Plots/hhmm_V_MLE_density_A_0_1.png}
+        \includegraphics[width=2.1in]{../Plots/hhmm_V_MLE_density_A_0_0.png}
+        \includegraphics[width=2.1in]{../Plots/hhmm_V_MLE_density_A_0_1.png}
+        \includegraphics[width=2.1in]{../Plots/hhmm_V_MLE_density_A_0_2.png}
         \end{center}
         
         \noindent Figure \arabic{fignum}: Kernel density estimate of the distribution of estimates of acceleration parameters ($\hat \mu^*_A$, $\hat \sigma^*_A$, and $\hat \phi^*_A$) for each subdive state. The red star represents the true values of $\mu^*_A$, $\sigma^*_A$, and $\phi^*_A$ for both subdive states. These estimates are for the CarHHMM. 
@@ -727,15 +271,16 @@ Model                       & \multicolumn{1}{c}{Parameter} & \multicolumn{1}{c}
         
         \subsection{CarHMM-DFT}
         \begin{center}
-        \includegraphics[width=3in]{../Plots/hmm_FV_MLE_density_A_0_0.png}
-        \includegraphics[width=3in]{../Plots/hmm_FV_MLE_density_A_0_1.png}
+        \includegraphics[width=2.1in]{../Plots/hmm_FV_MLE_density_A_0_0.png}
+        \includegraphics[width=2.1in]{../Plots/hmm_FV_MLE_density_A_0_1.png}
+        \includegraphics[width=2.1in]{../Plots/hmm_FV_MLE_density_A_0_2.png}
         \end{center}
         
         \noindent Figure \arabic{fignum}: Kernel density estimate of the distribution of estimates of acceleration parameters ($\hat \mu^*_A$, $\hat \sigma^*_A$, and $\hat \phi^*_A$) for each subdive state. The red star represents the true values of $\mu^*_A$, $\sigma^*_A$, and $\phi^*_A$ for both subdive states. These estimates are for the CarHMM-DFT.
         \addtocounter{fignum}{1}
         
     \newpage
-    \subsection{Empirical joint distributions - wiggliness ($\Ztwo_{t,\tilde t^*}$)}
+    \section{Empirical joint distributions - wiggliness ($\Ztwo_{t,\tilde t^*}$)}
     
         \begin{center}
         \scalebox{0.75}{
@@ -744,22 +289,30 @@ Model                       & \multicolumn{1}{c}{Parameter} & \multicolumn{1}{c}
         \def\arraystretch{1.5}
 \begin{tabular}{ccccccc}
 Model                       & \multicolumn{1}{c}{Parameter} & \multicolumn{1}{c}{Subdive Type} & \multicolumn{1}{c}{Estimate}   & \multicolumn{1}{c}{Bias}   & \multicolumn{1}{c}{Empirical SE} & \multicolumn{1}{c}{Observed Fischer SE}       \\ \hline
-\multirow{4}{*}{CarHMM-DFT} & \multirow{2}{*}{$\mu_W^*$}    & 1                                & $23.362$                         & $0.022$ $(p=0.408)$          & $0.582$                             & $0.419 \pm 0.061$                             \\
-                            &                               & 2                                & $300.689$                         & $-0.511$ $(p=0.213)$          & $9.144$                             & $4.679 \pm 0.336$                             \\
-                            & \multirow{2}{*}{$\sigma_W^*$} & 1                                & $12.949$                         & $-0.001$ $(p=0.974)$          & $0.539$                             & $0.388 \pm 0.061$                             \\
-                            &                               & 2                                & $329.585$                         & $-0.515$ $(p=0.280)$          & $10.622$                             & $5.748 \pm 0.396$                             \\ \hline
-\multirow{4}{*}{HHMM-DFT}   & \multirow{2}{*}{$\mu_W^*$}    & 1                                & $23.353$                         & $0.013$ $(p=0.632)$          & $0.620$                             & $0.431 \pm 0.067$                             \\
-                            &                               & 2                                & $298.441$                         & $-2.759$ $(p=0.000)$          & $10.438$                             & $4.788 \pm 0.432$                             \\
-                            & \multirow{2}{*}{$\sigma_W^*$} & 1                                & $12.938$                         & $-0.012$ $(p=0.656)$          & $0.583$                             & $0.404 \pm 0.064$                             \\
-                            &                               & 2                                & $328.496$                         & $-1.604$ $(p=0.001)$          & $10.482$                             & $5.822 \pm 0.460$                             \\ \hline
-\multirow{4}{*}{CarHHMM}    & \multirow{2}{*}{$\mu_W^*$}    & 1                                & ------                         & ------                     & ------                             & ------                                      \\
+\multirow{6}{*}{CarHHMM-DFT}& \multirow{3}{*}{$\mu_W^*$}    & 1                                & $34.981$                         & $0.001$ $(p=0.978)$          & $1.026$                             & $0.658 \pm 0.088$                             \\
+                            &                               & 2                                & $505.104$                         & $-0.686$ $(p=0.394)$          & $17.936$                             & $9.740 \pm 0.814$                             \\
+                            &                               & 3                                & $9787.146$                         & $17.166$ $(p=0.718)$          & $1060.450$                             & $280.244 \pm 97.120$                             \\
+                            & \multirow{3}{*}{$\sigma_W^*$} & 1                                & $23.849$                         & $-0.001$ $(p=0.991)$          & $0.989$                             & $0.652 \pm 0.094$                             \\
+                            &                               & 2                                & $514.207$                         & $-2.473$ $(p=0.010)$          & $21.427$                             & $11.410 \pm 0.947$                             \\
+                            &                               & 3                                & $14429.732$                         & $-32.818$ $(p=0.647)$          & $1596.020$                             & $302.698 \pm 165.935$                             \\ \hline
+\multirow{6}{*}{HHMM-DFT}   & \multirow{3}{*}{$\mu_W^*$}    & 1                                & $35.067$                         & $0.087$ $(p=0.097)$          & $1.170$                             & $0.679 \pm 0.100$                             \\
+                            &                               & 2                                & $500.928$                         & $-4.862$ $(p=0.000)$          & $24.024$                             & $10.754 \pm 1.205$                             \\
+                            &                               & 3                                & $6840.995$                         & $-2928.985$ $(p=0.000)$          & $1164.288$                             & $198.162 \pm 74.720$                             \\
+                            & \multirow{3}{*}{$\sigma_W^*$} & 1                                & $23.800$                         & $-0.050$ $(p=0.351)$          & $1.192$                             & $0.676 \pm 0.104$                             \\
+                            &                               & 2                                & $513.263$                         & $-3.417$ $(p=0.001)$          & $22.596$                             & $12.497 \pm 1.301$                             \\
+                            &                               & 3                                & $11458.795$                         & $-3003.755$ $(p=0.000)$          & $1738.793$                             & $302.698 \pm 193.611$                             \\ \hline
+\multirow{6}{*}{CarHHMM}    & \multirow{3}{*}{$\mu_W^*$}    & 1                                & ------                         & ------                     & ------                             & ------                                      \\
                             &                               & 2                                & ------                         & ------                     & ------                             & ------                                      \\
-                            & \multirow{2}{*}{$\sigma_W^*$} & 1                                & ------                         & ------                     & ------                             & ------                                      \\
-                            &                               & 2                                & ------                         & ------                     & ------                             & ------                                      \\ \hline
-\multirow{4}{*}{CarHHMM-DFT}& \multirow{2}{*}{$\mu_W^*$}    & 1                                & $23.341$                         & $0.001$ $(p=0.957)$          & $0.568$                             & $0.419 \pm 0.060$                             \\
-                            &                               & 2                                & $301.209$                         & $0.009$ $(p=0.982)$          & $8.869$                             & $4.697 \pm 0.353$                             \\
-                            & \multirow{2}{*}{$\sigma_W^*$} & 1                                & $12.918$                         & $-0.032$ $(p=0.183)$          & $0.526$                             & $0.387 \pm 0.059$                             \\
-                            &                               & 2                                & $329.684$                         & $-0.416$ $(p=0.365)$          & $10.225$                             & $5.773 \pm 0.396$                             
+                            &                               & 3                                & ------                         & ------                     & ------                             & ------                                      \\
+                            & \multirow{3}{*}{$\sigma_W^*$} & 1                                & ------                         & ------                     & ------                             & ------                                      \\
+                            &                               & 2                                & ------                         & ------                     & ------                             & ------                                      \\
+                            &                               & 3                                & ------                         & ------                     & ------                             & ------                                      \\ \hline
+\multirow{6}{*}{CarHMM-DFT} & \multirow{3}{*}{$\mu_W^*$}    & 1                                & $35.034$                         & $0.054$ $(p=0.264)$          & $1.076$                             & $0.661 \pm 0.093$                             \\ 
+                            &                               & 2                                & $503.762$                         & $-2.028$ $(p=0.013)$          & $18.258$                             & $9.641 \pm 0.916$                             \\
+                            &                               & 3                                & $9817.785$                         & $47.805$ $(p=0.328)$          & $1089.110$                             & $280.244 \pm 136.259$                             \\
+                            & \multirow{3}{*}{$\sigma_W^*$} & 1                                & $23.890$                         & $0.040$ $(p=0.401)$          & $1.058$                             & $0.656 \pm 0.101$                             \\
+                            &                               & 2                                & $515.228$                         & $-1.452$ $(p=0.125)$          & $21.087$                             & $11.371 \pm 0.990$                             \\
+                            &                               & 3                                & $14437.867$                         & $-24.683$ $(p=0.740)$          & $1660.764$                             & $331.589 \pm 165.935$                             \\
 \end{tabular}
         \egroup
         }
@@ -770,8 +323,9 @@ Model                       & \multicolumn{1}{c}{Parameter} & \multicolumn{1}{c}
     
         \subsection{CarHHMM-DFT}
         \begin{center}
-        \includegraphics[width=3in]{../Plots/hhmm_FV_MLE_density_FoVeDBA_0_0.png}
-        \includegraphics[width=3in]{../Plots/hhmm_FV_MLE_density_FoVeDBA_0_1.png}
+        \includegraphics[width=2.1in]{../Plots/hhmm_FV_MLE_density_FoVeDBA_0_0.png}
+        \includegraphics[width=2.1in]{../Plots/hhmm_FV_MLE_density_FoVeDBA_0_1.png}
+        \includegraphics[width=2.1in]{../Plots/hhmm_FV_MLE_density_FoVeDBA_0_2.png}
         \end{center}
         
         \noindent Figure \arabic{fignum}: Kernel density estimate of the distribution of estimates of wiggliness parameters ($\hat \mu^*_W$ and $\hat \sigma^*_W$) for each subdive state. The red star represents the true values of $\mu^*_W$ and $\sigma^*_W$ for both subdive states. These estimates are for the CarHHMM-DFT.
@@ -779,8 +333,9 @@ Model                       & \multicolumn{1}{c}{Parameter} & \multicolumn{1}{c}
         
         \subsection{HHMM-DFT}
         \begin{center}
-        \includegraphics[width=3in]{../Plots/hhmm_FV_uncorr_MLE_density_FoVeDBA_0_0.png}
-        \includegraphics[width=3in]{../Plots/hhmm_FV_uncorr_MLE_density_FoVeDBA_0_1.png}
+        \includegraphics[width=2.1in]{../Plots/hhmm_FV_uncorr_MLE_density_FoVeDBA_0_0.png}
+        \includegraphics[width=2.1in]{../Plots/hhmm_FV_uncorr_MLE_density_FoVeDBA_0_1.png}
+        \includegraphics[width=2.1in]{../Plots/hhmm_FV_uncorr_MLE_density_FoVeDBA_0_2.png}
         \end{center}
         
         \noindent Figure \arabic{fignum}: Kernel density estimate of the distribution of estimates of wiggliness parameters ($\hat \mu^*_W$ and $\hat \sigma^*_W$) for each subdive state. The red star represents the true values of $\mu^*_W$ and $\sigma^*_W$ for both subdive states. These estimates are for the HHMM-DFT.
@@ -791,8 +346,9 @@ Model                       & \multicolumn{1}{c}{Parameter} & \multicolumn{1}{c}
         
         \subsection{CarHMM-DFT}
         \begin{center}
-        \includegraphics[width=3in]{../Plots/hmm_FV_MLE_density_FoVeDBA_0_0.png}
-        \includegraphics[width=3in]{../Plots/hmm_FV_MLE_density_FoVeDBA_0_1.png}
+        \includegraphics[width=2.1in]{../Plots/hmm_FV_MLE_density_FoVeDBA_0_0.png}
+        \includegraphics[width=2.1in]{../Plots/hmm_FV_MLE_density_FoVeDBA_0_1.png}
+        \includegraphics[width=2.1in]{../Plots/hmm_FV_MLE_density_FoVeDBA_0_2.png}
         \end{center}
         
         \noindent Figure \arabic{fignum}: Kernel density estimate of the distribution of estimates of wiggliness parameters ($\hat \mu^*_W$ and $\hat \sigma^*_W$) for each subdive state. The red star represents the true values of $\mu^*_W$ and $\sigma^*_W$ for both subdive states. These estimates are for the CarHMM-DFT.
@@ -802,85 +358,141 @@ Model                       & \multicolumn{1}{c}{Parameter} & \multicolumn{1}{c}
     \section{Empirical joint distributions - probability transition matrices ($\Gamma, \Gamma^*$)}
         
         \begin{center}
-        \scalebox{0.75}{
+        \scalebox{0.7}{
         \bgroup
         \centering
         \def\arraystretch{1.5}
 \begin{tabular}{ccccccc}
-Model                        & \multicolumn{1}{c}{Parameter} & \multicolumn{1}{c}{Estimate}    & \multicolumn{1}{c}{Bias}   & \multicolumn{1}{c}{Empirical SE}  & \multicolumn{1}{c}{Observed Fischer SE}       \\ \hline
-\multirow{6}{*}{CarHMM-DFT}  & $\Gamma_{12}$                 & ------                          & ------                     & ------                            & ------                                        \\
-                             & $\Gamma_{21}$                 & ------                          & ------                     & ------                            & ------                                        \\
-                             & $\Gamma^{*(1)}_{12}$          & $0.179$                         & ------                     & $0.018$                           & $0.015 \pm 0.002$                             \\
-                             & $\Gamma^{*(1)}_{21}$          & $0.079$                         & ------                     & $0.011$                           & $0.008 \pm 0.001$                             \\
-                             & $\Gamma^{*(2)}_{12}$          & ------                          & ------                     & ------                            & ------                                        \\
-                             & $\Gamma^{*(2)}_{21}$          & ------                          & ------                     & ------                            & ------                                        \\ \hline
-\multirow{6}{*}{HHMM-DFT}    & $\Gamma_{12}$                 & $0.206$                         & $-0.006$ $(p=0.033)$       & $0.063$                           & $0.049 \pm 0.011$                             \\
-                             & $\Gamma_{21}$                 & $0.822$                         & $0.013$ $(p=0.014)$        & $0.119$                           & $0.098 \pm 0.029$                             \\
-                             & $\Gamma^{*(1)}_{12}$          & $0.312$                         & $-0.008$ $(p=0.011)$       & $0.070$                           & $0.048 \pm 0.019$                             \\
-                             & $\Gamma^{*(1)}_{21}$          & $0.047$                         & $-0.003$ $(p=0.000)$       & $0.014$                           & $0.010 \pm 0.002$                             \\
-                             & $\Gamma^{*(2)}_{12}$          & $0.139$                         & $-0.001$ $(p=0.158)$       & $0.018$                           & $0.017 \pm 0.003$                             \\
-                             & $\Gamma^{*(2)}_{21}$          & $0.146$                         & $-0.004$ $(p=0.001)$       & $0.025$                           & $0.019 \pm 0.004$                             \\ \hline
-\multirow{6}{*}{CarHHMM}     & $\Gamma_{12}$                 & $0.307$                         & $0.095$ $(p=0.000)$        & $0.257$                           & $0.052 \pm 0.021$                             \\
-                             & $\Gamma_{21}$                 & $0.711$                         & $-0.098$ $(p=0.000)$       & $0.280$                           & $0.102 \pm 0.040$                             \\
-                             & $\Gamma^{*(1)}_{12}$          & $0.269$                         & $-0.051$ $(p=0.000)$       & $0.252$                           & $0.019 \pm 0.006$                             \\
-                             & $\Gamma^{*(1)}_{21}$          & $0.134$                         & $0.084$ $(p=0.000)$        & $0.081$                           & $0.016 \pm 0.003$                             \\
-                             & $\Gamma^{*(2)}_{12}$          & $0.120$                         & $-0.020$ $(p=0.025)$       & $0.196$                           & $0.008 \pm 0.002$                             \\
-                             & $\Gamma^{*(2)}_{21}$          & $0.144$                         & $-0.006$ $(p=0.001)$       & $0.042$                           & $0.019 \pm 0.006$                             \\ \hline
-\multirow{6}{*}{CarHHMM-DFT} & $\Gamma_{12}$                 & $0.210$                         & $-0.002$ $(p=0.473)$       & $0.064$                           & $0.050 \pm 0.011$                             \\
-                             & $\Gamma_{21}$                 & $0.818$                         & $0.009$ $(p=0.076)$        & $0.117$                           & $0.097 \pm 0.027$                             \\
-                             & $\Gamma^{*(1)}_{12}$          & $0.325$                         & $0.005$ $(p=0.132)$        & $0.069$                           & $0.048 \pm 0.018$                             \\
-                             & $\Gamma^{*(1)}_{21}$          & $0.050$                         & $0.000$ $(p=0.713)$        & $0.012$                           & $0.010 \pm 0.002$                             \\
-                             & $\Gamma^{*(2)}_{12}$          & $0.141$                         & $0.001$ $(p=0.336)$        & $0.017$                           & $0.016 \pm 0.003$                             \\
-                             & $\Gamma^{*(2)}_{21}$          & $0.152$                         & $0.002$ $(p=0.032)$        & $0.020$                           & $0.018 \pm 0.004$                             \\ \hline
-
+Model                        & \multicolumn{1}{c}{Parameter} & \multicolumn{1}{c}{Estimate}   & \multicolumn{1}{c}{Bias} & \multicolumn{1}{c}{Empirical SE} & \multicolumn{1}{c}{Observed Fischer SE}     \\ \hline
+\multirow{12}{*}{CarHHMM-DFT}& $\Gamma^{*(1)}_{12}$          & $0.258$                         & $0.006$ $(p=0.004)$        & $0.043$                           & $0.032 \pm 0.006$                             \\
+                             & $\Gamma^{*(1)}_{13}$          & $0.002$                         & $0.002$ $(p=0.000)$        & $0.004$                           & $\text{N/A}$                             \\
+                             & $\Gamma^{*(1)}_{21}$          & $0.083$                         & $0.001$ $(p=0.243)$        & $0.015$                           & $0.012 \pm 0.002$                             \\
+                             & $\Gamma^{*(1)}_{23}$          & $0.052$                         & $-0.000$ $(p=0.984)$        & $0.010$                           & $0.009 \pm 0.001$                             \\
+                             & $\Gamma^{*(1)}_{31}$          & $0.003$                         & $0.003$ $(p=0.000)$        & $0.008$                           & $\text{N/A}$                             \\
+                             & $\Gamma^{*(1)}_{32}$          & $0.234$                         & $0.002$ $(p=0.322)$        & $0.042$                           & $0.036 \pm 0.008$                             \\
+                             & $\Gamma^{*(2)}_{12}$          & $0.111$                         & $0.146$ $(p=0.349)$        & $0.017$                           & $0.015 \pm 0.004$                             \\
+                             & $\Gamma^{*(2)}_{13}$          & $0.001$                         & $0.002$ $(p=0.000)$        & $0.002$                           & $\text{N/A}$                             \\
+                             & $\Gamma^{*(2)}_{21}$          & $0.151$                         & $-0.068$ $(p=0.584)$        & $0.023$                           & $0.021 \pm 0.005$                             \\
+                             & $\Gamma^{*(2)}_{23}$          & $0.036$                         & $0.016$ $(p=0.944)$        & $0.013$                           & $0.010 \pm 0.003$                             \\
+                             & $\Gamma^{*(2)}_{31}$          & $0.007$                         & $0.003$ $(p=0.000)$        & $0.024$                           & $\text{N/A}$                             \\
+                             & $\Gamma^{*(2)}_{32}$          & $0.252$                         & $0.008$ $(p=0.000)$        & $0.096$                           & $0.063 \pm 0.028$                             \\ \hline
+\multirow{12}{*}{HHMM-DFT}   & $\Gamma^{*(1)}_{12}$          & $0.240$                         & $-0.012$ $(p=0.000)$        & $0.042$                           & $0.032 \pm 0.006$                             \\
+                             & $\Gamma^{*(1)}_{13}$          & $0.003$                         & $0.003$ $(p=0.000)$        & $0.006$                           & $\text{N/A}$                             \\
+                             & $\Gamma^{*(1)}_{21}$          & $0.077$                         & $-0.005$ $(p=0.000)$        & $0.019$                           & $0.012 \pm 0.002$                             \\
+                             & $\Gamma^{*(1)}_{23}$          & $0.047$                         & $-0.004$ $(p=0.000)$        & $0.009$                           & $0.008 \pm 0.001$                             \\
+                             & $\Gamma^{*(1)}_{31}$          & $0.005$                         & $0.005$ $(p=0.000)$        & $0.009$                           & $\text{N/A}$                             \\
+                             & $\Gamma^{*(1)}_{32}$          & $0.153$                         & $-0.079$ $(p=0.000)$        & $0.029$                           & $0.026 \pm 0.005$                             \\
+                             & $\Gamma^{*(2)}_{12}$          & $0.109$                         & $0.128$ $(p=0.000)$        & $0.018$                           & $0.016 \pm 0.004$                             \\
+                             & $\Gamma^{*(2)}_{13}$          & $0.002$                         & $0.003$ $(p=0.000)$        & $0.004$                           & $\text{N/A}$                             \\
+                             & $\Gamma^{*(2)}_{21}$          & $0.151$                         & $-0.073$ $(p=0.712)$        & $0.031$                           & $0.023 \pm 0.006$                             \\
+                             & $\Gamma^{*(2)}_{23}$          & $0.037$                         & $0.012$ $(p=0.009)$        & $0.013$                           & $0.011 \pm 0.004$                             \\
+                             & $\Gamma^{*(2)}_{31}$          & $0.021$                         & $0.005$ $(p=0.000)$        & $0.026$                           & $0.034  $                             \\
+                             & $\Gamma^{*(2)}_{32}$          & $0.135$                         & $-0.073$ $(p=0.000)$        & $0.057$                           & $0.038 \pm 0.018$                             \\ \hline
+\multirow{12}{*}{CarHHMM}    & $\Gamma^{*(1)}_{12}$          & $0.138$                         & $-0.114$ $(p=0.000)$        & $0.131$                           & $0.018 \pm 0.006$                             \\
+                             & $\Gamma^{*(1)}_{13}$          & $0.023$                         & $0.022$ $(p=0.000)$        & $0.107$                           & $0.039  $                             \\
+                             & $\Gamma^{*(1)}_{21}$          & $0.037$                         & $-0.044$ $(p=0.000)$        & $0.054$                           & $0.007 \pm 0.001$                             \\
+                             & $\Gamma^{*(1)}_{23}$          & $0.027$                         & $-0.025$ $(p=0.000)$        & $0.050$                           & $0.004 \pm 0.001$                             \\
+                             & $\Gamma^{*(1)}_{31}$          & $0.013$                         & $0.013$ $(p=0.000)$        & $0.022$                           & $0.013  $                             \\
+                             & $\Gamma^{*(1)}_{32}$          & $0.134$                         & $-0.099$ $(p=0.000)$        & $0.043$                           & $0.023 \pm 0.006$                             \\
+                             & $\Gamma^{*(2)}_{12}$          & $0.056$                         & $0.026$ $(p=0.000)$        & $0.035$                           & $0.008 \pm 0.002$                             \\
+                             & $\Gamma^{*(2)}_{13}$          & $0.002$                         & $0.022$ $(p=0.004)$        & $0.017$                           & $\text{N/A}$                             \\
+                             & $\Gamma^{*(2)}_{21}$          & $0.069$                         & $-0.113$ $(p=0.000)$        & $0.032$                           & $0.011 \pm 0.003$                             \\
+                             & $\Gamma^{*(2)}_{23}$          & $0.017$                         & $-0.009$ $(p=0.000)$        & $0.012$                           & $0.005 \pm 0.002$                             \\
+                             & $\Gamma^{*(2)}_{31}$          & $0.011$                         & $0.013$ $(p=0.000)$        & $0.016$                           & $0.029  $                             \\
+                             & $\Gamma^{*(2)}_{32}$          & $0.138$                         & $-0.093$ $(p=0.000)$        & $0.079$                           & $0.037 \pm 0.018$                             \\ \hline
+\multirow{6}{*}{CarHMM-DFT}  & $\Gamma^{*(1)}_{12}$          & $0.158$                         & ------                   & $0.019$                           & $0.014 \pm 0.002$                             \\
+                             & $\Gamma^{*(1)}_{13}$          & $0.001$                         & ------                   & $0.002$                           & $\text{N/A}$                             \\
+                             & $\Gamma^{*(1)}_{21}$          & $0.096$                         & ------                   & $0.012$                           & $0.010 \pm 0.001$                             \\
+                             & $\Gamma^{*(1)}_{23}$          & $0.046$                         & ------                   & $0.007$                           & $0.007 \pm 0.001$                             \\
+                             & $\Gamma^{*(1)}_{31}$          & $0.002$                         & ------                   & $0.004$                           & $\text{N/A}$                             \\
+                             & $\Gamma^{*(1)}_{32}$          & $0.227$                         & ------                   & $0.035$                           & $0.030 \pm 0.006$                             \\
 \end{tabular}
         \egroup
         }
         \end{center}
         
-        \noindent Table \arabic{tablenum}: Estimates and standard errors for all probability transition matrices across all four models in the simulation study. The ``Estimate" column is the average across 500 simulations, and the ``Observed Fisher SE" column is the median across 500 simulations. The $\pm$ refers to the inter-quartile range. SE stands for standard error. Reported $p$-values test if the observed bias is statistically significant using a one-sample $t$-test.
+        \noindent Table \arabic{tablenum}: Estimates and standard errors for fine-scale probability transition matrices across all four models in the simulation study. The ``Estimate" column is the average across 500 simulations, and the ``Observed Fisher SE" column is the median across 500 simulations. The $\pm$ refers to the inter-quartile range. SE stands for standard error. Reported $p$-values test if the observed bias is statistically significant using a one-sample $t$-test.
+        \addtocounter{tablenum}{1}
+        
+        
+        
+        \begin{center}
+        \scalebox{0.75}{
+        \bgroup
+        \centering
+        \def\arraystretch{1.5}
+\begin{tabular}{ccccccc}
+Model                        & \multicolumn{1}{c}{Parameter} & \multicolumn{1}{c}{Estimate}   & \multicolumn{1}{c}{Bias} & \multicolumn{1}{c}{Empirical SE} & \multicolumn{1}{c}{Observed Fischer SE}     \\ \hline
+\multirow{2}{*}{CarHHMM-DFT}& $\Gamma_{12}$                 & $0.160$                         & $0.005$ $(p=0.030)$        & $0.056$                           & $0.042 \pm 0.012$                             \\
+                             & $\Gamma_{21}$                 & $0.907$                         & $-0.006$ $(p=0.214)$        & $0.102$                           & $0.116$                             \\ \hline
+\multirow{2}{*}{HHMM-DFT}   & $\Gamma_{12}$                 & $0.161$                         & $0.007$ $(p=0.007)$        & $0.055$                           & $0.041 \pm 0.011$                             \\
+                             & $\Gamma_{21}$                 & $0.916$                         & $0.004$ $(p=0.372)$        & $0.088$                           & $0.112$                             \\ \hline
+\multirow{2}{*}{CarHHMM}    & $\Gamma_{12}$                 & $0.198$                         & $0.044$ $(p=0.000)$        & $0.152$                           & $0.044 \pm 0.014$                             \\
+                             & $\Gamma_{21}$                 & $0.832$                         & $-0.081$ $(p=0.000)$        & $0.195$                           & $0.103 \pm 0.073$                             \\ \hline
+\multirow{2}{*}{CarHMM-DFT} & $\Gamma_{12}$                 & ------                         & ------                   & ------                           & ------                                      \\
+                             & $\Gamma_{21}$                 & ------                         & ------                   & ------                           & ------                                      \\
+\end{tabular}
+        \egroup
+        }
+        \end{center}
+        
+        \noindent Table \arabic{tablenum}: Estimates and standard errors for coarse-scale probability transition matrices across all four models in the simulation study. The ``Estimate" column is the average across 500 simulations, and the ``Observed Fisher SE" column is the median across 500 simulations. The $\pm$ refers to the inter-quartile range. SE stands for standard error. Reported $p$-values test if the observed bias is statistically significant using a one-sample $t$-test.
         \addtocounter{tablenum}{1}
         
         \newpage
         \subsection{CarHHMM-DFT}
         \begin{center}
-        \includegraphics[width=3in]{../Plots/hhmm_FV_Gamma_density_-1.png}
+        \includegraphics[width=2.5in]{../Plots/hhmm_FV_Gamma_density_-1_row_-1.png}
         
-        \includegraphics[width=3in]{../Plots/hhmm_FV_Gamma_density_0.png}
-        \includegraphics[width=3in]{../Plots/hhmm_FV_Gamma_density_1.png}
+        \includegraphics[width=2.5in]{../Plots/hhmm_FV_Gamma_density_0_row_0.png}
+        \includegraphics[width=2.5in]{../Plots/hhmm_FV_Gamma_density_1_row_0.png}
+        \includegraphics[width=2.5in]{../Plots/hhmm_FV_Gamma_density_0_row_1.png}
+        \includegraphics[width=2.5in]{../Plots/hhmm_FV_Gamma_density_1_row_1.png}
+        \includegraphics[width=2.5in]{../Plots/hhmm_FV_Gamma_density_0_row_2.png}
+        \includegraphics[width=2.5in]{../Plots/hhmm_FV_Gamma_density_1_row_2.png}
         \end{center}
         
-        \noindent Figure \arabic{fignum}: Kernel density estimate of the distributions $\hat \Gamma$, $\hat \Gamma^{*(1)}$, and $\hat \Gamma^{*(2)}$ for the CarHHMM-DFT. There are two fine-scale probability transition matrices- one corresponding to each dive type. We only plot the off-diagonal elements of the probability transition matrices since this uniquely defines a stochastic matrix. The red star represents the true values.
+        \noindent Figure \arabic{fignum}: Kernel density estimate of the distributions $\hat \Gamma$, $\hat \Gamma^{*(1)}$, and $\hat \Gamma^{*(2)}$ for the CarHHMM-DFT. There are two fine-scale probability transition matrices- one corresponding to each dive type. We only plot the off-diagonal elements of the probability transition matrices since this uniquely defines a stochastic matrix. The red star represents the true values and the white star represents the mean of all maximum likelihood estimates.
         \addtocounter{fignum}{1}
         
         \newpage
         \subsection{HHMM-DFT}
         \begin{center}
-        \includegraphics[width=3in]{../Plots/hhmm_FV_uncorr_Gamma_density_-1.png}
+        \includegraphics[width=2.5in]{../Plots/hhmm_FV_uncorr_Gamma_density_-1_row_-1.png}
         
-        \includegraphics[width=3in]{../Plots/hhmm_FV_uncorr_Gamma_density_0.png}
-        \includegraphics[width=3in]{../Plots/hhmm_FV_uncorr_Gamma_density_1.png}
+        \includegraphics[width=2.5in]{../Plots/hhmm_FV_uncorr_Gamma_density_0_row_0.png}
+        \includegraphics[width=2.5in]{../Plots/hhmm_FV_uncorr_Gamma_density_1_row_0.png}
+        \includegraphics[width=2.5in]{../Plots/hhmm_FV_uncorr_Gamma_density_0_row_1.png}
+        \includegraphics[width=2.5in]{../Plots/hhmm_FV_uncorr_Gamma_density_1_row_1.png}
+        \includegraphics[width=2.5in]{../Plots/hhmm_FV_uncorr_Gamma_density_0_row_2.png}
+        \includegraphics[width=2.5in]{../Plots/hhmm_FV_uncorr_Gamma_density_1_row_2.png}
         \end{center}
         
-        \noindent Figure \arabic{fignum}: Kernel density estimate of the distributions $\hat \Gamma$, $\hat \Gamma^{*(1)}$, and $\hat \Gamma^{*(2)}$ for the HHMM-DFT. There are two fine-scale probability transition matrices- one corresponding to each dive type. We only plot the off-diagonal elements of the probability transition matrices since this uniquely defines a stochastic matrix. The red star represents the true values.
+        \noindent Figure \arabic{fignum}: Kernel density estimate of the distributions $\hat \Gamma$, $\hat \Gamma^{*(1)}$, and $\hat \Gamma^{*(2)}$ for the HHMM-DFT. There are two fine-scale probability transition matrices- one corresponding to each dive type. We only plot the off-diagonal elements of the probability transition matrices since this uniquely defines a stochastic matrix. The red star represents the true values and the white star represents the mean of all maximum likelihood estimates.
         \addtocounter{fignum}{1}
         
         \newpage
         \subsection{CarHHMM}
         \begin{center}
-        \includegraphics[width=3in]{../Plots/hhmm_V_Gamma_density_-1.png}
+        \includegraphics[width=2.5in]{../Plots/hhmm_V_Gamma_density_-1_row_-1.png}
         
-        \includegraphics[width=3in]{../Plots/hhmm_V_Gamma_density_0.png}
-        \includegraphics[width=3in]{../Plots/hhmm_V_Gamma_density_1.png}
+        \includegraphics[width=2.5in]{../Plots/hhmm_V_Gamma_density_0_row_0.png}
+        \includegraphics[width=2.5in]{../Plots/hhmm_V_Gamma_density_1_row_0.png}
+        \includegraphics[width=2.5in]{../Plots/hhmm_V_Gamma_density_0_row_1.png}
+        \includegraphics[width=2.5in]{../Plots/hhmm_V_Gamma_density_1_row_1.png}
+        \includegraphics[width=2.5in]{../Plots/hhmm_V_Gamma_density_0_row_2.png}
+        \includegraphics[width=2.5in]{../Plots/hhmm_V_Gamma_density_1_row_2.png}
         \end{center}
         
-        \noindent Figure \arabic{fignum}: Kernel density estimate of the distributions $\hat \Gamma$, $\hat \Gamma^{*(1)}$, and $\hat \Gamma^{*(2)}$ for the CarHHMM. There are two fine-scale probability transition matrices- one corresponding to each dive type. We only plot the off-diagonal elements of the probability transition matrices since this uniquely defines a stochastic matrix. The red star represents the true values.
+        \noindent Figure \arabic{fignum}: Kernel density estimate of the distributions $\hat \Gamma$, $\hat \Gamma^{*(1)}$, and $\hat \Gamma^{*(2)}$ for the CarHHMM. There are two fine-scale probability transition matrices- one corresponding to each dive type. We only plot the off-diagonal elements of the probability transition matrices since this uniquely defines a stochastic matrix. The red star represents the true values and the white star represents the mean of all maximum likelihood estimates.
         \addtocounter{fignum}{1}
         
         \newpage
         \subsection{CarHMM-DFT}
         \begin{center}
-        \includegraphics[width=3in]{../Plots/hmm_FV_Gamma_density_0.png}
+        \includegraphics[width=2.5in]{../Plots/hmm_FV_Gamma_density_0_row_0.png} \\
+        \includegraphics[width=2.5in]{../Plots/hmm_FV_Gamma_density_0_row_1.png} \\
+        \includegraphics[width=2.5in]{../Plots/hmm_FV_Gamma_density_0_row_2.png} \\
         \end{center}
         
         \noindent Figure \arabic{fignum}: Kernel density estimate of the distribution $\hat \Gamma^{*(1)}$ for the CarHMM-DFT. There is only one fine-scale probability transition matrix and no coarse-scale probability transition matrix since we assume that there is only one dive type for the CarHMM-DFT. We only plot the off-diagonal elements of the probability transition matrices since this uniquely defines a stochastic matrix. There is no red star which represents the true values because the CarHMM-DFT assumes that there is only one dive type.

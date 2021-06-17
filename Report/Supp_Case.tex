@@ -71,33 +71,35 @@
         
         \newpage
         
-    \section{Likelihood Surface - CarHHMM-DFT}
+    \section{Likelihood Surfaces - CarHHMM-DFT}
     
         \begin{center}
-        %\includegraphics[width=2.25in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_coarse-theta-likelihood-dive_duration-1.png}
-        %\includegraphics[width=2.25in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_coarse-theta-likelihood-dive_duration-2.png}
+        \includegraphics[width=2.25in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_coarse-theta-likelihood-dive_duration-1.png}
+        \includegraphics[width=2.25in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_coarse-theta-likelihood-dive_duration-2.png}
         \end{center}
         
-        \noindent Figure \arabic{fignum}: Collection of 5 lag plots where a given observation is on the $x$-axis and the subsequent observation is on the $y$-axis. Each plot corresponds to a feature in the killer whale dive data. Lag plots are used to decide whether to include auto-correlation in the HMMs used to model the killer whale's kinematic data. They can also be used to determine the number of hidden states if multiple distinct patterns are visible. 
+        \noindent Figure \arabic{fignum}: Log-likelihood of the CarHHMM-DFT as a function of the dive duration parameters $\mu_Y^{(i)}$ and $\sigma_Y^{(i)}$ for dive types $i = 1,2$. All other parameters and probability transition matrices are assumed to be the maximum likelihood estimates shown in Table (1) of Section 3.1. The log-likelihood is scaled by the log-likelihood of the maximum likelihood estimate $(\hat \mu_Y,\hat \sigma_Y)$, which is denoted by a red star.
         \addtocounter{fignum}{1}
         
         
         \begin{center}
-        %\includegraphics[width=2.1in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_coarse-eta-likelihood.png}
+        \includegraphics[width=2.1in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_coarse-eta-likelihood.png}
         \end{center}
         
-        \noindent Figure \arabic{fignum}: Collection of 5 lag plots where a given observation is on the $x$-axis and the subsequent observation is on the $y$-axis. Each plot corresponds to a feature in the killer whale dive data. Lag plots are used to decide whether to include auto-correlation in the HMMs used to model the killer whale's kinematic data. They can also be used to determine the number of hidden states if multiple distinct patterns are visible. 
+        \noindent Figure \arabic{fignum}: Log-likelihood of the CarHHMM-DFT as a function of the coarse-scale probability transition matrix parameters $\eta_{1,2}$ and $\eta_{2,1}$. Recall that $\Gamma_{i,j} = \exp(\eta_{i,j}) / \sum_k \exp(\eta_{i,k})$. All other parameters and probability transition matrices are assumed to be the maximum likelihood estimates shown in Table (1) of Section 3.1. The log-likelihood is scaled by the log-likelihood of the maximum likelihood estimate $(\hat \eta_{1,2},\hat \eta_{2,1})$, which is denoted by a red star.
         \addtocounter{fignum}{1}
         
         % Ahat_low
         \begin{center}
-        %\includegraphics[width=2.1in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_fine-theta-likelihood-Ahat_low-0.png}
-        %\includegraphics[width=2.1in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_fine-theta-likelihood-Ahat_low-1.png}
+        \includegraphics[width=2.1in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_fine-theta-likelihood-Ahat_low-0.png}
+        \includegraphics[width=2.1in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_fine-theta-likelihood-Ahat_low-1.png}
         \includegraphics[width=2.1in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_fine-theta-likelihood-Ahat_low-2.png}
         \end{center}
         
-        \noindent Figure \arabic{fignum}: Collection of 5 lag plots where a given observation is on the $x$-axis and the subsequent observation is on the $y$-axis. Each plot corresponds to a feature in the killer whale dive data. Lag plots are used to decide whether to include auto-correlation in the HMMs used to model the killer whale's kinematic data. They can also be used to determine the number of hidden states if multiple distinct patterns are visible. 
+        \noindent Figure \arabic{fignum}: Log-likelihood of the CarHHMM-DFT as a function of the wiggliness parameters $\mu_W^{*(\cdot,i^*)}$ and $\sigma_W^{*(\cdot,i^*)}$ for subdive types $i^* = 1,2,3$. All other parameters and probability transition matrices are assumed to be the maximum likelihood estimates shown in Table (1) of Section 3.1. The log-likelihood is scaled by the log-likelihood of the maximum likelihood estimate $(\hat \mu_W^{*(\cdot,i^*)}, \hat \sigma_W^{*(\cdot,i^*)})$, which is denoted by a red star.
         \addtocounter{fignum}{1}
+        
+        \newpage
         
         % Ax
         \begin{center}
@@ -106,7 +108,7 @@
         \includegraphics[width=2.1in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_fine-theta-likelihood-Ax-2.png}
         \end{center}
         
-        \noindent Figure \arabic{fignum}: Collection of 5 lag plots where a given observation is on the $x$-axis and the subsequent observation is on the $y$-axis. Each plot corresponds to a feature in the killer whale dive data. Lag plots are used to decide whether to include auto-correlation in the HMMs used to model the killer whale's kinematic data. They can also be used to determine the number of hidden states if multiple distinct patterns are visible. 
+        \noindent Figure \arabic{fignum}: Log-likelihood of the CarHHMM-DFT as a function of the $x$-acceleration parameters $\mu_{A_x}^{*(\cdot,i^*)}, \sigma_{A_x}^{*(\cdot,i^*)}$ and $\text{logit}\left(\phi_{A}^{*(\cdot,i^*)}\right)$ for subdive types $i^* = 1,2,3$. All other parameters and probability transition matrices are assumed to be the maximum likelihood estimates shown in Table (1) of Section 3.1. The log-likelihood is scaled by the log-likelihood of the maximum likelihood estimate $\left(\hat \mu_{A_x}^{*(\cdot,i^*)}, \hat \sigma_{A_x}^{*(\cdot,i^*)}, \hat \phi_{A}^{*(\cdot,i^*)}\right)$, which is denoted by a red star.
         \addtocounter{fignum}{1}
         
         
@@ -117,7 +119,7 @@
         \includegraphics[width=2.1in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_fine-theta-likelihood-Ay-2.png}
         \end{center}
         
-        \noindent Figure \arabic{fignum}: Collection of 5 lag plots where a given observation is on the $x$-axis and the subsequent observation is on the $y$-axis. Each plot corresponds to a feature in the killer whale dive data. Lag plots are used to decide whether to include auto-correlation in the HMMs used to model the killer whale's kinematic data. They can also be used to determine the number of hidden states if multiple distinct patterns are visible. 
+        \noindent Figure \arabic{fignum}: Log-likelihood of the CarHHMM-DFT as a function of the $y$-acceleration parameters $\mu_{A_y}^{*(\cdot,i^*)}, \sigma_{A_y}^{*(\cdot,i^*)}$ and $\text{logit}\left(\phi_{A}^{*(\cdot,i^*)}\right)$ for subdive types $i^* = 1,2,3$. All other parameters and probability transition matrices are assumed to be the maximum likelihood estimates shown in Table (1) of Section 3.1. The log-likelihood is scaled by the log-likelihood of the maximum likelihood estimate $\left(\hat \mu_{A_y}^{*(\cdot,i^*)}, \hat \sigma_{A_y}^{*(\cdot,i^*)}, \hat \phi_{A}^{*(\cdot,i^*)}\right)$, which is denoted by a red star.
         \addtocounter{fignum}{1}
         
         % Az
@@ -127,27 +129,22 @@
         \includegraphics[width=2.1in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_fine-theta-likelihood-Az-2.png}
         \end{center}
         
-        \noindent Figure \arabic{fignum}: Collection of 5 lag plots where a given observation is on the $x$-axis and the subsequent observation is on the $y$-axis. Each plot corresponds to a feature in the killer whale dive data. Lag plots are used to decide whether to include auto-correlation in the HMMs used to model the killer whale's kinematic data. They can also be used to determine the number of hidden states if multiple distinct patterns are visible. 
+        \noindent Figure \arabic{fignum}: Log-likelihood of the CarHHMM-DFT as a function of the $z$-acceleration parameters $\mu_{A_z}^{*(\cdot,i^*)}, \sigma_{A_z}^{*(\cdot,i^*)}$ and $\text{logit}\left(\phi_{A}^{*(\cdot,i^*)}\right)$ for subdive types $i^* = 1,2,3$. All other parameters and probability transition matrices are assumed to be the maximum likelihood estimates shown in Table (1) of Section 3.1. The log-likelihood is scaled by the log-likelihood of the maximum likelihood estimate $\left(\hat \mu_{A_z}^{*(\cdot,i^*)}, \hat \sigma_{A_z}^{*(\cdot,i^*)}, \hat \phi_{A}^{*(\cdot,i^*)}\right)$, which is denoted by a red star.
         \addtocounter{fignum}{1}
+        
+        \newpage
         
         % eta1
         \begin{center}
-        \includegraphics[width=2.1in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_fine-eta-likelihood-0-row_0.png}
-        \includegraphics[width=2.1in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_fine-eta-likelihood-0-row_1.png}
-        \includegraphics[width=2.1in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_fine-eta-likelihood-0-row_2.png}
+        \includegraphics[width=3in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_fine-eta-likelihood-0-row_0.png}
+        \includegraphics[width=3in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_fine-eta-likelihood-1-row_0.png}
+        \includegraphics[width=3in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_fine-eta-likelihood-0-row_1.png}
+        \includegraphics[width=3in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_fine-eta-likelihood-1-row_1.png}
+        \includegraphics[width=3in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_fine-eta-likelihood-0-row_2.png}
+        \includegraphics[width=3in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_fine-eta-likelihood-1-row_2.png}
         \end{center}
         
-        \noindent Figure \arabic{fignum}: Collection of 5 lag plots where a given observation is on the $x$-axis and the subsequent observation is on the $y$-axis. Each plot corresponds to a feature in the killer whale dive data. Lag plots are used to decide whether to include auto-correlation in the HMMs used to model the killer whale's kinematic data. They can also be used to determine the number of hidden states if multiple distinct patterns are visible. 
-        \addtocounter{fignum}{1}
-        
-        % eta1
-        \begin{center}
-        \includegraphics[width=2.1in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_fine-eta-likelihood-1-row_0.png}
-        \includegraphics[width=2.1in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_fine-eta-likelihood-1-row_1.png}
-        \includegraphics[width=2.1in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_fine-eta-likelihood-1-row_2.png}
-        \end{center}
-        
-        \noindent Figure \arabic{fignum}: Collection of 5 lag plots where a given observation is on the $x$-axis and the subsequent observation is on the $y$-axis. Each plot corresponds to a feature in the killer whale dive data. Lag plots are used to decide whether to include auto-correlation in the HMMs used to model the killer whale's kinematic data. They can also be used to determine the number of hidden states if multiple distinct patterns are visible. 
+        \noindent Figure \arabic{fignum}: Log-likelihood of the CarHHMM-DFT as a function of the fine-scale probability transition matrix parameters associated both dive types ($\eta^{(i)*}_{i^*,j^*}$ for $i = 1,2$ and $i^*,j^* = 1,2,3$). Recall that $\eta^{(i)*}_{i^*,i^*} = 0$ and that $\Gamma^{(i)*}_{i^*,j^*} = \exp(\eta^{(i)*}_{i^*,j^*}) / \sum_{k^*} \exp(\eta^{(i)*}_{i^*,k^*})$. All other parameters and probability transition matrices are assumed to be the maximum likelihood estimates shown in Table (1) of Section 3.1. The log-likelihood is scaled by the log-likelihood of the maximum likelihood estimate $\hat \Gamma^{(i)*}$, which is denoted by a red star. Note that the long ridges of approximately equal likelihood corresponds to $\hat \Gamma^{(i)*}_{1,3} \approx \hat \Gamma^{(i)*}_{3,1} \approx 0$. This indicates that the whale never switches directly between subdive states 1 and 3.
         \addtocounter{fignum}{1}
         
         \newpage    
