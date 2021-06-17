@@ -33,27 +33,35 @@
 \caption{Average decoding accuracies and training times for all models used to categorize dive type and subdive state in the simulation study. Each of the four models was fit to 500 training data sets comprised of 100 simulated dives and tested on test data sets also comprised of 100 simulated dives. Reported values are averages, and $\pm$ refers to the sample standard deviation across the 500 data sets. Rows labelled Both/Both correspond to overall average decoding accuracy.}
 \scalebox{0.7}{
 \begin{tabular}{ccccccc}
-Model                       & \multicolumn{1}{c}{Train Time (min)} & \multicolumn{1}{c}{True Dive Type} & \multicolumn{1}{c}{True Subdive State} & \multicolumn{1}{c}{Dive Accuracy} & \multicolumn{1}{c}{Subdive Accuracy}  \\ \hline
-\multirow{5}{*}{CarHMM-DFT} & \multirow{5}{*}{$70 \pm 11$}   & Both                          & Both                             & -------------                     & $0.93 \pm 0.01$                       \\
-                            &                                    & 1                             & 1                                & \multirow{2}{*}{-------------}    & $0.79 \pm 0.04$                       \\ 
-                            &                                    & 1                             & 2                                &                                   & $0.96 \pm 0.01$                       \\ 
-                            &                                    & 2                             & 1                                & \multirow{2}{*}{-------------}    & $0.92 \pm 0.01$                       \\ 
-                            &                                    & 2                             & 2                                &                                   & $0.94 \pm 0.01$                       \\ \hline 
-\multirow{5}{*}{HHMM-DFT}   & \multirow{5}{*}{$209 \pm 51$}   & Both                          & Both                             & $0.94 \pm 0.04$                   & $0.88 \pm 0.04$                       \\
-                            &                                    & 1                             & 1                                & \multirow{2}{*}{$0.97 \pm 0.03$}    & $0.63 \pm 0.12$                       \\ 
-                            &                                    & 1                             & 2                                &                                   & $0.96 \pm 0.01$                       \\ 
-                            &                                    & 2                             & 1                                & \multirow{2}{*}{$0.85 \pm 0.10$}    & $0.79 \pm 0.16$                       \\ 
-                            &                                    & 2                             & 2                                &                                   & $0.92 \pm 0.03$                       \\ \hline
-\multirow{5}{*}{CarHHMM}    & \multirow{5}{*}{$236 \pm 52$}   & Both                          & Both                             & $0.87 \pm 0.17$                   & $0.74 \pm 0.05$                       \\
-                            &                                    & 1                             & 1                                & \multirow{2}{*}{$0.87 \pm 0.21$}    & $0.77 \pm 0.21$                       \\ 
-                            &                                    & 1                             & 2                                &                                   & $0.71 \pm 0.09$                       \\ 
-                            &                                    & 2                             & 1                                & \multirow{2}{*}{$0.82 \pm 0.14$}    & $0.87 \pm 0.23$                       \\ 
-                            &                                    & 2                             & 2                                &                                   & $0.66 \pm 0.10$                       \\ \hline
-\multirow{5}{*}{CarHHMM-DFT}& \multirow{5}{*}{$132 \pm 40$}   & Both                          & Both                             & $0.94 \pm 0.04$                   & $0.93 \pm 0.01$                       \\
-                            &                                    & 1                             & 1                                & \multirow{2}{*}{$0.96 \pm 0.03$}    & $0.76 \pm 0.04$                       \\ 
-                            &                                    & 1                             & 2                                &                                   & $0.96 \pm 0.01$                       \\ 
-                            &                                    & 2                             & 1                                & \multirow{2}{*}{$0.87 \pm 0.09$}    & $0.93 \pm 0.01$                       \\ 
-                            &                                    & 2                             & 2                                &                                   & $0.93 \pm 0.01$                       \\ \hline
+Model                       & \multicolumn{1}{c}{Train Time (m)} & \multicolumn{1}{c}{Dive Type} & \multicolumn{1}{c}{Subdive Type} & \multicolumn{1}{c}{Dive Accuracy} & \multicolumn{1}{c}{Subdive Accuracy}  \\ \hline
+\multirow{7}{*}{CarHHMM-DFT}& \multirow{7}{*}{$156 \pm 67$}   & All                           & All                              & $0.956 \pm 0.028$                   & $0.911 \pm 0.006$                       \\
+                            &                                    & 1                             & 1                                & \multirow{3}{*}{$0.973\pm0.032$}    & $0.846 \pm 0.027$                       \\
+                            &                                    & 1                             & 2                                &                                   & $0.918 \pm 0.011$                       \\ 
+                            &                                    & 1                             & 3                                &                                   & $0.860 \pm 0.030$                       \\ 
+                            &                                    & 2                             & 1                                & \multirow{3}{*}{$0.856\pm0.097$}    & $0.949 \pm 0.010$                       \\ 
+                            &                                    & 2                             & 2                                &                                   & $0.915 \pm 0.015$                       \\
+                            &                                    & 2                             & 3                                &                                   & $0.871 \pm 0.057$                       \\ \hline
+\multirow{7}{*}{HHMM-DFT}   & \multirow{7}{*}{$162 \pm 64$}   & All                           & All                              & $0.959 \pm 0.025$                   & $0.844 \pm 0.024$                       \\
+                            &                                    & 1                             & 1                                & \multirow{3}{*}{$0.977\pm0.028$}    & $0.761 \pm 0.063$                       \\ 
+                            &                                    & 1                             & 2                                &                                   & $0.845 \pm 0.029$                       \\ 
+                            &                                    & 1                             & 3                                &                                   & $0.858 \pm 0.034$                       \\
+                            &                                    & 2                             & 1                                & \multirow{3}{*}{$0.851\pm0.097$}    & $0.883 \pm 0.066$                       \\ 
+                            &                                    & 2                             & 2                                &                                   & $0.829 \pm 0.041$                       \\
+                            &                                    & 2                             & 3                                &                                   & $0.876 \pm 0.061$                       \\ \hline
+\multirow{7}{*}{CarHHMM}    & \multirow{7}{*}{$258 \pm 106$}   & All                           & All                              & $0.924 \pm 0.127$                   & $0.845 \pm 0.018$                       \\
+                            &                                    & 1                             & 1                                & \multirow{3}{*}{$0.933\pm0.153$}    & $0.689 \pm 0.050$                       \\ 
+                            &                                    & 1                             & 2                                &                                   & $0.900 \pm 0.031$                       \\ 
+                            &                                    & 1                             & 3                                &                                   & $0.673 \pm 0.059$                       \\
+                            &                                    & 2                             & 1                                & \multirow{3}{*}{$0.864\pm0.134$}    & $0.906 \pm 0.022$                       \\ 
+                            &                                    & 2                             & 2                                &                                   & $0.848 \pm 0.033$                       \\
+                            &                                    & 2                             & 3                                &                                   & $0.687 \pm 0.105$                       \\ \hline
+\multirow{7}{*}{CarHMM-DFT} & \multirow{7}{*}{$45 \pm 22$}   & All                           & All                              & ---                                   & $0.912 \pm 0.006$                       \\
+                            &                                    & 1                             & 1                                & \multirow{3}{*}{---          }    & $0.854 \pm 0.026$                       \\
+                            &                                    & 1                             & 2                                &                                   & $0.921 \pm 0.011$                       \\                            
+                            &                                    & 1                             & 3                                &                                   & $0.860 \pm 0.032$                       \\ 
+                            &                                    & 2                             & 1                                & \multirow{3}{*}{---          }    & $0.943 \pm 0.011$                       \\ 
+                            &                                    & 2                             & 2                                &                                   & $0.919 \pm 0.014$                       \\ 
+                            &                                    & 2                             & 3                                &                                   & $0.878 \pm 0.053$                       \\ \hline
 \end{tabular}
 }
 
