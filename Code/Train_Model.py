@@ -83,7 +83,7 @@ data = prep.get_all_features(df,dive_df)
 # train_model
 print('training model')
 hhmm = HHMM.HHMM(pars,data)
-hhmm.train_DM(data,max_iters=10,max_steps=50)
+hhmm.train_DM(data,max_iters=25,max_steps=25,max_time=90)
 
 # get SEs
 h = 0.01
@@ -95,6 +95,7 @@ print('labelling df')
 data,df = hhmm.label_df(data,df)
 
 # save everything
+hhmm.data = None
 hhmm.save(HHMM_file)
-with open(data_outfile, 'wb') as f:
-    pickle.dump(data, f)
+#with open(data_outfile, 'wb') as f:
+#    pickle.dump(data, f)

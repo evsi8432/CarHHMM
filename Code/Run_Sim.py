@@ -48,8 +48,8 @@ K0 = 2
 K1 = 3
 
 # dive duration parameters
-dd_mu = np.array([27.27,127.07])
-dd_sig = np.array([10.91,64.06])
+dd_mu = np.array([27.34,127.55])
+dd_sig = np.array([10.96,63.89])
 
 dd_shape = np.square(dd_mu)/np.square(dd_sig)
 dd_scale = np.square(dd_sig)/np.array(dd_mu)
@@ -65,8 +65,8 @@ for i in range(K1):
 FoVeDBA_sin_scale = np.ones((K1,51))
 
 # set mean and variance
-FoVeDBA_mu = np.array([[34.98],[505.79],[9769.98]])
-FoVeDBA_sig = np.array([[23.85],[516.68],[14462.55]])
+FoVeDBA_mu = np.array([[34.01],[490.06],[9154.16]])
+FoVeDBA_sig = np.array([[22.99],[502.56],[13538.75]])
 
 # adjust shape and scale accordingly
 FoVeDBA_sin_shape *= np.square(FoVeDBA_mu)/np.square(FoVeDBA_sig)
@@ -82,18 +82,18 @@ corr_fine = [0.97,0.83,0.61]
 
 # initialize a probablity transition matrix
 
-eta_crude = np.array([[ 0.    , -1.6984],
-                      [ 2.3471,  0.    ]])
+eta_crude = np.array([[ 0.    , -1.7127],
+                      [ 2.3629,  0.    ]])
 
-ptm_crude = HHMM.eta_2_ptm(ptm_crude)
+ptm_crude = HHMM.eta_2_ptm(eta_crude)
 print(ptm_crude)
 
-eta_fine =  [np.array([[  0.    ,  -1.0873, -10.00 ],
-                       [ -2.3615,   0.    , -2.823 ],
-                       [ -10.000,  -1.1937,  0.    ]]),
-              np.array([[  0.    ,  -2.0691,  -10.000],
-                        [ -1.6902,   0.    ,  -3.1311],
-                        [ -10.000,  -1.2303,   0.    ]])]
+eta_fine =  [np.array([[  0.    ,  -1.078 , -5.9046],
+                       [ -2.3897,   0.    , -2.819 ],
+                       [ -10.000,  -1.2166,  0.    ]]),
+              np.array([[  0.    ,  -2.0510,  -10.000],
+                        [ -1.6947,   0.    ,  -3.1301],
+                        [ -10.000,  -1.2369,   0.    ]])]
 
 ptm_fine = [HHMM.eta_2_ptm(eta_fine[0]),
             HHMM.eta_2_ptm(eta_fine[1])]
@@ -346,7 +346,7 @@ for dataset_num in range(ndatasets):
         hmm_FV.true_theta = deepcopy(hmm_FV_theta)
         hmm_FV.true_eta = deepcopy(hmm_FV_eta)
 
-        hmm_FV.train_DM(data_FV)
+        hmm_FV.train_DM(data_FV,max_iters=25,max_steps=25,max_time=11)
         hmm_FV.get_SEs(data_FV,h)
         data,data_V,data_FV = create_data()
 
@@ -392,7 +392,7 @@ for dataset_num in range(ndatasets):
         hhmm_FV_uncorr.true_theta = deepcopy(hhmm_FV_uncorr_theta)
         hhmm_FV_uncorr.true_eta = deepcopy(hhmm_FV_uncorr_eta)
 
-        hhmm_FV_uncorr.train_DM(data_FV)
+        hhmm_FV_uncorr.train_DM(data_FV,max_iters=25,max_steps=25,max_time=11)
         hhmm_FV_uncorr.get_SEs(data_FV,h)
         data,data_V,data_FV = create_data()
 
@@ -443,7 +443,7 @@ for dataset_num in range(ndatasets):
         hhmm_V.true_theta = deepcopy(hhmm_V_theta)
         hhmm_V.true_eta = deepcopy(hhmm_V_eta)
 
-        hhmm_V.train_DM(data_V)
+        hhmm_V.train_DM(data_V,max_iters=25,max_steps=25,max_time=11)
         hhmm_V.get_SEs(data_V,h)
         data,data_V,data_FV = create_data()
 
@@ -497,7 +497,7 @@ for dataset_num in range(ndatasets):
         hhmm_FV.true_theta = deepcopy(hhmm_FV_theta)
         hhmm_FV.true_eta = deepcopy(hhmm_FV_eta)
 
-        hhmm_FV.train_DM(data_FV)
+        hhmm_FV.train_DM(data_FV,max_iters=25,max_steps=25,max_time=11)
         hhmm_FV.get_SEs(data_FV,h)
         data,data_V,data_FV = create_data()
 

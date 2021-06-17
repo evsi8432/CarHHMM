@@ -8,9 +8,9 @@
 #SBATCH --mail-type=REQUEUE
 #SBATCH --mail-type=ALL
 
-#SBATCH --time=72:00:00
-#SBATCH --array=1-400
+#SBATCH --time=96:00:00
 #SBATCH --mem-per-cpu=8G
+#SBATCH --array=1-400
 #SBATCH --cpus-per-task=1
 
 if [ $SLURM_ARRAY_TASK_ID -lt 101 ]

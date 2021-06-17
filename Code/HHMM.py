@@ -123,21 +123,10 @@ class HHMM:
 
                 feature_data = [datum[feature] for datum in data]
 
-                # first find mu
-                theta[0][feature]['mu'] = np.mean(feature_data)*np.ones(K)
-
-                # then get varaince of each quantile set of data
-                data_sorted = np.sort(feature_data)
-                n = len(data_sorted)
-                for k0 in range(K):
-                    if settings['f'] != 'vonmises':
-                        std = np.std(data_sorted[int(k0*n/K):int((k0+1)*n/K)])
-                        theta[0][feature]['sig'][k0] = max(0.1,std)
-                    else:
-                        theta[0][feature]['sig'][k0] = 1.0
-
-                # initialize correlations
-                theta[0][feature]['corr'] = -1.0 * np.ones(K)
+                # first find basic parameter estimates
+                theta[0][feature]['mu'] = np.ones(K)*np.mean(feature_data)
+                theta[0][feature]['sig'] = np.ones(K)*max(0.1,np.std(feature_data))
+                theta[0][feature]['corr'] = np.ones(K)*-1.0
 
                 # add randomness in initialization
                 if settings['f'] == 'normal':
@@ -145,7 +134,8 @@ class HHMM:
                     theta[0][feature]['sig'] *= np.exp(norm.rvs(0.0,1.0,size=K))
                     theta[0][feature]['corr'] += norm.rvs(0.0,1.0,size=K)
                 elif settings['f'] == 'gamma':
-                    theta[0][feature]['mu'] *= np.exp(norm.rvs(0.0,1.0,size=K))
+                    log_std = np.std(np.log(feature_data))
+                    theta[0][feature]['mu'] *= np.exp(norm.rvs(0.0,log_std,size=K))
                     theta[0][feature]['sig'] *= np.exp(norm.rvs(0.0,1.0,size=K))
                     theta[0][feature]['corr'] += norm.rvs(0.0,1.0,size=K)
                 else:
@@ -199,22 +189,67 @@ class HHMM:
 
     def reorder_params(self):
 
-        state_order = np.argsort(self.theta[1][0]['Ax']['sig'])
+        # do coarse-scale states
+        state_order = np.argsort(self.theta[0]['dive_duration']['mu'])
+
+        # first reorder eta
+        eta_coarse = deepcopy(self.eta[0])
+        eta_coarse_SE = deepcopy(self.SEs['Gamma_coarse'])
+        CM_coarse = deepcopy(self.CM[0])
+
+        eta_fine = deepcopy(self.eta[1])
+        eta_fine_SE = deepcopy(self.SEs['Gamma_fine'])
+
+        for i in range(self.pars.K[0]):
+            eta_fine[i] = self.eta[1][state_order[i]]
+            eta_fine_SE[i] = self.SEs['Gamma_fine'][state_order[i]]
+            for j in range(self.pars.K[0]):
+                eta_coarse[i,j] = self.eta[0][state_order[i],state_order[j]]
+                eta_coarse_SE[i,j] = self.SEs['Gamma_coarse'][state_order[i],state_order[j]]
+                CM_coarse[i,j] = self.CM[0][i,state_order[j]]
+
+        self.eta[0] = eta_coarse
+        self.SEs['Gamma_coarse'] = eta_coarse_SE
+        self.eta[1] = eta_fine
+        self.SEs['Gamma_fine'] = eta_fine_SE
+        self.CM[0] = CM_coarse
+
+        # then reorder theta
+        for feature,settings in self.pars.features[0].items():
+            for param in ['mu','sig','corr']:
+                self.theta[0][feature][param] = np.array([self.theta[0][feature][param][state_order[i]] for i in range(self.pars.K[0])])
+                self.SEs[feature][param] = np.array([self.SEs[feature][param][state_order[i]] for i in range(self.pars.K[0])])
+
+        # do fine-scale states
+        if 'Ahat_low' in self.theta[1][0]:
+            state_order = np.argsort(self.theta[1][0]['Ahat_low']['mu'])
+        elif 'FoVeDBA' in self.theta[1][0]:
+            state_order = np.argsort(self.theta[1][0]['FoVeDBA']['mu'])
+        elif 'Ax' in self.theta[1][0]:
+            state_order = np.argsort(self.theta[1][0]['Ax']['sig'])
+        else:
+            state_order = np.argsort(self.theta[1][0]['A']['sig'])
 
         # first reorder eta
         for k0 in range(self.pars.K[0]):
             eta_fine = deepcopy(self.eta[1][k0])
-            for i in range(k0):
-                for j in range(k0):
-                    eta_fine[i,j] = eta_fine[state_order[i],state_order[j]]
+            eta_fine_SE = deepcopy(self.SEs['Gamma_fine'][k0])
+            CM_fine = deepcopy(self.CM[1][k0])
+            for i in range(self.pars.K[1]):
+                for j in range(self.pars.K[1]):
+                    eta_fine[i,j] = self.eta[1][k0][state_order[i],state_order[j]]
+                    eta_fine_SE[i,j] = self.SEs['Gamma_fine'][k0][state_order[i],state_order[j]]
+                    CM_fine[i,j] = self.CM[1][k0][i,state_order[j]]
             self.eta[1][k0] = eta_fine
+            self.SEs['Gamma_fine'][k0] = eta_fine_SE
+            self.CM[1][k0] = CM_fine
 
         # then reorder theta
         for feature,settings in self.pars.features[1].items():
             for k0 in range(self.pars.K[0]):
                 for param in ['mu','sig','corr']:
-                    self.theta[1][k0][feature][param] = np.array([self.theta[1][k0][feature][param][state_order[i]] for i in range(3)])
-
+                    self.theta[1][k0][feature][param] = np.array([self.theta[1][k0][feature][param][state_order[i]] for i in range(self.pars.K[1])])
+                    self.SEs[feature][param] = np.array([self.SEs[feature][param][state_order[i]] for i in range(self.pars.K[1])])
 
 
     def find_log_p_yt_given_xt(self,level,feature,data,data_tm1,mu,sig,corr,sample=0):
@@ -619,9 +654,9 @@ class HHMM:
 
         return (self.theta,self.eta)
 
-    def train_DM(self,data,max_iters=10,max_steps=50,tol=0.01,eps=10e-6):
+    def train_DM(self,data,max_iters=100,max_steps=50,tol=0.01,eps=10e-6,max_time=90):
 
-        stime = time.time()
+        stime_overall = time.time()
         options = {'maxiter':max_iters,'disp':False}
         prev_l = self.likelihood(data)
 
@@ -631,12 +666,94 @@ class HHMM:
             print(prev_l)
             print('')
 
-            ### start with crude eta ###
+            ### start with fine theta ###
+            for k1 in range(self.pars.K[1]):
+
+                if self.pars.share_fine_states:
+                    K0 = 1
+                else:
+                    K0 = self.pars.K[0]
+
+                for feature in self.pars.features[1]:
+                    for k0 in range(K0):
+
+                        def loss_fn(x):
+
+                            theta_backup = deepcopy(self.theta)
+
+                            for k00 in range(self.pars.K[0]):
+
+                                # continue if we not sharing the states
+                                if not self.pars.share_fine_states and (k00 != k0):
+                                    continue
+
+                                # set theta
+                                self.theta[1][k00][feature]['mu'][k1] = x[0]
+                                self.theta[1][k00][feature]['sig'][k1] = max(x[1],eps)
+
+                                if feature not in ['Ay','Az'] and self.pars.features[1][feature]['corr']:
+                                    self.theta[1][k00][feature]['corr'][k1] = x[2]
+                                    if feature == 'Ax':
+                                        self.theta[1][k00]['Ay']['corr'][k1] = x[2]
+                                        self.theta[1][k00]['Az']['corr'][k1] = x[2]
+
+                            l = -self.likelihood(data)
+                            self.theta = theta_backup
+                            return l
+
+                        # define inital value
+                        if feature not in ['Ay','Az'] and self.pars.features[1][feature]['corr']:
+                            x0 = deepcopy(np.array([self.theta[1][k0][feature]['mu'][k1],
+                                                    self.theta[1][k0][feature]['sig'][k1],
+                                                    self.theta[1][k0][feature]['corr'][k1]]))
+                        else:
+                            x0 = deepcopy(np.array([self.theta[1][k0][feature]['mu'][k1],
+                                                    self.theta[1][k0][feature]['sig'][k1]]))
+
+                        # optimize
+                        stime = time.time()
+                        res = minimize(loss_fn, x0, method='Nelder-Mead', options=options)
+                        etime = time.time()
+
+                        print('optimized fine theta %s, dive_state %d subdive state %d'\
+                              % (feature,k0,k1))
+                        print(res)
+                        print('original: ', x0)
+                        print('time taken: ', etime-stime, ' seconds')
+
+                        # update final values
+                        if self.likelihood(data) < -res['fun']:
+                            x = np.copy(res['x'])
+                            for k00 in range(self.pars.K[0]):
+
+                                # continue if we not sharing the states
+                                if not self.pars.share_fine_states and (k00 != k0):
+                                    continue
+
+                                # set theta
+                                self.theta[1][k00][feature]['mu'][k1] = x[0]
+                                self.theta[1][k00][feature]['sig'][k1] = max(x[1],eps)
+
+                                if feature not in ['Ay','Az'] and self.pars.features[1][feature]['corr']:
+                                    self.theta[1][k00][feature]['corr'][k1] = x[2]
+                                    if feature == 'Ax':
+                                        self.theta[1][k00]['Ay']['corr'][k1] = x[2]
+                                        self.theta[1][k00]['Az']['corr'][k1] = x[2]
+
+                        else:
+                            print('DANGER- keeping likelihood at ', self.likelihood(data))
+                        print('')
+
+                        if time.time() - stime_overall > 3600*max_time:
+                            self.train_time = time.time()-stime_overall
+                            return (self.theta,self.eta)
+
+            ### then do coarse eta ###
             for i in range(self.pars.K[0]):
-                backup = deepcopy(self.eta[0][i,:])
-                backup_l = deepcopy(self.likelihood(data))
 
                 def loss_fn(x):
+
+                    eta_backup  = deepcopy(self.eta)
 
                     # update crude eta
                     for j,xj in enumerate(x):
@@ -645,7 +762,10 @@ class HHMM:
                         else:
                             self.eta[0][i,j+1] = xj
 
-                    return -self.likelihood(data)
+                    l = -self.likelihood(data)
+                    self.eta = eta_backup
+
+                    return l
 
                 # define inital value
                 x0 = deepcopy(self.eta[0][i,:])
@@ -657,93 +777,102 @@ class HHMM:
                     res = minimize(loss_fn, x0, method='Nelder-Mead',options=options)
                     etime = time.time()
 
+                    print('optimized coarse eta, row %d' % i)
+                    print(res)
+                    print('original: ', x0)
+                    print('time taken: ', etime-stime, ' seconds')
+
                     # update final values
                     x = np.copy(res['x'])
-                    if self.likelihood(data) >= backup_l:
+                    if self.likelihood(data) < -res['fun']:
                         for j,xj in enumerate(x):
                             if j < i:
                                 self.eta[0][i,j] = xj
                             else:
                                 self.eta[0][i,j+1] = xj
                     else:
-                        self.eta[0][i,:] = backup
-                        print('DANGER')
+                        print('DANGER- keeping likelihood at ', self.likelihood(data))
 
-                    print('updated coarse eta, row %d' % i)
-                    print('original: ', backup)
-                    print(res)
-                    print('time taken: ', etime-stime, ' seconds')
                     print('')
                 else:
                     print('N = 1, no Coarse Gamma')
 
+                if time.time() - stime_overall > 3600*max_time:
+                    self.train_time = time.time()-stime_overall
+                    return (self.theta,self.eta)
 
-            #### then do crude theta ###
+
+            #### then do coarse theta ###
             for k0 in range(self.pars.K[0]):
                 for feature in self.pars.features[0]:
-                    for param in ['mu','sig','corr']:
 
-                        backup = deepcopy(self.theta[0][feature][param][k0])
-                        backup_l = deepcopy(self.likelihood(data))
+                    def loss_fn(x):
 
-                        # find when not to do the optimization
-                        if param == 'corr' and not self.pars.features[0][feature]['corr']:
-                            continue
-                        if feature in ['Ay','Az'] and param in ['corr']:
-                            continue
+                        theta_backup = deepcopy(self.theta)
 
-                        def loss_fn(x):
-                            if feature == 'Ax' and param in ['corr']:
-                                self.theta[0]['Ax'][param][k0] = x
-                                self.theta[0]['Ay'][param][k0] = x
-                                self.theta[0]['Az'][param][k0] = x
-                            else:
-                                if param == 'sig':
-                                    self.theta[0][feature][param][k0] = max(x,eps)
-                                else:
-                                    self.theta[0][feature][param][k0] = x
+                        self.theta[0][feature]['mu'][k0] = x[0]
+                        self.theta[0][feature]['sig'][k0] = max(x[1],eps)
 
-                            return -self.likelihood(data)
+                        if feature not in ['Ay','Az'] and self.pars.features[0][feature]['corr']:
+                            self.theta[0][feature]['corr'][k0] = x[2]
+                            if feature == 'Ax':
+                                self.theta[0]['Ay']['corr'][k0] = x[2]
+                                self.theta[0]['Az']['corr'][k0] = x[2]
 
-                        # define inital value
-                        x0 = self.theta[0][feature][param][k0]
+                        l = -self.likelihood(data)
+                        self.theta = theta_backup
 
-                        # optimize
-                        stime = time.time()
-                        res = minimize(loss_fn, x0, method='Nelder-Mead', options=options)
-                        etime = time.time()
+                        return l
 
-                        # update final values
-                        x = np.copy(res['x'])
-                        if self.likelihood(data) >= backup_l:
-                            if feature == 'Ax' and param in ['corr']:
-                                self.theta[0]['Ax'][param][k0] = x
-                                self.theta[0]['Ay'][param][k0] = x
-                                self.theta[0]['Az'][param][k0] = x
-                            else:
-                                if param == 'sig':
-                                    self.theta[0][feature][param][k0] = max(x,eps)
-                                else:
-                                    self.theta[0][feature][param][k0] = x
-                        else:
-                            self.theta[0][feature][param][k0] = backup
-                            print('DANGER')
+                    # define inital value
+                    if self.pars.features[0][feature]['corr']:
+                        x0 = deepcopy(np.array([self.theta[0][feature]['mu'][k0],
+                                                self.theta[0][feature]['sig'][k0],
+                                                self.theta[0][feature]['corr'][k0]]))
+                    else:
+                        x0 = deepcopy(np.array([self.theta[0][feature]['mu'][k0],
+                                                self.theta[0][feature]['sig'][k0]]))
 
-                        print('updated coarse theta %s, state %d, param %s' % (feature,k0,param))
-                        print('original: ', backup)
-                        print(res)
-                        print('time taken: ', etime-stime, ' seconds')
-                        print('')
 
+                    # optimize
+                    stime = time.time()
+                    res = minimize(loss_fn, x0, method='Nelder-Mead', options=options)
+                    etime = time.time()
+
+                    print('optimized coarse feature %s, state %d' % (feature,k0))
+                    print(res)
+                    print('original: ', x0)
+                    print('time taken: ', etime-stime, ' seconds')
+
+                    # update final values
+                    x = np.copy(res['x'])
+                    if self.likelihood(data) < -res['fun']:
+
+                        self.theta[0][feature]['mu'][k0] = x[0]
+                        self.theta[0][feature]['sig'][k0] = max(x[1],eps)
+
+                        if feature not in ['Ay','Az'] and self.pars.features[0][feature]['corr']:
+                            self.theta[0][feature]['corr'][k0] = x[2]
+                            if feature == 'Ax':
+                                self.theta[0]['Ay']['corr'][k0] = x[2]
+                                self.theta[0]['Az']['corr'][k0] = x[2]
+
+                    else:
+                        print('DANGER- keeping likelihood at ', self.likelihood(data))
+
+                    print('')
+
+                    if time.time() - stime_overall > 3600*max_time:
+                        self.train_time = time.time()-stime_overall
+                        return (self.theta,self.eta)
 
             ### then do fine eta ###
             for k0 in range(self.pars.K[0]):
                 for i in range(self.pars.K[1]):
 
-                    backup = deepcopy(self.eta[1][k0][i,:])
-                    backup_l = self.likelihood(data)
-
                     def loss_fn(x):
+
+                        eta_backup = deepcopy(self.eta)
 
                         # update crude eta
                         for j,xj in enumerate(x):
@@ -752,7 +881,10 @@ class HHMM:
                             else:
                                 self.eta[1][k0][i,j+1] = xj
 
-                        return -self.likelihood(data)
+                        l = -self.likelihood(data)
+                        self.eta = eta_backup
+
+                        return l
 
                     # define inital value
                     x0 = deepcopy(self.eta[1][k0][i,:])
@@ -763,9 +895,14 @@ class HHMM:
                     res = minimize(loss_fn, x0, method='Nelder-Mead',options=options)
                     etime = time.time()
 
+                    print('optimized fine eta, dive %d, row %d' % (k0,i))
+                    print(res)
+                    print('original: ', x0)
+                    print('time taken: ', etime-stime, ' seconds')
+
                     # update final values
                     x = np.copy(res['x'])
-                    if self.likelihood(data) >= backup_l:
+                    if self.likelihood(data) < -res['fun']:
 
                         for j,xj in enumerate(x):
                             if j < i:
@@ -773,95 +910,13 @@ class HHMM:
                             else:
                                 self.eta[1][k0][i,j+1] = xj
                     else:
-                        self.eta[1][k0][i,:] = backup
-                        print('DANGER')
+                        print('DANGER- keeping likelihood at ', self.likelihood(data))
 
-                    print('updated fine eta, dive %d, row %d' % (k0,i))
-                    print('original: ', backup)
-                    print(res)
-                    print('time taken: ', etime-stime, ' seconds')
                     print('')
 
-
-            ### finally do fine theta ###
-            for k1 in range(self.pars.K[1]):
-
-                if self.pars.share_fine_states:
-                    K0 = 1
-                else:
-                    K0 = self.pars.K[0]
-
-                for feature in self.pars.features[1]:
-                    for k0 in range(K0):
-                        for param in ['mu','sig','corr']:
-
-                            # find when not to do the optimization
-                            if param == 'corr' and not self.pars.features[1][feature]['corr']:
-                                continue
-                            if feature in ['Ay','Az'] and param in ['corr']:
-                                continue
-
-                            backup = deepcopy(self.theta[1][k0][feature][param][k1])
-                            backup_l = deepcopy(self.likelihood(data))
-
-                            def loss_fn(x):
-
-                                for k00 in range(self.pars.K[0]):
-
-                                    # continue if we not sharing the states
-                                    if not self.pars.share_fine_states and (k00 != k0):
-                                        continue
-
-                                    # set theta
-                                    if feature == 'Ax' and param in ['corr']:
-                                        self.theta[1][k00]['Ax'][param][k1] = x
-                                        self.theta[1][k00]['Ay'][param][k1] = x
-                                        self.theta[1][k00]['Az'][param][k1] = x
-                                    else:
-                                        if param == 'sig':
-                                            self.theta[1][k00][feature][param][k1] = max(x,eps)
-                                        else:
-                                            self.theta[1][k00][feature][param][k1] = x
-
-                                return -self.likelihood(data)
-
-                            # define inital value
-                            x0 = self.theta[1][k0][feature][param][k1]
-
-                            # optimize
-                            stime = time.time()
-                            res = minimize(loss_fn, x0, method='Nelder-Mead', options=options)
-                            etime = time.time()
-
-                            # update final values
-                            if self.likelihood(data) >= backup_l:
-                                x = np.copy(res['x'])
-                            else:
-                                x = backup
-                                print('DANGER')
-
-                            for k00 in range(self.pars.K[0]):
-
-                                # continue if we not sharing the states
-                                if not self.pars.share_fine_states and (k00 != k0):
-                                    continue
-                                # set theta
-                                if feature == 'Ax' and param in ['corr']:
-                                    self.theta[1][k00]['Ax'][param][k1] = x
-                                    self.theta[1][k00]['Ay'][param][k1] = x
-                                    self.theta[1][k00]['Az'][param][k1] = x
-                                else:
-                                    if param == 'sig':
-                                        self.theta[1][k00][feature][param][k1] = max(x,eps)
-                                    else:
-                                        self.theta[1][k00][feature][param][k1] = x
-
-                            print('updated fine theta %s, dive_state %d subdive state %d, param %s'\
-                                  % (feature,k0,k1,param))
-                            print('original: ', backup)
-                            print(res)
-                            print('time taken: ', etime-stime, ' seconds')
-                            print('')
+                    if time.time() - stime_overall > 3600*max_time:
+                        self.train_time = time.time()-stime_overall
+                        return (self.theta,self.eta)
 
             curr_l = self.likelihood(data)
             if abs(curr_l - prev_l) < tol:
@@ -870,7 +925,7 @@ class HHMM:
                 prev_l = curr_l
             print('\n\n')
 
-        self.train_time = time.time()-stime
+        self.train_time = time.time()-stime_overall
 
         return (self.theta,self.eta)
 
@@ -982,6 +1037,11 @@ class HHMM:
 
                     SEs[feature][param].append(sig_th)
 
+                    # print results
+                    print(th_tm1)
+                    print(th_t)
+                    print(th_tp1)
+
 
         # fine-scale theta (shared states)
         for feature in self.theta[1][0]:
@@ -1004,9 +1064,13 @@ class HHMM:
 
                     # get plus value
                     if param == 'corr':
-                        self.theta[1][0][feature][param][state_num] = corr_2_rho(theta+h0)
-                        for i in range(1,self.pars.K[0]):
-                            self.theta[1][i][feature][param][state_num] = self.theta[1][0][feature][param][state_num]
+                        for k0 in range(self.pars.K[0]):
+                            if feature in ['Ax','Ay','Az']:
+                                self.theta[1][k0]['Ax'][param][state_num] = corr_2_rho(theta+h0)
+                                self.theta[1][k0]['Ay'][param][state_num] = corr_2_rho(theta+h0)
+                                self.theta[1][k0]['Az'][param][state_num] = corr_2_rho(theta+h0)
+                            else:
+                                self.theta[1][k0][feature][param][state_num] = corr_2_rho(theta+h0)
                     else:
                         self.theta[1][0][feature][param][state_num] += h
                         for i in range(1,self.pars.K[0]):
@@ -1015,9 +1079,13 @@ class HHMM:
 
                     # get minus value
                     if param == 'corr':
-                        self.theta[1][0][feature][param][state_num] = corr_2_rho(theta-h0)
-                        for i in range(1,self.pars.K[0]):
-                            self.theta[1][i][feature][param][state_num] = self.theta[1][0][feature][param][state_num]
+                        for k0 in range(self.pars.K[0]):
+                            if feature in ['Ax','Ay','Az']:
+                                self.theta[1][k0]['Ax'][param][state_num] = corr_2_rho(theta-h0)
+                                self.theta[1][k0]['Ay'][param][state_num] = corr_2_rho(theta-h0)
+                                self.theta[1][k0]['Az'][param][state_num] = corr_2_rho(theta-h0)
+                            else:
+                                self.theta[1][k0][feature][param][state_num] = corr_2_rho(theta-h0)
                     else:
                         self.theta[1][0][feature][param][state_num] += -2*h
                         for i in range(1,self.pars.K[0]):
@@ -1031,9 +1099,13 @@ class HHMM:
 
                     # return theta
                     if param == 'corr':
-                        self.theta[1][0][feature][param][state_num] = corr_2_rho(theta)
-                        for i in range(1,self.pars.K[0]):
-                            self.theta[1][i][feature][param][state_num] = self.theta[1][0][feature][param][state_num]
+                        for k0 in range(self.pars.K[0]):
+                            if feature in ['Ax','Ay','Az']:
+                                self.theta[1][k0]['Ax'][param][state_num] = corr_2_rho(theta)
+                                self.theta[1][k0]['Ay'][param][state_num] = corr_2_rho(theta)
+                                self.theta[1][k0]['Az'][param][state_num] = corr_2_rho(theta)
+                            else:
+                                self.theta[1][k0][feature][param][state_num] = corr_2_rho(theta)
                     else:
                         self.theta[1][0][feature][param][state_num] += h
                         for i in range(1,self.pars.K[0]):
