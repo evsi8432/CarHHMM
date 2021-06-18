@@ -310,7 +310,7 @@ hhmm_Vs = []
 hhmm_FV_uncorrs = []
 hhmm_FVs = []
 
-h = 0.001
+h = 0.01
 
 for dataset_num in range(ndatasets):
 

@@ -189,6 +189,10 @@ class HHMM:
 
     def reorder_params(self):
 
+        if self.CM is None:
+            self.CM = [np.zeros((self.pars.K[0],self.pars.K[0])),
+                       [np.zeros((self.pars.K[1],self.pars.K[1])) for _ in range(self.pars.K[0])]]
+
         # do coarse-scale states
         state_order = np.argsort(self.theta[0]['dive_duration']['mu'])
 
@@ -215,20 +219,24 @@ class HHMM:
         self.CM[0] = CM_coarse
 
         # then reorder theta
+        theta_coarse = deepcopy(self.theta[0])
+        SEs = deepcopy(self.SEs)
+
         for feature,settings in self.pars.features[0].items():
             for param in ['mu','sig','corr']:
-                self.theta[0][feature][param] = np.array([self.theta[0][feature][param][state_order[i]] for i in range(self.pars.K[0])])
-                self.SEs[feature][param] = np.array([self.SEs[feature][param][state_order[i]] for i in range(self.pars.K[0])])
+                self.theta[0][feature][param] = np.array([theta_coarse[feature][param][state_order[i]] for i in range(self.pars.K[0])])
+                self.SEs[feature][param] = np.array([SEs[feature][param][state_order[i]] for i in range(self.pars.K[0])])
 
         # do fine-scale states
+        theta_fine = deepcopy(self.theta[1][0])
         if 'Ahat_low' in self.theta[1][0]:
-            state_order = np.argsort(self.theta[1][0]['Ahat_low']['mu'])
+            state_order = np.argsort(theta_fine['Ahat_low']['mu'])
         elif 'FoVeDBA' in self.theta[1][0]:
-            state_order = np.argsort(self.theta[1][0]['FoVeDBA']['mu'])
+            state_order = np.argsort(theta_fine['FoVeDBA']['mu'])
         elif 'Ax' in self.theta[1][0]:
-            state_order = np.argsort(self.theta[1][0]['Ax']['sig'])
+            state_order = np.argsort(theta_fine['Ax']['sig'])
         else:
-            state_order = np.argsort(self.theta[1][0]['A']['sig'])
+            state_order = np.argsort(theta_fine['A']['sig'])
 
         # first reorder eta
         for k0 in range(self.pars.K[0]):
@@ -248,8 +256,8 @@ class HHMM:
         for feature,settings in self.pars.features[1].items():
             for k0 in range(self.pars.K[0]):
                 for param in ['mu','sig','corr']:
-                    self.theta[1][k0][feature][param] = np.array([self.theta[1][k0][feature][param][state_order[i]] for i in range(self.pars.K[1])])
-                    self.SEs[feature][param] = np.array([self.SEs[feature][param][state_order[i]] for i in range(self.pars.K[1])])
+                    self.theta[1][k0][feature][param] = np.array([theta_fine[feature][param][state_order[i]] for i in range(self.pars.K[1])])
+                    self.SEs[feature][param] = np.array([SEs[feature][param][state_order[i]] for i in range(self.pars.K[1])])
 
 
     def find_log_p_yt_given_xt(self,level,feature,data,data_tm1,mu,sig,corr,sample=0):
