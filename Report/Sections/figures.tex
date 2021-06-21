@@ -12,18 +12,18 @@
         \multirow{2}{*}{Dive Duration $(s)$ -- $Y_t$}                                  & 1                                    & $27.34 (0.63)$ & $10.96 (0.56)$ & ---           \\
                                                                                        & 2                                    & $127.5 (11.3)$ & $63.9 (9.0)$ & ---           \\ \hline
         \multirow{3}{*}{$x$-Acc. $(m/s^2)$ -- $\left(\Zone_{t,\tilde t^*}\right)_x$}   & 1                                    & $0.449 (0.030)$ & $0.039 (0.001)$ & $0.968 (0.002)$ \\
-                                                                                       & 2                                    & $0.210 (0.012)$ & $0.096 (0.002)$ & $0.829 (0.010)$ \\
-                                                                                       & 3                                    & $0.232 (0.035)$ & $0.296 (0.010)$ & $0.607 (0.042)$ \\ \hline
-        \multirow{3}{*}{$y$-Acc. $(m/s^2)$ -- $\left(\Zone_{t,\tilde t^*}\right)_y$}   & 1                                    & $0.450 (0.038)$ & $0.051 (0.001)$ & $0.968 (0.009)$ \\
-                                                                                       & 2                                    & $0.437 (0.012)$ & $0.094 (0.002)$ & $0.829 (0.016)$ \\
-                                                                                       & 3                                    & $0.366 (0.042)$ & $0.365 (0.012)$ & $0.607 (0.040)$ \\ \hline
-        \multirow{3}{*}{$z$-Acc. $(m/s^2)$ -- $\left(\Zone_{t,\tilde t^*}\right)_z$}   & 1                                    & $-0.691 (0.043)$ & $0.058 (0.001)$ & $0.968 (0.005)$ \\
-                                                                                       & 2                                    & $-0.573 (0.014)$ & $0.111 (0.002)$ & $0.829 (0.012)$ \\
-                                                                                       & 3                                    & $-0.303 (0.041)$ & $0.354 (0.012)$ & $0.607 (0.039)$ \\ \hline
+                                                                                       & 2                                    & $0.210 (0.012)$ & $0.096 (0.002)$ & $0.829 (0.007)$ \\
+                                                                                       & 3                                    & $0.232 (0.035)$ & $0.296 (0.010)$ & $0.607 (0.023)$ \\ \hline
+        \multirow{3}{*}{$y$-Acc. $(m/s^2)$ -- $\left(\Zone_{t,\tilde t^*}\right)_y$}   & 1                                    & $0.450 (0.038)$ & $0.051 (0.001)$ & $0.968 (0.002)$ \\
+                                                                                       & 2                                    & $0.437 (0.012)$ & $0.094 (0.002)$ & $0.829 (0.007)$ \\
+                                                                                       & 3                                    & $0.366 (0.042)$ & $0.365 (0.012)$ & $0.607 (0.023)$ \\ \hline
+        \multirow{3}{*}{$z$-Acc. $(m/s^2)$ -- $\left(\Zone_{t,\tilde t^*}\right)_z$}   & 1                                    & $-0.691 (0.043)$ & $0.058 (0.001)$ & $0.968 (0.002)$ \\
+                                                                                       & 2                                    & $-0.573 (0.014)$ & $0.111 (0.002)$ & $0.829 (0.007)$ \\
+                                                                                       & 3                                    & $-0.303 (0.041)$ & $0.354 (0.012)$ & $0.607 (0.023)$ \\ \hline
         \multirow{3}{*}{Wiggliness - $\Ztwo_{t,\tilde t^*}$}                           & 1                                    & $34.02 (0.36)$ & $22.99 (0.38)$ & ---           \\
                                                                                        & 2                                    & $490.1 (5.6)$ & $502.6 (6.8)$ & ---           \\
                                                                                        & 3                                    & $9150 (220)$ & $13540 (350)$ & ---           \\ \hline
-        \end{tabular}
+    \end{tabular}
     }
     \label{table:emis_dists_CarHHMM-DFT}
 \end{table}
@@ -138,7 +138,7 @@ Model                       & \multicolumn{1}{c}{Train Time (m)} & \multicolumn{
     	\centering
     	\includegraphics[width=3in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2-fine-emissions.png}
     	\caption{Estimated Normal conditional densities %of the three components 
-    	of killer whale acceleration $\big(\Zone_{t,\tilde t^*}|\Zone_{t,\tilde t^*-1} = \mu_A^{*(\cdot,i^*)}\big)$ plotted on a linear scale and estimated Gamma probability density of wiggliness $\big(\Ztwo_{t,\tilde t^*}\big)$ plotted on a log-log scale. These density functions correspond to subdive behaviours $\tilde{X}^*_{t,t^*} = 1,2,3$, and are identical across dive types $X_t = 1$ and $X_t = 2$. Acceleration density functions are conditioned on $\Zone_{t,\tilde t^*-1} = \mu_A^{*(\cdot,i^*)}$ since the mean of $\Zone_{t,\tilde t^*}$ depends on $\Zone_{t,\tilde t^*-1}$.}
+    	of killer whale acceleration $\big(\Zone_{t,\tilde t^*}\big|\Zone_{t,\tilde t^*-1} = \mu_A^{*(\cdot,i^*)}\big)$ plotted on a linear scale and estimated Gamma probability density of wiggliness $\big(\Ztwo_{t,\tilde t^*}\big)$ plotted on a log-log scale. These density functions correspond to subdive behaviours $\tilde{X}^*_{t,t^*} = 1,2,3$, and are identical across dive types $X_t = 1$ and $X_t = 2$. Acceleration density functions are conditioned on $\Zone_{t,\tilde t^*-1} = \mu_A^{*(\cdot,i^*)}$ since the mean of $\Zone_{t,\tilde t^*}$ depends on $\Zone_{t,\tilde t^*-1}$.}
     	\label{fig:fine_emis}
     \end{subfigure}
     \caption{Estimated probability density functions of coarse- and fine-scale emissions corresponding to observations of killer whale behaviour. Densities are estimated by fitting the CarHHMM-DFT to the case study data (see Table \ref{table:emis_dists_CarHHMM-DFT}).}
@@ -165,7 +165,7 @@ Model                       & \multicolumn{1}{c}{Train Time (m)} & \multicolumn{
     	\caption{Empirical distribution of $Y_t$}
     	\label{fig:empirical_dist}
     \end{subfigure}
-    \caption{Pseudoresiduals of wiggliness $\left(\Phi^{-1} \left(\Pr(\Ztwo_{t,\tilde t^*} < \ztwo_{t,\tilde t^*}|Y,\tilde Y^* / \{\Ztwo_{t,\tilde t^*}\}) \right), \enspace \text{left} \right)$ plotted over a standard normal density as well as a weighted empirical distribution of dive duration ($Y_t$, right) plotted over the corresponding fitted Gamma distributions. Both plots are generated by fitting the CarHHMM-DFT to the killer whale case study data and performing the forward-backward algorithm.}
+    \caption{Pseudoresiduals of wiggliness $\left(\Phi^{-1} \left(\Pr(\Ztwo_{t,\tilde t^*} < \ztwo_{t,\tilde t^*}\big|Y,\tilde Y^* / \{\Ztwo_{t,\tilde t^*}\}) \right), \enspace \text{left} \right)$ plotted over a standard normal density as well as a weighted empirical distribution of dive duration ($Y_t$, right) plotted over the corresponding fitted Gamma distributions. Both plots are generated by fitting the CarHHMM-DFT to the killer whale case study data and performing the forward-backward algorithm.}
     \label{fig:model_checking}
 \end{figure}
 
