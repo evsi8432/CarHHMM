@@ -1,0 +1,143 @@
+\documentclass{article}
+
+\usepackage{latexsym}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{psfrag}
+\usepackage{graphicx}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{url}
+\usepackage{float}
+\usepackage[margin=1in]{geometry}
+\input{header}
+\input{defs}
+
+\begin{document}
+\title{Modelling state-switching functional data with hidden Markov models: reviewer response}
+\date{}
+\author{Blinded}
+
+\maketitle
+
+We sincerely thank the reviewers for their comments, and we believe that the paper is better today than it was prior to peer review. Before addressing the reviewer comments one-by-one, there are several changes to the paper that we would like to highlight.
+
+\begin{itemize}
+    \item The case study has been re-run and the results have changed very slightly.
+    \item The simulation study has been re-run with 3 behavioural states instead of 2.
+    \item The supplemental material has been broken into two: supplement A contains material related to the case study while supplement B contains material related to the simulation study. 
+\end{itemize}
+
+
+\section{Reviewing: 1}
+
+\begin{enumerate}
+    \item 
+    \begin{enumerate}
+        \item \textit{What is the difference between `different curve types' and `between-curve dependence'?} 
+        
+        The different curve types and between-curve dependence are closely related to one another. We assume that each curve is labelled with one of a discrete number of curve types, where each curve type corresponds to a distribution over curves of that type. We also assume that the sequence of curve types makes up an unobserved Markov chain, which is what induces the between-curve dependence. We have edited page 3, lines 49-53 as well as page 5, lines 83-84 to make this distinction clearer. In addition, we have changed ``different curve types" to ``a discrete number of curve types" where applicable to highlight that we are using a Markov chain with a discrete number of states to model the between-curve dependence. 
+        
+        \item \textit{Is the paper trying to cluster the curves or identify the progression of curves at a given time t?} 
+        
+        ``Our goal is to identify and describe a finite number of behaviours at multiple scales within sequential functional data. We simultaneously aim to model complicated temporal dependence both between and within curves." We have added this excerpt to page 5, lines 81-83 to clarify the goal of this paper. Using our case study as an example, we simultaneously identify and describe two different dive types and three different swimming behaviours. The distribution of the swimming behaviours can be used to estimate killer whale energy expenditure, and state-decoding algorithms can be used to identify possible foraging dives and feeding events. 
+        
+        \item \textit{If the dependence between curves is purely based on the hidden variables, then there should be more justifications in 2.4 as curves are transformed to lower-dimensional variables. For functional time series, please see "On the prediction of stationary functional time series", "High-dimensional functional time series forecasting: An application to age-specific mortality rates".} 
+        
+        We do transform the curves to lower-dimensional variables, which causes a significant amount of reconstruction error. We do not bound this reconstruction error, and only talk about reconstruction in appendix for the purpose of the simulation study. This is an admitted weakness of our paper. However, our goal is not to reconstruct the curves, but rather to identify the coarse-scale and fine-scale curve types as well as describe the dependence between those types. We added an explanation of this on pages 15-16, lines 281-294. Nonetheless, bounding prediction and reconstruction error is a promising area of future study. In particular, it would be useful to prove an analogue of Theorem 3.2 in "On the prediction of stationary functional time series" for state-switching functional time series. We added a sentence about this to the discussion on page 40, lines 754-757.
+        
+    \end{enumerate}
+    
+    \item \textit{What is the within-curve structure? There are numerous ways to deal with periodic functions. fPCA and smoothing with a Fourier basis will give you a better transformation of curves than the proposed in 2.4.} 
+    
+    This is an excellent point- fPCA is a better way to reduce reconstruction error, and we added a discussion of this on pages 15-16, lines 281-294. However, our goal is to provide a means of summarizing these curves in a way that is interpretable for practitioners, not to reconstruct the curves.
+    
+    \item \begin{enumerate}
+        \item \textit{There is no discussion about $x^*$ other than the transitional matrix. What's the significance of this hidden variable and in the hierarchy?} 
+        
+        If $x_t = i$, then $x_{t,t*}^*$ represents one of $N^{*(i)}$ possible within-curve hidden behaviours associated with observation $y_{t,t*}^*$ and dive type $i$. We have added a sentence on page 12, lines 225-227 to make this more clear. For example, in the case study we have that there are 3 possible subdive states. If the whale is in subdive state 2 for dive t and window $\tilde t^*$, then $\tilde x^*_{t,\tilde t^*} = 2$.  In addition, we added verbiage on page 21, lines 405-411 to make clear what $x$ and $x^*$ are in the context of the case study. 
+        
+        \item \textit{Have you tried to fit a simple HMM with only $x_t$ and $y_t$?} 
+        
+        This is a good point- we suspect that a simple HMM would likely have comparable performance to our model to determine the dive types ($x_t$) and the conditional distributions of dive duration ($y_t$). However, we are primarily interested in jointly estimating the dive types and the subdive behaviours for the killer whale case study. If anything, we are personally more interested in the fine-scale behaviours. To make this more clear to the reader, we have added a sentence on page 22, lines 413-418.
+        
+    \end{enumerate}
+    
+    \item \begin{enumerate}
+        \item \textit{The `between-curve dependence' or the hidden variable $x_t$ is significantly influenced by $y_t$ not the fine-scale observations as shown in Figure 4.}
+        
+        We have added some verbiage to the caption of Figure 1(d) to indicate that we are omitting the coarse-scale process and are only looking at the HMM-DFT as a fine-scale model of the within-curve behaviour of curve $t$. 
+        
+        \item \textit{Where is the relationship between $x_t$ and $x^*_t$? The likelihood function does not include this relation.}
+        
+        $x_t$ corresponds to the curve type of curve $t$, and the curve type determines the parameters of the fine-scale model used to model the fine-scale observations $y^*_t$. If that fine-scale model is again an HMM, then $x^*_t$ is a Markov chain whose probability transition matrix is determined by the curve type ($x_t$). In addition, the distribution of $y^*_{t,t^*}$ is determined by both the curve type ($x_t$) and the fine-scale hidden state ($x^*_{t,t^*}$). We have edited page 13, lines 241-244 to make this fact more clear. The likelihood function does not include either $x_t$ or $x^*_t$ because both hidden variables can be marginalized out of the likelihood. We have made this more clear by adding verbiage to pages 8-9, lines 163-172 as well as page 14, lines 253-255. 
+        
+    \end{enumerate}
+    
+    \item \textit{It would be better to see more than 2 hidden states where emission distributions are similar in the simulation studies.} 
+    
+    It is confusing that we switch from 3 fine-scale hidden states in the case study to 2 fine-scale hidden states in the simulation study. As such, we re-ran our simulation study with 3 fine-scale hidden states and parameters that more closely represent the case-study. See section 4 of the paper for the updated results.  We have based the simulation study on the case study in order to simulate data that is as realistic as possible. We believe that this gives a good balance between separated and overlapping hidden states so the simulation study is informative.
+    
+    \item \textit{It is interesting to see the posterior distributions when the model is fitted with a sampling approach (sequential Monte Carlo).} 
+    
+    This is an interesting approach that has been looked at in a couple of papers. This is beyond the scope of our paper, but we have added references to several sampling methods for HMMs (and relevant citations) on page 9, lines 165-170.
+    
+    \item \textit{After the transformation, does the autoregressive pattern hold? Is the likelihood function of $\tilde y^*$ in Equation (4) valid?} 
+    
+    After the transformation we are redefining our model such that all modelling assumptions apply to the transformed variables rather than the original fine-scale variables. Therefore, the model selection and model validation techniques in Sections 3.2 and 3.4 should be  on the transformed observations, not the original observations. For example, Figure 1 of Supplement A shows lag plots for the transformed fine-scale observations, and there appears to be strong auto-correlation. We have added several sentences on page 17, lines 315-324 to clarify this.
+    
+    \item \begin{enumerate}
+        \item \textit{The problem is overcomplicated, what is the optimization routine? } 
+        
+        For each model, we ran 100 direct maximization routines using random initializations using the Nelder-Mead method of the optimize package of spicy. In particular, we optimized one row at a time of the probability transition matrices and one set of parameters associated with a (feature,hidden state) pair at a time. We found that most, but not all, of the optimization routines converged to similar parameter estimates. We have added an explanation of our optimization routine on pages 26-17, lines 502-510.
+        
+        \item \textit{Can you provide some surface plots of the likelihood?} 
+        
+        We thank the reviewer for this suggestion, as plotting the likelihood gave us evidence that our optimization routine did in fact converge. We added plots of the likelihood surface associated with the CarHHMM-DFT in supplement A. Unfortunately the parameter space is high-dimensional, so we plotted the likelihood of the parameters associated with each feature / hidden state pair while keeping all other parameters fixed at their maximum likelihood estimates.
+        
+    \end{enumerate}
+
+\end{enumerate}
+
+
+\section{Reviewing: 2}
+
+\textit{The authors of CJS-21-0003 present a novel and promising approach based on Hidden Markov Models to analyze functional data with intricate dependence structures. I would like to congratulate the authors on the very well-written paper. Below are just a few comments I would like the authors to address.}
+
+\begin{enumerate}
+    \item \textit{Introduction, page 5, around line 15. Before the work of Langrock et al. (2018), there has been the work of De Souza and Heckman (2014), which was the first paper proposing this new class of nonparametric regression models, called switching nonparametric regression models, allowing the hidden states to be independent or to follow a Markov structure. Later De Souza, Heckman, and Xu (2017) extended their approach to multiple curves allowing for different variance structures within each curve. Together with Langrock et. al. (2018), I believe these two references should be included as important examples of HMMs in nonparametric functional modelling:}
+    
+    \textit{de Souza, C. P. E., Heckman, N. E. and Xu, F., (2017) ``Switching nonparametric regression models for multi-curve data", The Canadian Journal of Statistics}
+
+    \textit{de Souza, C. P. E. and Heckman, N. E. (2014) ``Switching nonparametric regression models", Journal of Nonparametric Statistics}
+    
+    We thank the reviewer for the references and have added them to page 5, lines 92-96.
+    
+    \item \textit{Section 2, end of page 6: the authors start the description of their model by presenting this idea of coarse-scale versus fine-scale, but I missed a connection between these and what was said in the introduction regarding the problem of analyzing biologging data. It would be great if the authors could make this connection clear. There is something written later in Section 2.4, maybe some of that can be said earlier.}
+    
+    The introduction primarily uses the adjectives "between-curve" and "within-curve" to focus on FDA, while the subsequent sections switch to "coarse-scale" and "fine-scale" to be more general. The connection between these adjectives was not clear before, so we have added a sentence to page 2, lines 34-36 to introduce "coarse-scale" vs "fine-scale" earlier. We have also added a sentence to page 5, lines 81-85 to make the connection between coarse-scale / fine-scale and curve types / behavioural states.
+    
+    \item \textit{Section 2, end of page 6: is there a special reason for denoting the number of curves by $T$? I find it less confusing to use, for example, $N$ or $M$ for that purpose so that each curve can be denoted by $i$ or $j$ because $t$ reminds me of evaluation time points which later you denote by $t^*$.}
+    
+    It is confusing that the number of curves is denoted by $T$, which usually indicates time points. However, we currently use $N$ and $N^*$ to represent the number of coarse-scale and fine-scale hidden states, respectively. In addition, the curves are assumed to be sequential in time, and there is a connection between the coarse scale index $t$ and the fine-scale index $t^*$. We have added a sentence on page 7, lines 138-139 to clarify that these curves are sequential but not necessarily equi-spaced in time. In addition, there is some precedence for indexing sequential curves with $t$- see "Cam\'er-Karhunen-Lo\`eve representation and harmonic principal component analysis of functional time series" by Panaretos and Tavakoli and "Dynamic functional principal components" by Hormann and Kidinski for examples.
+    
+    \item \textit{In Section 2.1, page 7 around line 50: it is important to explicitly say that a time-homogeneous chain is being considered, that is, transition probabilities do not depend on time.}
+    
+    We agree and have added a sentence to clarify this on page 8, lines 152-153.
+    
+    \item \textit{Page 8 around line 25: when presenting the likelihood $\mathcal{L}_{\text{HMM}}$, I would first present it and then mention the forward algorithm otherwise the reader may think that the equation has to do with the algorithm, but it is just the likelihood. Another thing is, I believe the algorithm is the backward-forward algorithm because it involves calculating both the so-called backward and forward quantities.}
+    
+    We have edited page 9, lines 172-177 to clarify the difference between the likelihood and the forward algorithm. We have also described the forward algorithm, which is used to evaluate the likelihood, as well as the forward-backward algorithm, which is used for state decoding and maximizing the likelihood via the Baum-Welch algorithm. See Zucchini et al (2016) for details.
+    
+    \item \textit{Could the author clarify how the maximum likelihood estimation is conducted? Is it via direct maximization of the likelihood using numerical methods or via the EM algorithm? I missed a section or paragraph describing exactly how inference is conducted. }
+    
+    For each model, we ran 100 direct maximization routines using random initializations using the Nelder-Mead method of the optimize package of spicy. In particular, we optimized one row at a time of the probability transition matrices and one set of parameters associated with a (feature,hidden state) pair at a time. We found that most, but not all, of the optimization routines converged to similar parameter estimates. We have added an explanation of our optimization routine on pages 26-17, lines 502-510.
+    
+    \item \textit{de Souza, C. P. E. et al. (2017) also consider the case where the distribution of the hidden states depends on some covariates such as weather conditions. In this case, for biologging data, would it be useful or would it make sense to potentially have transition probabilities depending on covariates via the same, logit link, representation that the authors already used.}
+    
+    This is a very useful and common practice in the ecology literature. While it is beyond the scope of our case study, we have added a brief discussion of covariates on page 10, lines 183-186.
+    
+\end{enumerate}
+
+
+\end{document}
