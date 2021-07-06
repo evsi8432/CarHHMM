@@ -189,6 +189,9 @@ class HHMM:
 
     def reorder_params(self):
 
+        if self.SEs is None:
+            self.get_SEs(self.data,0.01)
+
         if self.CM is None:
             self.CM = [np.zeros((self.pars.K[0],self.pars.K[0])),
                        [np.zeros((self.pars.K[1],self.pars.K[1])) for _ in range(self.pars.K[0])]]
@@ -723,7 +726,7 @@ class HHMM:
                         res = minimize(loss_fn, x0, method='Nelder-Mead', options=options)
                         etime = time.time()
 
-                        print('optimized fine theta %s, dive_state %d subdive state %d'\
+                        print('optimized fine theta %s, dive type %d subdive state %d'\
                               % (feature,k0,k1))
                         print(res)
                         print('original: ', x0)
@@ -996,6 +999,8 @@ class HHMM:
 
         SEs = {}
 
+        orig_theta = deepcopy(self.theta)
+
         # coarse-scale theta
         for feature in self.theta[0]:
             print('')
@@ -1030,10 +1035,7 @@ class HHMM:
                     th_tm1 = self.likelihood(data)
 
                     # return theta
-                    if param == 'corr':
-                        self.theta[0][feature][param][state_num] = corr_2_rho(theta)
-                    else:
-                        self.theta[0][feature][param][state_num] += h
+                    self.theta = deepcopy(orig_theta)
 
                     # get estimate
                     if param =='corr':
@@ -1106,18 +1108,7 @@ class HHMM:
                     print(th_tp1)
 
                     # return theta
-                    if param == 'corr':
-                        for k0 in range(self.pars.K[0]):
-                            if feature in ['Ax','Ay','Az']:
-                                self.theta[1][k0]['Ax'][param][state_num] = corr_2_rho(theta)
-                                self.theta[1][k0]['Ay'][param][state_num] = corr_2_rho(theta)
-                                self.theta[1][k0]['Az'][param][state_num] = corr_2_rho(theta)
-                            else:
-                                self.theta[1][k0][feature][param][state_num] = corr_2_rho(theta)
-                    else:
-                        self.theta[1][0][feature][param][state_num] += h
-                        for i in range(1,self.pars.K[0]):
-                            self.theta[1][i][feature][param][state_num] = self.theta[1][0][feature][param][state_num]
+                    self.theta = deepcopy(orig_theta)
 
                     # get estimate
                     if param =='corr':
@@ -1145,6 +1136,7 @@ class HHMM:
 
                 # get middle value
                 th_t = self.likelihood(data)
+                print(th_t)
 
                 # get plus value
                 ptm[i,j] += h0

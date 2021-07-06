@@ -161,7 +161,7 @@ class Visualisor:
 
                 dist = self.pars.features[0][feature]['f']
                 K = self.pars.K[0]
-                colors = [cm.get_cmap('tab10')(i) for i in [0,1]]
+                colors = [cm.get_cmap('tab10')(i) for i in range(K)]
                 legend = ['Dive Type %d'%(x+1) for x in range(K)]
             else:
                 mu = self.hhmm.theta[1][0][feature]['mu']
@@ -169,7 +169,7 @@ class Visualisor:
 
                 dist = self.pars.features[1][feature]['f']
                 K = self.pars.K[1]
-                colors = [cm.get_cmap('viridis')(i) for i in [0.,0.5,1.]]
+                colors = [cm.get_cmap('viridis')(i/(K-1.0)) for i in range(K)]
                 legend = ['Subdive Behavior %d'%(x+1) for x in range(K)]
 
             for state in range(K):
@@ -323,7 +323,7 @@ class Visualisor:
             if 'subdive_state_' not in col:
 
                 plt.subplot(nrows,1,fignum)
-                colors = [cm.get_cmap('tab10')(i) for i in [0,1]]
+                colors = [cm.get_cmap('tab10')(i) for i in range(self.pars.K[0])]
                 legend = ['Dive Type %d' % (i+1) for i in range(self.pars.K[0])]
                 for state,dive_df in enumerate(dives):
                     plt.plot(dive_df['sec_from_start']/60,dive_df[col],
@@ -346,16 +346,17 @@ class Visualisor:
                     plt.gca().invert_yaxis()
 
                 # plot vlines
-                for dive_num in range(sdive+1,edive+1):
-                    vline = min(dive[dive['dive_num'] == dive_num]['sec_from_start']/60)
-                    plt.axvline(vline,color='k',linewidth=2)
-
+                #for dive_num in range(sdive+1,edive+1):
+                    #vline = min(dive[dive['dive_num'] == dive_num]['sec_from_start']/60)
+                    #plt.axvline(vline,color='k',linewidth=2)
+                if col == 'Ax':
+                    plt.ylim([-2,2])
                 fignum += 1#2
 
             # subdive-level coloring
             if 'dive_state_' not in col or 'subdive_state' in col:
                 plt.subplot(nrows,1,fignum)
-                colors = [cm.get_cmap('viridis')(i) for i in [0.,0.5,1.]]
+                colors = [cm.get_cmap('viridis')(i/(self.pars.K[1]-1.0)) for i in range(self.pars.K[1])]
                 #legend = ['Subdive Behavior %d' % (i+1) for i in range(self.pars.K[1])]
                 for state,subdive_df in enumerate(subdives):
                     plt.plot(subdive_df['sec_from_start']/60,subdive_df[col],
@@ -381,10 +382,11 @@ class Visualisor:
                     plt.gca().invert_yaxis()
 
                 # plot vlines
-                for dive_num in range(sdive+1,edive+1):
-                    vline = min(dive[dive['dive_num'] == dive_num]['sec_from_start']/60)
-                    plt.axvline(vline,color='k',linewidth=2)
-
+                #for dive_num in range(sdive+1,edive+1):
+                    #vline = min(dive[dive['dive_num'] == dive_num]['sec_from_start']/60)
+                    #plt.axvline(vline,color='k',linewidth=2)
+                if col == 'Ax':
+                    plt.ylim([-2,2])
                 fignum += 1#-1
 
         t_start = dive['time'].min()
@@ -397,7 +399,7 @@ class Visualisor:
 
                 # dive-level columns - color by dive type only
                 plt.subplot(nrows,1,fignum)
-                colors = [cm.get_cmap('tab10')(i) for i in [0,1]]
+                colors = [cm.get_cmap('tab10')(i) for i in range(self.pars.K[0])]
                 legend = ['Dive Type %d' % (i+1) for i in range(self.pars.K[0])]
 
                 times = [[]] * self.pars.K[0]
@@ -414,7 +416,7 @@ class Visualisor:
                         time.append(avg_time)
                         features[ML_state].append(dive[col])
                         feature.append(dive[col])
-                    plt.axvline(max(time),color='k',linewidth=2)
+                    #plt.axvline(max(time),color='k',linewidth=2)
                 for state in range(self.pars.K[0]):
                     plt.plot(times[state],features[state],
                              '.',color=colors[state],markersize=4)
@@ -429,7 +431,7 @@ class Visualisor:
 
                 # subdive-level columns - color by dive type
                 plt.subplot(nrows,1,fignum)
-                colors = [cm.get_cmap('tab10')(i) for i in [0,1]]
+                colors = [cm.get_cmap('tab10')(i) for i in range(self.pars.K[0])]
                 legend = ['Dive Type %d' % (i+1) for i in range(self.pars.K[0])]
 
                 times = [ [] for _ in range(self.pars.K[0]) ]
@@ -456,14 +458,14 @@ class Visualisor:
                 plt.ylabel(col,fontsize = 14)
                 plt.xlabel('Time (s)',fontsize=10)
                 plt.legend(legend,prop={'size': 10})
-                for vline in vlines:
-                    plt.axvline(vline,color='k',linewidth=2)
+                #for vline in vlines:
+                    #plt.axvline(vline,color='k',linewidth=2)
                 fignum += 1
 
 
                 # subdive-level columns - color by subdive type
                 plt.subplot(nrows,1,fignum)
-                colors = [cm.get_cmap('viridis')(i) for i in [0.,0.5,1.]]
+                colors = [cm.get_cmap('viridis')(i/self.pars.K[1]-1.0) for i in range(self.pars.K[1])]
                 legend = ['Subdive Behavior %d' % (i+1) for i in range(self.pars.K[1])]
 
                 times = [ [] for _ in range(self.pars.K[1]) ]
@@ -490,8 +492,8 @@ class Visualisor:
                 plt.xlabel('Time (secs)',fontsize=10)
                 plt.legend(legend,prop={'size': 10})
                 plt.title('Depth Data',fontsize=10)
-                for vline in vlines:
-                    plt.axvline(vline,color='k',linewidth=2)
+                #for vline in vlines:
+                    #plt.axvline(vline,color='k',linewidth=2)
                 fignum += 1
 
         legend_elements = [Line2D([0], [0], marker='o', color='w', label='Subdive 1',

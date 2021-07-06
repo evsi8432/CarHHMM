@@ -35,15 +35,23 @@ np.random.seed(rand_seed)
 # set parameters
 pars = Parameters.Parameters()
 
-pars.cvc_file = '../Data/2019/20190902-182840-CATs_OB_1.cvc'
-pars.csv_file = '../Data/2019/20190902-182840-CATs_OB_1_001.csv'
+#pars.cvc_file = '../Data/2019/20190902-182840-CATs_OB_1.cvc'
+#pars.csv_file = '../Data/2019/20190902-182840-CATs_OB_1_001.csv'
+
+# parameters for 20200830-180909-Gikumi_CC_136
+pars.cvc_file = '../Data/2020/20200830-180909-Gikumi_CC_136/20200830-180909-Gikumi_CC_136.cvc'
+pars.csv_file = '../Data/2020/20200830-180909-Gikumi_CC_136/20200830-180909-Gikumi_CC_136.csv'
+pars.stime = '2020-08-30 10:50:00'
+pars.etime = '2020-08-30 16:00:00'
+pars.drop_times = []
 
 pars.features = [{'dive_duration':{'corr':False,'f':'gamma'}},
                  {'Ahat_low':{'thresh':5,'corr':False,'f':'gamma'},
                   'Ax':{'corr':True,'f':'normal'},
                   'Ay':{'corr':True,'f':'normal'},
                   'Az':{'corr':True,'f':'normal'}}]
-pars.K = [2,3]
+
+pars.K = [3,3]
 pars.share_fine_states = True
 
 if model == 'CarHMM':
@@ -83,19 +91,21 @@ data = prep.get_all_features(df,dive_df)
 # train_model
 print('training model')
 hhmm = HHMM.HHMM(pars,data)
-hhmm.train_DM(data,max_iters=25,max_steps=25,max_time=90)
+hhmm.train_DM(data,max_iters=25,max_steps=25,max_time=48)
+hhmm.save(HHMM_file)
 
 # get SEs
 h = 0.01
 print('finding standard errors')
 hhmm.get_SEs(data,h)
+hhmm.save(HHMM_file)
 
 # label data
-print('labelling df')
-data,df = hhmm.label_df(data,df)
+#print('labelling df')
+#data,df = hhmm.label_df(data,df)
 
 # save everything
-hhmm.data = None
-hhmm.save(HHMM_file)
+#hhmm.data = None
+#hhmm.save(HHMM_file)
 #with open(data_outfile, 'wb') as f:
 #    pickle.dump(data, f)
