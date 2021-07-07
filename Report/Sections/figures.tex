@@ -4,7 +4,7 @@
 
 \begin{table}[ht]
 \centering
-\caption{Estimates with standard errors for the parameters of the distributions of dive duration $\left(Y_t\right)$, acceleration $\left(\Zone_{t,\tilde t^*}\right)$, and wiggliness $\left(\Ztwo_{t,\tilde t^*}\right)$ of the killer whale kinematic data using the full CarHHMM-DFT. The parentheses refer to standard errors estimated using the observed information matrix.}
+\caption{Estimates with standard errors for the parameters of the distributions of dive duration $(Y_t)$, acceleration $(\Zone_{t,\tilde t^*})$, and wiggliness $(\Ztwo_{t,\tilde t^*})$ of the killer whale kinematic data using the full CarHHMM-DFT. The parentheses refer to standard errors estimated using the observed information matrix.}
 \scalebox{0.85}{
     \begin{tabular}{ccccc}
         \multirow{2}{*}{Feature}                                                       & \multirow{2}{*}{Dive / Subdive Type} & \multicolumn{3}{c}{Parameter Estimate}        \\
@@ -73,38 +73,34 @@ Model                       & \multicolumn{1}{c}{Train Time (m)} & \multicolumn{
 \begin{figure}[ht]
     \begin{subfigure}{\textwidth}
       \centering
-      \includegraphics[width=2.75in]{../Plots/HMM.png}  
-      \caption{Hidden Markov Model (\textbf{HMM})}
+      \includegraphics[width=3.5in]{../Plots/HMM.png}  
       \label{fig:HMM}
     \end{subfigure}
     %
-    \newline
+    \hrule
     %
     \begin{subfigure}{\textwidth}
       \centering
-      \includegraphics[width=2.75in]{../Plots/CarHMM.png}  
-      \caption{Conditionally Autoregressive HMM (\textbf{CarHMM})}
+      \includegraphics[width=3.5in]{../Plots/CarHMM.png}  
       \label{fig:CarHMM}
     \end{subfigure}
     %
-    \newline
+    \hrule
     %
     \begin{subfigure}{\textwidth}
       \centering
-      \includegraphics[width=3in]{../Plots/HHMM.png}  
-      \caption{Hierarchical HMM (\textbf{HHMM}) with traditional HMMs as the coarse- and fine-scale models}
+      \includegraphics[width=3.75in]{../Plots/HHMM.png}  
       \label{fig:HHMM}
     \end{subfigure}
     %
-    \newline
+    \hrule
     %
     \begin{subfigure}{\textwidth}
       \centering
-      \includegraphics[width=2.75in]{../Plots/HMM-DFT.png}  
-      \caption{Fine-scale HMM with Discrete Fourier Transform (\textbf{HMM-DFT}) for curve $t$ (coarse-scale process omitted)}
+      \includegraphics[width=3.5in]{../Plots/HMM-DFT.png}  
       \label{fig:HMM-DFT}
     \end{subfigure}
-    \caption{Dependence structures of a standard HMM (a) and three HMM variants (b, c, and d). Hidden state sequences are denoted as $X$ on the coarse-scale and $X^*$ on the fine scale. Observations are denoted as $Y$ on the coarse scale and $Y^*$ on the fine scale. The fine-scale observations of the HMM-DFT are transformed using a moving window and denoted as $\Z$ with corresponding hidden states $\tilde X^*$.}
+    \caption{Dependence structure of a standard HMM (top), CarHMM (middle-top), HHMM (middle-bottom), and HMM-DFT (bottom). Hidden state sequences are denoted as $X$ on the coarse-scale and $X^*$ on the fine scale. Observations are denoted as $Y$ on the coarse scale and $Y^*$ on the fine scale. The coarse-scale process is not included in the HMM-DFT because moving window transformations often only apply to fine-scale data. The fine-scale observations of the HMM-DFT are transformed using a moving window and denoted as $\Z$ with corresponding fine-scale hidden states $\tilde X^*$.}
     \label{fig:models}
 \end{figure}
 
@@ -129,26 +125,21 @@ Model                       & \multicolumn{1}{c}{Train Time (m)} & \multicolumn{
 \begin{figure}[ht]
     \begin{subfigure}{\textwidth}
     	\centering
-    	\includegraphics[width=3in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2-coarse-emissions.png}
-    	\caption{Estimated Gamma densities of killer whale dive duration ($Y_t$) corresponding to dive types $X_t = 1$ and $X_t = 2$.}
-    	\label{fig:coarse_emis}
+    	\includegraphics[width=3.25in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2-coarse-emissions.png}
     \end{subfigure}
     \newline
     \begin{subfigure}{\textwidth}
     	\centering
-    	\includegraphics[width=3in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2-fine-emissions.png}
-    	\caption{Estimated Normal conditional densities %of the three components 
-    	of killer whale acceleration $\big(\Zone_{t,\tilde t^*}\big|\Zone_{t,\tilde t^*-1} = \mu_A^{*(\cdot,i^*)}\big)$ plotted on a linear scale and estimated Gamma probability density of wiggliness $\big(\Ztwo_{t,\tilde t^*}\big)$ plotted on a log-log scale. These density functions correspond to subdive behaviours $\tilde{X}^*_{t,t^*} = 1,2,3$, and are identical across dive types $X_t = 1$ and $X_t = 2$. Acceleration density functions are conditioned on $\Zone_{t,\tilde t^*-1} = \mu_A^{*(\cdot,i^*)}$ since the mean of $\Zone_{t,\tilde t^*}$ depends on $\Zone_{t,\tilde t^*-1}$.}
-    	\label{fig:fine_emis}
+    	\includegraphics[width=3.25in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2-fine-emissions.png}
     \end{subfigure}
-    \caption{Estimated probability density functions of coarse- and fine-scale emissions corresponding to observations of killer whale behaviour. Densities are estimated by fitting the CarHHMM-DFT to the case study data (see Table \ref{table:emis_dists_CarHHMM-DFT}).}
+    \caption{Estimated Gamma densities of killer whale dive duration ($Y_t$) (top), estimated Normal conditional densities of killer whale acceleration $(\Zone_{t,\tilde t^*}\big|\Zone_{t,\tilde t^*-1} = \mu_A^{*(\cdot,i^*)})$ (middle and bottom left), and estimated Gamma densities of wiggliness $(\Ztwo_{t,\tilde t^*})$ plotted on a log-log scale (bottom right). Densities of $Y_t$ correspond to dive types 1 and 2, while densities of $\Zone_{t,\tilde t^*}$ and $\Ztwo_{t,\tilde t^*}$ correspond to subdive states 1, 2, and 3. Densities are estimated by fitting the CarHHMM-DFT to the case study data (see Table \ref{table:emis_dists_CarHHMM-DFT}).}
     \label{fig:emis}
 \end{figure}
 
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=4.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_decoded_dives.png}
-	\caption{The $x$--component of acceleration $\left(y^*_{t,t^*}\right)_x$ (top two panels) and dive depth (bottom two panels) of a northern resident killer whale for a sequence of six selected dives. Each panel is partitioned into dives by vertical black lines. The curve colours in the first and third panels correspond to the estimated dive types while the curve colours of the second and fourth panels correspond the estimated subdive states. Both the dive types and subdive states are estimated by fitting the CarHHMM-DFT to the data and performing the forward-backward algorithm to determine the hidden state with the highest probability.}
+	\caption{The $x$- component of acceleration $(y^*_{t,t^*})_x$ (top two panels) and dive depth (bottom two panels) of a northern resident killer whale for a sequence of six selected dives. Each panel is partitioned into dives by vertical black lines. The curve colours in the first and third panels correspond to the estimated dive types while the curve colours of the second and fourth panels correspond the estimated subdive states. Both the dive types and subdive states are estimated by fitting the CarHHMM-DFT to the data and performing the forward-backward algorithm to determine the hidden state with the highest probability.}
 	\label{fig:labeled_dives}
 \end{figure}
 
@@ -165,7 +156,9 @@ Model                       & \multicolumn{1}{c}{Train Time (m)} & \multicolumn{
     	\caption{Empirical distribution of $Y_t$}
     	\label{fig:empirical_dist}
     \end{subfigure}
-    \caption{Pseudoresiduals of wiggliness $\left(\Phi^{-1} \left(\Pr(\Ztwo_{t,\tilde t^*} < \ztwo_{t,\tilde t^*}\big|Y,\tilde Y^* / \{\Ztwo_{t,\tilde t^*}\}) \right), \enspace \text{left} \right)$ plotted over a standard normal density as well as a weighted empirical distribution of dive duration ($Y_t$, right) plotted over the corresponding fitted Gamma distributions. Both plots are generated by fitting the CarHHMM-DFT to the killer whale case study data and performing the forward-backward algorithm.}
+    \caption{Pseudoresiduals of wiggliness 
+    %$\left(\Phi^{-1} \left(\Pr(\Ztwo_{t,\tilde t^*} < \ztwo_{t,\tilde t^*}\big|Y,\tilde Y^* / \{\Ztwo_{t,\tilde t^*}\}) \right), \enspace \text{left} \right)$
+    plotted over a standard normal density as well as a weighted empirical distribution of dive duration ($Y_t$, right) plotted over the corresponding fitted Gamma distributions. Both plots are generated by fitting the CarHHMM-DFT to the killer whale case study data and performing the forward-backward algorithm.}
     \label{fig:model_checking}
 \end{figure}
 
