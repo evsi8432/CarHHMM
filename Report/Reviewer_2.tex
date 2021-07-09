@@ -42,7 +42,7 @@ We appreciate the kind words and are glad that the reviewer has enjoyed the pape
 
     \textit{de Souza, C. P. E. and Heckman, N. E. (2014) ``Switching nonparametric regression models", Journal of Nonparametric Statistics}
     
-    We thank the reviewer for the references and have added them to page 5, lines 92-96.
+    We thank the reviewer for the references and have added them to page 5, lines 92-95.
     
     \item \textit{Section 2, end of page 6: the authors start the description of their model by presenting this idea of coarse-scale versus fine-scale, but I missed a connection between these and what was said in the introduction regarding the problem of analyzing biologging data. It would be great if the authors could make this connection clear. There is something written later in Section 2.4, maybe some of that can be said earlier.}
     
@@ -50,23 +50,23 @@ We appreciate the kind words and are glad that the reviewer has enjoyed the pape
     
     \item \textit{Section 2, end of page 6: is there a special reason for denoting the number of curves by $T$? I find it less confusing to use, for example, $N$ or $M$ for that purpose so that each curve can be denoted by $i$ or $j$ because $t$ reminds me of evaluation time points which later you denote by $t^*$.}
     
-    It is confusing that the number of curves is denoted by $T$, which usually indicates time points. However, the curves are assumed to be sequential in time, and there is a connection between the coarse scale index $t$ and the fine-scale index $t^*$. We have added a sentence on page 7, lines 137-138 to clarify that these curves are sequential but not necessarily equi-spaced in time. In addition, there is some precedence for indexing sequential curves with $t$. See ``Cam\'er-Karhunen-Lo\`eve representation and harmonic principal component analysis of functional time series" (2013) by Panaretos and Tavakoli and ``Dynamic functional principal components" by Hormann and Kidinski (2014) for examples.
+    It is confusing that the number of curves is denoted by $T$, which usually indicates time points. However, the curves are assumed to be sequential in time, and there is a connection between the coarse scale index $t$ and the fine-scale index $t^*$. We have added a sentence on page 7, lines 138-140 to clarify that these curves are sequential but not necessarily equi-spaced in time. In addition, there is some precedence for indexing sequential curves with $t$. See ``Cam\'er-Karhunen-Lo\`eve representation and harmonic principal component analysis of functional time series" (2013) by Panaretos and Tavakoli and ``Dynamic functional principal components" by Hormann and Kidinski (2014) for examples.
     
     \item \textit{In Section 2.1, page 7 around line 50: it is important to explicitly say that a time-homogeneous chain is being considered, that is, transition probabilities do not depend on time.}
     
-    We agree and have added a sentence to clarify this on page 8, lines 151-152. Thank you for noting the omission.
+    We agree and have added a sentence to clarify this on page 8, lines 153-154. Thank you for noting the omission.
     
     \item \textit{Page 8 around line 25: when presenting the likelihood $\mathcal{L}_{\text{HMM}}$, I would first present it and then mention the forward algorithm otherwise the reader may think that the equation has to do with the algorithm, but it is just the likelihood. Another thing is, I believe the algorithm is the backward-forward algorithm because it involves calculating both the so-called backward and forward quantities.}
     
-    We have edited page 9, lines 171-176 to clarify the difference between the likelihood and the forward algorithm. We have also described the forward algorithm, which is used to evaluate the likelihood, as well as the forward-backward algorithm, which is used for state decoding and maximizing the likelihood via the Baum-Welch algorithm (Zucchini et al, 2016).
+    We have edited pages 9, lines 165-172 to clarify the difference between the likelihood and the forward algorithm. We have also described the forward algorithm, which is used to evaluate the likelihood, as well as the forward-backward algorithm, which is used for state decoding and maximizing the likelihood via the Baum-Welch algorithm (Zucchini et al, 2016).
     
     \item \textit{Could the author clarify how the maximum likelihood estimation is conducted? Is it via direct maximization of the likelihood using numerical methods or via the EM algorithm? I missed a section or paragraph describing exactly how inference is conducted. }
     
-    We personally maximized the likelihood directly. For each model, we ran 100 direct maximization routines using random initializations using the Nelder-Mead method of the optimize package of SciPy. In particular, we optimized one row at a time of the probability transition matrices and one set of parameters associated with a (feature, hidden state) pair at a time. We found that most, but not all, of the optimization routines converged to similar parameter estimates. We have added an explanation of our optimization routine on page 26, lines 491-500. Thank you for calling attention to this omission.
+    We personally maximized the likelihood directly. For each model, we ran 100 direct maximization routines using random initializations using the Nelder-Mead method of the optimize package of SciPy. In particular, we optimized one row at a time of the probability transition matrices and one set of parameters associated with a (feature, hidden state) pair at a time. We found that most, but not all, of the optimization routines converged to similar parameter estimates. We have added an explanation of our optimization routine on page 26, lines 491-500. Thank you for prompting us to correct this omission.
     
     \item \textit{de Souza, C. P. E. et al. (2017) also consider the case where the distribution of the hidden states depends on some covariates such as weather conditions. In this case, for biologging data, would it be useful or would it make sense to potentially have transition probabilities depending on covariates via the same, logit link, representation that the authors already used.}
     
-    This is a very useful and common practice in the ecology literature. While it is beyond the scope of our case study, we have added a brief discussion of covariates on page 10, lines 182-185.
+    This is a very useful and common practice in the ecology literature. While it is beyond the scope of our case study, we have added a brief discussion of covariates on page 10, lines 183-186.
     
 \end{enumerate}
 
