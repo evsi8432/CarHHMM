@@ -1,0 +1,75 @@
+\documentclass{article}
+
+\usepackage{latexsym}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{psfrag}
+\usepackage{graphicx}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{url}
+\usepackage{float}
+\usepackage[margin=1in]{geometry}
+\input{header}
+\input{defs}
+
+\begin{document}
+\title{Modelling state-switching functional data with hidden Markov models: reviewer 2 response}
+\date{}
+\author{Blinded}
+
+\maketitle
+
+We sincerely thank the reviewers for their comments, and we believe that the paper is better today than it was prior to peer review. Before addressing the reviewer comments one-by-one, there are several changes to the paper that we would like to highlight.
+
+\begin{itemize}
+    \item To address the potential optimization issues raised by the reviewers, we have re-run the case with more random initializations. The numerical results have changed slightly, but the qualitative results remain the same.
+    \item Reviewer 1 commented that it would be better to see more than 2 hidden states in the simulation study. As such, we have re-run the simulation study with 3 fine-scale behavioural states instead of 2.
+    \item Reviewer 1 requested that we add the likelihood surface for the CarHHMM-DFT, and we have done so in the supplemental material. Additionally, the supplemental material has been broken into two: supplement A contains material related to the case study while supplement B contains material related to the simulation study. 
+    \item We have added line numbers for convenience. All page and line references refer to the current manuscript.
+\end{itemize}
+
+\section{Reviewer 2}
+
+\textit{The authors of CJS-21-0003 present a novel and promising approach based on Hidden Markov Models to analyze functional data with intricate dependence structures. I would like to congratulate the authors on the very well-written paper. Below are just a few comments I would like the authors to address.}
+
+We appreciate the kind words and are glad that the reviewer has enjoyed the paper.
+
+\begin{enumerate}
+    \item \textit{Introduction, page 5, around line 15. Before the work of Langrock et al. (2018), there has been the work of De Souza and Heckman (2014), which was the first paper proposing this new class of nonparametric regression models, called switching nonparametric regression models, allowing the hidden states to be independent or to follow a Markov structure. Later De Souza, Heckman, and Xu (2017) extended their approach to multiple curves allowing for different variance structures within each curve. Together with Langrock et. al. (2018), I believe these two references should be included as important examples of HMMs in nonparametric functional modelling:}
+    
+    \textit{de Souza, C. P. E., Heckman, N. E. and Xu, F., (2017) ``Switching nonparametric regression models for multi-curve data", The Canadian Journal of Statistics}
+
+    \textit{de Souza, C. P. E. and Heckman, N. E. (2014) ``Switching nonparametric regression models", Journal of Nonparametric Statistics}
+    
+    We thank the reviewer for the references and have added them to page 5, lines 92-96.
+    
+    \item \textit{Section 2, end of page 6: the authors start the description of their model by presenting this idea of coarse-scale versus fine-scale, but I missed a connection between these and what was said in the introduction regarding the problem of analyzing biologging data. It would be great if the authors could make this connection clear. There is something written later in Section 2.4, maybe some of that can be said earlier.}
+    
+    The introduction primarily uses the adjectives ``between-curve" and ``within-curve" to focus on FDA, while the subsequent sections switch to ``coarse-scale" and ``fine-scale" to be more general. The connection between these adjectives was not clear before, so we have added a sentence to page 2, lines 34-36 to introduce ``coarse-scale" vs ``fine-scale" earlier. We have also added a sentence to page 5, lines 80-82 to make the connection between coarse-scale / fine-scale and curve types / behavioural states.
+    
+    \item \textit{Section 2, end of page 6: is there a special reason for denoting the number of curves by $T$? I find it less confusing to use, for example, $N$ or $M$ for that purpose so that each curve can be denoted by $i$ or $j$ because $t$ reminds me of evaluation time points which later you denote by $t^*$.}
+    
+    It is confusing that the number of curves is denoted by $T$, which usually indicates time points. However, the curves are assumed to be sequential in time, and there is a connection between the coarse scale index $t$ and the fine-scale index $t^*$. We have added a sentence on page 7, lines 137-138 to clarify that these curves are sequential but not necessarily equi-spaced in time. In addition, there is some precedence for indexing sequential curves with $t$. See ``Cam\'er-Karhunen-Lo\`eve representation and harmonic principal component analysis of functional time series" (2013) by Panaretos and Tavakoli and ``Dynamic functional principal components" by Hormann and Kidinski (2014) for examples.
+    
+    \item \textit{In Section 2.1, page 7 around line 50: it is important to explicitly say that a time-homogeneous chain is being considered, that is, transition probabilities do not depend on time.}
+    
+    We agree and have added a sentence to clarify this on page 8, lines 151-152. Thank you for noting the omission.
+    
+    \item \textit{Page 8 around line 25: when presenting the likelihood $\mathcal{L}_{\text{HMM}}$, I would first present it and then mention the forward algorithm otherwise the reader may think that the equation has to do with the algorithm, but it is just the likelihood. Another thing is, I believe the algorithm is the backward-forward algorithm because it involves calculating both the so-called backward and forward quantities.}
+    
+    We have edited page 9, lines 171-176 to clarify the difference between the likelihood and the forward algorithm. We have also described the forward algorithm, which is used to evaluate the likelihood, as well as the forward-backward algorithm, which is used for state decoding and maximizing the likelihood via the Baum-Welch algorithm (Zucchini et al, 2016).
+    
+    \item \textit{Could the author clarify how the maximum likelihood estimation is conducted? Is it via direct maximization of the likelihood using numerical methods or via the EM algorithm? I missed a section or paragraph describing exactly how inference is conducted. }
+    
+    We personally maximized the likelihood directly. For each model, we ran 100 direct maximization routines using random initializations using the Nelder-Mead method of the optimize package of SciPy. In particular, we optimized one row at a time of the probability transition matrices and one set of parameters associated with a (feature, hidden state) pair at a time. We found that most, but not all, of the optimization routines converged to similar parameter estimates. We have added an explanation of our optimization routine on page 26, lines 491-500. Thank you for calling attention to this omission.
+    
+    \item \textit{de Souza, C. P. E. et al. (2017) also consider the case where the distribution of the hidden states depends on some covariates such as weather conditions. In this case, for biologging data, would it be useful or would it make sense to potentially have transition probabilities depending on covariates via the same, logit link, representation that the authors already used.}
+    
+    This is a very useful and common practice in the ecology literature. While it is beyond the scope of our case study, we have added a brief discussion of covariates on page 10, lines 182-185.
+    
+\end{enumerate}
+
+We are grateful for the kind words and recommendations from reviewer 2. Their suggestions have been incorporated, and the paper is more complete as a result.
+
+\end{document}

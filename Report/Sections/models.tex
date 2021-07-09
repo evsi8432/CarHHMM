@@ -1,6 +1,6 @@
 %\section{Models and parameter estimation}
 
-Consider a sequence of $T$ curves, where curve $t$ is characterized by a curve-level (or coarse-scale) observation $Y_t$ as well as a sequence of $T^*_t$ within-curve (or fine-scale) observations $Y^*_{t}$. Namely, $Y^*_{t} \equiv \big\{Y^*_{t,1},\ldots,Y^*_{t,T^*_t}\big\}$ is made up of fine-scale quantities derived from curve $t$ and indexed by $t^*$. Both $Y_t$ and $Y^*_{t,t^*}$ can be either vectors or scalars. We call the sequence of coarse-scale observations $Y \equiv \big\{Y_1, \ldots, Y_T\big\}$ and the collection of all fine-scale observations $Y^* \equiv \big\{Y^*_1,\ldots,Y^*_T \big\}$. We assume that the curves $Y_1,\ldots,Y_T$ are indexed according to the temporal order in which they are observed, but the $T$ observations need not be equally spaced in time. To develop our model for this data, we detail the structure of a traditional HMM followed by three variations which generalize its base structure. We then show how each of these generalized HMMs can be synthesized to form a wide variety of more complicated models.
+Consider a sequence of $T$ curves, where curve $t$ is characterized by a curve-level (or coarse-scale) observation $Y_t$ as well as a sequence of $T^*_t$ within-curve (or fine-scale) observations $Y^*_{t}$. Namely, $Y^*_{t} \equiv \big\{Y^*_{t,1},\ldots,Y^*_{t,T^*_t}\big\}$ is made up of fine-scale quantities derived from curve $t$ and indexed by $t^*$. Both $Y_t$ and $Y^*_{t,t^*}$ can be either vectors or scalars. We call the sequence of coarse-scale observations $Y \equiv \big\{Y_1, \ldots, Y_T\big\}$ and the collection of all fine-scale observations $Y^* \equiv \big\{Y^*_1,\ldots,Y^*_T \big\}$. We assume that the curves $Y_1,\ldots,Y_T$ are indexed according to the order in which they are observed in time, but the $T$ observations need not be equally spaced apart. To develop our model for this data, we detail the structure of a traditional HMM followed by three variations which generalize its base structure. We then show how each of these generalized HMMs can be synthesized to form a wide variety of more complicated models.
 
 \subsection{HMMs as a base structure}
 \label{subsec:HMM}
@@ -25,7 +25,7 @@ The joint likelihood of both the parameters and the hidden states is given by th
     \label{eqn:like}
 \end{equation}
 %
-but it is also computationally tractable to sum over all possible values of $x$ to obtain the following:
+but it is also tractable to sum over all possible values of $x$ to obtain the following:
 
 \begin{equation}
     \calL_{\text{HMM}}(\theta,\Gamma;y) = \delta P(y_1;\theta) \prod_{t=2}^T \Gamma P(y_t;\theta) \mathbf{1}_N,
@@ -139,7 +139,7 @@ After performing this transformation, the entire model must be redefined since t
 
 The likelihood of this model is identical to that of the original HMM or CarHMM as defined in Sections \ref{subsec:HMM} and \ref{subsec:CarHMM}, but $Y^*$ is replaced with $\Z$ and $X^*$ is replaced with $\tilde{X^*}$. To clearly differentiate models, we refer to an HMM with $\Z$ as observations and $\tilde{X^*}$ as hidden states as an HMM-DFT. Figure \ref{fig:models} displays the dependence structure of a fine-scale HMM-DFT.
 
-It is important to note that replacing $Y^*_t$ with summary statistics results in a loss of information since it involves substituting infinite-dimensional curves with a finite-dimensional representation. Readers interested in summary statistics that prediction error for sequential functional data can read \citet{Aue:2015} and \citet{Gao:2019}, who both use functional principle component analysis (FPCA) and derive bounds on the error caused by dimension reduction. While these papers do not account for state-switching behaviour between curves or windows, deriving similar error bounds for FPCA within an HMM framework appears to be a promising direction for future research. 
+Replacing $Y^*_t$ with summary statistics results in a loss of information since it involves substituting infinite-dimensional curves with a finite-dimensional representation. While we are primarily interested in classifying and describing coarse- and fine-scale behaviour, some researchers may be less interested in interpretability and more interested in predicting future functional data. To this end, \citet{Aue:2015} and \citet{Gao:2019} both use functional principle component analysis (FPCA) and derive bounds on the error caused by dimension reduction. While these papers do not account for state-switching behaviour between curves or windows, deriving similar error bounds for FPCA within an HMM framework appears to be a promising direction for future research. 
 
 \subsection{Generalized hierarchical Markov models}
 
