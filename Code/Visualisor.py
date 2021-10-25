@@ -94,23 +94,23 @@ class Visualisor:
             positions = np.vstack([Xtemp.ravel(), Ytemp.ravel()])
             Ztemp = np.reshape(kernel.pdf(positions).T, Xtemp.shape)
 
-            np.set_printoptions(suppress=True,precision=4)
+            #np.set_printoptions(suppress=True,precision=4)
             im = plt.imshow(np.rot90(Ztemp),extent = xlim + ylim)
-            plt.xlabel(xlabs[i],fontsize=12)
-            plt.ylabel(ylabs[i],fontsize=12)
-            plt.xticks(fontsize=10)
-            plt.yticks(fontsize=10)
-            plt.gca().ticklabel_format(style='sci',scilimits = (-3,3))
+            plt.xlabel(xlabs[i],fontsize=10)
+            plt.ylabel(ylabs[i],fontsize=10)
+            plt.xticks(fontsize=8)
+            plt.yticks(fontsize=8)
+            plt.gca().ticklabel_format(style='sci',scilimits = (-10,10),useMathText=True)
             plt.gca().yaxis.get_offset_text().set_fontsize(10)
             plt.gca().xaxis.get_offset_text().set_fontsize(10)
             divider = make_axes_locatable(plt.gca())
             cax = divider.append_axes("right", size="5%", pad=0.05)
             c = fig.colorbar(im,cax=cax)#im, orientation='horizontal',pad=0.125)
-            c.ax.tick_params(labelsize=10)
-            c.ax.ticklabel_format(style='sci',scilimits = (-3,3))
+            c.ax.tick_params(labelsize=8)
+            c.ax.ticklabel_format(style='sci',scilimits = (-10,10))
             c.ax.yaxis.get_offset_text().set_fontsize(10)
             if i%2 == 1 or i==4:
-                c.set_label('Density',fontsize = 10)
+                c.set_label('Density',fontsize = 8)
 
             fig_num += 1
 
@@ -162,7 +162,7 @@ class Visualisor:
                 dist = self.pars.features[0][feature]['f']
                 K = self.pars.K[0]
                 colors = [cm.get_cmap('tab10')(i) for i in range(K)]
-                legend = ['Dive Type %d'%(x+1) for x in range(K)]
+                legend = ['Dive type %d'%(x+1) for x in range(K)]
             else:
                 mu = self.hhmm.theta[1][0][feature]['mu']
                 sig = self.hhmm.theta[1][0][feature]['sig']
@@ -187,13 +187,13 @@ class Visualisor:
                 else:
                     raise('distribution %s not recognized' % dist)
                 ax[row_num,col_num].plot(x,y,color=colors[state])
-                if col_num == 0:
-                    ax[row_num,col_num].set_ylabel('Density',fontsize=12)
+                #if col_num == 0:
+                ax[row_num,col_num].set_ylabel('Density',fontsize=12)
                 if level == 0:
                     title = 'Emission Distributions, Dive Duration'
                     ax[row_num,col_num].set_xlabel('$Y_t$ $(s)$')
                     #ax[row_num,col_num].set_title(title,fontsize=12)
-                    plt.legend(['Dive Type 1','Dive Type 2'],fontsize=10)
+                    plt.legend(['Dive type 1','Dive type 2'],fontsize=10)
                 else:
                     titles = [r'$\left(\tilde A^*_{t,\tilde t^*}\right)_x$ $(m/s^2)$',
                               r'$\left(\tilde A^*_{t,\tilde t^*}\right)_y$ $(m/s^2)$',
@@ -207,11 +207,11 @@ class Visualisor:
                         ax[row_num,col_num].set_ylim([10e-8,10e-1])
                         ax[row_num,col_num].set_xlim([10e-1,10e4])
 
-                    legend_elements = [Line2D([0], [0], marker='o', color='w', label='Subdive 1',
+                    legend_elements = [Line2D([0], [0], marker='o', color='w', label='Subdive state 1',
                                            markerfacecolor=colors[0], markersize=8),
-                                       Line2D([0], [0], marker='o', color='w', label='Subdive 2',
+                                       Line2D([0], [0], marker='o', color='w', label='Subdive state 2',
                                            markerfacecolor=colors[1], markersize=8),
-                                       Line2D([0], [0], marker='o', color='w', label='Subdive 3',
+                                       Line2D([0], [0], marker='o', color='w', label='Subdive state 3',
                                            markerfacecolor=colors[2], markersize=8)]
 
                     fig.legend(handles=legend_elements,
@@ -239,7 +239,7 @@ class Visualisor:
             print('No trained model')
             return
 
-        print('Probability transistion matrix for dive types:')
+        print('Probability transistion matrix for Dive types:')
 
         ptm = np.exp(self.hhmm.eta[0])
         ptm = (ptm.T/np.sum(ptm,1)).T
@@ -324,7 +324,7 @@ class Visualisor:
 
                 plt.subplot(nrows,1,fignum)
                 colors = [cm.get_cmap('tab10')(i) for i in range(self.pars.K[0])]
-                legend = ['Dive Type %d' % (i+1) for i in range(self.pars.K[0])]
+                legend = ['Dive type %d' % (i+1) for i in range(self.pars.K[0])]
                 for state,dive_df in enumerate(dives):
                     plt.plot(dive_df['sec_from_start']/60,dive_df[col],
                              '.',color=colors[state],markersize=4)
@@ -346,11 +346,11 @@ class Visualisor:
                     plt.gca().invert_yaxis()
 
                 # plot vlines
-                #for dive_num in range(sdive+1,edive+1):
-                    #vline = min(dive[dive['dive_num'] == dive_num]['sec_from_start']/60)
-                    #plt.axvline(vline,color='k',linewidth=2)
-                if col == 'Ax':
-                    plt.ylim([-2,2])
+                for dive_num in range(sdive+1,edive+1):
+                    vline = min(dive[dive['dive_num'] == dive_num]['sec_from_start']/60)
+                    plt.axvline(vline,color='k',linewidth=2)
+                #if col == 'Ax':
+                #plt.ylim([-2,2])
                 fignum += 1#2
 
             # subdive-level coloring
@@ -372,7 +372,7 @@ class Visualisor:
                 plt.yticks(fontsize=10)
                 plt.ylabel(ylabs[i],fontsize=10)
                 if col == df_cols[-1]:
-                    plt.xlabel('Time (mins)',fontsize=10)
+                    plt.xlabel('Time $(min)$',fontsize=10)
                     plt.xticks(fontsize=10)
                 else:
                     plt.xticks([])
@@ -382,11 +382,11 @@ class Visualisor:
                     plt.gca().invert_yaxis()
 
                 # plot vlines
-                #for dive_num in range(sdive+1,edive+1):
-                    #vline = min(dive[dive['dive_num'] == dive_num]['sec_from_start']/60)
-                    #plt.axvline(vline,color='k',linewidth=2)
-                if col == 'Ax':
-                    plt.ylim([-2,2])
+                for dive_num in range(sdive+1,edive+1):
+                    vline = min(dive[dive['dive_num'] == dive_num]['sec_from_start']/60)
+                    plt.axvline(vline,color='k',linewidth=2)
+                # if col == 'Ax':
+                #     plt.ylim([-2,2])
                 fignum += 1#-1
 
         t_start = dive['time'].min()
@@ -400,7 +400,7 @@ class Visualisor:
                 # dive-level columns - color by dive type only
                 plt.subplot(nrows,1,fignum)
                 colors = [cm.get_cmap('tab10')(i) for i in range(self.pars.K[0])]
-                legend = ['Dive Type %d' % (i+1) for i in range(self.pars.K[0])]
+                legend = ['Dive type %d' % (i+1) for i in range(self.pars.K[0])]
 
                 times = [[]] * self.pars.K[0]
                 features = [[]] * self.pars.K[0]
@@ -432,7 +432,7 @@ class Visualisor:
                 # subdive-level columns - color by dive type
                 plt.subplot(nrows,1,fignum)
                 colors = [cm.get_cmap('tab10')(i) for i in range(self.pars.K[0])]
-                legend = ['Dive Type %d' % (i+1) for i in range(self.pars.K[0])]
+                legend = ['Dive type %d' % (i+1) for i in range(self.pars.K[0])]
 
                 times = [ [] for _ in range(self.pars.K[0]) ]
                 features = [ [] for _ in range(self.pars.K[0]) ]
@@ -496,18 +496,18 @@ class Visualisor:
                     #plt.axvline(vline,color='k',linewidth=2)
                 fignum += 1
 
-        legend_elements = [Line2D([0], [0], marker='o', color='w', label='Subdive 1',
+        legend_elements = [Line2D([0], [0], marker='o', color='w', label='Subdive state 1',
                                   markerfacecolor=cm.get_cmap('viridis')(0.0), markersize=8),
-                           Line2D([0], [0], marker='o', color='w', label='Subive 2',
-                                  markerfacecolor=cm.get_cmap('viridis')(0.5), markersize=8),
-                           Line2D([0], [0], marker='o', color='w', label='Subdive 3',
-                                  markerfacecolor=cm.get_cmap('viridis')(1.0), markersize=8),
-                           Line2D([0], [0], marker='o', color='w', label='Dive 1',
+                           Line2D([0], [0], marker='o', color='w', label='Dive type 1',
                                   markerfacecolor=cm.get_cmap('tab10')(0), markersize=8),
-                           Line2D([0], [0], marker='o', color='w', label='Dive 2',
-                                  markerfacecolor=cm.get_cmap('tab10')(1), markersize=8)]
+                           Line2D([0], [0], marker='o', color='w', label='Subdive state 2',
+                                  markerfacecolor=cm.get_cmap('viridis')(0.5), markersize=8),
+                           Line2D([0], [0], marker='o', color='w', label='Dive type 2',
+                                  markerfacecolor=cm.get_cmap('tab10')(1), markersize=8),
+                           Line2D([0], [0], marker='o', color='w', label='Subdive state 3',
+                                  markerfacecolor=cm.get_cmap('viridis')(1.0), markersize=8)]
         plt.subplot(nrows,1,1)
-        plt.gca().legend(handles=legend_elements,prop={'size': 8}, ncol=5, mode="expand", borderaxespad=0.,
+        plt.gca().legend(handles=legend_elements,prop={'size': 8}, ncol=3, mode="expand", borderaxespad=0.,
                          bbox_to_anchor=(0., 1.1, 1.0, .102), loc='lower left')
         plt.subplots_adjust(wspace=0, hspace=0.1)
 
