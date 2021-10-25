@@ -3,17 +3,17 @@
 
 \setcounter{equation}{6}   %  set this to the last equation number used
 
-We easily simulate realizations of the coarse-scale HMM ($X$ and $Y$) given the parameters $\Gamma$ and $\theta$. For each dive $t$, we also easily generate the fine-scale hidden Markov chain $\tilde X^*_t \equiv \big\{\tilde X^*_{t,1},\ldots,\tilde X^*_{t,\tilde T_t^*}\big\}$ according to one of the probability transition matrices $\Gamma^{*(1)}$ or $\Gamma^{*(2)}$, depending upon the value of $X_t$. This determines the sequence of fine-scale hidden states corresponding to each window. Recall that the fine-scale model is based on a sequence of $\tilde T_t^*$ two-second windows, each containing 100 observations, and our model is formulated in terms of quantities derived from the raw data within each window (namely, the average acceleration, $\Zone_{t,\tilde t^*}$, and wiggliness, $\Ztwo_{ t,\tilde t^*}$). Generating the raw acceleration data from $\Zone_{t,\tilde t^*}$ and $\Ztwo_{ t,\tilde t^*}$ is not straightforward. In our simulation study, we generate raw acceleration data so that we can visualize our results in terms of the underlying data curves for each dive. Here, we explain how we generate the acceleration curves so that $\Zone_{t,\tilde t^*}$ and $\Ztwo_{ t,\tilde t^*}$ both follow the specified model. A key component is the discrete Fourier transformation of the 100 raw acceleration values in window $\tilde{t}^*$ of dive $t$:
+We easily simulate realizations of the coarse-scale HMM ($X$ and $Y$) given the parameters $\Gamma$ and $\theta$. For each dive $t$, we also easily generate the fine-scale hidden Markov chain $\tilde X^*_t = \big\{\tilde X^*_{t,1},\ldots,\tilde X^*_{t,\tilde T_t^*}\big\}$ according to one of the probability transition matrices $\Gamma^{*(1)}$ or $\Gamma^{*(2)}$, depending upon the value of $X_t$. This determines the sequence of fine-scale hidden states corresponding to each window. Recall that the fine-scale model is based on a sequence of $\tilde T_t^*$ two-second windows, each containing 100 observations, and our model is formulated in terms of quantities derived from the raw data within each window (namely, the average acceleration, $\Zone_{t,\tilde t^*}$, and wiggliness, $\Ztwo_{ t,\tilde t^*}$). Generating the raw acceleration data from $\Zone_{t,\tilde t^*}$ and $\Ztwo_{ t,\tilde t^*}$ is not straightforward. In our simulation study, we generate raw acceleration data so that we can visualize our results in terms of the underlying data curves for each dive. Here, we explain how we generate the acceleration curves so that $\Zone_{t,\tilde t^*}$ and $\Ztwo_{ t,\tilde t^*}$ both follow the specified model. A key component is the discrete Fourier transformation of the 100 raw acceleration values in window $\tilde{t}^*$ of dive $t$:
 
 \[
-    \hat{Y}^{*(k)}_{t,\tilde{t}^*}  \equiv DFT\left\{Y^*_{t,100 (\tilde{t}^*-1) + 1 },\ldots, Y^*_{t,100 \tilde{t}^*}\right\}(k)
+    \hat{Y}^{*(k)}_{t,\tilde{t}^*}  = DFT\left\{Y^*_{t,100 (\tilde{t}^*-1) + 1 },\ldots, Y^*_{t,100 \tilde{t}^*}\right\}(k)
 \]
 for $k \geq 0$, as defined in Equation (\ref{eq:DFTdef}).
 
 We simulate the raw acceleration data for dive $t$ in three steps: (1) simulate the average acceleration within each window $\left(\hat Y^{*(0)}_{t,\tilde t^*}\right)$, (2) simulate all other Fourier coefficients within each window $\left(\hat Y^{*(k)}_{t,\tilde t^*}, k = 1,\ldots,99\right)$, and (3) take the inverse discrete Fourier transform of $\hat{Y}^*_{t,\tilde t^*}$:
 
 \[
-    \{Y^*_{t,100(\tilde t^* - 1) + 1},\ldots,Y^*_{t,100\tilde t^*}\} \equiv IDFT\left\{\hat{Y}^{*(0)}_{t,\tilde t^*},
+    \{Y^*_{t,100(\tilde t^* - 1) + 1},\ldots,Y^*_{t,100\tilde t^*}\} = IDFT\left\{\hat{Y}^{*(0)}_{t,\tilde t^*},
     \ldots, \hat{Y}^{*(99)}_{t,\tilde t^*}\right\}
     {\rm{~for~}} \tilde t^* = 1,\ldots,\tilde T^*_t.
 \]
@@ -22,12 +22,12 @@ The details of steps (1) and (2) are described below.
 For step (1), we generate $\hat Y^{*(0)}_{t,1}, \ldots, \hat Y^{*(0)}_{t,\tilde T_t^*}$ as a CarHMM with underlying Markov state sequence $\tilde X^{*}_{t,1}, \ldots, \tilde X^{*}_{t,\tilde T_t^*}$ and random first emission. Specifically, we let
 
    \[
-    	\hat{Y}^{*(0)}_{t,1}|\tilde X^*_{t,1} = i^* ~~\sim~~ \mathcal{N} \left(100 \mu^{*(\cdot,i^*)}_A, \left(100\sigma_A^{*(\cdot,i^*)}\right)^2 \right)
+    	\hat{Y}^{*(0)}_{t,1}\mid\tilde X^*_{t,1} = i^* ~~\sim~~ \mathcal{N} \left(100 \mu^{*(\cdot,i^*)}_A, \left(100\sigma_A^{*(\cdot,i^*)}\right)^2 \right)
     	~~{\rm{and}}
    \]
    
     \begin{align}	
-       \hat{Y}^{*(0)}_{t,\tilde t^*}|\tilde X^*_{t,\tilde t^*} = i^*,\hat{Y}^{*(0)}_{t,\tilde t^*-1}
+       \hat{Y}^{*(0)}_{t,\tilde t^*}\mid\tilde X^*_{t,\tilde t^*} = i^*,\hat{Y}^{*(0)}_{t,\tilde t^*-1}
        &~~\sim ~~\mathcal{N} \left(\phi_A^{*(\cdot,i^*)} \hat{Y}^{*(0)}_{t,\tilde t^*-1} + 100(1-\phi_A^{*(\cdot,i^*)}) \mu^{*(\cdot,i^*)}_A, \left(100\sigma_A^{*(\cdot,i^*)}\right)^2 \right), \label{eqn:yhat_0} \\
         %
         &\tilde t^* = 2,\ldots, \tilde T^*_t
@@ -48,11 +48,11 @@ For step (1), we generate $\hat Y^{*(0)}_{t,1}, \ldots, \hat Y^{*(0)}_{t,\tilde 
    
     \begin{align}
     \begin{split}
-    	b^{(k)}_{t,\tilde t^*}|\tilde X^*_{t,\tilde t^*} = 1 &~~\sim~~ {\rm{Gamma}}(11.03/(k+1)^3, 15.54) \\
+    	b^{(k)}_{t,\tilde t^*}\mid\tilde X^*_{t,\tilde t^*} = 1 &~~\sim~~ {\rm{Gamma}}(11.03/(k+1)^3, 15.54) \\
     	%
-    	b^{(k)}_{t,\tilde t^*}|\tilde X^*_{t,\tilde t^*} = 2  &~~\sim ~~{\rm{Gamma}}(4.80/(k+1)^3, 515.38). \\ 
+    	b^{(k)}_{t,\tilde t^*}\mid\tilde X^*_{t,\tilde t^*} = 2  &~~\sim ~~{\rm{Gamma}}(4.80/(k+1)^3, 515.38). \\ 
     	%
-    	b^{(k)}_{t,\tilde t^*}|\tilde X^*_{t,\tilde t^*} = 3  &~~\sim ~~{\rm{Gamma}}(2.31/(k+1)^3, 20023.44). 
+    	b^{(k)}_{t,\tilde t^*}\mid\tilde X^*_{t,\tilde t^*} = 3  &~~\sim ~~{\rm{Gamma}}(2.31/(k+1)^3, 20023.44). 
     \end{split}
     \label{eqn:bdist}
     \end{align}
@@ -83,15 +83,15 @@ the wiggliness within window $\tilde t^*$ of dive $t$ is
 If $\tilde \omega < 50$, then $\Ztwo_{t,\tilde t^*}$ is the sum of independent Gamma-distributed random variables with identical scale parameters, so the distribution of $\Ztwo_{t,\tilde t^*}$ is also Gamma. Thus, by Equation (\ref{eqn:bdist}):
 
 \[
-    \Ztwo_{t,\tilde t^*}|\tilde X^*_{t,\tilde t^*} = 1  ~~ \sim ~~ {\rm{Gamma}}\left(\sum_{k=1}^{\tilde \omega} 11.03/(k+1)^3 , 15.54 \right),
+    \Ztwo_{t,\tilde t^*}\mid\tilde X^*_{t,\tilde t^*} = 1  ~~ \sim ~~ {\rm{Gamma}}\left(\sum_{k=1}^{\tilde \omega} 11.03/(k+1)^3 , 15.54 \right),
 \]
 %
 \[
-    \Ztwo_{t,\tilde t^*}|\tilde X^*_{t,\tilde t^*} = 2 ~~\sim~~ {\rm{Gamma}}\left(\sum_{k=1}^{\tilde \omega} 4.80/(k+1)^3 , 515.38 \right), \text{and}
+    \Ztwo_{t,\tilde t^*}\mid\tilde X^*_{t,\tilde t^*} = 2 ~~\sim~~ {\rm{Gamma}}\left(\sum_{k=1}^{\tilde \omega} 4.80/(k+1)^3 , 515.38 \right), \text{and}
 \]
 %
 \[
-    \Ztwo_{t,\tilde t^*}|\tilde X^*_{t,\tilde t^*} = 3  ~~ \sim ~~ {\rm{Gamma}}\left(\sum_{k=1}^{\tilde \omega} 2.31/(k+1)^3 , 20023.44 \right).
+    \Ztwo_{t,\tilde t^*}\mid\tilde X^*_{t,\tilde t^*} = 3  ~~ \sim ~~ {\rm{Gamma}}\left(\sum_{k=1}^{\tilde \omega} 2.31/(k+1)^3 , 20023.44 \right).
 \]
 Setting $\tilde \omega$ to 10 and carrying out simple calculation of the mean and variance of a Gamma distribution gives the proper values for $\mu_W^{*(\cdot,i^*)}$ and $\sigma_W^{*(\cdot,i^*)}$.
 
@@ -112,11 +112,11 @@ P(y_t,\z_t;\theta,\theta^*,\Gamma^*)  = \text{diag}\Big[&f^{(1)}(y_t;\theta^{(1)
 %
 where $f^{(i)}(y_t;\theta^{(i)})$ is the emission distribution of dive duration given that $X_t = i$. The likelihood $\calL_{\text{fine}}$ corresponds to the fine-scale model and is equal to the following:
 
-\[\calL_{\text{fine}}\left(\theta^{*},\Gamma^{*(i)};\z_t\right) = \delta^{*(i)} \prod_{\tilde t^* = 2}^{\tilde T^*_t} \Gamma^{*(i)} P(\z_{t,\tilde t^*}|\z_{t,\tilde t^*-1};\theta^*) \mathbf{1}_{N^*},\]
+\[\calL_{\text{fine}}\left(\theta^{*},\Gamma^{*(i)};\z_t\right) = \delta^{*(i)} \prod_{\tilde t^* = 2}^{\tilde T^*_t} \Gamma^{*(i)} P(\z_{t,\tilde t^*}\mid\z_{t,\tilde t^*-1};\theta^*) \mathbf{1}_{N^*},\]
 %
-where $P(\z_{t,\tilde t^*}|\z_{t,\tilde t^*-1};\theta^*)$ is an $N^* \times N^*$ diagonal matrix with $(i^*,i^*)^{th}$ entry equal to $f^{*(\cdot,i^*)}(\z_{t,\tilde t^*}|\z_{t,\tilde t^*-1}; \theta^{*(\cdot,i^*)})$.
+where $P(\z_{t,\tilde t^*}\mid\z_{t,\tilde t^*-1};\theta^*)$ is an $N^* \times N^*$ diagonal matrix with $(i^*,i^*)^{th}$ entry equal to $f^{*(\cdot,i^*)}(\z_{t,\tilde t^*}\mid\z_{t,\tilde t^*-1}; \theta^{*(\cdot,i^*)})$.
 %
-Recall that $f^{*(\cdot,i^*)}(\cdot|\z_{t,t^*-1}; \theta^{*(\cdot,i^*)})$ is the probability density function of $\Z_{t,\tilde t^*}$ when $\tilde X^*_{t,\tilde t^*} = i^*$ and $\Z_{t,\tilde t^*-1} = \z_{t,\tilde t^*-1}$.
+Recall that $f^{*(\cdot,i^*)}(\cdot\mid\z_{t,t^*-1}; \theta^{*(\cdot,i^*)})$ is the probability density function of $\Z_{t,\tilde t^*}$ when $\tilde X^*_{t,\tilde t^*} = i^*$ and $\Z_{t,\tilde t^*-1} = \z_{t,\tilde t^*-1}$.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
