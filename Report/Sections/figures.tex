@@ -4,25 +4,25 @@
 
 \begin{table}[ht]
 \centering
-\caption{Estimates with standard errors for the parameters of the distributions of dive duration $(Y_t)$, acceleration $(\Zone_{t,\tilde t^*})$, and wiggliness $(\Ztwo_{t,\tilde t^*})$ of the killer whale kinematic data using the full CarHHMM-DFT. The parentheses refer to standard errors estimated using the observed information matrix.}
+\caption{Estimates and standard errors for the parameters of the distribution of dive duration $(Y_t)$, acceleration $(\Zone_{t,\tilde t^*})$, and ``wiggliness" $(\Ztwo_{t,\tilde t^*})$ of the killer whale kinematic data using the full CarHHMM-DFT. Figures following $\pm$ refer to standard errors estimated using the observed information matrix.}
 \scalebox{0.825}{
     \begin{tabular}{ccccc}
         \multirow{2}{*}{Feature}                                                       & \multirow{2}{*}{Dive type / subdive state} & \multicolumn{3}{c}{Parameter estimate}        \\
                                                                                        &                                      & $\hat \mu$    & $\hat \sigma$ & $\hat \phi$   \\ \hline
-        \multirow{2}{*}{Dive Duration $(s)$ -- $Y_t$}                                  & 1                                    & $27.342 (0.633)$ & $10.961 (0.560)$ & ---           \\
-                                                                                       & 2                                    & $127.548 (11.341)$ & $63.888 (9.032)$ & ---           \\ \hline
-        \multirow{3}{*}{$x$-Acc. $(m/s^2)$ -- $\left(\Zone_{t,\tilde t^*}\right)_x$}   & 1                                    & $0.449 (0.030)$ & $0.039 (0.001)$ & $0.968 (0.002)$ \\
-                                                                                       & 2                                    & $0.210 (0.012)$ & $0.096 (0.002)$ & $0.829 (0.007)$ \\
-                                                                                       & 3                                    & $0.232 (0.035)$ & $0.296 (0.010)$ & $0.607 (0.023)$ \\ \hline
-        \multirow{3}{*}{$y$-Acc. $(m/s^2)$ -- $\left(\Zone_{t,\tilde t^*}\right)_y$}   & 1                                    & $0.450 (0.038)$ & $0.051 (0.001)$ & $0.968 (0.002)$ \\
-                                                                                       & 2                                    & $0.437 (0.012)$ & $0.094 (0.002)$ & $0.829 (0.007)$ \\
-                                                                                       & 3                                    & $0.366 (0.042)$ & $0.365 (0.012)$ & $0.607 (0.023)$ \\ \hline
-        \multirow{3}{*}{$z$-Acc. $(m/s^2)$ -- $\left(\Zone_{t,\tilde t^*}\right)_z$}   & 1                                    & $-0.691 (0.043)$ & $0.058 (0.001)$ & $0.968 (0.002)$ \\
-                                                                                       & 2                                    & $-0.573 (0.014)$ & $0.111 (0.002)$ & $0.829 (0.007)$ \\
-                                                                                       & 3                                    & $-0.303 (0.041)$ & $0.354 (0.012)$ & $0.607 (0.023)$ \\ \hline
-        \multirow{3}{*}{Wiggliness -- $\Ztwo_{t,\tilde t^*}$}                           & 1                                    & $34.015 (0.368)$ & $22.986 (0.378)$ & ---           \\
-                                                                                       & 2                                    & $490.068 (5.584)$ & $502.558 (6.776)$ & ---           \\
-                                                                                       & 3                                    & $9154.156 (220.765)$ & $13538.747 (354.281)$ & ---           \\ \hline
+        \multirow{2}{*}{Dive Duration $(s)$ -- $Y_t$}                                  & 1                                    & $27.342 \pm 0.633$ & $10.961 \pm 0.560$ & ---           \\
+                                                                                       & 2                                    & $127.548 \pm 11.341$ & $63.888 \pm 9.032$ & ---           \\ \hline
+        \multirow{3}{*}{$x$-Acc. $(m/s^2)$ -- $\left(\Zone_{t,\tilde t^*}\right)_x$}   & 1                                    & $0.449 \pm 0.030$ & $0.039 \pm 0.001$ & $0.968 \pm 0.002$ \\
+                                                                                       & 2                                    & $0.210 \pm 0.012$ & $0.096 \pm 0.002$ & $0.829 \pm 0.007$ \\
+                                                                                       & 3                                    & $0.232 \pm 0.035$ & $0.296 \pm 0.010$ & $0.607 \pm 0.023$ \\ \hline
+        \multirow{3}{*}{$y$-Acc. $(m/s^2)$ -- $\left(\Zone_{t,\tilde t^*}\right)_y$}   & 1                                    & $0.450 \pm 0.038$ & $0.051 \pm 0.001$ & $0.968 \pm 0.002$ \\
+                                                                                       & 2                                    & $0.437 \pm 0.012$ & $0.094 \pm 0.002$ & $0.829 \pm 0.007$ \\
+                                                                                       & 3                                    & $0.366 \pm 0.042$ & $0.365 \pm 0.012$ & $0.607 \pm 0.023$ \\ \hline
+        \multirow{3}{*}{$z$-Acc. $(m/s^2)$ -- $\left(\Zone_{t,\tilde t^*}\right)_z$}   & 1                                    & $-0.691 \pm 0.043$ & $0.058 \pm 0.001$ & $0.968 \pm 0.002$ \\
+                                                                                       & 2                                    & $-0.573 \pm 0.014$ & $0.111 \pm 0.002$ & $0.829 \pm 0.007$ \\
+                                                                                       & 3                                    & $-0.303 \pm 0.041$ & $0.354 \pm 0.012$ & $0.607 \pm 0.023$ \\ \hline
+        \multirow{3}{*}{Wiggliness -- $\Ztwo_{t,\tilde t^*}$}                          & 1                                    & $34.015 \pm 0.368$ & $22.986 \pm 0.378$ & ---           \\
+                                                                                       & 2                                    & $490.068 \pm 5.584$ & $502.558 \pm 6.776$ & ---           \\
+                                                                                       & 3                                    & $9154.156 \pm 220.765$ & $13538.747 \pm 354.281$ & ---           \\ \hline
     \end{tabular}
     }
     \label{table:emis_dists_CarHHMM-DFT}
@@ -100,7 +100,7 @@ Model                       & \multicolumn{1}{c}{Training time (min)} & \multico
       \includegraphics[width=3.5in]{../Plots/HMM-DFT.png}  
       \label{fig:HMM-DFT}
     \end{subfigure}
-    \caption{Dependence structure of a standard HMM (top), CarHMM (middle-top), HHMM (middle-bottom), and HMM-DFT (bottom). Hidden state sequences are denoted as $X$ on the coarse scale and $X^*$ on the fine scale. Observations are denoted as $Y$ on the coarse scale and $Y^*$ on the fine scale. The coarse-scale process is not included in the HMM-DFT because moving window transformations often only apply to fine-scale data. The fine-scale observations of the HMM-DFT are transformed using a moving window and denoted as $\Z$ with corresponding fine-scale hidden states $\tilde X^*$.}
+    \caption{Dependence structure of a standard HMM (top), CarHMM (middle-top), HHMM (middle-bottom), and HMM-DFT (bottom). Hidden state sequences are denoted by $X$ on the coarse scale and by $X^*$ on the fine scale. Observations are denoted by $Y$ on the coarse scale and by $Y^*$ on the fine scale. The coarse-scale process is not included in the HMM-DFT because moving window transformations often only apply to fine-scale data. The fine-scale observations of the HMM-DFT are transformed using a moving window and denoted by $\Z$ with corresponding fine-scale hidden states $\tilde X^*$.}
     \label{fig:models}
 \end{figure}
 
@@ -109,7 +109,7 @@ Model                       & \multicolumn{1}{c}{Training time (min)} & \multico
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=5.25in]{../Plots/raw_data.png}
-	\caption{Dive depth (top panel) and three-dimensional acceleration (bottom three panels) from a killer whale over approximately 5 hours. An exact physical interpretation of each of component acceleration is difficult due to variations in tag orientation. There are data gaps occurring from around $1.5$ to $1.8$ hours and from around $3.2$ to $4.5$ hours. Both data gaps were excluded from analyses.}
+	\caption{Dive depth (top panel) and three-dimensional acceleration (bottom three panels) from a killer whale over approximately 5 $h$. An exact physical interpretation of each component of acceleration is difficult due to variations in tag orientation. There are data gaps occurring from around hours $1.5$ to $1.8$ and from around hours $3.2$ to $4.5$. Both data gaps are excluded from analyses.}
 	\label{fig:data}
 \end{figure}
 
@@ -118,7 +118,7 @@ Model                       & \multicolumn{1}{c}{Training time (min)} & \multico
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=5in]{../Plots/CarHHMM-DFT.png}
-	\caption{Graphical representation of the conditionally auto-regressive hierarchical hidden Markov model with discrete Fourier transform (\textbf{CarHHMM-DFT}) used in the simulation and case study. The type of dive $t$ is denoted by $X_t$ and $Y_t$ represents the associated dive duration. The raw acceleration vector associated with dive $t$ and time stamp $t^*$ is denoted by $Y^*_{t,t^*}$. The subdive state of the killer whale during dive $t$ and window $\tilde t^*$ is denoted as $\tilde X^*_{t,\tilde t^*}$, and the corresponding transformed observation is denoted by $\Z_{t,\tilde t^*}$.}
+	\caption{Graphical representation of the CarHHMM-DFT used in the simulation and case studies. The type of dive $t$ is denoted by $X_t$, and $Y_t$ represents the associated dive duration. The raw acceleration vector associated with dive $t$ and time stamp $t^*$ is denoted by $Y^*_{t,t^*}$. The subdive state of the killer whale during dive $t$ and window $\tilde t^*$ is denoted by $\tilde X^*_{t,\tilde t^*}$, and the corresponding transformed observation is denoted by $\Z_{t,\tilde t^*}$.}
 	\label{fig:CarHHMM-DFT}
 \end{figure}
 
@@ -132,14 +132,14 @@ Model                       & \multicolumn{1}{c}{Training time (min)} & \multico
     	\centering
     	\includegraphics[width=3.25in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2-fine-emissions.png}
     \end{subfigure}
-    \caption{Estimated Gamma densities of killer whale dive duration ($Y_t$) (top), estimated Normal conditional densities of killer whale acceleration $(\Zone_{t,\tilde t^*} \mid \Zone_{t,\tilde t^*-1} = \mu_A^{*(\cdot,i^*)})$ (middle and bottom left), and estimated Gamma densities of wiggliness $(\Ztwo_{t,\tilde t^*})$ plotted on a log-log scale (bottom right). Densities of $Y_t$ correspond to dive types 1 and 2, while densities of $\Zone_{t,\tilde t^*}$ and $\Ztwo_{t,\tilde t^*}$ correspond to subdive states 1, 2, and 3. Densities are estimated by fitting the CarHHMM-DFT to the case study data (see Table \ref{table:emis_dists_CarHHMM-DFT}).}
+    \caption{Estimated gamma densities of killer whale dive duration ($Y_t$) (top), estimated normal conditional densities of killer whale acceleration $(\Zone_{t,\tilde t^*} \mid \Zone_{t,\tilde t^*-1} = \mu_A^{*(\cdot,i^*)})$ (middle and bottom left), and estimated gamma densities of ``wiggliness" $(\Ztwo_{t,\tilde t^*})$ plotted on a log-log scale (bottom right). The densities of $Y_t$ correspond to dive types 1 and 2, while the densities of $\Zone_{t,\tilde t^*}$ and $\Ztwo_{t,\tilde t^*}$ correspond to subdive states 1, 2, and 3. The densities are estimated by fitting the CarHHMM-DFT to the case study data (see Table \ref{table:emis_dists_CarHHMM-DFT}).}
     \label{fig:emis}
 \end{figure}
 
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=4.75in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_decoded_dives.png}
-	\caption{The $x$- component of acceleration $(y^*_{t,t^*})_x$ (top two panels) and dive depth (bottom two panels) of a northern resident killer whale for a sequence of six selected dives. Each panel is partitioned into dives by vertical black lines. The curve colours in the first and third panels correspond to the estimated dive types while the curve colours of the second and fourth panels correspond the estimated subdive states. Both the dive types and subdive states are estimated by fitting the CarHHMM-DFT to the data and performing the forward-backward algorithm to determine the hidden state with the highest probability.}
+	\caption{The $x$-component of acceleration, $(y^*_{t,t^*})_x$ (top two panels), and dive depth (bottom two panels) of a northern resident killer whale for a sequence of six selected dives. Each panel is partitioned into dives by vertical black lines. Curve colour in the first and third panels corresponds to estimated dive type while curve colour in the second and fourth panels corresponds to the estimated subdive state. Both dive type and subdive state are estimated by fitting the CarHHMM-DFT to the data and applying the forward--backward algorithm to determine the hidden state with the highest probability.}
 	\label{fig:labeled_dives}
 \end{figure}
 
@@ -152,9 +152,9 @@ Model                       & \multicolumn{1}{c}{Training time (min)} & \multico
     	\centering
     	\includegraphics[width=2.25in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_empirical_hist_dive_duration.png}
     \end{subfigure}
-    \caption{Pseudoresiduals of wiggliness (left)
+    \caption{Pseudoresiduals of ``wiggliness"
     %$\left(\Phi^{-1} \left(\Pr(\Ztwo_{t,\tilde t^*} < \ztwo_{t,\tilde t^*}\big|Y,\tilde Y^* / \{\Ztwo_{t,\tilde t^*}\}) \right), \enspace \text{left} \right)$
-    plotted over a standard normal density as well as a weighted empirical distribution of dive duration $Y_t$ (right) plotted over the corresponding fitted Gamma distributions. Both plots are generated by fitting the CarHHMM-DFT to the killer whale case study data and performing the forward-backward algorithm.}
+    plotted over a standard normal density (left) and weighted empirical distributions of dive duration $Y_t$ plotted over the corresponding fitted gamma distributions (right). Both plots are generated by fitting the CarHHMM-DFT to the killer whale case study data and applying the forward--backward algorithm.}
     \label{fig:model_checking}
 \end{figure}
 
@@ -163,13 +163,13 @@ Model                       & \multicolumn{1}{c}{Training time (min)} & \multico
 \begin{figure}[ht]
     \centering
     \includegraphics[width=4.5in]{../Plots/Posterior_Coarse_States.png}
-    \caption{Estimated probabilities that each dive $t$ is of type $x_t$ for six selected dives of a simulated data set of killer whale dive behaviour. Each panel is partitioned into dives by vertical black lines. The colour of the curve corresponds to the true dive type while the colour of the background corresponds to the true subdive state. The CarHMM-DFT is omitted because it assumes that there is only one dive type.}
+    \caption{Estimated probabilities that each dive $t$ is of type $x_t$ for six selected dives of a simulated data set of killer whale dive behaviour. Each panel is partitioned into dives by vertical black lines. Curve colour corresponds to true dive type while background colour corresponds to true subdive state. The CarHMM-DFT is omitted because it assumes that there is only one dive type.}
     \label{fig:acc_coarse}
 \end{figure}
 
 \begin{figure}[ht]
     \centering
     \includegraphics[width=4.5in]{../Plots/Posterior_Fine_States.png}
-    \caption{Estimated probabilities that each window $(t,\tilde t^*)$ corresponds to subdive state $\tilde x^*_{t,\tilde t^*}$ for six selected dives of a simulated data set of killer whale dive behaviour. Each panel is partitioned into dives by vertical black lines. The colour of the curve corresponds to the true subdive state while the colour of the background corresponds to the true dive type.}
+    \caption{Estimated probabilities that each window $(t,\tilde t^*)$ corresponds to subdive state $\tilde x^*_{t,\tilde t^*}$ for six selected dives of a simulated data set of killer whale dive behaviour. Each panel is partitioned into dives by vertical black lines. Curve colour corresponds to true subdive state while background colour corresponds to true dive type.}
     \label{fig:acc_fine}
 \end{figure}
