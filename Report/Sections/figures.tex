@@ -33,7 +33,7 @@
 \caption{Average decoding accuracies and training times for all models in the simulation study. Each of the four models was fit to 500 training data sets composed of 100 simulated dives and tested on test data sets also composed of 100 simulated dives. Reported values are averages, and figures following $\pm$ refer to sample standard deviation across the 500 data sets. ``All" denotes overall average decoding accuracy.}
 \scalebox{0.9}{
 \begin{tabular}{ccccccc}
-Model                       & \multicolumn{1}{c}{Training time (min)} & \multicolumn{1}{c}{Dive type} & \multicolumn{1}{c}{Subdive type} & \multicolumn{1}{c}{Dive accuracy} & \multicolumn{1}{c}{Subdive accuracy}  \\ \hline
+Model                       & \multicolumn{1}{c}{Training time ($min$)} & \multicolumn{1}{c}{Dive type} & \multicolumn{1}{c}{Subdive type} & \multicolumn{1}{c}{Dive accuracy} & \multicolumn{1}{c}{Subdive accuracy}  \\ \hline
 \multirow{7}{*}{CarHHMM-DFT}& \multirow{7}{*}{$156 \pm 67$}   & All                           & All                              & $0.956 \pm 0.028$                   & $0.911 \pm 0.006$                       \\
                             &                                    & 1                             & 1                                & \multirow{3}{*}{$0.973\pm0.032$}    & $0.846 \pm 0.027$                       \\
                             &                                    & 1                             & 2                                &                                   & $0.918 \pm 0.011$                       \\ 
@@ -108,7 +108,7 @@ Model                       & \multicolumn{1}{c}{Training time (min)} & \multico
 
 \begin{figure}[ht]
 	\centering
-	\includegraphics[width=5.25in]{../Plots/raw_data.png}
+	\includegraphics[width=5.25in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2_raw_data.png}
 	\caption{Dive depth (top panel) and three-dimensional acceleration (bottom three panels) from a killer whale over approximately 5 $h$. An exact physical interpretation of each component of acceleration is difficult due to variations in tag orientation. There are data gaps occurring from around hours $1.5$ to $1.8$ and from around hours $3.2$ to $4.5$. Both data gaps are excluded from analyses.}
 	\label{fig:data}
 \end{figure}
@@ -125,12 +125,12 @@ Model                       & \multicolumn{1}{c}{Training time (min)} & \multico
 \begin{figure}[ht]
     \begin{subfigure}{\textwidth}
     	\centering
-    	\includegraphics[width=3.25in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2-coarse-emissions.png}
+    	\includegraphics[width=3.5in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2-coarse-emissions.png}
     \end{subfigure}
     \newline
     \begin{subfigure}{\textwidth}
     	\centering
-    	\includegraphics[width=3.25in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2-fine-emissions.png}
+    	\includegraphics[width=3.5in]{../Plots/2019/20190902-182840-CATs_OB_1_0_267_CarHHMM2-fine-emissions.png}
     \end{subfigure}
     \caption{Estimated gamma densities of killer whale dive duration ($Y_t$) (top), estimated normal conditional densities of killer whale acceleration $(\Zone_{t,\tilde t^*} \mid \Zone_{t,\tilde t^*-1} = \mu_A^{*(\cdot,i^*)})$ (middle and bottom left), and estimated gamma densities of ``wiggliness" $(\Ztwo_{t,\tilde t^*})$ plotted on a log-log scale (bottom right). The densities of $Y_t$ correspond to dive types 1 and 2, while the densities of $\Zone_{t,\tilde t^*}$ and $\Ztwo_{t,\tilde t^*}$ correspond to subdive states 1, 2, and 3. The densities are estimated by fitting the CarHHMM-DFT to the case study data (see Table \ref{table:emis_dists_CarHHMM-DFT}).}
     \label{fig:emis}

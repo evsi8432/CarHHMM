@@ -20,14 +20,14 @@ If $X_t=i$, then we denote the conditional density or probability mass function 
 The joint likelihood of both the parameters and the hidden states is given by
 
 \begin{equation}
-    \calL_{\text{HMM}}(x,\theta,\Gamma;y) = \delta_{x_1} f^{(x_1)}(y_1; \theta^{(x_1)}) \prod_{t=2}^\top \Gamma_{x_{t-1} x_t} f^{(x_t)}(y_t; \theta^{(x_t)}),
+    \calL_{\text{HMM}}(x,\theta,\Gamma;y) = \delta_{x_1} f^{(x_1)}(y_1; \theta^{(x_1)}) \prod_{t=2}^T \Gamma_{x_{t-1} x_t} f^{(x_t)}(y_t; \theta^{(x_t)}),
     \label{eqn:like}
 \end{equation}
 %
 but it is also tractable to sum over all possible values of $x$ to obtain
 
 \begin{equation}
-    \calL_{\text{HMM}}(\theta,\Gamma;y) = \delta P(y_1;\theta) \prod_{t=2}^\top \Gamma P(y_t;\theta) \mathbf{1}_N,
+    \calL_{\text{HMM}}(\theta,\Gamma;y) = \delta P(y_1;\theta) \prod_{t=2}^T \Gamma P(y_t;\theta) \mathbf{1}_N,
     \label{eqn:like_marginal}
 \end{equation}
 %
@@ -66,7 +66,7 @@ A CarHMM following Equations (\ref{eqn:carhmm1}) and (\ref{eqn:carhmm2}) can be 
 As above, the likelihood of $\theta$ and $\Gamma$ corresponding to the CarHMM can be calculated using the forward algorithm. If $y$ is the sequence of observations, then
 
 \begin{equation*}
-    \calL_{\text{CarHMM}}(\theta,\Gamma;y) = \delta \prod_{t=2}^\top \Gamma P(y_t \mid y_{t-1};\theta) \mathbf{1}_N,
+    \calL_{\text{CarHMM}}(\theta,\Gamma;y) = \delta \prod_{t=2}^T \Gamma P(y_t \mid y_{t-1};\theta) \mathbf{1}_N,
     \label{eqn:CarHMM_likelihood}
 \end{equation*}
 where
@@ -102,7 +102,7 @@ $y^* = \{y^*_1, \ldots,y^*_T\}$ be the collection of $T$ observed fine-scale emi
 In addition, let $\theta^* = \{\theta^{*(1)}, \ldots, \theta^{*(N)}\}$ denote the collection of all fine-scale emission parameters and $\Gamma^* = \{\Gamma^{*(1)}, \ldots, \Gamma^{*(N)}\}$ denote the collection of all fine-scale transition probability matrices. The likelihood of the observed data is then
 
 \begin{equation}
-    \calL_{\text{HHMM}}(\theta,\theta^*,\Gamma,\Gamma^*;y,y^*) = \delta P_m(y_1,y_1^*;\theta,\theta^*,\Gamma^*) \prod_{t=2}^\top \Gamma P_m(y_t,y_t^* \mid y_{t-1};\theta,\theta^*,\Gamma^*) \mathbf{1}_N,
+    \calL_{\text{HHMM}}(\theta,\theta^*,\Gamma,\Gamma^*;y,y^*) = \delta P_m(y_1,y_1^*;\theta,\theta^*,\Gamma^*) \prod_{t=2}^T \Gamma P_m(y_t,y_t^* \mid y_{t-1};\theta,\theta^*,\Gamma^*) \mathbf{1}_N,
     \label{eqn:HHMM_likelihood}
 \end{equation}
 %
