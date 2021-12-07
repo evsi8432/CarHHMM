@@ -65,7 +65,7 @@
     	\includegraphics[width=5in]{../Plots/sim_data.png}
     	\end{center}
     	
-    	\noindent Figure \arabic{fignum}: Acceleration data for five dives of a selected simulated data set. The raw accelerometer data is denoted by $Y^*_{t,\tilde t^*}$ and recorded at 50 $Hz$ while $\Zone_{t,\tilde t^*}$ and $\Ztwo_{t,\tilde t^*}$ are recorded at $0.5 Hz$. Dives are separated by vertical black lines. Curve colour corresponds to the true subdive state, while background colour corresponds to true dive type. Subdive state 1 can plausibly be interpreted as ``gliding", subdive state 2 can plausibly be interpreted as active swimming, and subdive state 3 can be interpreted as sudden or aggressive movement.
+    	\noindent Figure S\arabic{fignum}: Acceleration data for five dives of a selected simulated data set. The raw accelerometer data is denoted by $Y^*_{t,\tilde t^*}$ and recorded at 50 $Hz$ while $\Zone_{t,\tilde t^*}$ and $\Ztwo_{t,\tilde t^*}$ are recorded at $0.5 Hz$. Dives are separated by vertical black lines. Curve colour corresponds to the true subdive state, while background colour corresponds to true dive type. Subdive state 1 can plausibly be interpreted as ``gliding", subdive state 2 can plausibly be interpreted as active swimming, and subdive state 3 can be interpreted as sudden or aggressive movement.
     	\addtocounter{fignum}{1}
 
     \newpage
@@ -110,7 +110,7 @@ Model                       & \multicolumn{1}{c}{Training time ($min$)} & \multi
         }
         \end{center}
         
-        \noindent Table \arabic{tablenum}: Average decoding accuracies and training times for all models used to categorize dive type and subdive state in the simulation study. Each of the four models was fit to 500 training data sets composed of 100 simulated dives and tested on test data sets also composed of 100 simulated dives. Reported values are averages, and figures following $\pm$ refer to sample standard deviation across the 500 data sets. ``All" denotes overall average decoding accuracy.
+        \noindent Table S\arabic{tablenum}: Average decoding accuracies and training times for all models used to categorize dive type and subdive state in the simulation study. Each of the four models was fit to 500 training data sets composed of 100 simulated dives and tested on test data sets also composed of 100 simulated dives. Reported values are averages, and figures following $\pm$ refer to sample standard deviation across the 500 data sets. ``All" denotes overall average decoding accuracy.
         \addtocounter{tablenum}{1}
 
     \newpage
@@ -144,7 +144,7 @@ Model                       & \multicolumn{1}{c}{Parameter} & \multicolumn{1}{c}
         }
         \end{center}
         
-        \noindent Table \arabic{tablenum}: Estimates and standard errors for the parameters of the distribution of dive duration across all four models in the simulation study. The ``Estimate" column gives averages across 500 simulations, and the ``Observed Fisher SE" column gives medians across 500 simulations. Figures following $\pm$ refer to inter quartile range. ``SE" stands for standard error. Reported $P$-values correspond to one-sample $t$-tests of whether bias is statistically significant.
+        \noindent Table S\arabic{tablenum}: Estimates and standard errors for the parameters of the distribution of dive duration across all four models in the simulation study. The ``Estimate" column gives averages across 500 simulations, and the ``Observed Fisher SE" column gives medians across 500 simulations. Figures following $\pm$ refer to inter quartile range. ``SE" stands for standard error. Reported $P$-values correspond to one-sample $t$-tests of whether bias is statistically significant.
         \addtocounter{tablenum}{1}
         
         \newpage
@@ -155,7 +155,7 @@ Model                       & \multicolumn{1}{c}{Parameter} & \multicolumn{1}{c}
         \includegraphics[width=3in]{../Plots/hhmm_FV_MLE_density_dive_duration_-1_1.png}
         \end{center}
         
-        \noindent Figure \arabic{fignum}: Kernel density estimate of the distribution of the dive duration parameter estimators ($\hat \mu_Y$ and $\hat \sigma_Y$). These estimates are associated with the CarHHMM-DFT and correspond to both dive types. White stars represent the mean of all maximum likelihood estimates and red stars represent the true values of $\mu_Y$ and $\sigma_Y$ for both dive types.
+        \noindent Figure S\arabic{fignum}: Kernel density estimate of the distribution of the dive duration parameter estimators ($\hat \mu_Y$ and $\hat \sigma_Y$). These estimates are associated with the CarHHMM-DFT and correspond to both dive types. White stars represent the mean of all maximum likelihood estimates and red stars represent the true values of $\mu_Y$ and $\sigma_Y$ for both dive types.
         \addtocounter{fignum}{1}
         
         \subsection{HHMM-DFT}
@@ -164,7 +164,7 @@ Model                       & \multicolumn{1}{c}{Parameter} & \multicolumn{1}{c}
         \includegraphics[width=3in]{../Plots/hhmm_FV_uncorr_MLE_density_dive_duration_-1_1.png}
         \end{center}
 
-        \noindent Figure \arabic{fignum}: Kernel density estimate of the distribution of the dive duration parameter estimators ($\hat \mu_Y$ and $\hat \sigma_Y$). These estimates are associated with the HHMM-DFT and correspond to both dive types. White stars represent the mean of all maximum likelihood estimates and red stars represent the true values of $\mu_Y$ and $\sigma_Y$ for both dive types.
+        \noindent Figure S\arabic{fignum}: Kernel density estimate of the distribution of the dive duration parameter estimators ($\hat \mu_Y$ and $\hat \sigma_Y$). These estimates are associated with the HHMM-DFT and correspond to both dive types. White stars represent the mean of all maximum likelihood estimates and red stars represent the true values of $\mu_Y$ and $\sigma_Y$ for both dive types.
         \addtocounter{fignum}{1}
         
         \subsection{CarHHMM}
@@ -173,7 +173,7 @@ Model                       & \multicolumn{1}{c}{Parameter} & \multicolumn{1}{c}
         \includegraphics[width=3in]{../Plots/hhmm_V_MLE_density_dive_duration_-1_1.png}
         \end{center}
         
-        \noindent Figure \arabic{fignum}: Kernel density estimate of the distribution of the dive duration parameter estimators ($\hat \mu_Y$ and $\hat \sigma_Y$). These estimates are associated with the CarHHMM and correspond to both dive types. White stars represent the mean of all maximum likelihood estimates and red stars represent the true values of $\mu_Y$ and $\sigma_Y$ for both dive types.
+        \noindent Figure S\arabic{fignum}: Kernel density estimate of the distribution of the dive duration parameter estimators ($\hat \mu_Y$ and $\hat \sigma_Y$). These estimates are associated with the CarHHMM and correspond to both dive types. White stars represent the mean of all maximum likelihood estimates and red stars represent the true values of $\mu_Y$ and $\sigma_Y$ for both dive types.
         \addtocounter{fignum}{1}
         
         \subsection{CarHMM-DFT}
@@ -181,7 +181,7 @@ Model                       & \multicolumn{1}{c}{Parameter} & \multicolumn{1}{c}
         \includegraphics[width=3in]{../Plots/hmm_FV_MLE_density_dive_duration_-1_0.png}
         \end{center}
         
-        \noindent Figure \arabic{fignum}: Kernel density estimate of the distribution of the dive duration parameter estimators ($\hat \mu_Y$ and $\hat \sigma_Y$). This estimate is associated with the CarHMM-DFT. The White star represents the mean of all maximum likelihood estimates. Unlike in other figures, there is no red star representing true values because the CarHMM-DFT assumes that there is only one dive type.
+        \noindent Figure S\arabic{fignum}: Kernel density estimate of the distribution of the dive duration parameter estimators ($\hat \mu_Y$ and $\hat \sigma_Y$). This estimate is associated with the CarHMM-DFT. The White star represents the mean of all maximum likelihood estimates. Unlike in other figures, there is no red star representing true values because the CarHMM-DFT assumes that there is only one dive type.
         \addtocounter{fignum}{1}
     
     \newpage
@@ -235,7 +235,7 @@ Model                       & \multicolumn{1}{c}{Parameter} & \multicolumn{1}{c}
         }
         \end{center}
         
-        \noindent Table \arabic{tablenum}: Estimates and standard errors for the parameters of the distribution of acceleration across all four models in the simulation study. The ``Estimate" column gives averages across 500 simulations, and the ``Observed Fisher SE" column gives medians across 500 simulations. Figures following $\pm$ refer to inter quartile range. ``SE" stands for standard error. Note that standard error cannot be estimated when $\phi^*_A \approx 0$ or $\phi^*_A \approx 1$. Reported $P$-values correspond to one-sample $t$-tests of whether bias is statistically significant.
+        \noindent Table S\arabic{tablenum}: Estimates and standard errors for the parameters of the distribution of acceleration across all four models in the simulation study. The ``Estimate" column gives averages across 500 simulations, and the ``Observed Fisher SE" column gives medians across 500 simulations. Figures following $\pm$ refer to inter quartile range. ``SE" stands for standard error. Note that standard error cannot be estimated when $\phi^*_A \approx 0$ or $\phi^*_A \approx 1$. Reported $P$-values correspond to one-sample $t$-tests of whether bias is statistically significant.
         \addtocounter{tablenum}{1}
         
         \newpage
@@ -247,7 +247,7 @@ Model                       & \multicolumn{1}{c}{Parameter} & \multicolumn{1}{c}
         \includegraphics[width=2.1in]{../Plots/hhmm_FV_MLE_density_A_0_2.png}
         \end{center}
         
-        \noindent Figure \arabic{fignum}: Kernel density estimates of the distribution of acceleration parameter estimators ($\hat \mu^*_A$, $\hat \sigma^*_A$, and $\hat \phi^*_A$) for each subdive state. White stars represent the mean of all maximum likelihood estimates and red stars represent the true values of $\mu^*_A$, $\sigma^*_A$, and $\phi^*_A$ for each subdive state. These estimates are for the CarHHMM-DFT.
+        \noindent Figure S\arabic{fignum}: Kernel density estimates of the distribution of acceleration parameter estimators ($\hat \mu^*_A$, $\hat \sigma^*_A$, and $\hat \phi^*_A$) for each subdive state. White stars represent the mean of all maximum likelihood estimates and red stars represent the true values of $\mu^*_A$, $\sigma^*_A$, and $\phi^*_A$ for each subdive state. These estimates are for the CarHHMM-DFT.
         \addtocounter{fignum}{1}
         
         \subsection{HHMM-DFT}
@@ -257,7 +257,7 @@ Model                       & \multicolumn{1}{c}{Parameter} & \multicolumn{1}{c}
         \includegraphics[width=2.1in]{../Plots/hhmm_FV_uncorr_MLE_density_A_0_2.png}
         \end{center}
         
-        \noindent Figure \arabic{fignum}: Kernel density estimate of the distribution of acceleration parameter estimators ($\hat \mu^*_A$ and $\hat \sigma^*_A$) for each subdive state. White stars represent the mean of all maximum likelihood estimates and red stars represent the true values of $\mu^*_A$ and $\sigma^*_A$ for each subdive state. These estimates are for the HHMM-DFT. Note that the HHMM-DFT assumes no autocorrelation in $\Zone_{t,\tilde t^*}$, so $\hat \phi_A^{*(\cdot,i^*)}$ is absent from these plots.
+        \noindent Figure S\arabic{fignum}: Kernel density estimate of the distribution of acceleration parameter estimators ($\hat \mu^*_A$ and $\hat \sigma^*_A$) for each subdive state. White stars represent the mean of all maximum likelihood estimates and red stars represent the true values of $\mu^*_A$ and $\sigma^*_A$ for each subdive state. These estimates are for the HHMM-DFT. Note that the HHMM-DFT assumes no autocorrelation in $\Zone_{t,\tilde t^*}$, so $\hat \phi_A^{*(\cdot,i^*)}$ is absent from these plots.
         \addtocounter{fignum}{1}
         
         \subsection{CarHHMM}
@@ -267,7 +267,7 @@ Model                       & \multicolumn{1}{c}{Parameter} & \multicolumn{1}{c}
         \includegraphics[width=2.1in]{../Plots/hhmm_V_MLE_density_A_0_2.png}
         \end{center}
         
-        \noindent Figure \arabic{fignum}: Kernel density estimates of the distribution of acceleration parameter estimators ($\hat \mu^*_A$, $\hat \sigma^*_A$, and $\hat \phi^*_A$) for each subdive state. White stars represent the mean of all maximum likelihood estimates and red stars represent the true values of $\mu^*_A$, $\sigma^*_A$, and $\phi^*_A$ for each subdive state. These estimates are for the CarHHMM. 
+        \noindent Figure S\arabic{fignum}: Kernel density estimates of the distribution of acceleration parameter estimators ($\hat \mu^*_A$, $\hat \sigma^*_A$, and $\hat \phi^*_A$) for each subdive state. White stars represent the mean of all maximum likelihood estimates and red stars represent the true values of $\mu^*_A$, $\sigma^*_A$, and $\phi^*_A$ for each subdive state. These estimates are for the CarHHMM. 
         \addtocounter{fignum}{1}
         
         \subsection{CarHMM-DFT}
@@ -277,7 +277,7 @@ Model                       & \multicolumn{1}{c}{Parameter} & \multicolumn{1}{c}
         \includegraphics[width=2.1in]{../Plots/hmm_FV_MLE_density_A_0_2.png}
         \end{center}
         
-        \noindent Figure \arabic{fignum}: Kernel density estimates of the distribution of acceleration parameter estimators ($\hat \mu^*_A$, $\hat \sigma^*_A$, and $\hat \phi^*_A$) for each subdive state. White stars represent the mean of all maximum likelihood estimates and red stars represent the true values of $\mu^*_A$, $\sigma^*_A$, and $\phi^*_A$ for each subdive state. These estimates are for the CarHMM-DFT.
+        \noindent Figure S\arabic{fignum}: Kernel density estimates of the distribution of acceleration parameter estimators ($\hat \mu^*_A$, $\hat \sigma^*_A$, and $\hat \phi^*_A$) for each subdive state. White stars represent the mean of all maximum likelihood estimates and red stars represent the true values of $\mu^*_A$, $\sigma^*_A$, and $\phi^*_A$ for each subdive state. These estimates are for the CarHMM-DFT.
         \addtocounter{fignum}{1}
         
     \newpage
@@ -321,7 +321,7 @@ Model                       & \multicolumn{1}{c}{Parameter} & \multicolumn{1}{c}
         }
         \end{center}
         
-        \noindent Table \arabic{tablenum}: Estimates and standard errors for the parameters of the distribution of wiggliness across all four models in the simulation study. The ``Estimate" column gives averages across 500 simulations, and the ``Observed Fisher SE" column gives medians across 500 simulations. Figures following $\pm$ refer to inter quartile range. ``SE" stands for standard error. Reported $P$-values correspond to one-sample $t$-tests of whether bias is statistically significant.
+        \noindent Table S\arabic{tablenum}: Estimates and standard errors for the parameters of the distribution of wiggliness across all four models in the simulation study. The ``Estimate" column gives averages across 500 simulations, and the ``Observed Fisher SE" column gives medians across 500 simulations. Figures following $\pm$ refer to inter quartile range. ``SE" stands for standard error. Reported $P$-values correspond to one-sample $t$-tests of whether bias is statistically significant.
         \addtocounter{tablenum}{1}
         
         \newpage
@@ -333,7 +333,7 @@ Model                       & \multicolumn{1}{c}{Parameter} & \multicolumn{1}{c}
         \includegraphics[width=2.1in]{../Plots/hhmm_FV_MLE_density_FoVeDBA_0_2.png}
         \end{center}
         
-        \noindent Figure \arabic{fignum}: Kernel density estimate of the distributions of wiggliness parameter estimates ($\hat \mu^*_W$ and $\hat \sigma^*_W$) for each subdive state. White stars represent the mean of all maximum likelihood estimates and red stars represent the true values of $\mu^*_W$ and $\sigma^*_W$ for each subdive state. These estimates are for the CarHHMM-DFT.
+        \noindent Figure S\arabic{fignum}: Kernel density estimate of the distributions of wiggliness parameter estimates ($\hat \mu^*_W$ and $\hat \sigma^*_W$) for each subdive state. White stars represent the mean of all maximum likelihood estimates and red stars represent the true values of $\mu^*_W$ and $\sigma^*_W$ for each subdive state. These estimates are for the CarHHMM-DFT.
         \addtocounter{fignum}{1}
         
         \subsection{HHMM-DFT}
@@ -343,7 +343,7 @@ Model                       & \multicolumn{1}{c}{Parameter} & \multicolumn{1}{c}
         \includegraphics[width=2.1in]{../Plots/hhmm_FV_uncorr_MLE_density_FoVeDBA_0_2.png}
         \end{center}
         
-        \noindent Figure \arabic{fignum}: Kernel density estimate of the distributions of wiggliness parameter estimates ($\hat \mu^*_W$ and $\hat \sigma^*_W$) for each subdive state. White stars represent the mean of all maximum likelihood estimates and red stars represent the true values of $\mu^*_W$ and $\sigma^*_W$ for each subdive state. These estimates are for the HHMM-DFT.
+        \noindent Figure S\arabic{fignum}: Kernel density estimate of the distributions of wiggliness parameter estimates ($\hat \mu^*_W$ and $\hat \sigma^*_W$) for each subdive state. White stars represent the mean of all maximum likelihood estimates and red stars represent the true values of $\mu^*_W$ and $\sigma^*_W$ for each subdive state. These estimates are for the HHMM-DFT.
         \addtocounter{fignum}{1}
         
         \subsection{CarHHMM}
@@ -356,7 +356,7 @@ Model                       & \multicolumn{1}{c}{Parameter} & \multicolumn{1}{c}
         \includegraphics[width=2.1in]{../Plots/hmm_FV_MLE_density_FoVeDBA_0_2.png}
         \end{center}
         
-        \noindent Figure \arabic{fignum}: Kernel density estimate of the distributions of wiggliness parameter estimates ($\hat \mu^*_W$ and $\hat \sigma^*_W$) for each subdive state. White stars represent the mean of all maximum likelihood estimates and red stars represent the true values of $\mu^*_W$ and $\sigma^*_W$ for each subdive state. These estimates are for the CarHMM-DFT.
+        \noindent Figure S\arabic{fignum}: Kernel density estimate of the distributions of wiggliness parameter estimates ($\hat \mu^*_W$ and $\hat \sigma^*_W$) for each subdive state. White stars represent the mean of all maximum likelihood estimates and red stars represent the true values of $\mu^*_W$ and $\sigma^*_W$ for each subdive state. These estimates are for the CarHMM-DFT.
         \addtocounter{fignum}{1}
         
     \newpage
@@ -382,7 +382,7 @@ Model                        & \multicolumn{1}{c}{Parameter} & \multicolumn{1}{c
         }
         \end{center}
         
-        \noindent Table \arabic{tablenum}: Estimates and standard errors for the coarse-scale transition probability matrices across all four models in the simulation study. The ``Estimate" column gives averages across 500 simulations, and the ``Observed Fisher SE" column gives medians across 500 simulations. Figures following $\pm$ refer to inter quartile range. ``SE" stands for standard error. Note that standard error cannot be estimated when $\Gamma_{i,j} \approx 0$. Reported $P$-values correspond to one-sample $t$-tests of whether bias is statistically significant.
+        \noindent Table S\arabic{tablenum}: Estimates and standard errors for the coarse-scale transition probability matrices across all four models in the simulation study. The ``Estimate" column gives averages across 500 simulations, and the ``Observed Fisher SE" column gives medians across 500 simulations. Figures following $\pm$ refer to inter quartile range. ``SE" stands for standard error. Note that standard error cannot be estimated when $\Gamma_{i,j} \approx 0$. Reported $P$-values correspond to one-sample $t$-tests of whether bias is statistically significant.
         \addtocounter{tablenum}{1}
         
         \newpage
@@ -441,7 +441,7 @@ Model                        & \multicolumn{1}{c}{Parameter} & \multicolumn{1}{c
         }
         \end{center}
         
-        \noindent Table \arabic{tablenum}: Estimates and standard errors for fine-scale transition probability matrices across all four models in the simulation study. The ``Estimate" column gives averages across 500 simulations, and the ``Observed Fisher SE" column gives medians across 500 simulations. Figures following $\pm$ refer to inter quartile range. ``SE" stands for standard error. Note that standard error cannot be estimated when $\Gamma^{*(i)}_{i^*,j^*} \approx 0$. Reported $P$-values correspond to one-sample $t$-tests of whether bias is statistically significant.
+        \noindent Table S\arabic{tablenum}: Estimates and standard errors for fine-scale transition probability matrices across all four models in the simulation study. The ``Estimate" column gives averages across 500 simulations, and the ``Observed Fisher SE" column gives medians across 500 simulations. Figures following $\pm$ refer to inter quartile range. ``SE" stands for standard error. Note that standard error cannot be estimated when $\Gamma^{*(i)}_{i^*,j^*} \approx 0$. Reported $P$-values correspond to one-sample $t$-tests of whether bias is statistically significant.
         \addtocounter{tablenum}{1}
         
         \newpage
@@ -458,7 +458,7 @@ Model                        & \multicolumn{1}{c}{Parameter} & \multicolumn{1}{c
         \includegraphics[width=2.5in]{../Plots/hhmm_FV_Gamma_density_1_row_2.png}
         \end{center}
         
-        \noindent Figure \arabic{fignum}: Kernel density estimates of the distributions of $\hat \Gamma$, $\hat \Gamma^{*(1)}$, and $\hat \Gamma^{*(2)}$ for the CarHHMM-DFT. There are two fine-scale transition probability matrices---one corresponding to each dive type. We plot only the off-diagonal elements of the transition probability matrices since these elements uniquely define a stochastic matrix. Red stars represent the true values and white stars represent the mean of all maximum likelihood estimates.
+        \noindent Figure S\arabic{fignum}: Kernel density estimates of the distributions of $\hat \Gamma$, $\hat \Gamma^{*(1)}$, and $\hat \Gamma^{*(2)}$ for the CarHHMM-DFT. There are two fine-scale transition probability matrices---one corresponding to each dive type. We plot only the off-diagonal elements of the transition probability matrices since these elements uniquely define a stochastic matrix. Red stars represent the true values and white stars represent the mean of all maximum likelihood estimates.
         \addtocounter{fignum}{1}
         
         \newpage
@@ -474,7 +474,7 @@ Model                        & \multicolumn{1}{c}{Parameter} & \multicolumn{1}{c
         \includegraphics[width=2.5in]{../Plots/hhmm_FV_uncorr_Gamma_density_1_row_2.png}
         \end{center}
         
-        \noindent Figure \arabic{fignum}: Kernel density estimates of the distributions of $\hat \Gamma$, $\hat \Gamma^{*(1)}$, and $\hat \Gamma^{*(2)}$ for the HHMM-DFT. There are two fine-scale transition probability matrices---one corresponding to each dive type. We plot only the off-diagonal elements of the transition probability matrices since these elements uniquely define a stochastic matrix. Red stars represent the true values and white stars represent the mean of all maximum likelihood estimates.
+        \noindent Figure S\arabic{fignum}: Kernel density estimates of the distributions of $\hat \Gamma$, $\hat \Gamma^{*(1)}$, and $\hat \Gamma^{*(2)}$ for the HHMM-DFT. There are two fine-scale transition probability matrices---one corresponding to each dive type. We plot only the off-diagonal elements of the transition probability matrices since these elements uniquely define a stochastic matrix. Red stars represent the true values and white stars represent the mean of all maximum likelihood estimates.
         \addtocounter{fignum}{1}
         
         \newpage
@@ -490,7 +490,7 @@ Model                        & \multicolumn{1}{c}{Parameter} & \multicolumn{1}{c
         \includegraphics[width=2.5in]{../Plots/hhmm_V_Gamma_density_1_row_2.png}
         \end{center}
         
-        \noindent Figure \arabic{fignum}: Kernel density estimates of the distributions of $\hat \Gamma$, $\hat \Gamma^{*(1)}$, and $\hat \Gamma^{*(2)}$ for the CarHHMM. There are two fine-scale transition probability matrices---one corresponding to each dive type. We plot only the off-diagonal elements of the transition probability matrices since these elements uniquely define a stochastic matrix. Red stars represent the true values and white stars represent the mean of all maximum likelihood estimates.
+        \noindent Figure S\arabic{fignum}: Kernel density estimates of the distributions of $\hat \Gamma$, $\hat \Gamma^{*(1)}$, and $\hat \Gamma^{*(2)}$ for the CarHHMM. There are two fine-scale transition probability matrices---one corresponding to each dive type. We plot only the off-diagonal elements of the transition probability matrices since these elements uniquely define a stochastic matrix. Red stars represent the true values and white stars represent the mean of all maximum likelihood estimates.
         \addtocounter{fignum}{1}
         
         \newpage
@@ -501,6 +501,6 @@ Model                        & \multicolumn{1}{c}{Parameter} & \multicolumn{1}{c
         \includegraphics[width=2.5in]{../Plots/hmm_FV_Gamma_density_0_row_2.png} \\
         \end{center}
         
-        \noindent Figure \arabic{fignum}: Kernel density estimates of the distribution of $\hat \Gamma^{*(1)}$ for the CarHMM-DFT. There is only one fine-scale transition probability matrix and no coarse-scale transition probability matrix since the CarHMM-DFT assumes that there is only one dive type. We plot only the off-diagonal elements of the transition probability matrix since these elements uniquely define a stochastic matrix. White stars represent the mean of all maximum likelihood estimates. Unlike other figures, there are no red stars representing the true values because the CarHMM-DFT assumes that there is only one dive type.
+        \noindent Figure S\arabic{fignum}: Kernel density estimates of the distribution of $\hat \Gamma^{*(1)}$ for the CarHMM-DFT. There is only one fine-scale transition probability matrix and no coarse-scale transition probability matrix since the CarHMM-DFT assumes that there is only one dive type. We plot only the off-diagonal elements of the transition probability matrix since these elements uniquely define a stochastic matrix. White stars represent the mean of all maximum likelihood estimates. Unlike other figures, there are no red stars representing the true values because the CarHMM-DFT assumes that there is only one dive type.
         \addtocounter{fignum}{1}
 \end{document}
