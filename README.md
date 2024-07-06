@@ -4,3 +4,5 @@ This repository houses the code and report for the paper *Modelling multi-scale 
 by Evan Sidrow, Nancy Heckman, Sarah M.E. Fortune, Andrew W. Trites, Ian Murphy, and Marie Auger-Méthé (2021). *Preprint*.
 
 eprint: 2101.03268
+
+This code relies on data that is not publically available, so unfortunately the case study can not be run independently.
